@@ -1,0 +1,120 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:avrichtextbox="using:AvRichTextBox"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:local="using:LunarChatApp"
+			 xmlns:lucideAvalonia="using:LucideAvalonia"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:md="using:LiveMarkdown.Avalonia"
+			 xmlns:shadui="using:ShadUI"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.ServersPage">
+	<Grid ColumnDefinitions="Auto *">
+		<shadui:Sidebar
+		BorderBrush="{DynamicResource BorderColor30}"
+		BorderThickness="0,0,1,0"
+		Expanded="true"
+		Grid.Column="0"
+		MinWidth="60"
+		Padding="4"
+		Width="220">
+			<shadui:Sidebar.Header>
+				<StackPanel Orientation="Horizontal">
+					<Button Margin="2" Padding="8">
+						<lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="House" StrokeBrush="#fff" StrokeThickness="1.5" Width="28" Height="28"/>
+					</Button>
+					<Button Padding="8,0,4,0">
+						<Grid MaxWidth="230" ColumnSpacing="10">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*" />
+								<ColumnDefinition MinWidth="30" />
+							</Grid.ColumnDefinitions>
+							<TextBlock Classes="h6" Text="Fluxpoint Development" TextWrapping="WrapWithOverflow"></TextBlock>
+							<lucideAvalonia:Lucide Grid.Column="1" HorizontalAlignment="Left" Icon="ChevronDown" StrokeBrush="#fff" StrokeThickness="1.5" Width="22" Height="22"/>
+						</Grid>
+					</Button>
+				</StackPanel>
+			</shadui:Sidebar.Header>
+
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="auto" />
+						<ColumnDefinition />
+					</Grid.ColumnDefinitions>
+					<StackPanel HorizontalAlignment="Left">
+						<local:ServerIcon ServerName="Fluxpoint Development"></local:ServerIcon>
+					</StackPanel>
+					<StackPanel Grid.Column="1" Spacing="4">
+						<local:ChannelItem ChannelName="rules" ChannelType="Rules"></local:ChannelItem>
+						<local:ChannelItem ChannelName="schedule" ChannelType="Schedule"></local:ChannelItem>
+						<local:ChannelItem ChannelName="general" ChannelType="Text"></local:ChannelItem>
+						<local:ChannelItem ChannelName="media" ChannelType="Media"></local:ChannelItem>
+						<local:ChannelItem ChannelName="voice" ChannelType="Voice"></local:ChannelItem>
+					</StackPanel>
+				</Grid>
+				<Grid Grid.Row="1">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="50" />
+					</Grid.ColumnDefinitions>
+					<Button HorizontalAlignment="Left" Padding="6">
+						<StackPanel Orientation="Horizontal" Spacing="6">
+							<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
+								<Image Source="/Assets/avatar.png" Width="40" Height="40"></Image>
+							</Border>
+							<StackPanel>
+								<TextBlock Text="Builderb"></TextBlock>
+								<TextBlock Classes="Muted" Text="builderb"></TextBlock>
+							</StackPanel>
+						</StackPanel>
+					</Button>
+					<Button Grid.Column="1" Click="OpenSettings">
+						<lucideAvalonia:Lucide Grid.Column="1" HorizontalAlignment="Left" Icon="Settings" StrokeBrush="#fff" StrokeThickness="1.5" Width="22" Height="22"/>
+					</Button>
+				</Grid>
+			</Grid>
+		</shadui:Sidebar>
+		<StackPanel Grid.Column="1" Margin="4">
+			<Grid Grid.Row="0">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+				<ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="auto" />
+							<ColumnDefinition />
+						</Grid.ColumnDefinitions>
+						<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
+							<Image Source="/Assets/avatar.png" Width="32" Height="32"></Image>
+						</Border>
+						<StackPanel Grid.Column="1" Margin="4">
+							<StackPanel Orientation="Horizontal" Spacing="6">
+								<TextBlock Classes="Large" Text="Builderb"></TextBlock>
+								<TextBlock Classes="Muted" VerticalAlignment="Center" Text="10:00 PM"></TextBlock>
+							</StackPanel>
+							<md:MarkdownRenderer x:Name="MarkdownRenderer" />
+						</StackPanel>
+					</Grid>
+				</ScrollViewer>
+				<Grid Grid.Row="1" Margin="4" Background="#393A41" ColumnSpacing="6">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="auto" />
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="auto" />
+					</Grid.ColumnDefinitions>
+					<lucideAvalonia:Lucide VerticalAlignment="Top" Padding="4" Icon="Plus" StrokeBrush="#fff" StrokeThickness="1.5" Width="22" Height="22"/>
+					<avrichtextbox:RichTextBox Grid.Column="1" x:Name="RichBox" Background="#393A41" BorderBrush="Transparent"></avrichtextbox:RichTextBox>
+					<lucideAvalonia:Lucide VerticalAlignment="Top" Padding="4" Grid.Column="2" Icon="Smile" StrokeBrush="#fff" StrokeThickness="1.5" Width="22" Height="22"/>
+				</Grid>
+			</Grid>
+
+		</StackPanel>
+	</Grid>
+</UserControl>

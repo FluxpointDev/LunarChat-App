@@ -1,0 +1,36 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:LunarChatApp"
+             x:Class="LunarChatApp.App"
+             xmlns:themes="clr-namespace:ShadUI;assembly=ShadUI"
+             RequestedThemeVariant="Default">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+
+     <TrayIcon.Icons>
+        <TrayIcons>
+            <TrayIcon Icon="/Assets/test-icon.ico" ToolTipText="Lunar Chat">
+                <TrayIcon.Menu>
+                    <NativeMenu>
+                        <!--  added spaces to have a wider menu  -->
+                        <NativeMenuItem Header="Open            " />
+                        <NativeMenuItemSeparator />
+                        <NativeMenuItem Header="Exit" />
+                    </NativeMenu>
+                </TrayIcon.Menu>
+            </TrayIcon>
+        </TrayIcons>
+    </TrayIcon.Icons>
+
+    <Application.Resources>
+		<FontFamily x:Key="LucideIcon">avares://shadui-app/Assets/Fonts#lucide</FontFamily>
+        <FontFamily x:Key="ShadUIIcon">avares://shadui-app/Assets/Fonts#shadui</FontFamily>
+    </Application.Resources>
+    <Application.Styles>
+        <themes:ShadTheme />
+        <StyleInclude Source="avares://LiveMarkdown.Avalonia/Styles.axaml"/>
+    </Application.Styles>
+</Application>

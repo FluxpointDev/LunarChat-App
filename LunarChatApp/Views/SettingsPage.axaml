@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="using:LunarChatApp"
+             xmlns:lucideAvalonia="using:LucideAvalonia"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shadui="using:ShadUI"
+             xmlns:viewmodels="using:LunarChatApp.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="LunarChatApp.SettingsPage"
+             x:DataType="viewmodels:SettingsViewModel">
+    <Grid ColumnDefinitions="Auto *">
+        <shadui:Sidebar
+		BorderBrush="{DynamicResource BorderColor30}"
+		BorderThickness="0,0,1,0"
+		Expanded="true"
+		Grid.Row="0"
+		MinWidth="60"
+		Padding="4"
+		Width="220">
+            <shadui:Sidebar.Header>
+				<StackPanel>
+					<TextBlock Text="Settings"></TextBlock>
+                </StackPanel>
+			</shadui:Sidebar.Header>
+            <StackPanel>
+			<shadui:SidebarItem
+                        Content="Profile">
+                        <shadui:SidebarItem.Icon>
+                            <Viewbox>
+                                <lucideAvalonia:Lucide x:Name="Test" Icon="House" StrokeBrush="#cccccc" StrokeThickness="1.5" Width="16" Height="16"/>
+                            </Viewbox>
+                        </shadui:SidebarItem.Icon>
+                    </shadui:SidebarItem>
+        </StackPanel>
+     </shadui:Sidebar>
+        <StackPanel Grid.Column="1" Margin="6">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Classes="Large" Text="{Binding SelectedTitle}"></TextBlock>
+				<Button>
+				<lucideAvalonia:Lucide Icon="CircleX" StrokeBrush="#cccccc" StrokeThickness="1.5" Width="30" Height="30"/>
+                </Button>
+            </StackPanel>
+            
+            <ContentControl Content="{Binding SelectedPage}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

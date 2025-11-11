@@ -1,0 +1,13 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="using:LunarChatApp"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="LunarChatApp.ServerIcon">
+    <Button Click="Clicked" Margin="2" Padding="4">
+                <Border CornerRadius="12" ClipToBounds="True" ToolTip.Tip="{Binding $parent[local:ServerIcon].ServerName}" ToolTip.Placement="Right">
+						<Image Source="/Assets/test-icon.ico" Width="36" Height="36"></Image>
+               </Border>
+        </Button>
+</UserControl>

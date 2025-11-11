@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Project Path="LunarChatApp.Android/LunarChatApp.Android.csproj" />
+  <Project Path="LunarChatApp.Browser/LunarChatApp.Browser.csproj" />
+  <Project Path="LunarChatApp.Desktop/LunarChatApp.Desktop.csproj" />
+  <Project Path="LunarChatApp.iOS/LunarChatApp.iOS.csproj" />
+  <Project Path="LunarChatApp/LunarChatApp.csproj" />
+</Solution>

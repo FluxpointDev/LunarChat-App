@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="using:LunarChatApp"
+            xmlns:shadui="using:ShadUI"
+             xmlns:lucideAvalonia="using:LucideAvalonia"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="100"
+             x:Class="LunarChatApp.ChannelItem">
+        <shadui:SidebarItem Click="Clicked"
+                        Content="{Binding $parent[local:ChannelItem].ChannelName}">
+                        <shadui:SidebarItem.Icon>
+                            <Viewbox>
+                                <lucideAvalonia:Lucide x:Name="Test" Icon="{Binding $parent[local:ChannelItem].ChannelIcon}" StrokeBrush="#cccccc" StrokeThickness="1.5" Width="16" Height="16"/>
+                            </Viewbox>
+                        </shadui:SidebarItem.Icon>
+                    </shadui:SidebarItem>
+</UserControl>
