@@ -1,8 +1,50 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="LunarChatApp.SettingsProfile">
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:shadui="using:ShadUI"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.SettingsProfile">
+	<StackPanel Spacing="20" HorizontalAlignment="Left">
+		<StackPanel HorizontalAlignment="Left" Spacing="10">
+		<TextBox
+		Classes="Clearable"
+		Watermark="builderb"
+		Width="225"
+		Text="Builderb"
+		shadui:ControlAssist.Label="Display Name" />
 
+		<TextBox
+		Classes="Clearable"
+		Watermark="builderb"
+		Width="225"
+		Text="builderb"
+		shadui:ControlAssist.Label="Username" />
+
+		<TextBox
+		Classes="Clearable"
+		Watermark="user@email.com"
+		Width="225"
+		Text="user@gmail.com"
+		shadui:ControlAssist.Label="Email" />
+
+		
+			</StackPanel>
+		<StackPanel
+		HorizontalAlignment="Left"
+		Orientation="Horizontal"
+		Spacing="8">
+			<Button
+		Classes="Primary"
+		Content="Change Password" />
+
+			<Button
+		Classes="Secondary"
+		Content="Disable Account" />
+
+			<Button
+		Classes="Destructive"
+		Content="Delete Account" />
+		</StackPanel>
+	</StackPanel>
 </UserControl>

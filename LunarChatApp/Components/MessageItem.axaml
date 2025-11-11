@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:md="using:LiveMarkdown.Avalonia"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.MessageItem">
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="auto" />
+			<ColumnDefinition />
+		</Grid.ColumnDefinitions>
+		<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
+			<Image Source="/Assets/avatar.png" Width="32" Height="32"></Image>
+		</Border>
+		<StackPanel Grid.Column="1" Margin="4">
+			<StackPanel Orientation="Horizontal" Spacing="6">
+				<TextBlock Classes="Large" Text="Builderb"></TextBlock>
+				<TextBlock Classes="Muted" VerticalAlignment="Center" Text="10:00 PM"></TextBlock>
+			</StackPanel>
+			<md:MarkdownRenderer x:Name="MarkdownRenderer" />
+		</StackPanel>
+	</Grid>
+</UserControl>

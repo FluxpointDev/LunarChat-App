@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Avalonia.Controls;
+using System;
 using System.Reflection;
 
 namespace LunarChatApp.Services;
@@ -31,6 +32,8 @@ public sealed class PageManager(ServiceProvider serviceProvider)
             _onNavigate = value;
         }
     }
+
+    public Action<UserControl> OnSwitchPage;
 }
 
 public interface INavigable

@@ -2,9 +2,11 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using LunarChatApp.Services;
 using LunarChatApp.Utility;
 using LunarChatApp.ViewModels;
 using LunarChatApp.Views;
+using ShadUI;
 using System.Linq;
 
 namespace LunarChatApp;
@@ -18,6 +20,10 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        var provider = new ServiceProvider();
+        var themeWatcher = provider.GetService<ThemeWatcher>();
+        var pageManager = provider.GetService<PageManager>();
+        themeWatcher.Initialize();
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
@@ -25,7 +31,7 @@ public partial class App : Application
             DisableAvaloniaDataAnnotationValidation();
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainViewModel()
+                DataContext = new MainViewModel(themeWatcher, pageManager)
             };
             this.RegisterTrayIconsEvents(desktop.MainWindow as MainWindow, desktop.MainWindow.DataContext as MainViewModel);
         }
@@ -33,7 +39,7 @@ public partial class App : Application
         {
             singleViewPlatform.MainView = new MainView
             {
-                DataContext = new MainViewModel()
+                DataContext = new MainViewModel(themeWatcher, pageManager)
             };
         }
 

@@ -7,7 +7,9 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:md="using:LiveMarkdown.Avalonia"
 			 xmlns:shadui="using:ShadUI"
+			 xmlns:viewmodels="using:LunarChatApp.ViewModels"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:DataType="viewmodels:ServersViewModel"
 			 x:Class="LunarChatApp.ServersPage">
 	<Grid ColumnDefinitions="Auto *">
 		<shadui:Sidebar
@@ -73,35 +75,20 @@
 							</StackPanel>
 						</StackPanel>
 					</Button>
-					<Button Grid.Column="1" Click="OpenSettings">
+					<Button Grid.Column="1" Command="{Binding OpenSettingsCommand}">
 						<lucideAvalonia:Lucide Grid.Column="1" HorizontalAlignment="Left" Icon="Settings" StrokeBrush="#fff" StrokeThickness="1.5" Width="22" Height="22"/>
 					</Button>
 				</Grid>
 			</Grid>
 		</shadui:Sidebar>
-		<StackPanel Grid.Column="1" Margin="4">
-			<Grid Grid.Row="0">
+		<Grid Grid.Column="1">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="*" />
-					<RowDefinition Height="Auto" />
+					<RowDefinition Height="auto" />
 				</Grid.RowDefinitions>
-				<ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-					<Grid>
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="auto" />
-							<ColumnDefinition />
-						</Grid.ColumnDefinitions>
-						<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
-							<Image Source="/Assets/avatar.png" Width="32" Height="32"></Image>
-						</Border>
-						<StackPanel Grid.Column="1" Margin="4">
-							<StackPanel Orientation="Horizontal" Spacing="6">
-								<TextBlock Classes="Large" Text="Builderb"></TextBlock>
-								<TextBlock Classes="Muted" VerticalAlignment="Center" Text="10:00 PM"></TextBlock>
-							</StackPanel>
-							<md:MarkdownRenderer x:Name="MarkdownRenderer" />
-						</StackPanel>
-					</Grid>
+				<ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsScrollChainingEnabled="false" Padding="24" >
+					<ItemsRepeater  ItemsSource="{Binding CrockeryList}">
+					</ItemsRepeater>
 				</ScrollViewer>
 				<Grid Grid.Row="1" Margin="4" Background="#393A41" ColumnSpacing="6">
 					<Grid.ColumnDefinitions>
@@ -109,12 +96,14 @@
 						<ColumnDefinition Width="*" />
 						<ColumnDefinition Width="auto" />
 					</Grid.ColumnDefinitions>
-					<lucideAvalonia:Lucide VerticalAlignment="Top" Padding="4" Icon="Plus" StrokeBrush="#fff" StrokeThickness="1.5" Width="22" Height="22"/>
+					<Button VerticalAlignment="Top" Padding="4">
+						<lucideAvalonia:Lucide  Icon="Plus" StrokeBrush="#fff" StrokeThickness="1.5" Width="22" Height="22"/>
+					</Button>
 					<avrichtextbox:RichTextBox Grid.Column="1" x:Name="RichBox" Background="#393A41" BorderBrush="Transparent"></avrichtextbox:RichTextBox>
-					<lucideAvalonia:Lucide VerticalAlignment="Top" Padding="4" Grid.Column="2" Icon="Smile" StrokeBrush="#fff" StrokeThickness="1.5" Width="22" Height="22"/>
+					<Button Grid.Column="2" VerticalAlignment="Top" Padding="4">
+						<lucideAvalonia:Lucide Icon="Smile" StrokeBrush="#fff" StrokeThickness="1.5" Width="22" Height="22"/>
+					</Button>
 				</Grid>
 			</Grid>
-
-		</StackPanel>
 	</Grid>
 </UserControl>

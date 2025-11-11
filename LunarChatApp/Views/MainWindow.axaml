@@ -7,6 +7,9 @@
         xmlns:shadui="clr-namespace:ShadUI;assembly=ShadUI"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="LunarChatApp.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        MinHeight="400"
+        MinWidth="600"
         Icon="/Assets/test-icon.ico"
         Title="Lunar Chat">
    <!-- <shadui:Window.Hosts>
@@ -20,9 +23,17 @@
             Margin="8,8,0,8"
             Width="14" />
     </shadui:Window.LogoContent>
-    <shadui:Window.MenuBarContent>
-        <shadui:SidebarItemLabel Text="Test" />
-    </shadui:Window.MenuBarContent>
+    <shadui:Window.RightWindowTitleBarContent>
+        <Button
+                Background="{DynamicResource SidebarBackgroundColor}"
+                Command="{Binding SwitchThemeCommand}"
+                CornerRadius="{DynamicResource MdCornerRadius}"
+                Height="30"
+                ToolTip.Tip="Switch Theme"
+                Width="60">
+                <TextBlock Classes="LucideIcon" Text="Theme" />
+            </Button>
+    </shadui:Window.RightWindowTitleBarContent>
 		
     <views:MainView />
 </shadui:Window>
