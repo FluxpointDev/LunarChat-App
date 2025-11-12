@@ -28,6 +28,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LunarChatApp.Shared\LunarChatApp.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Components\ChannelItem.axaml.cs">
       <DependentUpon>ChannelItem.axaml</DependentUpon>
     </Compile>

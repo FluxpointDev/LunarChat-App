@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Core\Bots\" />
+    <Folder Include="WebSocket\" />
+    <Folder Include="Rest\Channels\" />
+    <Folder Include="Rest\Messages\" />
+    <Folder Include="Rest\Servers\" />
+    <Folder Include="Rest\Users\" />
+  </ItemGroup>
+
+</Project>

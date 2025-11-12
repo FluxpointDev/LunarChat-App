@@ -6,5 +6,6 @@
   <Project Path="LunarChatApp.Browser/LunarChatApp.Browser.csproj" />
   <Project Path="LunarChatApp.Desktop/LunarChatApp.Desktop.csproj" />
   <Project Path="LunarChatApp.iOS/LunarChatApp.iOS.csproj" />
+  <Project Path="LunarChatApp.Shared/LunarChatApp.Shared.csproj" Id="9991fd0e-7a4d-4ffd-91a0-a9cd2a7de306" />
   <Project Path="LunarChatApp/LunarChatApp.csproj" />
 </Solution>
