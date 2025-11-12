@@ -1,6 +1,4 @@
-﻿using LunarChatServer.Shared.Rest;
-
-namespace LunarChatApp.Shared.Core.Servers;
+﻿namespace LunarChatApp.Shared.Core.Servers;
 
 public class Member
 {

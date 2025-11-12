@@ -1,6 +1,6 @@
 ﻿namespace LunarChatApp.Shared.Rest.Accounts;
 
-public class CreateAccountRequest
+public class CreateAccountRequest : ILunarRequest
 {
     public string username { get; set; }
     public string email { get; set; }

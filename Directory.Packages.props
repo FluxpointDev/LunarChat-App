@@ -21,6 +21,7 @@
     <PackageVersion Include="Jab" Version="0.12.0" />
     <PackageVersion Include="LiveMarkdown.Avalonia" Version="1.3.6" />
     <PackageVersion Include="LucideAvalonia" Version="1.6.1" />
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageVersion Include="ShadUI" Version="0.1.5" />
     <PackageVersion Include="Simplecto.Avalonia.RichTextBox" Version="1.3.9" />
     <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.15" />

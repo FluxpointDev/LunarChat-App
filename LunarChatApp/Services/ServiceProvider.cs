@@ -5,6 +5,7 @@ using ShadUI;
 namespace LunarChatApp.Services;
 
 [ServiceProvider]
+[Singleton(typeof(RestClient))]
 [Singleton(typeof(PageManager), Factory = nameof(PageManagerFactory))]
 [Singleton(typeof(ThemeWatcher), Factory = nameof(ThemeWatcherFactory))]
 public partial class ServiceProvider

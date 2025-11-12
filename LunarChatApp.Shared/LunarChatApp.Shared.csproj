@@ -15,4 +15,8 @@
     <Folder Include="Rest\Users\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" />
+  </ItemGroup>
+
 </Project>

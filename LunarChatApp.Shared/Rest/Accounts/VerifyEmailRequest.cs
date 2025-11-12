@@ -1,7 +1,6 @@
 ﻿namespace LunarChatApp.Shared.Rest.Accounts;
 
-public class LoginRequest : ILunarRequest
+public class VerifyEmailRequest : ILunarRequest
 {
     public string email { get; set; }
-    public string password { get; set; }
 }
