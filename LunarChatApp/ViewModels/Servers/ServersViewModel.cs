@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
+using ShadUI;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -11,11 +12,15 @@ public partial class ServersViewModel : ViewModelBase
 {
     private PageManager pageManager;
     public TestState state { get; set; }
+    private ThemeWatcher themeWatcher;
+    private MainViewModel main;
 
-    public ServersViewModel(PageManager page, TestState st)
+    public ServersViewModel(PageManager page, TestState st, ThemeWatcher theme, MainViewModel mainModel)
     {
         pageManager = page;
         state = st;
+        themeWatcher = theme;
+        main = mainModel;
         st.OnSelectServer += OnSelectServer;
         st.OnSelectChannel += OnSelectChannel;
         if (CrockeryList == null)
@@ -75,7 +80,7 @@ public partial class ServersViewModel : ViewModelBase
     {
         pageManager.OnSwitchPage(new SettingsPage
         {
-            DataContext = new SettingsViewModel(pageManager, state)
+            DataContext = new SettingsViewModel(pageManager, state, themeWatcher, main)
         });
     }
 }

@@ -24,7 +24,7 @@ public partial class MainViewModel : ViewModelBase
         if (SelectedPage == null)
             SelectedPage = new LoginPage
             {
-                DataContext = new LoginViewModel(pageManager, rest, state)
+                DataContext = new LoginViewModel(pageManager, rest, state, themeWatcher, this)
             };
     }
 
@@ -65,7 +65,7 @@ public partial class MainViewModel : ViewModelBase
         page.Initialize();
     }
 
-    private ThemeMode _currentTheme;
+    public ThemeMode _currentTheme;
 
     public ThemeMode CurrentTheme
     {

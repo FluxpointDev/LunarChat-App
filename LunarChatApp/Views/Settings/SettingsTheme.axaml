@@ -2,7 +2,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:settings="using:LunarChatApp.ViewModels.Settings"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="LunarChatApp.SettingsTheme">
-  Welcome to Avalonia!
+             x:Class="LunarChatApp.SettingsTheme"
+             x:DataType="settings:SettingsThemeViewModel">
+    <StackPanel Spacing="20" HorizontalAlignment="Left">
+  <ComboBox Width="255" SelectedIndex="{Binding SelectedIndex}" SelectedValue="{Binding SelectedItem, Mode=TwoWay}">
+        <ComboBoxItem>Auto</ComboBoxItem>
+        <ComboBoxItem>Dark</ComboBoxItem>
+        <ComboBoxItem>Light</ComboBoxItem>
+    </ComboBox>
+        </StackPanel>
 </UserControl>

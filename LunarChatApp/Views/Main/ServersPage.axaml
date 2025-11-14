@@ -23,7 +23,7 @@
 			<shadui:Sidebar.Header>
 				<StackPanel Orientation="Horizontal">
 					<Button Margin="2" Padding="8" Command="{Binding OpenHomeCommand}">
-						<lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="House" StrokeBrush="#fff" StrokeThickness="1.5" Width="28" Height="28"/>
+						<lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="House" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="28" Height="28"/>
 					</Button>
 					<ContentControl Content="{Binding SelectedHeader}"></ContentControl>
 				</StackPanel>
@@ -62,7 +62,7 @@
 						</StackPanel>
 					</Button>
 					<Button Grid.Column="1" Command="{Binding OpenSettingsCommand}">
-						<lucideAvalonia:Lucide Grid.Column="1" HorizontalAlignment="Left" Icon="Settings" StrokeBrush="#fff" StrokeThickness="1.5" Width="22" Height="22"/>
+						<lucideAvalonia:Lucide Grid.Column="1" HorizontalAlignment="Left" Icon="Settings" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="22" Height="22"/>
 					</Button>
 				</Grid>
 			</Grid>

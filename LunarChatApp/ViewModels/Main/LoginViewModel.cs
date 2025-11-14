@@ -2,12 +2,13 @@
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.Validators;
+using ShadUI;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace LunarChatApp.ViewModels;
 
-public partial class LoginViewModel(PageManager pageManager, RestClient rest, TestState state) : ViewModelBase
+public partial class LoginViewModel(PageManager pageManager, RestClient rest, TestState state, ThemeWatcher themeWatcher, MainViewModel main) : ViewModelBase
 {
     [ObservableProperty]
     public int _currentTab;
@@ -64,7 +65,7 @@ public partial class LoginViewModel(PageManager pageManager, RestClient rest, Te
         state.Username = Username;
         pageManager.OnSwitchPage(new ServersPage
         {
-            DataContext = new ServersViewModel(pageManager, state)
+            DataContext = new ServersViewModel(pageManager, state, themeWatcher, main)
         });
     }
 

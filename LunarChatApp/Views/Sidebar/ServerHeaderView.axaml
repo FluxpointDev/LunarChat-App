@@ -12,7 +12,7 @@
 								<ColumnDefinition MinWidth="30" />
 							</Grid.ColumnDefinitions>
 							<TextBlock Classes="h6" Text="Fluxpoint Development" TextWrapping="WrapWithOverflow"></TextBlock>
-							<lucideAvalonia:Lucide Grid.Column="1" HorizontalAlignment="Left" Icon="ChevronDown" StrokeBrush="#fff" StrokeThickness="1.5" Width="22" Height="22"/>
+							<lucideAvalonia:Lucide Grid.Column="1" HorizontalAlignment="Left" Icon="ChevronDown" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="22" Height="22"/>
 						</Grid>
 					</Button>
 </UserControl>

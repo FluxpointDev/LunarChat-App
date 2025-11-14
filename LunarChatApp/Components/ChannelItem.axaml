@@ -13,7 +13,7 @@
                         Content="{Binding $parent[local:ChannelItem].ChannelName}">
                         <shadui:SidebarItem.Icon>
                             <Viewbox>
-                                <lucideAvalonia:Lucide x:Name="Test" Icon="{Binding $parent[local:ChannelItem].ChannelIcon}" StrokeBrush="#cccccc" StrokeThickness="1.5" Width="16" Height="16"/>
+                                <lucideAvalonia:Lucide x:Name="Test" Icon="{Binding $parent[local:ChannelItem].ChannelIcon}" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="16" Height="16"/>
                             </Viewbox>
                         </shadui:SidebarItem.Icon>
                     </shadui:SidebarItem>

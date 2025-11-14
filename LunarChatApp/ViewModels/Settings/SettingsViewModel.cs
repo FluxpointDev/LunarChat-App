@@ -2,6 +2,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
+using LunarChatApp.ViewModels.Settings;
+using ShadUI;
 using System;
 
 namespace LunarChatApp.ViewModels;
@@ -19,11 +21,15 @@ public partial class SettingsViewModel : ViewModelBase
 {
     private PageManager pageManager;
     private TestState state { get; set; }
+    private ThemeWatcher themeWatcher;
+    private MainViewModel main;
 
-    public SettingsViewModel(PageManager page, TestState st)
+    public SettingsViewModel(PageManager page, TestState st, ThemeWatcher theme, MainViewModel mainModel)
     {
         pageManager = page;
         state = st;
+        themeWatcher = theme;
+        main = mainModel;
         if (SelectedPage == null)
             SelectedPage = new SettingsAccount();
     }
@@ -40,7 +46,7 @@ public partial class SettingsViewModel : ViewModelBase
     {
         pageManager.OnSwitchPage(new ServersPage
         {
-            DataContext = new ServersViewModel(pageManager, state)
+            DataContext = new ServersViewModel(pageManager, state, themeWatcher, main)
         });
     }
 
@@ -108,7 +114,10 @@ public partial class SettingsViewModel : ViewModelBase
                 SelectedPage = new SettingsConnections();
                 break;
             case SettingsPageType.Theme:
-                SelectedPage = new SettingsTheme();
+                SelectedPage = new SettingsTheme()
+                {
+                    DataContext = new SettingsThemeViewModel(state, themeWatcher, main)
+                };
                 break;
             case SettingsPageType.Chat:
                 SelectedPage = new SettingsChat();
