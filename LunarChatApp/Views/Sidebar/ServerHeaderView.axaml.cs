@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace LunarChatApp;
 
-public partial class SettingsConnections : UserControl
+public partial class ServerHeaderView : UserControl
 {
-    public SettingsConnections()
+    public ServerHeaderView()
     {
         InitializeComponent();
     }

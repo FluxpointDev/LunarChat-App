@@ -31,7 +31,7 @@ public partial class App : Application
             DisableAvaloniaDataAnnotationValidation();
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainViewModel(themeWatcher, pageManager)
+                DataContext = new MainViewModel(provider)
             };
             this.RegisterTrayIconsEvents(desktop.MainWindow as MainWindow, desktop.MainWindow.DataContext as MainViewModel);
         }
@@ -39,7 +39,7 @@ public partial class App : Application
         {
             singleViewPlatform.MainView = new MainView
             {
-                DataContext = new MainViewModel(themeWatcher, pageManager)
+                DataContext = new MainViewModel(provider)
             };
         }
 

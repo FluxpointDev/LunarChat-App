@@ -2,4 +2,6 @@
 
 public class Server
 {
+    public string Id;
+    public string Name;
 }

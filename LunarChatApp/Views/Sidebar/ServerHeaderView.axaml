@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:lucideAvalonia="using:LucideAvalonia"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="LunarChatApp.ServerHeaderView">
+  <Button Padding="8,0,4,0">
+						<Grid MaxWidth="230" ColumnSpacing="10">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*" />
+								<ColumnDefinition MinWidth="30" />
+							</Grid.ColumnDefinitions>
+							<TextBlock Classes="h6" Text="Fluxpoint Development" TextWrapping="WrapWithOverflow"></TextBlock>
+							<lucideAvalonia:Lucide Grid.Column="1" HorizontalAlignment="Left" Icon="ChevronDown" StrokeBrush="#fff" StrokeThickness="1.5" Width="22" Height="22"/>
+						</Grid>
+					</Button>
+</UserControl>

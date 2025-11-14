@@ -5,9 +5,11 @@
             xmlns:shadui="using:ShadUI"
              xmlns:lucideAvalonia="using:LucideAvalonia"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:servers="using:LunarChatApp.ViewModels.Servers"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="100"
-             x:Class="LunarChatApp.ChannelItem">
-        <shadui:SidebarItem Click="Clicked"
+             x:Class="LunarChatApp.ChannelItem"
+             x:DataType="servers:ChannelItemViewModel">
+        <shadui:SidebarItem Command="{Binding SelectChannelCommand}"
                         Content="{Binding $parent[local:ChannelItem].ChannelName}">
                         <shadui:SidebarItem.Icon>
                             <Viewbox>

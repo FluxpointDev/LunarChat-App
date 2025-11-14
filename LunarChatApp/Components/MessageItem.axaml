@@ -15,7 +15,7 @@
 		</Border>
 		<StackPanel Grid.Column="1" Margin="4">
 			<StackPanel Orientation="Horizontal" Spacing="6">
-				<TextBlock Classes="Large" Text="Builderb"></TextBlock>
+				<TextBlock x:Name="MessageUsername" Classes="Large" Text="Builderb"></TextBlock>
 				<TextBlock Classes="Muted" VerticalAlignment="Center" Text="10:00 PM"></TextBlock>
 			</StackPanel>
 			<md:MarkdownRenderer x:Name="MarkdownRenderer" />

@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using LunarChatApp.Services;
+using LunarChatApp.Shared.Core.Servers;
 
 namespace LunarChatApp;
 
@@ -11,7 +12,7 @@ public partial class ServersPage : UserControl
         InitializeComponent();
     }
 
-    public ServerData? SelectedServer;
+    public Server? SelectedServer;
 
     private void OpenSettings(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {

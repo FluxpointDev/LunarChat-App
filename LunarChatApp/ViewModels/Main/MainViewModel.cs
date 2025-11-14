@@ -14,15 +14,17 @@ public partial class MainViewModel : ViewModelBase
     private ThemeWatcher themeWatcher;
     private PageManager pageManager;
 
-    public MainViewModel(ThemeWatcher watch, PageManager page)
+    public MainViewModel(ServiceProvider services)
     {
-        themeWatcher = watch;
-        pageManager = page;
+        themeWatcher = services.GetService<ThemeWatcher>();
+        pageManager = services.GetService<PageManager>();
+        var rest = services.GetService<RestClient>();
+        var state = services.GetService<TestState>();
         pageManager.OnSwitchPage += SwitchPage;
         if (SelectedPage == null)
-            SelectedPage = new ServersPage
+            SelectedPage = new LoginPage
             {
-                DataContext = new ServersViewModel(pageManager)
+                DataContext = new LoginViewModel(pageManager, rest, state)
             };
     }
 
@@ -33,7 +35,7 @@ public partial class MainViewModel : ViewModelBase
     private object? _selectedPage;
 
     [ObservableProperty]
-    private string _currentRoute = "servers";
+    private string _currentRoute = "login";
 
     private void SwitchPage(UserControl page)
     {

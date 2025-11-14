@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using LucideAvalonia.Enum;
+using LunarChatApp.Shared.Core.Channels;
 
 namespace LunarChatApp;
 

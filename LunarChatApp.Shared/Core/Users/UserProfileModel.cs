@@ -1,6 +1,4 @@
-﻿using LunarChatApp.Shared.Core;
-
-namespace LunarChatApp.Shared.Core.Users;
+﻿namespace LunarChatApp.Shared.Core.Users;
 
 public class UserProfileModel
 {

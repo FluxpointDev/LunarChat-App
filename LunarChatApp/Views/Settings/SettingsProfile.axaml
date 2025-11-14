@@ -3,22 +3,25 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:shadui="using:ShadUI"
+             xmlns:viewmodels="using:LunarChatApp.ViewModels"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-			 x:Class="LunarChatApp.SettingsProfile">
+			 x:Class="LunarChatApp.SettingsProfile"
+			 x:DataType="viewmodels:SettingsSectionModel">
 	<StackPanel Spacing="20" HorizontalAlignment="Left">
 		<StackPanel HorizontalAlignment="Left" Spacing="10">
 		<TextBox
 		Classes="Clearable"
 		Watermark="builderb"
 		Width="225"
-		Text="Builderb"
+		Text="{Binding state.DisplayName}"
+		IsReadOnly="true"
 		shadui:ControlAssist.Label="Display Name" />
 
 		<TextBox
 		Classes="Clearable"
 		Watermark="builderb"
 		Width="225"
-		Text="builderb"
+		Text="{Binding state.Username}"
 		shadui:ControlAssist.Label="Username" />
 
 		<TextBox
@@ -26,6 +29,7 @@
 		Watermark="user@email.com"
 		Width="225"
 		Text="user@gmail.com"
+		IsReadOnly="true"
 		shadui:ControlAssist.Label="Email" />
 
 		

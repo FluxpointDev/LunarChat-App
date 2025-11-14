@@ -6,13 +6,24 @@ using System;
 
 namespace LunarChatApp.ViewModels;
 
+public partial class SettingsSectionModel : ViewModelBase
+{
+    public TestState state { get; set; }
+
+    public SettingsSectionModel(TestState st)
+    {
+        state = st;
+    }
+}
 public partial class SettingsViewModel : ViewModelBase
 {
     private PageManager pageManager;
+    private TestState state { get; set; }
 
-    public SettingsViewModel(PageManager page)
+    public SettingsViewModel(PageManager page, TestState st)
     {
         pageManager = page;
+        state = st;
         if (SelectedPage == null)
             SelectedPage = new SettingsAccount();
     }
@@ -29,7 +40,7 @@ public partial class SettingsViewModel : ViewModelBase
     {
         pageManager.OnSwitchPage(new ServersPage
         {
-            DataContext = new ServersViewModel(pageManager)
+            DataContext = new ServersViewModel(pageManager, state)
         });
     }
 
@@ -88,7 +99,10 @@ public partial class SettingsViewModel : ViewModelBase
                 SelectedPage = new SettingsAccount();
                 break;
             case SettingsPageType.Profile:
-                SelectedPage = new SettingsProfile();
+                SelectedPage = new SettingsProfile
+                {
+                    DataContext = new SettingsSectionModel(state)
+                };
                 break;
             case SettingsPageType.Connections:
                 SelectedPage = new SettingsConnections();

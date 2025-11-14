@@ -1,0 +1,109 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:shadui="using:ShadUI"
+			 xmlns:viewmodels="using:LunarChatApp.ViewModels"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.LoginPage"
+			 x:DataType="viewmodels:LoginViewModel">
+
+	<TabControl SelectedIndex="{Binding CurrentTab}" HorizontalAlignment="Center" Margin="10">
+		<TabControl.Items>
+			<TabItem Header="Demo">
+				<shadui:Card
+				Width="350"
+				HorizontalAlignment="Center"
+				HasShadow="True">
+					<shadui:Card.Header>
+						<StackPanel Spacing="4">
+							<shadui:CardTitle FontSize="18">Demo</shadui:CardTitle>
+							<shadui:CardDescription>Test out the app!!</shadui:CardDescription>
+						</StackPanel>
+					</shadui:Card.Header>
+					<StackPanel Spacing="16">
+						<TextBox
+						shadui:ControlAssist.Label="Username"
+						Classes="Clearable"
+						Text="{Binding Username, Mode=TwoWay}"
+						Watermark="bob" />
+						<TextBlock TextWrapping="Wrap">Max 32 characters, use lowercase letters, numbers, underscores _ or full stops.</TextBlock>
+					</StackPanel>
+					<shadui:Card.Footer>
+						<Button Classes="Primary" Command="{Binding SubmitDemoCommand}">Submit</Button>
+					</shadui:Card.Footer>
+				</shadui:Card>
+			</TabItem>
+			<TabItem Header="Login">
+				<shadui:Card
+				Width="350"
+				HorizontalAlignment="Center"
+				HasShadow="True">
+					<shadui:Card.Header>
+						<StackPanel Spacing="4">
+							<shadui:CardTitle FontSize="18">Login</shadui:CardTitle>
+							<shadui:CardDescription>Hello!</shadui:CardDescription>
+						</StackPanel>
+					</shadui:Card.Header>
+					<StackPanel Spacing="16">
+						<TextBox
+						shadui:ControlAssist.Label="Email"
+						Classes="Clearable"
+						Text="{Binding Email, Mode=TwoWay}"
+						Watermark="user@example.com" />
+						<TextBox
+						shadui:ControlAssist.Label="Password"
+						Classes="PasswordReveal"
+						PasswordChar="•"
+						Text="{Binding Password, Mode=TwoWay}"
+						Watermark="Enter password" />
+					</StackPanel>
+					<shadui:Card.Footer>
+						<Button Classes="Primary" Command="{Binding SubmitLoginCommand}">Submit</Button>
+					</shadui:Card.Footer>
+				</shadui:Card>
+			</TabItem>
+			<TabItem Header="Register">
+				<shadui:Card
+				Width="350"
+				HorizontalAlignment="Center"
+				HasShadow="True">
+					<shadui:Card.Header>
+						<StackPanel Spacing="4">
+							<shadui:CardTitle FontSize="18">Create Account</shadui:CardTitle>
+							<shadui:CardDescription>This dosen't actually work</shadui:CardDescription>
+						</StackPanel>
+					</shadui:Card.Header>
+					<StackPanel Spacing="16">
+						<TextBox
+						shadui:ControlAssist.Label="Email"
+						Classes="Clearable"
+						Text="{Binding Email, Mode=TwoWay}"
+						Watermark="user@example.com" />
+						<TextBox
+						shadui:ControlAssist.Hint="This is your public display name."
+						shadui:ControlAssist.Label="Username"
+						Classes="Clearable"
+						Text="{Binding Username, Mode=TwoWay}"
+						Watermark="bob" />
+						<TextBox
+						shadui:ControlAssist.Label="Password"
+						Classes="PasswordReveal"
+						PasswordChar="•"
+						Text="{Binding Password, Mode=TwoWay}"
+						Watermark="Enter password" />
+						<TextBox
+						shadui:ControlAssist.Label="Confirm"
+						Classes="PasswordReveal"
+						PasswordChar="•"
+						Text="{Binding ConfirmPassword, Mode=TwoWay}"
+						Watermark="Confirm password" />
+					</StackPanel>
+					<shadui:Card.Footer>
+						<Button Classes="Primary" Command="{Binding SubmitRegisterCommand}">Submit</Button>
+					</shadui:Card.Footer>
+				</shadui:Card>
+			</TabItem>
+		</TabControl.Items>
+	</TabControl>
+</UserControl>

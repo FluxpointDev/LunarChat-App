@@ -5,20 +5,22 @@ namespace LunarChatApp;
 
 public partial class MessageItem : UserControl
 {
-    public MessageItem()
+    public MessageItem(string username, string content)
     {
         InitializeComponent();
+        MessageUsername.Text = username;
         var markdownBuilder = new ObservableStringBuilder();
         MarkdownRenderer.MarkdownBuilder = markdownBuilder;
         // Append Markdown content, this will trigger re-rendering
-        markdownBuilder.Append("# Hello, Markdown!\n" +
-            "https://google.com\n" +
-            "- Test 1\n" +
-            "- Test 2\n" +
-            "**Bold**\n" +
-            "```cs\n" +
-            "public void Test() {\n" +
-            "}\n" +
-            "```");
+        markdownBuilder.Append(content);
+        //markdownBuilder.Append("# Hello, Markdown!\n" +
+        //    "https://google.com\n" +
+        //    "- Test 1\n" +
+        //    "- Test 2\n" +
+        //    "**Bold**\n" +
+        //    "```cs\n" +
+        //    "public void Test() {\n" +
+        //    "}\n" +
+        //    "```");
     }
 }

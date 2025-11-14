@@ -1,0 +1,72 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:avrichtextbox="using:AvRichTextBox"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:local="using:LunarChatApp"
+			 xmlns:lucideAvalonia="using:LucideAvalonia"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:md="using:LiveMarkdown.Avalonia"
+			 xmlns:shadui="using:ShadUI"
+			 xmlns:viewmodels="using:LunarChatApp.ViewModels"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:DataType="viewmodels:ServersViewModel"
+			 x:Class="LunarChatApp.ServersPage">
+	<Grid ColumnDefinitions="Auto *">
+		<shadui:Sidebar
+		BorderBrush="{DynamicResource BorderColor30}"
+		BorderThickness="0,0,1,0"
+		Expanded="true"
+		Grid.Column="0"
+		MinWidth="60"
+		Padding="4"
+		Width="220">
+			<shadui:Sidebar.Header>
+				<StackPanel Orientation="Horizontal">
+					<Button Margin="2" Padding="8" Command="{Binding OpenHomeCommand}">
+						<lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="House" StrokeBrush="#fff" StrokeThickness="1.5" Width="28" Height="28"/>
+					</Button>
+					<ContentControl Content="{Binding SelectedHeader}"></ContentControl>
+				</StackPanel>
+			</shadui:Sidebar.Header>
+
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="auto" />
+						<ColumnDefinition />
+					</Grid.ColumnDefinitions>
+					<StackPanel HorizontalAlignment="Left">
+						<ItemsRepeater MinWidth="40"  ItemsSource="{Binding CrockeryList}">
+						</ItemsRepeater>
+					</StackPanel>
+					<ContentControl Grid.Column="1" Content="{Binding SelectedSidebar}"></ContentControl>
+				</Grid>
+				<Grid Grid.Row="1">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="50" />
+					</Grid.ColumnDefinitions>
+					<Button HorizontalAlignment="Left" Padding="6">
+						<StackPanel Orientation="Horizontal" Spacing="6">
+							<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
+								<Image Source="/Assets/avatar.png" Width="40" Height="40"></Image>
+							</Border>
+							<StackPanel>
+								<TextBlock Text="{Binding state.DisplayName}"></TextBlock>
+								<TextBlock Classes="Muted" Text="{Binding state.Username}"></TextBlock>
+							</StackPanel>
+						</StackPanel>
+					</Button>
+					<Button Grid.Column="1" Command="{Binding OpenSettingsCommand}">
+						<lucideAvalonia:Lucide Grid.Column="1" HorizontalAlignment="Left" Icon="Settings" StrokeBrush="#fff" StrokeThickness="1.5" Width="22" Height="22"/>
+					</Button>
+				</Grid>
+			</Grid>
+		</shadui:Sidebar>
+		<ContentControl Grid.Column="1" Content="{Binding SelectedPage}"></ContentControl>
+	</Grid>
+</UserControl>

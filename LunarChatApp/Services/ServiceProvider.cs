@@ -8,6 +8,7 @@ namespace LunarChatApp.Services;
 [Singleton(typeof(RestClient))]
 [Singleton(typeof(PageManager), Factory = nameof(PageManagerFactory))]
 [Singleton(typeof(ThemeWatcher), Factory = nameof(ThemeWatcherFactory))]
+[Singleton(typeof(TestState))]
 public partial class ServiceProvider
 {
     public PageManager PageManagerFactory()

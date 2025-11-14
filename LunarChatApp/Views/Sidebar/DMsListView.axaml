@@ -1,0 +1,19 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:lucideAvalonia="using:LucideAvalonia"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shadui="using:ShadUI"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="LunarChatApp.DMsListView">
+    <StackPanel Spacing="4">
+    <shadui:SidebarItem IsChecked="true"
+                        Content="Home">
+                        <shadui:SidebarItem.Icon>
+                            <Viewbox>
+                                <lucideAvalonia:Lucide x:Name="Test" Icon="LayoutGrid" StrokeBrush="#cccccc" StrokeThickness="1.5" Width="16" Height="16"/>
+                            </Viewbox>
+                        </shadui:SidebarItem.Icon>
+                    </shadui:SidebarItem>
+        </StackPanel>
+</UserControl>
