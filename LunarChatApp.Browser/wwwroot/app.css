@@ -9,7 +9,9 @@
     align-items: center;
     display: flex;
     pointer-events: none;
+    flex-direction: column;
 }
+
 
 /* Light theme styles */
 @media (prefers-color-scheme: light) {
@@ -17,13 +19,9 @@
         background: white;
     }
 
-    .avalonia-splash h2 {
-        color: #1b2a4e;
-    }
-
-    .avalonia-splash a {
-        color: #0D6EFD;
-    }
+        .avalonia-splash h2 {
+            color: #1b2a4e;
+        }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -31,24 +29,15 @@
         background: #1b2a4e;
     }
 
-    .avalonia-splash h2 {
-        color: white;
-    }
-
-    .avalonia-splash a {
-        color: white;
-    }
+        .avalonia-splash h2 {
+            color: white;
+        }
 }
 
 .avalonia-splash h2 {
     font-weight: 400;
     font-size: 1.5rem;
-}
-
-.avalonia-splash a {
-    text-decoration: none;
-    font-size: 2.5rem;
-    display: block;   
+    display: block !important;
 }
 
 .avalonia-splash.splash-close {
