@@ -16,32 +16,36 @@
 			<RowDefinition Height="*" />
 			<RowDefinition Height="auto" />
 		</Grid.RowDefinitions>
-		<TextBlock Padding="6" Classes="Large" Text="{Binding Name}"></TextBlock>
+		<Border BorderBrush="{DynamicResource BorderColor30}" BorderThickness="0,0,0,1">
+			<TextBlock Padding="6" Classes="Large" Text="{Binding Name}"></TextBlock>
+		</Border>
 		<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsScrollChainingEnabled="false" Padding="24" >
 			<ItemsRepeater ItemsSource="{Binding CrockeryList}">
 			</ItemsRepeater>
 		</ScrollViewer>
-		<Grid Grid.Row="2" Margin="4" Background="#393A41" ColumnSpacing="6">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="auto" />
-				<ColumnDefinition Width="*" />
-				<ColumnDefinition Width="auto" />
-			</Grid.ColumnDefinitions>
-			<Button VerticalAlignment="Top" Padding="4">
-				<lucideAvalonia:Lucide Icon="Plus" StrokeBrush="#fff" StrokeThickness="1.5" Width="22" Height="22"/>
-			</Button>
-			<TextBox Grid.Column="1"
-					 Classes=""
-					 Text="{Binding Textbox}">
-				<TextBox.KeyBindings>
-					<KeyBinding Command="{Binding EnterCommand}" Gesture="Enter" />
-				</TextBox.KeyBindings>
-			</TextBox>
-			<!--<avrichtextbox:RichTextBox Grid.Column="1" x:Name="RichBox" Background="#393A41" BorderBrush="Transparent"></avrichtextbox:RichTextBox>-->
-			<Button Grid.Column="2" VerticalAlignment="Top" Padding="4">
-				<lucideAvalonia:Lucide Icon="Smile" StrokeBrush="#fff" StrokeThickness="1.5" Width="22" Height="22"/>
-			</Button>
-		</Grid>
+		<Border Grid.Row="2" CornerRadius="8" Margin="6" Background="{DynamicResource BorderColor}">
+			<Grid Margin="2, 8, 2, 8" ColumnSpacing="6">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="auto" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="auto" />
+				</Grid.ColumnDefinitions>
+				<Button VerticalAlignment="Center" Margin="4,0,0,0" Padding="4">
+					<lucideAvalonia:Lucide Icon="Plus" StrokeBrush="#fff" StrokeThickness="1.5" Width="22" Height="22"/>
+				</Button>
+				<TextBox Grid.Column="1"
+						 Classes=""
+						 Text="{Binding Textbox}">
+					<TextBox.KeyBindings>
+						<KeyBinding Command="{Binding EnterCommand}" Gesture="Enter" />
+					</TextBox.KeyBindings>
+				</TextBox>
+				<!--<avrichtextbox:RichTextBox Grid.Column="1" x:Name="RichBox" Background="#393A41" BorderBrush="Transparent"></avrichtextbox:RichTextBox>-->
+				<Button Grid.Column="2" Margin="0, 0, 4, 0" VerticalAlignment="Center" Padding="4">
+					<lucideAvalonia:Lucide Icon="Smile" StrokeBrush="#fff" StrokeThickness="1.5" Width="22" Height="22"/>
+				</Button>
+			</Grid>
+		</Border>
 	</Grid>
 
 </UserControl>
