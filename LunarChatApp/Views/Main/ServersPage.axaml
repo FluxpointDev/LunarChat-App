@@ -50,17 +50,40 @@
 						<ColumnDefinition Width="*" />
 						<ColumnDefinition Width="50" />
 					</Grid.ColumnDefinitions>
-					<Button HorizontalAlignment="Left" Padding="6">
-						<StackPanel Orientation="Horizontal" Spacing="6">
-							<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
-								<Image Source="/Assets/avatar.png" Width="40" Height="40"></Image>
-							</Border>
-							<StackPanel>
-								<TextBlock Text="{Binding state.DisplayName}"></TextBlock>
-								<TextBlock Classes="Muted" Text="{Binding state.Username}"></TextBlock>
-							</StackPanel>
-						</StackPanel>
-					</Button>
+					<Menu Classes="Single">
+						<MenuItem
+						Classes="NoPressedAnimation"
+						CornerRadius="{DynamicResource LgCornerRadius}"
+						HorizontalAlignment="Stretch"
+						Padding="8,0"
+						shadui:MenuItemAssist.PopupHorizontalOffset="4"
+						shadui:MenuItemAssist.PopupPlacement="RightEdgeAlignedBottom"
+						shadui:MenuItemAssist.PopupVerticalOffset="4">
+							<MenuItem.Header>
+								<Button HorizontalAlignment="Left">
+									<StackPanel Orientation="Horizontal" Spacing="6">
+										<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
+											<Image Source="/Assets/avatar.png" Width="40" Height="40"></Image>
+										</Border>
+										<StackPanel>
+											<TextBlock Text="{Binding state.DisplayName}"></TextBlock>
+											<TextBlock Classes="Muted" Text="{Binding state.Username}"></TextBlock>
+										</StackPanel>
+									</StackPanel>
+								</Button>
+							</MenuItem.Header>
+							<MenuItem Header="Logout">
+                                <MenuItem.Icon>
+                                    <lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="LogOut" StrokeBrush="{DynamicResource PrimaryColor}" Width="12" Height="12"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+							<MenuItem Header="Quit">
+                                <MenuItem.Icon>
+                                    <lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="X" StrokeBrush="{DynamicResource PrimaryColor}" Width="12" Height="12"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+						</MenuItem>
+					</Menu>
 					<Button Grid.Column="1" Command="{Binding OpenSettingsCommand}">
 						<lucideAvalonia:Lucide Grid.Column="1" HorizontalAlignment="Left" Icon="Settings" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="22" Height="22"/>
 					</Button>

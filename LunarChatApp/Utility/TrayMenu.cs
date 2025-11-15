@@ -35,7 +35,7 @@ public static class TrayMenu
         //var aboutMenu = items.First(x =>
         //    x.Header != null && x.Header.Contains("About", StringComparison.CurrentCultureIgnoreCase));
         var exitMenu = items.First(x =>
-            x.Header != null && x.Header.Contains("Exit", StringComparison.CurrentCultureIgnoreCase));
+            x.Header != null && x.Header.Contains("Quit", StringComparison.CurrentCultureIgnoreCase));
 
         openMenu.Click += (_, _) =>
         {

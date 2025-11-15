@@ -18,7 +18,7 @@
                         <!--  added spaces to have a wider menu  -->
                         <NativeMenuItem Header="Open            " />
                         <NativeMenuItemSeparator />
-                        <NativeMenuItem Header="Exit" />
+                        <NativeMenuItem Header="Quit" />
                     </NativeMenu>
                 </TrayIcon.Menu>
             </TrayIcon>
