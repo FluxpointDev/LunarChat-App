@@ -63,10 +63,11 @@ public partial class LoginViewModel(PageManager pageManager, RestClient rest, Te
 
         state.DisplayName = Username;
         state.Username = Username;
-        pageManager.OnSwitchPage(new ServersPage
+        state.CachedServersPage = new ServersPage
         {
             DataContext = new ServersViewModel(pageManager, state, themeWatcher, main, rest)
-        });
+        };
+        pageManager.OnSwitchPage(state.CachedServersPage);
     }
 
     [RelayCommand]

@@ -6,6 +6,7 @@
              xmlns:vm="clr-namespace:LunarChatApp.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="LunarChatApp.Views.MainView"
+             Background="{DynamicResource PrimaryForegroundColor}"
              x:DataType="vm:MainViewModel">
   <Design.DataContext>
     <!-- This only sets the DataContext for the previewer in an IDE,

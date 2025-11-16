@@ -8,6 +8,8 @@ namespace LunarChatApp;
 
 public partial class TestState : ObservableObject
 {
+    public ServersPage? CachedServersPage;
+
     [ObservableProperty]
     private string _username = "test";
 

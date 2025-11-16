@@ -92,10 +92,7 @@ public partial class MainViewModel : ViewModelBase
     {
         if (SelectedPage.GetType() == typeof(SettingsPage))
         {
-            pageManager.OnSwitchPage(new ServersPage
-            {
-                DataContext = new ServersViewModel(pageManager, state, themeWatcher, this, rest)
-            });
+            pageManager.OnSwitchPage(state.CachedServersPage);
         }
     }
 

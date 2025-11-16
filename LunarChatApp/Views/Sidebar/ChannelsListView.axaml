@@ -8,7 +8,7 @@
 			 x:Class="LunarChatApp.ChannelsListView"
 			 x:DataType="viewmodels:ChannelListViewModel">
 	<StackPanel Spacing="4">
-		<ItemsRepeater ItemsSource="{Binding CrockeryList}">
+		<ItemsRepeater ItemsSource="{Binding ChannelsList}">
 		</ItemsRepeater>
 	</StackPanel>
 </UserControl>

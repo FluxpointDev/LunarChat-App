@@ -44,10 +44,7 @@ public partial class SettingsViewModel : ViewModelBase
     [RelayCommand]
     public void CloseSettings()
     {
-        pageManager.OnSwitchPage(new ServersPage
-        {
-            DataContext = new ServersViewModel(pageManager, state, themeWatcher, main, main.rest)
-        });
+        pageManager.OnSwitchPage(state.CachedServersPage);
     }
 
     [RelayCommand]

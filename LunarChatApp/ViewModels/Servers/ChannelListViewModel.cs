@@ -9,11 +9,11 @@ public partial class ChannelListViewModel : ViewModelBase
 {
     public ChannelListViewModel(TestState state, ServerState server)
     {
-        if (CrockeryList == null)
-            CrockeryList = new ObservableCollection<ChannelItem>(server.Channels.Values.Select(x => new ChannelItem() { ChannelName = x.Name, ChannelType = x.Type, DataContext = new ChannelItemViewModel(state, x) }));
+        if (ChannelsList == null)
+            ChannelsList = new ObservableCollection<ChannelItem>(server.Channels.Values.Select(x => new ChannelItem() { ChannelName = x.Name, ChannelType = x.Type, DataContext = new ChannelItemViewModel(state, x) }));
 
     }
 
     [ObservableProperty]
-    private ObservableCollection<ChannelItem> _crockeryList;
+    private ObservableCollection<ChannelItem> _channelsList;
 }

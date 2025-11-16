@@ -22,10 +22,9 @@ public partial class ServersViewModel : ViewModelBase
         state = st;
         themeWatcher = theme;
         main = mainModel;
+        rest = rs;
         st.OnSelectServer += OnSelectServer;
         st.OnSelectChannel += OnSelectChannel;
-        if (CrockeryList == null)
-            CrockeryList = new ObservableCollection<ServerIcon>(state.Servers.Values.Select(x => new ServerIcon() { DataContext = new ServerIconViewModel(state, page, x.Server) }));
 
         if (_selectedPage == null)
         {
@@ -42,7 +41,8 @@ public partial class ServersViewModel : ViewModelBase
             }
         }
 
-        rest = rs;
+        if (ServersList == null)
+            ServersList = new ObservableCollection<ServerIcon>(state.Servers.Values.Select(x => new ServerIcon() { DataContext = new ServerIconViewModel(state, page, x.Server) }));
     }
 
     private void OnSelectChannel(Shared.Core.Channels.Channel channel)
@@ -58,7 +58,7 @@ public partial class ServersViewModel : ViewModelBase
     }
 
     [ObservableProperty]
-    private ObservableCollection<ServerIcon> _crockeryList;
+    private ObservableCollection<ServerIcon> _serversList;
 
     [ObservableProperty]
     private UserControl? _selectedHeader;

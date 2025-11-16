@@ -40,7 +40,7 @@
 						<ColumnDefinition />
 					</Grid.ColumnDefinitions>
 					<StackPanel HorizontalAlignment="Left">
-						<ItemsRepeater MinWidth="40"  ItemsSource="{Binding CrockeryList}">
+						<ItemsRepeater MinWidth="40"  ItemsSource="{Binding ServersList}">
 						</ItemsRepeater>
 					</StackPanel>
 					<ContentControl Grid.Column="1" Content="{Binding SelectedSidebar}"></ContentControl>
