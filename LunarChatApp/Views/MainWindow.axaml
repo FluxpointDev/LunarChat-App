@@ -1,40 +1,42 @@
 <shadui:Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:LunarChatApp.ViewModels"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:views="clr-namespace:LunarChatApp.Views"
-        xmlns:shadui="clr-namespace:ShadUI;assembly=ShadUI"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="LunarChatApp.Views.MainWindow"
-        x:DataType="vm:MainViewModel"
-        Background="{DynamicResource PrimaryForegroundColor}"
-        MinHeight="400"
-        MinWidth="600"
-        Icon="/Assets/test-icon.ico"
-        Title="Lunar Chat">
-   <!-- <shadui:Window.Hosts>
-    <shadui:DialogHost Manager="{Binding DialogManager}"
-                        Owner="{Binding RelativeSource={RelativeSource AncestorType=shadui:Window}}" />
-    </shadui:Window.Hosts>-->
-     <shadui:Window.LogoContent>
-        <Image
-            Source="/Assets/test-icon.ico"
-            Height="14"
-            Margin="8,8,0,8"
-            Width="14" />
-    </shadui:Window.LogoContent>
-    <shadui:Window.RightWindowTitleBarContent>
-        <Button
-                Background="{DynamicResource SidebarBackgroundColor}"
-                Command="{Binding SwitchThemeCommand}"
-                CornerRadius="{DynamicResource MdCornerRadius}"
-                Height="30"
-                ToolTip.Tip="Switch Theme"
-                Width="60">
-                <TextBlock Classes="LucideIcon" Text="Theme" />
-            </Button>
-    </shadui:Window.RightWindowTitleBarContent>
-		
-    <views:MainView />
+			   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			   xmlns:vm="using:LunarChatApp.ViewModels"
+			   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			   xmlns:views="clr-namespace:LunarChatApp.Views"
+			   xmlns:shadui="clr-namespace:ShadUI;assembly=ShadUI"
+			   mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			   x:Class="LunarChatApp.Views.MainWindow"
+			   x:DataType="vm:MainViewModel"
+			   Background="{DynamicResource PrimaryForegroundColor}"
+			   MinHeight="400"
+			   MinWidth="600"
+			   Icon="/Assets/test-icon.ico"
+			   Title="Lunar Chat">
+	<!-- <shadui:Window.Hosts>
+	<shadui:DialogHost Manager="{Binding DialogManager}"
+	Owner="{Binding RelativeSource={RelativeSource AncestorType=shadui:Window}}" />
+	</shadui:Window.Hosts>-->
+	<shadui:Window.LogoContent>
+		<Image
+		Source="/Assets/test-icon.ico"
+		Height="14"
+		Margin="8,8,0,8"
+		Width="14" />
+	</shadui:Window.LogoContent>
+	<shadui:Window.RightWindowTitleBarContent>
+		<Button
+		Background="{DynamicResource SidebarBackgroundColor}"
+		Command="{Binding SwitchThemeCommand}"
+		CornerRadius="{DynamicResource MdCornerRadius}"
+		Height="30"
+		ToolTip.Tip="Switch Theme"
+		Width="60">
+			<TextBlock Classes="LucideIcon" Text="Theme" />
+		</Button>
+	</shadui:Window.RightWindowTitleBarContent>
+	<Window.KeyBindings>
+		<KeyBinding Gesture="Escape" Command="{Binding EscapeHotKey}" />
+	</Window.KeyBindings>
+	<views:MainView />
 </shadui:Window>

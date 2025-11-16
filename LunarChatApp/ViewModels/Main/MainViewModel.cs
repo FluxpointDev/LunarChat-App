@@ -13,13 +13,14 @@ public partial class MainViewModel : ViewModelBase
     private bool _disposed;
     private ThemeWatcher themeWatcher;
     private PageManager pageManager;
-
+    internal RestClient rest;
+    private TestState state;
     public MainViewModel(ServiceProvider services)
     {
         themeWatcher = services.GetService<ThemeWatcher>();
         pageManager = services.GetService<PageManager>();
-        var rest = services.GetService<RestClient>();
-        var state = services.GetService<TestState>();
+        rest = services.GetService<RestClient>();
+        state = services.GetService<TestState>();
         pageManager.OnSwitchPage += SwitchPage;
         if (SelectedPage == null)
             SelectedPage = new LoginPage
@@ -84,6 +85,18 @@ public partial class MainViewModel : ViewModelBase
         };
 
         themeWatcher.SwitchTheme(CurrentTheme);
+    }
+
+    [RelayCommand]
+    public void EscapeHotKey()
+    {
+        if (SelectedPage.GetType() == typeof(SettingsPage))
+        {
+            pageManager.OnSwitchPage(new ServersPage
+            {
+                DataContext = new ServersViewModel(pageManager, state, themeWatcher, this, rest)
+            });
+        }
     }
 
     public override void Dispose()

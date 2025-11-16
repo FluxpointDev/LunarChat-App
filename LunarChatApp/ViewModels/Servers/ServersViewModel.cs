@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using ShadUI;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -14,8 +15,8 @@ public partial class ServersViewModel : ViewModelBase
     public TestState state { get; set; }
     private ThemeWatcher themeWatcher;
     private MainViewModel main;
-
-    public ServersViewModel(PageManager page, TestState st, ThemeWatcher theme, MainViewModel mainModel)
+    private RestClient rest;
+    public ServersViewModel(PageManager page, TestState st, ThemeWatcher theme, MainViewModel mainModel, RestClient rs)
     {
         pageManager = page;
         state = st;
@@ -41,6 +42,7 @@ public partial class ServersViewModel : ViewModelBase
             }
         }
 
+        rest = rs;
     }
 
     private void OnSelectChannel(Shared.Core.Channels.Channel channel)
@@ -82,5 +84,20 @@ public partial class ServersViewModel : ViewModelBase
         {
             DataContext = new SettingsViewModel(pageManager, state, themeWatcher, main)
         });
+    }
+
+    [RelayCommand]
+    public void Logout()
+    {
+        pageManager.OnSwitchPage(new LoginPage
+        {
+            DataContext = new LoginViewModel(pageManager, rest, state, themeWatcher, main)
+        });
+    }
+
+    [RelayCommand]
+    public void Quit()
+    {
+        Environment.Exit(0);
     }
 }

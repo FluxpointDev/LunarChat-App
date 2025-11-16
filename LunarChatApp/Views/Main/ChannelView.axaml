@@ -14,7 +14,7 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="auto" />
 			<RowDefinition Height="*" />
-			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto" MaxHeight="100" />
 		</Grid.RowDefinitions>
 		<Border BorderBrush="{DynamicResource BorderColor30}" BorderThickness="0,0,0,1">
 			<TextBlock Padding="6" Classes="Large" Text="{Binding Name}"></TextBlock>
@@ -33,11 +33,12 @@
 				<Button VerticalAlignment="Center" Margin="4,0,0,0" Padding="4">
 					<lucideAvalonia:Lucide Icon="Plus" StrokeBrush="#fff" StrokeThickness="1.5" Width="22" Height="22"/>
 				</Button>
-				<TextBox Grid.Column="1"
-						 Classes=""
+				<TextBox Grid.Column="1" Classes="" AcceptsReturn="True"
+						shadui:ControlAssist.MaxHeight="100"
 						 Text="{Binding Textbox}">
 					<TextBox.KeyBindings>
 						<KeyBinding Command="{Binding EnterCommand}" Gesture="Enter" />
+						<KeyBinding Command="{Binding ClearCommand}" Gesture="Delete" />
 					</TextBox.KeyBindings>
 				</TextBox>
 				<!--<avrichtextbox:RichTextBox Grid.Column="1" x:Name="RichBox" Background="#393A41" BorderBrush="Transparent"></avrichtextbox:RichTextBox>-->

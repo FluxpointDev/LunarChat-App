@@ -9,6 +9,7 @@
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="LunarChatApp.SettingsPage"
 			 x:DataType="viewmodels:SettingsViewModel">
+
 	<Grid ColumnDefinitions="Auto *">
 		<shadui:Sidebar
 		BorderBrush="{DynamicResource BorderColor30}"
@@ -78,15 +79,14 @@
 				</shadui:SidebarItem>
 			</StackPanel>
 		</shadui:Sidebar>
-		<StackPanel Grid.Column="1" Margin="6">
-			<StackPanel Orientation="Horizontal" Spacing="6">
+		<StackPanel Grid.Column="1" Margin="6" MaxWidth="800">
+			<Grid Grid.ColumnDefinitions="*, auto">
 				<TextBlock Classes="Large" Text="{Binding SelectedTitle}"></TextBlock>
-				<Button Command="{Binding CloseSettingsCommand}">
+				<Button Command="{Binding CloseSettingsCommand}" HorizontalAlignment="Right">
 					<lucideAvalonia:Lucide Icon="CircleX" StrokeBrush="{DynamicResource ForegroundColor}" StrokeThickness="1.5" Width="30" Height="30"/>
 				</Button>
-			</StackPanel>
-
-			<TransitioningContentControl Content="{Binding SelectedPage}" />
+			</Grid>
+			<ContentControl Content="{Binding SelectedPage}" />
 		</StackPanel>
 	</Grid>
 </UserControl>

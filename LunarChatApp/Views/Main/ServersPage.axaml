@@ -60,7 +60,7 @@
 						shadui:MenuItemAssist.PopupPlacement="RightEdgeAlignedBottom"
 						shadui:MenuItemAssist.PopupVerticalOffset="4">
 							<MenuItem.Header>
-								<Button HorizontalAlignment="Left">
+								<Button HorizontalAlignment="Left" Padding="4">
 									<StackPanel Orientation="Horizontal" Spacing="6">
 										<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
 											<Image Source="/Assets/avatar.png" Width="40" Height="40"></Image>
@@ -72,12 +72,12 @@
 									</StackPanel>
 								</Button>
 							</MenuItem.Header>
-							<MenuItem Header="Logout">
+							<MenuItem Width="140" Header="Logout" Command="{Binding LogoutCommand}">
                                 <MenuItem.Icon>
                                     <lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="LogOut" StrokeBrush="{DynamicResource PrimaryColor}" Width="12" Height="12"/>
                                 </MenuItem.Icon>
                             </MenuItem>
-							<MenuItem Header="Quit">
+							<MenuItem Width="140" Header="Quit" Command="{Binding QuitCommand}">
                                 <MenuItem.Icon>
                                     <lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="X" StrokeBrush="{DynamicResource PrimaryColor}" Width="12" Height="12"/>
                                 </MenuItem.Icon>

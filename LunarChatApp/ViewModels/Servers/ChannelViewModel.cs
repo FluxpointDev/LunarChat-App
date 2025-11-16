@@ -35,4 +35,10 @@ public partial class ChannelViewModel : ViewModelBase
         state.CurrentServer.Messages[state.CurrentChannel.Id].Add(new Message() { Content = Textbox });
         Textbox = null;
     }
+
+    [RelayCommand]
+    public void Clear()
+    {
+        Textbox = null;
+    }
 }

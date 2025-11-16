@@ -46,7 +46,7 @@ public partial class SettingsViewModel : ViewModelBase
     {
         pageManager.OnSwitchPage(new ServersPage
         {
-            DataContext = new ServersViewModel(pageManager, state, themeWatcher, main)
+            DataContext = new ServersViewModel(pageManager, state, themeWatcher, main, main.rest)
         });
     }
 

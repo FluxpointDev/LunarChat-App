@@ -65,7 +65,7 @@ public partial class LoginViewModel(PageManager pageManager, RestClient rest, Te
         state.Username = Username;
         pageManager.OnSwitchPage(new ServersPage
         {
-            DataContext = new ServersViewModel(pageManager, state, themeWatcher, main)
+            DataContext = new ServersViewModel(pageManager, state, themeWatcher, main, rest)
         });
     }
 

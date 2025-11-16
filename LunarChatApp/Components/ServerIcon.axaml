@@ -3,6 +3,7 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:local="using:LunarChatApp"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shadui="using:ShadUI"
 			 xmlns:viewmodels="using:LunarChatApp.ViewModels"
 			 mc:Ignorable="d" d:DesignWidth="48" d:DesignHeight="48"
 			 x:Class="LunarChatApp.ServerIcon"
@@ -10,7 +11,7 @@
 	<Button IsEnabled="true" Command="{Binding SelectedServerCommand}" Margin="2" Padding="4">
 		<StackPanel>
 			<Border CornerRadius="12" ClipToBounds="True" ToolTip.Tip="{Binding Name}" ToolTip.Placement="Right">
-				<Image Source="/Assets/test-icon.ico" Width="36" Height="36"></Image>
+				<shadui:Avatar Fallback="FP" Source="/Assets/test-icon.ico" Width="36" Height="36"></shadui:Avatar>
 			</Border>
 		</StackPanel>
 	</Button>
