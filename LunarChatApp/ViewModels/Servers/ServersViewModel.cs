@@ -2,7 +2,9 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
-using ShadUI;
+using LunarChatApp.ViewModels.Dialogs;
+using LunarChatApp.ViewModels.Servers;
+using LunarChatApp.ViewModels.User;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -11,49 +13,51 @@ namespace LunarChatApp.ViewModels;
 
 public partial class ServersViewModel : ViewModelBase
 {
-    private PageManager pageManager;
     public TestState state { get; set; }
-    private ThemeWatcher themeWatcher;
     private MainViewModel main;
-    private RestClient rest;
-    public ServersViewModel(PageManager page, TestState st, ThemeWatcher theme, MainViewModel mainModel, RestClient rs)
+    private ServiceManager services;
+    public ServersViewModel(ServiceManager sv, MainViewModel mainModel)
     {
-        pageManager = page;
-        state = st;
-        themeWatcher = theme;
+        services = sv;
+        state = services.State;
         main = mainModel;
-        rest = rs;
-        st.OnSelectServer += OnSelectServer;
-        st.OnSelectChannel += OnSelectChannel;
+        services.State.OnPageSelect += State_OnPageSelect;
+        services.State.OnSelectServer += OnSelectServer;
+        services.State.OnSelectChannel += OnSelectChannel;
 
         if (_selectedPage == null)
         {
             if (state.CurrentServer == null)
             {
                 _selectedPage = new HomeView();
-                _selectedSidebar = new DMsListView();
+                _selectedSidebar = new DMsListView { DataContext = new DMsListModel(services) };
             }
             else
             {
-                _selectedSidebar = new ChannelsListView() { DataContext = new ChannelListViewModel(state, state.CurrentServer) };
+                _selectedSidebar = new ChannelsListView() { DataContext = new ChannelListViewModel(services, state) };
                 if (state.CurrentChannel != null)
-                    _selectedPage = new ChannelView() { DataContext = new ChannelViewModel(state) };
+                    _selectedPage = new ChannelView() { DataContext = new ChannelViewModel(state, services, null) };
             }
         }
 
         if (ServersList == null)
-            ServersList = new ObservableCollection<ServerIcon>(state.Servers.Values.Select(x => new ServerIcon() { DataContext = new ServerIconViewModel(state, page, x.Server) }));
+            ServersList = new ObservableCollection<ServerIcon>(state.Servers.Values.Select(x => new ServerIcon() { DataContext = new ServerIconViewModel(state, services.PageManager, x.Server) }));
     }
 
-    private void OnSelectChannel(Shared.Core.Channels.Channel channel)
+    private void State_OnPageSelect(UserControl control)
     {
-        SelectedPage = new ChannelView() { DataContext = new ChannelViewModel(state) };
+        SelectedPage = control;
+    }
+
+    private void OnSelectChannel(Shared.Core.Channels.Channel channel, Shared.Core.Users.User user)
+    {
+        SelectedPage = new ChannelView() { DataContext = new ChannelViewModel(state, services, user) };
     }
 
     private void OnSelectServer(Shared.Core.Servers.Server server)
     {
-        SelectedHeader = new ServerHeaderView();
-        SelectedSidebar = new ChannelsListView() { DataContext = new ChannelListViewModel(state, state.CurrentServer) };
+        SelectedHeader = new ServerHeaderView() { DataContext = new ServerHeaderViewModel(services) };
+        SelectedSidebar = new ChannelsListView() { DataContext = new ChannelListViewModel(services, state) };
         SelectedPage = null;
     }
 
@@ -73,25 +77,42 @@ public partial class ServersViewModel : ViewModelBase
     public void OpenHome()
     {
         SelectedHeader = null;
-        SelectedSidebar = new DMsListView();
+        SelectedSidebar = new DMsListView { DataContext = new DMsListModel(services) };
         SelectedPage = new HomeView();
     }
 
     [RelayCommand]
     public void OpenSettings()
     {
-        pageManager.OnSwitchPage(new SettingsPage
+        services.PageManager.OnSwitchPage(new SettingsPage
         {
-            DataContext = new SettingsViewModel(pageManager, state, themeWatcher, main)
+            DataContext = new SettingsViewModel(services.PageManager, state, services.ThemeWatcher, main)
         });
+    }
+
+    [RelayCommand]
+    public void OpenStatusDialog()
+    {
+        services.Dialogs.Create(new StatusDialogModel(state), "Set Status").WithSubmit(SubmitStatus).Open();
+    }
+
+    public void SubmitStatus(UserControl control)
+    {
+        StatusDialogModel? model = control.DataContext as StatusDialogModel;
+        state.StatusText = model.StatusText;
+        state.StatusType = model.StatusType;
     }
 
     [RelayCommand]
     public void Logout()
     {
-        pageManager.OnSwitchPage(new LoginPage
+        state.WebSocket.StopWebSocket = true;
+        state.WebSocket = null;
+        state.CurrentId = null;
+        services.Rest.Http.DefaultRequestHeaders.Remove("Auth-Id");
+        services.PageManager.OnSwitchPage(new LoginPage
         {
-            DataContext = new LoginViewModel(pageManager, rest, state, themeWatcher, main)
+            DataContext = new LoginViewModel(services, main)
         });
     }
 

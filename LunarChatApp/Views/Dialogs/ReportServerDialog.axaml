@@ -1,0 +1,22 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:dialogs="using:LunarChatApp.ViewModels.Dialogs"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:shadui="using:ShadUI"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.ReportServerDialog"
+			 x:DataType="dialogs:ReportServerDialogModel">
+	<StackPanel Spacing="10" HorizontalAlignment="Left">
+		<ComboBox Width="225" shadui:ControlAssist.Label="Type" SelectedIndex="{Binding ReportType}">
+			<ComboBoxItem>Other</ComboBoxItem>
+			<ComboBoxItem>Scam</ComboBoxItem>
+		</ComboBox>
+		<TextBox
+		Width="225"
+		shadui:ControlAssist.Label="Name"
+		Classes="Clearable"
+		Text="{Binding Details}"
+		Watermark="" />
+	</StackPanel>
+</UserControl>

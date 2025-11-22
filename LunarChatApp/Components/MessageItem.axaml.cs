@@ -5,6 +5,10 @@ namespace LunarChatApp;
 
 public partial class MessageItem : UserControl
 {
+    public MessageItem()
+    {
+        InitializeComponent();
+    }
     public MessageItem(string username, string content)
     {
         InitializeComponent();

@@ -1,15 +1,13 @@
-﻿using LunarChatApp.Shared.Rest;
+﻿
+
+using LunarChatApp.Shared.Rest.Accounts;
 using LunarChatApp.Shared.Rest.Optional;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
-namespace LunarChatApp.Services;
+namespace LunarChatApp.Shared.Rest;
 
 public class RestClient
 {
@@ -21,13 +19,54 @@ public class RestClient
         };
         //ClientHandler.Proxy = Client.Config.RestProxy;
 
+        Url = "https://lunar.fluxpoint.dev/api/";
         Http = new HttpClient(ClientHandler)
         {
             BaseAddress = new Uri(Url)
         };
-        Http.DefaultRequestHeaders.Add("User-Agent", "LunarChatClient");
-        Http.DefaultRequestHeaders.Add("Accept", "application/json");
+        try
+        {
+
+            //Http.DefaultRequestHeaders.Add("Accept", "application/json");
+            Http.DefaultRequestHeaders.Add("User-Agent", "LunarChatClient");
+        }
+        catch { }
+        Http.PostAsync(Url + "test1", new StringContent("{ \"test\": \"test\" }", Encoding.UTF8, "application/json"));
+
+        HttpRequestMessage Mes = new HttpRequestMessage(HttpMethod.Post, Url + "test2");
+        Mes.Content = new StringContent(SerializeJson(new CreateAccountRequest
+        {
+            username = "builderb2"
+        }), Encoding.UTF8, "application/json");
+        Http.SendAsync(Mes);
+
+        HttpRequestMessage Mes3 = new HttpRequestMessage(HttpMethod.Post, Url + "test3");
+        Mes3.Content = new StringContent(JsonConvert.SerializeObject(new CreateAccountRequest
+        {
+            username = "builderb2"
+        }, new JsonSerializerSettings
+        {
+            ContractResolver = OptionalContractResolver.Instance
+        }), Encoding.UTF8, "application/json");
+        Http.SendAsync(Mes3);
+
+        HttpRequestMessage Mes2 = new HttpRequestMessage(HttpMethod.Post, Url + "test4");
+        Mes2.Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(new CreateAccountRequest
+        {
+            username = "builderb2"
+        }, new System.Text.Json.JsonSerializerOptions
+        {
+            ReferenceHandler = ReferenceHandler.Preserve
+        }), Encoding.UTF8, "application/json");
+        Http.SendAsync(Mes2);
+
+        //PostAsync("/test1", new CreateAccountRequest
+        //{
+        //    username = "builderb2"
+        //});
     }
+
+
 
     public static JsonSerializer Serializer { get; internal set; } = new JsonSerializer
     {
@@ -49,45 +88,45 @@ public class RestClient
         return des;
     }
 
-    public string Url = "https://localhost:7216/";
-    public HttpClient Http = new HttpClient();
+    public string Url;
+    public HttpClient Http;
 
     public Task<HttpResponseMessage> SendRequestAsync(RequestType method, string endpoint, ILunarRequest? json = null)
     => InternalRequest(GetMethod(method), endpoint, json);
 
-    internal Task<TResponse> SendRequestAsync<TResponse>(RequestType method, string endpoint, Dictionary<string, object> json) where TResponse : class
+    public Task<TResponse> SendRequestAsync<TResponse>(RequestType method, string endpoint, Dictionary<string, object> json) where TResponse : class
         => InternalJsonRequest<TResponse>(GetMethod(method), endpoint, json);
 
-    internal Task<TResponse> SendRequestAsync<TResponse>(RequestType method, string endpoint, Dictionary<string, string> json) where TResponse : class
+    public Task<TResponse> SendRequestAsync<TResponse>(RequestType method, string endpoint, Dictionary<string, string> json) where TResponse : class
         => InternalJsonRequest<TResponse>(GetMethod(method), endpoint, json);
 
-    internal Task<TResponse?> GetAsync<TResponse>(string endpoint, ILunarRequest json = null, bool throwGetRequest = false) where TResponse : class
+    public Task<TResponse?> GetAsync<TResponse>(string endpoint, ILunarRequest json = null, bool throwGetRequest = false) where TResponse : class
 #pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
         => SendRequestAsync<TResponse>(RequestType.Get, endpoint, json, throwGetRequest);
 #pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
 
-    internal Task DeleteAsync(string endpoint, ILunarRequest json = null)
+    public Task DeleteAsync(string endpoint, ILunarRequest json = null)
         => SendRequestAsync(RequestType.Delete, endpoint, json);
 
-    internal Task<TResponse> DeleteAsync<TResponse>(string endpoint, ILunarRequest json = null) where TResponse : class
+    public Task<TResponse> DeleteAsync<TResponse>(string endpoint, ILunarRequest json = null) where TResponse : class
         => SendRequestAsync<TResponse>(RequestType.Delete, endpoint, json);
 
-    internal Task<TResponse> PatchAsync<TResponse>(string endpoint, ILunarRequest json = null) where TResponse : class
+    public Task<TResponse> PatchAsync<TResponse>(string endpoint, ILunarRequest json = null) where TResponse : class
         => SendRequestAsync<TResponse>(RequestType.Patch, endpoint, json);
 
-    internal Task PatchAsync(string endpoint, ILunarRequest json = null)
+    public Task PatchAsync(string endpoint, ILunarRequest json = null)
         => SendRequestAsync(RequestType.Patch, endpoint, json);
 
-    internal Task<TResponse> PutAsync<TResponse>(string endpoint, ILunarRequest json = null) where TResponse : class
+    public Task<TResponse> PutAsync<TResponse>(string endpoint, ILunarRequest json = null) where TResponse : class
         => SendRequestAsync<TResponse>(RequestType.Put, endpoint, json);
 
-    internal Task PutAsync(string endpoint, ILunarRequest json = null)
+    public Task PutAsync(string endpoint, ILunarRequest json = null)
         => SendRequestAsync(RequestType.Put, endpoint, json);
 
-    internal Task<TResponse> PostAsync<TResponse>(string endpoint, ILunarRequest json = null, bool isWebhookRequest = false) where TResponse : class
+    public Task<TResponse> PostAsync<TResponse>(string endpoint, ILunarRequest json = null, bool isWebhookRequest = false) where TResponse : class
         => SendRequestAsync<TResponse>(RequestType.Post, endpoint, json, false, isWebhookRequest);
 
-    internal Task PostAsync(string endpoint, ILunarRequest json = null)
+    public Task PostAsync(string endpoint, ILunarRequest json = null)
         => SendRequestAsync(RequestType.Post, endpoint, json);
 
     public Task<TResponse> SendRequestAsync<TResponse>(RequestType method, string endpoint, ILunarRequest json = null, bool throwGetRequest = false, bool isWebhookRequest = false) where TResponse : class
@@ -114,6 +153,9 @@ public class RestClient
 
     internal async Task<HttpResponseMessage> InternalRequest(HttpMethod method, string endpoint, object? request)
     {
+        if (endpoint.StartsWith("/"))
+            endpoint = endpoint.Substring(1);
+
         HttpRequestMessage Mes = new HttpRequestMessage(method, Url + endpoint);
         if (request != null)
         {
@@ -190,6 +232,9 @@ public class RestClient
     internal async Task<TResponse> InternalJsonRequest<TResponse>(HttpMethod method, string endpoint, object request, bool throwGetRequest = false, bool isWebhookRequest = false)
         where TResponse : class
     {
+        if (endpoint.StartsWith("/"))
+            endpoint = endpoint.Substring(1);
+
         HttpRequestMessage Mes = new HttpRequestMessage(method, isWebhookRequest ? endpoint : Url + endpoint);
         if (request != null)
         {

@@ -2,7 +2,9 @@
 
 public class Message
 {
-    public string Content;
+    public string ChannelId { get; set; }
+    public string Username { get; set; }
+    public string Content { get; set; }
     public static Message Create(MessageModel model)
     {
         return new Message();

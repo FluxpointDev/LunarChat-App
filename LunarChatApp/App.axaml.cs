@@ -23,6 +23,7 @@ public partial class App : Application
         var provider = new ServiceProvider();
         var themeWatcher = provider.GetService<ThemeWatcher>();
         var pageManager = provider.GetService<PageManager>();
+        var services = provider.GetService<ServiceManager>();
         themeWatcher.Initialize();
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
@@ -31,7 +32,7 @@ public partial class App : Application
             DisableAvaloniaDataAnnotationValidation();
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainViewModel(provider)
+                DataContext = new MainViewModel(services)
             };
             this.RegisterTrayIconsEvents(desktop.MainWindow as MainWindow, desktop.MainWindow.DataContext as MainViewModel);
         }
@@ -39,7 +40,7 @@ public partial class App : Application
         {
             singleViewPlatform.MainView = new MainView
             {
-                DataContext = new MainViewModel(provider)
+                DataContext = new MainViewModel(services)
             };
         }
 

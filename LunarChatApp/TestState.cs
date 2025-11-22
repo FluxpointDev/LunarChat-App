@@ -1,14 +1,23 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Avalonia.Controls;
+using CommunityToolkit.Mvvm.ComponentModel;
 using LunarChatApp.Shared.Core.Channels;
 using LunarChatApp.Shared.Core.Messages;
 using LunarChatApp.Shared.Core.Servers;
+using LunarChatApp.Shared.WebSocket;
+using LunarChatApp.ViewModels.Dialogs;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LunarChatApp;
 
 public partial class TestState : ObservableObject
 {
+    public StatusType StatusType;
+    public string? StatusText;
     public ServersPage? CachedServersPage;
+    public LunarSocketClient? WebSocket;
+    public string? CurrentId;
 
     [ObservableProperty]
     private string _username = "test";
@@ -77,26 +86,37 @@ public partial class TestState : ObservableObject
         }
     };
 
+    public Dictionary<string, List<Message>> PrivateMessages = new Dictionary<string, List<Message>>();
+
+    public delegate void PageEventHandler(UserControl control);
     public delegate void ServerEventHandler(Server server);
-    public delegate void ChannelEventHandler(Channel channel);
+
+    public delegate void ChannelEventHandler(Channel channel, Shared.Core.Users.User user);
     public delegate void EventHandler();
 
+    public event PageEventHandler? OnPageSelect;
     public event ServerEventHandler? OnSelectServer;
     public event ChannelEventHandler? OnSelectChannel;
-    public event EventHandler? OnServersUpdate;
 
+    //public event EventHandler? OnServersUpdate;
+
+    public void TriggerPageSelect(UserControl control)
+    {
+        OnPageSelect?.Invoke(control);
+    }
     public void TriggerSelectServer(Server server)
     {
         OnSelectServer?.Invoke(server);
     }
 
-    public void TriggerSelectChannel(Channel channel)
+    public void TriggerSelectChannel(Channel channel, Shared.Core.Users.User user)
     {
-        OnSelectChannel?.Invoke(channel);
+        OnSelectChannel?.Invoke(channel, user);
     }
 }
 public class ServerState
 {
+    public Func<Channel, Task> OnChannelUpdated;
     public Server Server;
     public Dictionary<string, Channel> Channels = new Dictionary<string, Channel>();
     public Dictionary<string, List<Message>> Messages = new Dictionary<string, List<Message>>();

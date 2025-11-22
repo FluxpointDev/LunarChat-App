@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
+using LunarChatApp.ViewModels.Dialogs;
 using ShadUI;
 using System;
 using System.Reflection;
@@ -11,32 +12,42 @@ namespace LunarChatApp.ViewModels;
 public partial class MainViewModel : ViewModelBase
 {
     private bool _disposed;
-    private ThemeWatcher themeWatcher;
-    private PageManager pageManager;
-    internal RestClient rest;
-    private TestState state;
-    public MainViewModel(ServiceProvider services)
+    private ServiceManager services;
+    public MainViewModel(ServiceManager sv)
     {
-        themeWatcher = services.GetService<ThemeWatcher>();
-        pageManager = services.GetService<PageManager>();
-        rest = services.GetService<RestClient>();
-        state = services.GetService<TestState>();
-        pageManager.OnSwitchPage += SwitchPage;
+        services = sv;
+        services.PageManager.OnSwitchPage += SwitchPage;
         if (SelectedPage == null)
+        {
             SelectedPage = new LoginPage
             {
-                DataContext = new LoginViewModel(pageManager, rest, state, themeWatcher, this)
+                DataContext = new LoginViewModel(services, this)
             };
-    }
+            CurrentDialog = new PopupMask { DataContext = new PopupMaskModel(sv.Dialogs) { } };
+            services.Dialogs.OnDialogOpen += OpenDialog;
+            services.Dialogs.OnDialogClose += CloseDialog;
+        }
 
-    [ObservableProperty]
-    private DialogManager _dialogManager;
+    }
 
     [ObservableProperty]
     private object? _selectedPage;
 
     [ObservableProperty]
+    private PopupMask _currentDialog;
+
+    [ObservableProperty]
     private string _currentRoute = "login";
+
+    public void OpenDialog(DialogMenu menu)
+    {
+        (CurrentDialog.DataContext as PopupMaskModel).SetMenu(menu);
+    }
+
+    public void CloseDialog()
+    {
+        (CurrentDialog.DataContext as PopupMaskModel).SetMenu(null);
+    }
 
     private void SwitchPage(UserControl page)
     {
@@ -55,7 +66,7 @@ public partial class MainViewModel : ViewModelBase
 
         if (SelectedPage == page) return;
 
-        if (_selectedPage != null && _selectedPage is IDisposable disposablePrevious)
+        if (SelectedPage != null && SelectedPage is IDisposable disposablePrevious)
         {
             disposablePrevious.Dispose();
         }
@@ -84,15 +95,15 @@ public partial class MainViewModel : ViewModelBase
             _ => ThemeMode.System
         };
 
-        themeWatcher.SwitchTheme(CurrentTheme);
+        services.ThemeWatcher.SwitchTheme(CurrentTheme);
     }
 
     [RelayCommand]
     public void EscapeHotKey()
     {
-        if (SelectedPage.GetType() == typeof(SettingsPage))
+        if (SelectedPage!.GetType() == typeof(SettingsPage))
         {
-            pageManager.OnSwitchPage(state.CachedServersPage);
+            services.PageManager.OnSwitchPage(services.State.CachedServersPage);
         }
     }
 
@@ -114,7 +125,7 @@ public partial class MainViewModel : ViewModelBase
 
         //DialogManager.Dispose();
 
-        //_disposed = true;
+        _disposed = true;
         GC.SuppressFinalize(this);
     }
 

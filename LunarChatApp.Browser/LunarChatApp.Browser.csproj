@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Nullable>enable</Nullable>
+	<JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
   </PropertyGroup>
   <PropertyGroup Label="Avalonia">
     <AvaloniaUseCompiledBindingsByDefault>False</AvaloniaUseCompiledBindingsByDefault>
@@ -15,5 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LunarChatApp\LunarChatApp.csproj" />
+	<TrimmerRootAssembly Include="LunarChatApp.Shared" />
   </ItemGroup>
 </Project>

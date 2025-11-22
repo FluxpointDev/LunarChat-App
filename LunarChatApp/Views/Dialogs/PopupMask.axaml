@@ -1,0 +1,72 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:dialogs="using:LunarChatApp.ViewModels.Dialogs"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:shadui="using:ShadUI" IsVisible="{Binding ShowDialog}"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.PopupMask"
+			 x:DataType="dialogs:PopupMaskModel" Background="{DynamicResource BorderColor30}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+	<Border BorderBrush="{DynamicResource BorderColor60}" Background="{DynamicResource BorderColor}"
+			BorderThickness="1" MinHeight="200" MinWidth="400"
+			CornerRadius="{DynamicResource XlCornerRadius}"
+			HorizontalAlignment="Center" VerticalAlignment="Center">
+		<Border.Transitions>
+			<Transitions>
+				<ThicknessTransition Duration="0:0:0.15" Property="Margin">
+					<ThicknessTransition.Easing>
+						<CircularEaseOut />
+					</ThicknessTransition.Easing>
+				</ThicknessTransition>
+				<DoubleTransition Duration="0:0:0.1" Property="Opacity" />
+				<TransformOperationsTransition Duration="0:0:0.15" Property="RenderTransform">
+					<TransformOperationsTransition.Easing>
+						<CircularEaseOut />
+					</TransformOperationsTransition.Easing>
+				</TransformOperationsTransition>
+			</Transitions>
+		</Border.Transitions>
+		<StackPanel>
+			<Panel>
+				<TextBlock Classes="Large" Margin="8,8,0,0" Text="{Binding Title}"></TextBlock>
+				<Button Command="{Binding CloseDialogCommand}"
+						CornerRadius="{DynamicResource MdCornerRadius}"
+						Cursor="Arrow"
+						Focusable="False"
+						Height="24"
+						HorizontalAlignment="Right"
+						HotKey="Escape"
+						IsVisible="{Binding Dismissible}"
+						Margin="8"
+						VerticalAlignment="Top"
+						Width="24">
+					<PathIcon
+					Data="{x:Static shadui:Icons.WindowClose}"
+					Foreground="{DynamicResource ForegroundColor}"
+					Height="10"
+					Width="10" />
+				</Button>
+			</Panel>
+			<Border Padding="12" ClipToBounds="True" CornerRadius="{DynamicResource XlCornerRadius}">
+				<Grid Grid.RowDefinitions="*, auto">
+					<ScrollViewer>
+						<ContentControl Content="{Binding Control}"></ContentControl>
+					</ScrollViewer>
+					<StackPanel Margin="4" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="6">
+						<Button
+						Classes="Secondary"
+						Command="{Binding CloseDialogCommand}"
+						Content="Close" />
+						<Button
+						Classes="Primary"
+						Command="{Binding SubmitDialogCommand}"
+						Content="Submit" />
+					</StackPanel>
+				</Grid>
+
+
+			</Border>
+		</StackPanel>
+
+	</Border>
+</UserControl>

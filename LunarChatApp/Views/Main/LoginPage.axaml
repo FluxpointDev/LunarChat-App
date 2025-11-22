@@ -26,7 +26,11 @@
 						shadui:ControlAssist.Label="Username"
 						Classes="Clearable"
 						Text="{Binding Username, Mode=TwoWay}"
-						Watermark="bob" />
+						Watermark="bob">
+							<TextBox.KeyBindings>
+								<KeyBinding Command="{Binding SubmitDemoCommand}" Gesture="Enter" />
+							</TextBox.KeyBindings>
+						</TextBox>
 						<TextBlock TextWrapping="Wrap">Max 32 characters, use lowercase letters, numbers, underscores _ or full stops.</TextBlock>
 					</StackPanel>
 					<shadui:Card.Footer>
@@ -54,7 +58,7 @@
 						<TextBox
 						shadui:ControlAssist.Label="Password"
 						Classes="PasswordReveal"
-						PasswordChar="•"
+						PasswordChar="*"
 						Text="{Binding Password, Mode=TwoWay}"
 						Watermark="Enter password" />
 					</StackPanel>
@@ -89,13 +93,13 @@
 						<TextBox
 						shadui:ControlAssist.Label="Password"
 						Classes="PasswordReveal"
-						PasswordChar="•"
+						PasswordChar="*"
 						Text="{Binding Password, Mode=TwoWay}"
 						Watermark="Enter password" />
 						<TextBox
 						shadui:ControlAssist.Label="Confirm"
 						Classes="PasswordReveal"
-						PasswordChar="•"
+						PasswordChar="*"
 						Text="{Binding ConfirmPassword, Mode=TwoWay}"
 						Watermark="Confirm password" />
 					</StackPanel>

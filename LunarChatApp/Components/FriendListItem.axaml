@@ -1,0 +1,36 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:components="using:LunarChatApp.Components"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:local="using:LunarChatApp"
+			 xmlns:lucideAvalonia="using:LucideAvalonia"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.FriendListItem"
+			 x:DataType="components:FriendListItemModel">
+	<Button HorizontalContentAlignment="Left" Padding="8">
+		<Grid Grid.ColumnDefinitions="*, auto" ColumnSpacing="20">
+			<StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
+				<StackPanel Orientation="Horizontal" Spacing="6">
+					<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
+						<Image Source="/Assets/avatar.png" Width="40" Height="40"></Image>
+					</Border>
+					<StackPanel>
+						<TextBlock Text="{Binding $parent[local:FriendListItem].DisplayName}"></TextBlock>
+						<TextBlock Classes="Muted" Text="{Binding $parent[local:FriendListItem].UserName}"></TextBlock>
+					</StackPanel>
+
+				</StackPanel>
+			</StackPanel>
+			<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
+				<Button Command="{Binding OpenMessagesCommand}">
+					<lucideAvalonia:Lucide Icon="MessageCircle" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="22" Height="22"/>
+				</Button>
+				<Button>
+					<lucideAvalonia:Lucide Icon="EllipsisVertical" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="22" Height="22"/>
+				</Button>
+			</StackPanel>
+		</Grid>
+
+	</Button>
+</UserControl>

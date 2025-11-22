@@ -13,5 +13,8 @@
          to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
     <vm:MainViewModel />
   </Design.DataContext>
-  <ContentControl Content="{Binding SelectedPage}" />
+    <Grid>
+        <ContentControl Name="MainContent" Content="{Binding SelectedPage}" />
+        <ContentControl Name="DialogContent" Content="{Binding CurrentDialog}" />
+    </Grid>
 </UserControl>

@@ -6,6 +6,7 @@ namespace LunarChatApp.Shared.Rest.Optional;
 
 public class OptionalContractResolver : DefaultContractResolver
 {
+    public static OptionalContractResolver Instance = new OptionalContractResolver();
     private static readonly TypeInfo _ienumerable = typeof(IEnumerable<ulong[]>).GetTypeInfo();
     private static readonly MethodInfo _shouldSerialize = typeof(OptionalContractResolver).GetTypeInfo().GetDeclaredMethod("ShouldSerialize");
 

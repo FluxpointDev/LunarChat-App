@@ -13,10 +13,6 @@
 			   MinWidth="600"
 			   Icon="/Assets/test-icon.ico"
 			   Title="Lunar Chat">
-	<!-- <shadui:Window.Hosts>
-	<shadui:DialogHost Manager="{Binding DialogManager}"
-	Owner="{Binding RelativeSource={RelativeSource AncestorType=shadui:Window}}" />
-	</shadui:Window.Hosts>-->
 	<shadui:Window.LogoContent>
 		<Image
 		Source="/Assets/test-icon.ico"

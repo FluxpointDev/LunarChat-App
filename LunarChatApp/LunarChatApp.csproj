@@ -4,9 +4,9 @@
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-	<PublishAot>true</PublishAot>
+	<PublishAot>false</PublishAot>
 	<NuGetAuditMode>direct</NuGetAuditMode>
-	<!--<BuiltInComInteropSupport>false</BuiltInComInteropSupport>-->
+	<JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>portable</DebugType>
@@ -32,17 +32,26 @@
     <PackageReference Include="Jab" />
     <PackageReference Include="LiveMarkdown.Avalonia" />
     <PackageReference Include="LucideAvalonia" />
+    <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="ShadUI" />
     <PackageReference Include="Simplecto.Avalonia.RichTextBox" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\LunarChatApp.Shared\LunarChatApp.Shared.csproj" />
+	<TrimmerRootAssembly Include="LunarChatApp.Shared" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Update="Components\ChannelItem.axaml.cs">
       <DependentUpon>ChannelItem.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Dialogs\ReportServerDialog.axaml.cs">
+      <DependentUpon>ReportServerDialog.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Assets\Fonts\" />
   </ItemGroup>
 </Project>

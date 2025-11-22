@@ -1,14 +1,17 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
+using LunarChatApp.Shared.Core.Messages;
+using LunarChatApp.Shared.Rest.Accounts;
+using LunarChatApp.Shared.Rest.Users;
 using LunarChatApp.Validators;
-using ShadUI;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace LunarChatApp.ViewModels;
 
-public partial class LoginViewModel(PageManager pageManager, RestClient rest, TestState state, ThemeWatcher themeWatcher, MainViewModel main) : ViewModelBase
+public partial class LoginViewModel(ServiceManager services, MainViewModel main) : ViewModelBase
 {
     [ObservableProperty]
     public int _currentTab;
@@ -53,7 +56,7 @@ public partial class LoginViewModel(PageManager pageManager, RestClient rest, Te
     }
 
     [RelayCommand]
-    private void SubmitDemo()
+    private async Task SubmitDemo()
     {
         HasErrors = false;
         SetProperties();
@@ -61,13 +64,36 @@ public partial class LoginViewModel(PageManager pageManager, RestClient rest, Te
         if (HasErrors)
             return;
 
-        state.DisplayName = Username;
-        state.Username = Username;
-        state.CachedServersPage = new ServersPage
+        StoatUser Json = await services.Rest.PostAsync<StoatUser>("/accounts/test", new CreateAccountRequest
         {
-            DataContext = new ServersViewModel(pageManager, state, themeWatcher, main, rest)
+            username = Username!.ToLower()
+        });
+        services.Rest.Http.DefaultRequestHeaders.Add("Auth-Id", Json._id);
+        services.State.CurrentId = Json._id;
+        services.State.DisplayName = Username.ToLower();
+        services.State.Username = Username.ToLower();
+        services.State.CachedServersPage = new ServersPage
+        {
+            DataContext = new ServersViewModel(services, main)
         };
-        pageManager.OnSwitchPage(state.CachedServersPage);
+        services.State.WebSocket = new Shared.WebSocket.LunarSocketClient("wss://lunar.fluxpoint.dev/api/gateway", Json._id);
+        services.State.WebSocket.OnMessageRecieved += WebSocket_OnMessageRecieved;
+        _ = services.State.WebSocket.SetupWebsocket();
+        services.PageManager.OnSwitchPage(services.State.CachedServersPage);
+    }
+
+    private void WebSocket_OnMessageRecieved(Shared.WebSocket.SocketMessageRecieve message)
+    {
+        if (!string.IsNullOrEmpty(message.channel_id))
+            return;
+
+        if (services.State.PrivateMessages.ContainsKey("1"))
+            services.State.PrivateMessages["1"].Add(new Message() { Content = message.content });
+        else
+            services.State.PrivateMessages.Add("1", new System.Collections.Generic.List<Message>
+                {
+                    new Message() { Content = message.content }
+                });
     }
 
     [RelayCommand]

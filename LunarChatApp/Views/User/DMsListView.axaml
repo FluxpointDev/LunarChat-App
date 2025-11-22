@@ -4,10 +4,12 @@
 			 xmlns:lucideAvalonia="using:LucideAvalonia"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:shadui="using:ShadUI"
+			 xmlns:user="using:LunarChatApp.ViewModels.User"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-			 x:Class="LunarChatApp.DMsListView">
+			 x:Class="LunarChatApp.DMsListView"
+			 x:DataType="user:DMsListModel">
 	<StackPanel Spacing="4">
-		<shadui:SidebarItem IsChecked="true"
+		<shadui:SidebarItem IsChecked="true" Command="{Binding OpenHomeCommand}"
 							Content="Home">
 			<shadui:SidebarItem.Icon>
 				<Viewbox>
@@ -15,6 +17,17 @@
 				</Viewbox>
 			</shadui:SidebarItem.Icon>
 		</shadui:SidebarItem>
-
+		<shadui:SidebarItem Content="Friends" Command="{Binding OpenFriendsCommand}">
+			<shadui:SidebarItem.Icon>
+				<Viewbox>
+					<lucideAvalonia:Lucide Icon="UsersRound" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="16" Height="16"/>
+				</Viewbox>
+			</shadui:SidebarItem.Icon>
+		</shadui:SidebarItem>
+		<shadui:SidebarItemLabel AsSeparator="True" Text="Messages" />
+		<StackPanel Spacing="4">
+			<ItemsRepeater ItemsSource="{Binding CrockeryList}">
+			</ItemsRepeater>
+		</StackPanel>
 	</StackPanel>
 </UserControl>
