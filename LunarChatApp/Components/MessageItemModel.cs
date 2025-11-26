@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
+using LunarChatApp.Shared.Core.Messages;
 using LunarChatApp.Views;
 using System.Threading.Tasks;
 
@@ -8,12 +9,13 @@ namespace LunarChatApp.Components;
 
 public partial class MessageItemModel : ViewModelBase
 {
-    public MessageItemModel(ServiceManager sv, string id, string author)
+    public MessageItemModel(ServiceManager sv, Message message)
     {
         services = sv;
-        messageId = id;
-        authorId = author;
-        IsAuthor = author == sv.State.Socket.CurrentId;
+        messageId = message.Id;
+        authorId = message.AuthorId;
+        IsAuthor = message.AuthorId == sv.State.Socket.CurrentId;
+        Username = message.Username;
     }
 
     private ServiceManager services;
@@ -22,6 +24,9 @@ public partial class MessageItemModel : ViewModelBase
 
     [ObservableProperty]
     private bool _isAuthor;
+
+    [ObservableProperty]
+    private string _username;
 
     [RelayCommand]
     public async Task Delete()

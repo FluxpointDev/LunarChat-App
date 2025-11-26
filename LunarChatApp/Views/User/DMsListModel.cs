@@ -1,10 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using LunarChatApp.Components;
 using LunarChatApp.Services;
-using LunarChatApp.Shared.Core.Accounts;
 using LunarChatApp.ViewModels.Main;
 using LunarChatApp.Views;
+using LunarChatApp.Views.Main;
 using System.Collections.ObjectModel;
 
 namespace LunarChatApp.ViewModels.User;
@@ -17,7 +16,6 @@ public partial class DMsListModel : ViewModelBase
     {
         services = sv;
         _crockeryList = new ObservableCollection<DMListItem>();
-        _crockeryList.Add(new DMListItem() { DataContext = new DMListItemModel(services, new Relation { username = "bob", display_name = "Bob", id = "1" }) });
     }
 
     [ObservableProperty]
@@ -26,7 +24,7 @@ public partial class DMsListModel : ViewModelBase
     [RelayCommand]
     public void OpenHome()
     {
-        services.State.TriggerPageSelect(new HomeView());
+        services.State.TriggerPageSelect(new HomeView() { DataContext = new HomeViewModel(services) });
     }
 
     [RelayCommand]

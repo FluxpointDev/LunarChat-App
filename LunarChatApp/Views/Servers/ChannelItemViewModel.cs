@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.Shared.Core.Channels;
 using LunarChatApp.Views;
@@ -15,8 +16,11 @@ public partial class ChannelItemViewModel : ViewModelBase
         state = st;
         channel = chan;
         services = sv;
+        isOwner = st.Socket.CurrentServer?.Server.OwnerId == st.Socket.CurrentId;
     }
 
+    [ObservableProperty]
+    private bool isOwner;
 
     [RelayCommand]
     public void SelectChannel()

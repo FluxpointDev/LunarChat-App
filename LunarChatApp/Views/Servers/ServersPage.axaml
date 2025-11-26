@@ -97,7 +97,7 @@
 						</MenuItem>
 					</Menu>
 					<Button Grid.Column="1" Command="{Binding OpenSettingsCommand}">
-						<lucideAvalonia:Lucide Grid.Column="1" HorizontalAlignment="Left" Icon="Settings" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="22" Height="22"/>
+						<lucideAvalonia:Lucide Grid.Column="1" HorizontalAlignment="Left" Icon="Settings" StrokeBrush="{DynamicResource PrimaryColor}" Foreground="{DynamicResource DestructiveColor75}" StrokeThickness="1.5" Width="22" Height="22"/>
 					</Button>
 				</Grid>
 			</Grid>

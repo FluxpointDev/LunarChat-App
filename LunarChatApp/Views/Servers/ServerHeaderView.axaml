@@ -18,7 +18,7 @@
 		shadui:MenuItemAssist.PopupPlacement="BottomEdgeAlignedLeft"
 		shadui:MenuItemAssist.PopupVerticalOffset="4">
 			<MenuItem.Header>
-				<Button Padding="6,0,6,0" HorizontalAlignment="Stretch" Foreground="#fff" IsHitTestVisible="False">
+				<Button Padding="6,0,6,0" HorizontalAlignment="Stretch" IsHitTestVisible="False">
 					<Grid ColumnSpacing="6">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="100" />
@@ -44,7 +44,7 @@
 					<lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="CircleAlert" StrokeBrush="{DynamicResource PrimaryColor}" Width="12" Height="12"/>
 				</MenuItem.Icon>
 			</MenuItem>
-			<MenuItem Header="Leave Server" Width="140" Command="{Binding LeaveServerCommand}" IsVisible="{Binding !IsOwner}">
+			<MenuItem Header="Leave Server" IsEnabled="False" Width="140" Command="{Binding LeaveServerCommand}" IsVisible="{Binding !IsOwner}">
 				<MenuItem.Icon>
 					<lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="LogOut" StrokeBrush="{DynamicResource PrimaryColor}" Width="12" Height="12"/>
 				</MenuItem.Icon>

@@ -27,8 +27,8 @@ public partial class DMListItemModel : ViewModelBase
     {
         services.State.Socket.CurrentChannel = new Channel
         {
-            Id = "1",
-            Name = Name
+            Id = user.id,
+            Name = user.display_name ?? user.username
         };
         services.State.Socket.TriggerSelectChannel(services.State.Socket.CurrentChannel, user);
     }

@@ -16,7 +16,6 @@ public class SocketState
     public ConcurrentDictionary<string, SocketServerState> Servers = new ConcurrentDictionary<string, SocketServerState>();
     public ConcurrentDictionary<string, List<Channel>> Channels = new ConcurrentDictionary<string, List<Channel>>();
 
-    public ConcurrentDictionary<string, List<Message>> PrivateMessages = new ConcurrentDictionary<string, List<Message>>();
     public Dictionary<string, Relation> Friends = new Dictionary<string, Relation>();
     public Dictionary<string, Relation> Blocks = new Dictionary<string, Relation>();
 

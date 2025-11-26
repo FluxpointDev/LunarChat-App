@@ -7,6 +7,7 @@ using LunarChatApp.ViewModels.Dialogs;
 using LunarChatApp.ViewModels.Servers;
 using LunarChatApp.ViewModels.User;
 using LunarChatApp.Views;
+using LunarChatApp.Views.Main;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -30,7 +31,7 @@ public partial class ServersViewModel : ViewModelBase
         services.State.Socket.OnRemoveServer += State_OnRemoveServer;
         if (state.Socket.CurrentServer == null)
         {
-            _selectedPage = new HomeView();
+            _selectedPage = new HomeView() { DataContext = new HomeViewModel(services) };
             //_selectedHeader = new HomeHeader() { DataContext = new HomeHeaderModel() };
             _selectedSidebar = new DMsListView { DataContext = new DMsListModel(services) };
         }
@@ -118,7 +119,7 @@ public partial class ServersViewModel : ViewModelBase
         SelectedHeader = null;
         //SelectedHeader = new HomeHeader() { DataContext = new HomeHeaderModel() };
         SelectedSidebar = new DMsListView { DataContext = new DMsListModel(services) };
-        SelectedPage = new HomeView();
+        SelectedPage = new HomeView() { DataContext = new HomeViewModel(services) };
         state.Socket.CurrentServer = null;
     }
 

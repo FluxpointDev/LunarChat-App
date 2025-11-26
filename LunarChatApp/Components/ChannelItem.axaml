@@ -13,7 +13,7 @@
 		<shadui:SidebarItem.Content>
 			<Grid Grid.ColumnDefinitions="*, auto">
 				<TextBlock Text="{Binding $parent[local:ChannelItem].ChannelName}"></TextBlock>
-				<Button HorizontalAlignment="Right" Command="{Binding OpenChannelSettingsCommand}">
+				<Button IsVisible="{Binding IsOwner}" HorizontalAlignment="Right" Command="{Binding OpenChannelSettingsCommand}">
 					<lucideAvalonia:Lucide HorizontalAlignment="Right" Icon="Settings" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="16" Height="16"/>
 				</Button>
 			</Grid>

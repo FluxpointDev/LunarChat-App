@@ -9,7 +9,6 @@ using LunarChatApp.Shared.Core.Messages;
 using LunarChatApp.Shared.Rest.Messages;
 using LunarChatApp.Shared.WebSocket.Events;
 using LunarChatApp.Views;
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,34 +29,16 @@ public partial class ChannelViewModel : ViewModelBase
         state.Socket.WebSocket.OnMessageRecieved += State_OnMessageRecieved;
         state.Socket.OnMessageEdit += MessageEdit;
         state.Socket.OnMessageDelete += MessageDelete;
-        if (u != null)
+
+        CrockeryList = new ObservableCollection<MessageItem>();
+        _ = Task.Run(async () =>
         {
-            if (state.Socket.PrivateMessages.TryGetValue(state.Socket.CurrentChannel.Id, out var messages))
-                CrockeryList = new ObservableCollection<MessageItem>(messages.Select(x => new MessageItem(st.Username, x.Content) { DataContext = new MessageItemModel(services, x.Id, x.AuthorId) }));
-            else
-                CrockeryList = new ObservableCollection<MessageItem>();
-        }
-        else
-        {
-            CrockeryList = new ObservableCollection<MessageItem>();
-            _ = Task.Run(async () =>
+            Message[]? messages = await services.Rest.GetAsync<Message[]>("/channels/" + state.Socket.CurrentChannel.Id + "/messages");
+            if (messages != null)
             {
-                Message[]? messages = await services.Rest.GetAsync<Message[]>("/channels/" + state.Socket.CurrentChannel.Id + "/messages");
-                if (messages != null)
-                {
-
-                    Dispatcher.UIThread.Post(() => { CrockeryList.AddRange(messages.Select(x => new MessageItem(st.Username, x.Content) { DataContext = new MessageItemModel(services, x.Id, x.AuthorId) })); });
-                }
-
-            });
-
-
-
-            //if (state.CurrentServer.Messages.TryGetValue(state.CurrentChannel.Id, out var messages))
-            //    CrockeryList = new ObservableCollection<MessageItem>(messages.Select(x => new MessageItem(st.Username, x.Content)));
-            //else
-            //    CrockeryList = new ObservableCollection<MessageItem>();
-        }
+                Dispatcher.UIThread.Post(() => { CrockeryList.AddRange(messages.Select(x => new MessageItem(st.Username, x.Content) { DataContext = new MessageItemModel(services, x) })); });
+            }
+        });
     }
 
     private void State_OnMessageRecieved(MessageRecievedEvent message)
@@ -65,7 +46,17 @@ public partial class ChannelViewModel : ViewModelBase
         if (message.channel_id != state.Socket.CurrentChannel?.Id)
             return;
 
-        CrockeryList.Add(new MessageItem(message.user.Username, message.content) { DataContext = new MessageItemModel(services, message.id, message.user.Id) });
+        CrockeryList.Add(new MessageItem(message.user.Username, message.content)
+        {
+            DataContext = new MessageItemModel(services, new Message
+            {
+                ChannelId = message.channel_id,
+                AuthorId = message.user.Id,
+                Content = message.content,
+                Id = message.id,
+                Username = message.user.DisplayName ?? message.user.Username
+            })
+        });
     }
 
     private async Task MessageEdit(Message message)
@@ -100,25 +91,10 @@ public partial class ChannelViewModel : ViewModelBase
     [RelayCommand]
     public async Task Enter()
     {
-
-        if (user != null)
+        await services.Rest.PostAsync("/channels/" + state.Socket.CurrentChannel.Id + "/messages", new SendMessageRequest
         {
-            CrockeryList.Add(new MessageItem(state.Username, Textbox) { DataContext = new MessageItemModel(services, Guid.NewGuid().ToString(), "1") });
-            if (state.Socket.PrivateMessages.ContainsKey("1"))
-                state.Socket.PrivateMessages["1"].Add(new Message() { Content = Textbox });
-            else
-                state.Socket.PrivateMessages.TryAdd("1", new System.Collections.Generic.List<Message>
-                {
-                    new Message() { Content = Textbox }
-                });
-        }
-        else
-        {
-            await services.Rest.PostAsync("/channels/" + state.Socket.CurrentChannel.Id + "/messages", new SendMessageRequest
-            {
-                content = Textbox
-            });
-        }
+            content = Textbox
+        });
 
         Textbox = null;
     }

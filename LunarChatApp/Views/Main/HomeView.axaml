@@ -1,10 +1,93 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="LunarChatApp.HomeView">
-  <StackPanel Margin="8">
-	  <TextBlock Classes="h4" Text="Click a server in the sidebar to get started!"></TextBlock>
-  </StackPanel>
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:lucideAvalonia="using:LucideAvalonia"
+			 xmlns:main="using:LunarChatApp.Views.Main"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:shadui="using:ShadUI"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.HomeView"
+			 x:DataType="main:HomeViewModel">
+	<ScrollViewer>
+		<Grid Grid.RowDefinitions="auto, auto, auto" HorizontalAlignment="Center">
+			<StackPanel Margin="20,4,4,14" HorizontalAlignment="Center">
+				<TextBlock
+				Classes="h2"
+				Text="Welcome to"
+				TextWrapping="Wrap" />
+				<TextBlock
+				Classes="h2" Foreground="#c161e2"
+				Text="Lunar Chat"
+				TextWrapping="Wrap" />
+			</StackPanel>
+			<StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="0">
+				<Button Margin="4" Command="{Binding CreateServerCommand}">
+					<shadui:Card HasShadow="False" Padding="20,10,20,10" Width="240">
+						<shadui:Card.Header>
+							<StackPanel Orientation="Horizontal" Spacing="12">
+								<Border Width="32" Height="32" Background="{DynamicResource BorderColor}" CornerRadius="90" ClipToBounds="True">
+									<lucideAvalonia:Lucide Margin="2,0,2,0" Padding="6" HorizontalAlignment="Left" Icon="Plus" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="28" Height="28" />
+								</Border>
+								<StackPanel Spacing="0">
+									<shadui:CardTitle Margin="0,0,0,4">Create Server</shadui:CardTitle>
+									<shadui:CardDescription>Invite your friends,</shadui:CardDescription>
+									<shadui:CardDescription>or create communities.</shadui:CardDescription>
+								</StackPanel>
+							</StackPanel>
+						</shadui:Card.Header>
+					</shadui:Card>
+				</Button>
+				<Button Margin="4">
+					<shadui:Card HasShadow="False" Padding="20,10,20,10" Width="240">
+						<shadui:Card.Header>
+							<StackPanel Orientation="Horizontal" Spacing="12">
+								<Border Width="32" Height="32" Background="{DynamicResource BorderColor}" CornerRadius="90" ClipToBounds="True">
+									<lucideAvalonia:Lucide Margin="2,0,2,0" Padding="6" HorizontalAlignment="Left" Icon="Compass" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="28" Height="28" />
+								</Border>
+								<StackPanel Spacing="0">
+									<shadui:CardTitle Margin="0,0,0,4">Discover</shadui:CardTitle>
+									<shadui:CardDescription>Find communities,</shadui:CardDescription>
+									<shadui:CardDescription>or add cool bots.</shadui:CardDescription>
+								</StackPanel>
+							</StackPanel>
+						</shadui:Card.Header>
+					</shadui:Card>
+				</Button>
+			</StackPanel>
+			<StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="0">
+				<Button Margin="4">
+					<shadui:Card HasShadow="False" Padding="20,10,20,10" Width="240">
+						<shadui:Card.Header>
+							<StackPanel Orientation="Horizontal" Spacing="12">
+								<Border Width="32" Height="32" Background="{DynamicResource BorderColor}" CornerRadius="90" ClipToBounds="True">
+									<lucideAvalonia:Lucide Margin="2,0,2,0" Padding="6" HorizontalAlignment="Left" Icon="MessageCircle" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="28" Height="28" />
+								</Border>
+								<StackPanel Spacing="0">
+									<shadui:CardTitle Margin="0,0,0,4">Lunar Lounge</shadui:CardTitle>
+									<shadui:CardDescription>Chat with the community,</shadui:CardDescription>
+									<shadui:CardDescription>report issues or feedback.</shadui:CardDescription>
+								</StackPanel>
+							</StackPanel>
+						</shadui:Card.Header>
+					</shadui:Card>
+				</Button>
+				<Button Margin="4">
+					<shadui:Card HasShadow="False" Padding="20,10,20,10" Width="240">
+						<shadui:Card.Header>
+							<StackPanel Orientation="Horizontal" Spacing="12">
+								<Border Width="32" Height="32" Background="{DynamicResource BorderColor}" CornerRadius="90" ClipToBounds="True">
+									<lucideAvalonia:Lucide Margin="2,0,2,0" Padding="6" HorizontalAlignment="Left" Icon="Code" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="28" Height="28" />
+								</Border>
+								<StackPanel Spacing="0">
+									<shadui:CardTitle Margin="0,0,0,4">Lunar Developers</shadui:CardTitle>
+									<shadui:CardDescription>Access the API and,</shadui:CardDescription>
+									<shadui:CardDescription>create bots or projects.</shadui:CardDescription>
+								</StackPanel>
+							</StackPanel>
+						</shadui:Card.Header>
+					</shadui:Card>
+				</Button>
+			</StackPanel>
+		</Grid>
+	</ScrollViewer>
 </UserControl>

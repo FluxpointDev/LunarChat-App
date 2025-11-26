@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
-using LunarChatApp.Shared.Core.Messages;
 using LunarChatApp.Shared.Rest.Accounts;
 using LunarChatApp.Shared.Rest.Users;
 using LunarChatApp.Shared.WebSocket;
@@ -85,24 +84,10 @@ public partial class LoginViewModel(ServiceManager services, MainViewModel main)
         };
         services.PageManager.OnSwitchPage(services.State.CachedServersPage);
 
-        services.State.Socket.WebSocket.OnMessageRecieved += WebSocket_OnMessageRecieved;
         if (services.State.Socket.APIEnabled)
             _ = services.State.Socket.WebSocket.SetupWebsocket();
     }
 
-    private void WebSocket_OnMessageRecieved(Shared.WebSocket.Events.MessageRecievedEvent message)
-    {
-        if (!string.IsNullOrEmpty(message.channel_id))
-            return;
-
-        if (services.State.Socket.PrivateMessages.ContainsKey("1"))
-            services.State.Socket.PrivateMessages["1"].Add(new Message() { Content = message.content });
-        else
-            services.State.Socket.PrivateMessages.TryAdd("1", new List<Message>
-                {
-                    new Message() { Content = message.content }
-                });
-    }
 
     [RelayCommand]
     private void SubmitLogin()

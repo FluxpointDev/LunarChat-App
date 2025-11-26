@@ -23,7 +23,6 @@ public partial class FriendsListModel : ViewModelBase
         services.State.Socket.OnBlockAdd += OnBlockAdd;
         services.State.Socket.OnBlockRemove += OnBlockRemove;
         _friendsList = new ObservableCollection<FriendListItem>();
-        _friendsList.Add(new FriendListItem() { DataContext = new FriendListItemModel(services, new Relation { display_name = "Bob", username = "bob", id = "1" }) });
         foreach (var i in services.State.Socket.Friends.Values)
         {
             _friendsList.Add(new FriendListItem() { DataContext = new FriendListItemModel(services, i) });

@@ -47,6 +47,9 @@ public partial class ServerIconViewModel : ViewModelBase
         }
         else
         {
+            if (Id == services.State.Socket.CurrentServer?.Server.Id)
+                return;
+
             services.State.Socket.CurrentServer = services.State.Socket.Servers[Id];
             services.State.Socket.TriggerSelectServer(services.State.Socket.Servers[Id].Server);
         }

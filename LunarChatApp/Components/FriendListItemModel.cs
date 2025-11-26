@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.Shared.Core.Accounts;
-using LunarChatApp.Shared.Core.Channels;
 using LunarChatApp.Views;
 
 namespace LunarChatApp.Components;
@@ -32,11 +31,11 @@ public partial class FriendListItemModel : ViewModelBase
     [RelayCommand]
     public void OpenMessages()
     {
-        services.State.Socket.CurrentChannel = new Channel
-        {
-            Id = "1",
-            Name = user.display_name ?? user.username
-        };
-        services.State.Socket.TriggerSelectChannel(services.State.Socket.CurrentChannel, user);
+        //services.State.Socket.CurrentChannel = new Channel
+        //{
+        //    Id = user.id,
+        //    Name = user.display_name ?? user.username
+        //};
+        //services.State.Socket.TriggerSelectChannel(services.State.Socket.CurrentChannel, user);
     }
 }
