@@ -3,10 +3,12 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shadui="using:ShadUI"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="LunarChatApp.DMListItem"
 			 x:DataType="components:DMListItemModel">
-	<Button HorizontalContentAlignment="Left" Padding="8" Command="{Binding OpenDMCommand}">
+
+	<shadui:SidebarItem Padding="8" Command="{Binding OpenDMCommand}">
 		<StackPanel Orientation="Horizontal" Spacing="6">
 			<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
 				<Image Source="/Assets/avatar.png" Width="28" Height="28"></Image>
@@ -15,5 +17,5 @@
 				<TextBlock Text="{Binding Name}"></TextBlock>
 			</StackPanel>
 		</StackPanel>
-	</Button>
+	</shadui:SidebarItem>
 </UserControl>

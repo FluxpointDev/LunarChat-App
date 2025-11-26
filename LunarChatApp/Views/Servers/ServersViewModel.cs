@@ -28,19 +28,18 @@ public partial class ServersViewModel : ViewModelBase
         services.State.Socket.OnSelectChannel += OnSelectChannel;
         services.State.Socket.OnAddServer += State_OnAddServer;
         services.State.Socket.OnRemoveServer += State_OnRemoveServer;
-        if (_selectedPage == null)
+        if (state.Socket.CurrentServer == null)
         {
-            if (state.Socket.CurrentServer == null)
-            {
-                _selectedPage = new HomeView();
-                _selectedSidebar = new DMsListView { DataContext = new DMsListModel(services) };
-            }
-            else
-            {
-                _selectedSidebar = new ChannelsListView() { DataContext = new ChannelListViewModel(services, state) };
-                if (state.Socket.CurrentChannel != null)
-                    _selectedPage = new ChannelView() { DataContext = new ChannelViewModel(state, services, null) };
-            }
+            _selectedPage = new HomeView();
+            //_selectedHeader = new HomeHeader() { DataContext = new HomeHeaderModel() };
+            _selectedSidebar = new DMsListView { DataContext = new DMsListModel(services) };
+        }
+        else
+        {
+            _selectedHeader = new ServerHeaderView() { DataContext = new ServerHeaderViewModel(services, state.Socket.CurrentServer.Server) };
+            _selectedSidebar = new ChannelsListView() { DataContext = new ChannelListViewModel(services, state) };
+            if (state.Socket.CurrentChannel != null)
+                _selectedPage = new ChannelView() { DataContext = new ChannelViewModel(state, services, null) };
         }
 
         if (ServersList == null)
@@ -113,9 +112,14 @@ public partial class ServersViewModel : ViewModelBase
     [RelayCommand]
     public void OpenHome()
     {
+        if (SelectedPage?.GetType() == typeof(HomeView))
+            return;
+
         SelectedHeader = null;
+        //SelectedHeader = new HomeHeader() { DataContext = new HomeHeaderModel() };
         SelectedSidebar = new DMsListView { DataContext = new DMsListModel(services) };
         SelectedPage = new HomeView();
+        state.Socket.CurrentServer = null;
     }
 
     [RelayCommand]

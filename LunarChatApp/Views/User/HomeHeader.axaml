@@ -1,0 +1,23 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shadui="using:ShadUI"
+             xmlns:user="using:LunarChatApp.Views.User"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="LunarChatApp.HomeHeader"
+             x:DataType="user:HomeHeaderModel">
+  <AutoCompleteBox
+    Width="160"
+    shadui:ElementAssist.Classes="Clearable"
+    Classes="Clearable"
+    FilterMode="Contains"
+    Watermark="Search...">
+    <AutoCompleteBox.InnerRightContent>
+        <PathIcon
+            Width="16"
+            Data="{x:Static shadui:Icons.Search}"
+            Opacity="0.75" />
+    </AutoCompleteBox.InnerRightContent>
+</AutoCompleteBox>
+</UserControl>
