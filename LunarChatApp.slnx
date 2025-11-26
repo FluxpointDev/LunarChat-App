@@ -6,6 +6,7 @@
     <Deploy Solution="Debug|*" />
   </Project>
   <Project Path="LunarChatApp.Browser/LunarChatApp.Browser.csproj" />
+  <Project Path="LunarChatApp.Data/LunarChatApp.Data.csproj" Id="2166d16d-af1d-47d9-8af5-d0740fb64a20" />
   <Project Path="LunarChatApp.Desktop/LunarChatApp.Desktop.csproj" />
   <Project Path="LunarChatApp.Host/LunarChatApp.Host.csproj" Id="6b2f5d09-b5cd-4d03-8bd8-81ae5a4ea341" />
   <Project Path="LunarChatApp.iOS/LunarChatApp.iOS.csproj" />

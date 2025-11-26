@@ -1,7 +1,7 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using LunarChatApp.ViewModels;
+using LunarChatApp.Views;
 
 namespace LunarChatApp;
 

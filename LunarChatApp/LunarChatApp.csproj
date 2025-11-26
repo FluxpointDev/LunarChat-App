@@ -38,8 +38,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LunarChatApp.Data\LunarChatApp.Data.csproj" />
     <ProjectReference Include="..\LunarChatApp.Shared\LunarChatApp.Shared.csproj" />
 	<TrimmerRootAssembly Include="LunarChatApp.Shared" />
+	<TrimmerRootAssembly Include="LunarChatApp.Data" />
   </ItemGroup>
 
   <ItemGroup>

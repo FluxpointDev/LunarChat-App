@@ -24,17 +24,17 @@
 							<ColumnDefinition Width="100" />
 							<ColumnDefinition MinWidth="18" />
 						</Grid.ColumnDefinitions>
-						<TextBlock Classes="h6" Text="Fluxpoint Development" TextWrapping="WrapWithOverflow"></TextBlock>
+						<TextBlock Classes="h6" Text="{Binding Name}" TextWrapping="WrapWithOverflow"></TextBlock>
 						<lucideAvalonia:Lucide Grid.Column="1" HorizontalAlignment="Right" Icon="ChevronDown" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="0.8" Width="16" Height="16"/>
 					</Grid>
 				</Button>
 			</MenuItem.Header>
-			<MenuItem Header="Server Settings" Width="140" Command="{Binding OpenServerSettingsCommand}">
+			<MenuItem Header="Server Settings" Width="140" Command="{Binding OpenServerSettingsCommand}" IsVisible="{Binding IsOwner}">
 				<MenuItem.Icon>
 					<lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="Settings" StrokeBrush="{DynamicResource PrimaryColor}" Width="12" Height="12"/>
 				</MenuItem.Icon>
 			</MenuItem>
-			<MenuItem Header="Create Channel" Width="140" Command="{Binding CreateChannelCommand}">
+			<MenuItem Header="Create Channel" Width="140" Command="{Binding CreateChannelCommand}" IsVisible="{Binding IsOwner}">
 				<MenuItem.Icon>
 					<lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="Plus" StrokeBrush="{DynamicResource PrimaryColor}" Width="12" Height="12"/>
 				</MenuItem.Icon>
@@ -44,7 +44,7 @@
 					<lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="CircleAlert" StrokeBrush="{DynamicResource PrimaryColor}" Width="12" Height="12"/>
 				</MenuItem.Icon>
 			</MenuItem>
-			<MenuItem Header="Leave Server" Width="140" Command="{Binding LeaveServerCommand}">
+			<MenuItem Header="Leave Server" Width="140" Command="{Binding LeaveServerCommand}" IsVisible="{Binding !IsOwner}">
 				<MenuItem.Icon>
 					<lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="LogOut" StrokeBrush="{DynamicResource PrimaryColor}" Width="12" Height="12"/>
 				</MenuItem.Icon>

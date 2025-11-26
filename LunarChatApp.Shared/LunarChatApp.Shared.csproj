@@ -10,8 +10,6 @@
 
   <ItemGroup>
     <Folder Include="Core\Bots\" />
-    <Folder Include="Rest\Channels\" />
-    <Folder Include="Rest\Servers\" />
   </ItemGroup>
 
   <ItemGroup>

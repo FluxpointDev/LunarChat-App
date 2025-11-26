@@ -10,8 +10,11 @@
 			 x:DataType="viewmodels:ServerIconViewModel">
 	<Button IsEnabled="true" Command="{Binding SelectedServerCommand}" Margin="2" Padding="4">
 		<StackPanel>
-			<Border CornerRadius="12" ClipToBounds="True" ToolTip.Tip="{Binding Name}" ToolTip.Placement="Right">
-				<shadui:Avatar Fallback="FP" Source="/Assets/test-icon.ico" Width="36" Height="36"></shadui:Avatar>
+			<Border IsVisible="{Binding !ShowPlus}" CornerRadius="12" ClipToBounds="True" ToolTip.Tip="{Binding Name}" ToolTip.Placement="Right">
+				<shadui:Avatar Fallback="{Binding Fallback}" Source="/Assets/test-icon.ico" Width="36" Height="36"></shadui:Avatar>
+			</Border>
+			<Border IsVisible="{Binding ShowPlus}" CornerRadius="12" ClipToBounds="True" ToolTip.Tip="Join or Create server" ToolTip.Placement="Right">
+				<shadui:Avatar Fallback="+" Width="36" Height="36"></shadui:Avatar>
 			</Border>
 		</StackPanel>
 	</Button>

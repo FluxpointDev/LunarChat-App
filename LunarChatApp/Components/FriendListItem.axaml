@@ -16,8 +16,8 @@
 						<Image Source="/Assets/avatar.png" Width="40" Height="40"></Image>
 					</Border>
 					<StackPanel>
-						<TextBlock Text="{Binding $parent[local:FriendListItem].DisplayName}"></TextBlock>
-						<TextBlock Classes="Muted" Text="{Binding $parent[local:FriendListItem].UserName}"></TextBlock>
+						<TextBlock Text="{Binding DisplayName}"></TextBlock>
+						<TextBlock Classes="Muted" Text="{Binding Username}"></TextBlock>
 					</StackPanel>
 
 				</StackPanel>
@@ -31,6 +31,5 @@
 				</Button>
 			</StackPanel>
 		</Grid>
-
 	</Button>
 </UserControl>

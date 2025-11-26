@@ -6,6 +6,7 @@ namespace LunarChatApp.Services;
 
 public sealed class ServiceManager
 {
+    public bool IsDev = true;
     public readonly PageManager PageManager;
     public readonly TestState State;
     public readonly RestClient Rest;
@@ -16,11 +17,9 @@ public sealed class ServiceManager
         PageManager = page;
         State = st;
         Rest = rs;
+        Rest.Initialize(IsDev ? "http://localhost:5156/" : "https://lunar.fluxpoint.dev/api/");
         ThemeWatcher = theme;
         Dialogs = diag;
-        Dialogs.Register<CreateChannelDialog, CreateChannelDialogModel>();
-        Dialogs.Register<ReportServerDialog, ReportServerDialogModel>();
-        Dialogs.Register<StatusDialog, StatusDialogModel>();
     }
     public PopupMaskModel Popup;
 }

@@ -27,4 +27,11 @@ public partial class MessageItem : UserControl
         //    "}\n" +
         //    "```");
     }
+
+    public void Update(string content)
+    {
+        var markdownBuilder = new ObservableStringBuilder();
+        MarkdownRenderer.MarkdownBuilder = markdownBuilder;
+        markdownBuilder.Append(content);
+    }
 }

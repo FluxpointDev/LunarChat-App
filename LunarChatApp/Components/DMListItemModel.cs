@@ -1,22 +1,22 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
+using LunarChatApp.Shared.Core.Accounts;
 using LunarChatApp.Shared.Core.Channels;
-using LunarChatApp.Shared.Core.Users;
-using LunarChatApp.ViewModels;
+using LunarChatApp.Views;
 
 namespace LunarChatApp.Components;
 
 public partial class DMListItemModel : ViewModelBase
 {
     private ServiceManager services;
-    private User user;
+    private Relation user;
 
-    public DMListItemModel(ServiceManager sv, User u)
+    public DMListItemModel(ServiceManager sv, Relation u)
     {
         services = sv;
         user = u;
-        Name = u.DisplayName ?? u.Username;
+        Name = u.display_name ?? u.username;
     }
 
     [ObservableProperty]
@@ -25,11 +25,11 @@ public partial class DMListItemModel : ViewModelBase
     [RelayCommand]
     public void OpenDM()
     {
-        services.State.CurrentChannel = new Channel
+        services.State.Socket.CurrentChannel = new Channel
         {
             Id = "1",
             Name = Name
         };
-        services.State.TriggerSelectChannel(services.State.CurrentChannel, user);
+        services.State.Socket.TriggerSelectChannel(services.State.Socket.CurrentChannel, user);
     }
 }

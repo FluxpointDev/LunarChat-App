@@ -7,13 +7,17 @@
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="LunarChatApp.CreateChannelDialog"
 			 x:DataType="dialogs:CreateChannelDialogModel">
-	<StackPanel Spacing="10" HorizontalAlignment="Left">
+	<StackPanel Spacing="10" HorizontalAlignment="Left" Margin="10">
 		<TextBox
 		Width="225"
 		shadui:ControlAssist.Label="Name"
 		Classes="Clearable"
 		Text="{Binding Name}"
-		Watermark="" />
+		Watermark="">
+			<TextBox.KeyBindings>
+								<KeyBinding Command="{Binding SubmitCommand}" Gesture="Enter" />
+							</TextBox.KeyBindings>
+			</TextBox>
 
 		<ComboBox Width="225" shadui:ControlAssist.Label="Type" SelectedIndex="{Binding Type}">
 			<ComboBoxItem>Text</ComboBoxItem>

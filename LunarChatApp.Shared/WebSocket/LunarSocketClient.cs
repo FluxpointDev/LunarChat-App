@@ -1,6 +1,9 @@
-﻿using LunarChatApp.Shared.Core.Users;
+﻿using LunarChatApp.Shared.Core.Channels;
+using LunarChatApp.Shared.Core.Users;
+using LunarChatApp.Shared.WebSocket.Events;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Collections.Concurrent;
 using System.Net.WebSockets;
 using System.Text;
 
@@ -12,13 +15,20 @@ public class LunarSocketClient
     {
         webSocketUrl = url;
         authId = auth;
+        State.WebSocket = this;
     }
-    public delegate void MessageEventHandler(SocketMessageRecieve message);
+
+    public delegate void MessageEventHandler(MessageRecievedEvent message);
+    public delegate void ServerJoinEventHandler(ServerJoinEvent server);
+    public SocketState State = new SocketState();
+
     public event MessageEventHandler? OnMessageRecieved;
-    public void TriggerMessage(SocketMessageRecieve message)
+    public void TriggerMessage(MessageRecievedEvent message)
     {
         OnMessageRecieved?.Invoke(message);
     }
+
+
 
     private string webSocketUrl;
     private string authId;
@@ -42,10 +52,6 @@ public class LunarSocketClient
 
                 try
                 {
-                    TriggerMessage(new SocketMessageRecieve
-                    {
-                        content = "Test"
-                    });
                     Uri uri = new Uri($"{webSocketUrl}?format=json&version=1");
 
                     //if (!string.IsNullOrEmpty(Client.Config.CfClearance))
@@ -57,17 +63,21 @@ public class LunarSocketClient
                     //WebSocket.Options.SetRequestHeader("User-Agent", "Lunar Client");
                     //WebSocket.Options.SetRequestHeader("Auth-Id", authId);
                     await WebSocket.ConnectAsync(uri, CancellationToken);
-                    TriggerMessage(new SocketMessageRecieve
+                    _ = Send(WebSocket, JsonConvert.SerializeObject(new AuthEvent
                     {
-                        content = "Online"
-                    });
+                        user_id = authId
+                    }), CancellationToken.None);
+                    //TriggerMessage(new MessageRecievedEvent
+                    //{
+                    //    content = "Online"
+                    //});
                     //await Send(WebSocket, JsonConvert.SerializeObject(new AuthenticateSocketRequest(Client.Token)), CancellationToken);
                     _firstError = true;
                     await Receive(WebSocket, CancellationToken);
                 }
                 catch (ArgumentException)
                 {
-                    TriggerMessage(new SocketMessageRecieve
+                    TriggerMessage(new MessageRecievedEvent
                     {
                         content = "Invalid websocket url"
                     });
@@ -76,7 +86,7 @@ public class LunarSocketClient
                 }
                 catch (WebSocketException we)
                 {
-                    TriggerMessage(new SocketMessageRecieve
+                    TriggerMessage(new MessageRecievedEvent
                     {
                         content = we.ToString()
                     });
@@ -96,7 +106,7 @@ public class LunarSocketClient
                 }
                 catch (Exception ex)
                 {
-                    TriggerMessage(new SocketMessageRecieve
+                    TriggerMessage(new MessageRecievedEvent
                     {
                         content = ex.ToString()
                     });
@@ -147,7 +157,7 @@ public class LunarSocketClient
         {
             switch (payload["type"].ToString())
             {
-                case "Authenticated":
+                case "auth":
                     if (_firstConnected)
                     {
                         //Client.InvokeConnected();
@@ -168,11 +178,136 @@ public class LunarSocketClient
                     //    }
                     //}, CancellationToken);
                     break;
-                case "Message":
+                case "ready":
                     {
-                        SocketMessageRecieve? message = JsonConvert.DeserializeObject<SocketMessageRecieve>(json);
-                        TriggerMessage(message);
+                        _firstConnected = false;
+                        ReadyEvent? data = JsonConvert.DeserializeObject<ReadyEvent>(json);
+                        State.Channels = data.channels;
+                        State.Friends = data.Friends;
+                        State.Blocks = data.Blocks;
+                        try
+                        {
+                            State.Servers = new ConcurrentDictionary<string, SocketServerState>(data.servers.ToDictionary(x => x.Id, x => new SocketServerState
+                            {
+                                Server = x,
+                                Channels = new ConcurrentDictionary<string, Channel>(State.Channels[x.Id].ToDictionary(x => x.Id, x => x))
+                            }));
+                        }
+                        catch (Exception ex)
+                        {
+                            throw ex;
+                        }
+                        Console.WriteLine("Test");
+                        foreach (var i in State.Servers.Values)
+                        {
+                            State.TriggerAddServer(i.Server);
+                        }
+                    }
+                    break;
+                case "message_create":
+                    {
+                        MessageRecievedEvent? data = JsonConvert.DeserializeObject<MessageRecievedEvent>(json);
+                        TriggerMessage(data);
 
+                    }
+                    break;
+                case "message_update":
+                    {
+                        MessageUpdateEvent? data = JsonConvert.DeserializeObject<MessageUpdateEvent>(json);
+                        _ = State.OnMessageEdit?.Invoke(new Core.Messages.Message
+                        {
+                            AuthorId = data.user.Id,
+                            ChannelId = data.channel_id,
+                            Content = data.content,
+                            Id = data.id,
+                            Username = data.user.Username
+                        });
+                    }
+                    break;
+                case "message_delete":
+                    {
+                        MessageDeleteEvent? data = JsonConvert.DeserializeObject<MessageDeleteEvent>(json);
+                        _ = State.OnMessageDelete?.Invoke(new Core.Messages.Message
+                        {
+                            AuthorId = data.user.Id,
+                            ChannelId = data.channel_id,
+                            Content = data.content,
+                            Id = data.id,
+                            Username = data.user.Username
+                        });
+                    }
+                    break;
+                case "server_join":
+                    {
+                        ServerJoinEvent? data = JsonConvert.DeserializeObject<ServerJoinEvent>(json);
+                        State.Servers.TryAdd(data.server.Id, new SocketServerState
+                        {
+                            Server = data.server,
+                            Channels = new ConcurrentDictionary<string, Channel>(data.channels)
+                        });
+                        var channels = new List<Channel>();
+                        foreach (var i in data.channels)
+                        {
+                            channels.Add(i.Value);
+                        }
+                        State.Channels.TryAdd(data.server.Id, channels);
+                        State.TriggerAddServer(data.server);
+                    }
+                    break;
+
+                case "server_left":
+                    {
+                        ServerLeftEvent? data = JsonConvert.DeserializeObject<ServerLeftEvent>(json);
+                        State.TriggerDeleteServer(State.Servers[data.server_id].Server);
+                        State.Servers.TryRemove(data.server_id, out _);
+                        State.Channels.TryRemove(data.server_id, out _);
+                    }
+                    break;
+                case "channel_create":
+                    {
+                        ChannelCreatedEvent? data = JsonConvert.DeserializeObject<ChannelCreatedEvent>(json);
+                        State.Servers[data.channel.ServerId].Channels.TryAdd(data.channel.Id, data.channel);
+                        State.Channels[data.channel.ServerId].Add(data.channel);
+                        if (State.CurrentServer.Server.Id == data.channel.ServerId)
+                            State.CurrentServer.OnChannelCreate.Invoke(data.channel);
+                    }
+                    break;
+                case "channel_delete":
+                    {
+                        ChannelDeletedEvent? data = JsonConvert.DeserializeObject<ChannelDeletedEvent>(json);
+                        var channel = State.Channels[data.server_id].FirstOrDefault(x => x.Id == data.channel_id);
+                        State.Servers[data.server_id].Channels.TryRemove(data.channel_id, out channel);
+                        State.Channels[data.server_id].Remove(channel);
+                        if (State.CurrentServer.Server.Id == channel.ServerId)
+                            State.CurrentServer.OnChannelDelete.Invoke(channel);
+                    }
+                    break;
+                case "account_friend_add":
+                    {
+                        AccountFriendAdd? data = JsonConvert.DeserializeObject<AccountFriendAdd>(json);
+                        State.Friends.Add(data.relation.id, data.relation);
+                        State.OnFriendAdd.Invoke(data.relation);
+                    }
+                    break;
+                case "account_friend_remove":
+                    {
+                        AccountFriendRemove? data = JsonConvert.DeserializeObject<AccountFriendRemove>(json);
+                        State.Friends.Remove(data.user_id, out var relation);
+                        State.OnFriendRemove.Invoke(relation);
+                    }
+                    break;
+                case "account_block_add":
+                    {
+                        AccountBlockAdd? data = JsonConvert.DeserializeObject<AccountBlockAdd>(json);
+                        State.Blocks.Add(data.relation.id, data.relation);
+                        State.OnBlockAdd.Invoke(data.relation);
+                    }
+                    break;
+                case "account_block_remove":
+                    {
+                        AccountBlockRemove? data = JsonConvert.DeserializeObject<AccountBlockRemove>(json);
+                        State.Blocks.Remove(data.user_id, out var relation);
+                        State.OnBlockRemove.Invoke(relation);
                     }
                     break;
             }

@@ -2,11 +2,9 @@
 
 public class SocketMessage
 {
+    public SocketMessage(string tp)
+    {
+        type = tp;
+    }
     public string type;
-}
-public class SocketMessageRecieve : SocketMessage
-{
-    public string channel_id;
-    public string username;
-    public string content;
 }

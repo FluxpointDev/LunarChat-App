@@ -14,9 +14,25 @@
 		Watermark=""
 		Width="225"
 		Text="{Binding ServerNameEdit}"
-		IsReadOnly="true"
 		shadui:ControlAssist.Label="Server Name" />
 
+			<TextBox
+    Width="225"
+    shadui:ControlAssist.Height="100"
+    shadui:ControlAssist.Label="Description"
+    AcceptsReturn="True"
+    Watermark="Enter a description here..." />
+		</StackPanel>
+      <StackPanel
+		HorizontalAlignment="Left"
+		Orientation="Horizontal"
+		Spacing="8">
+			<Button Command="{Binding SaveSettingsCommand}"
+		Classes="Primary"
+		Content="Update" />
+		  <Button Command="{Binding DeleteServerCommand}"
+		Classes="Destructive"
+		Content="Delete Server" />
 		</StackPanel>
 	</StackPanel>
 </UserControl>

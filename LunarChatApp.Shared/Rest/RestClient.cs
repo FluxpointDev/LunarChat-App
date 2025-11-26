@@ -13,13 +13,18 @@ public class RestClient
 {
     public RestClient()
     {
+
+    }
+
+    public void Initialize(string url)
+    {
         HttpClientHandler ClientHandler = new HttpClientHandler()
         {
             //UseProxy = Client.Config.RestProxy != null
         };
         //ClientHandler.Proxy = Client.Config.RestProxy;
 
-        Url = "https://lunar.fluxpoint.dev/api/";
+        Url = url;
         Http = new HttpClient(ClientHandler)
         {
             BaseAddress = new Uri(Url)
@@ -65,7 +70,6 @@ public class RestClient
         //    username = "builderb2"
         //});
     }
-
 
 
     public static JsonSerializer Serializer { get; internal set; } = new JsonSerializer
