@@ -2,6 +2,7 @@
   <Folder Name="/Solution Items/">
     <File Path="Directory.Packages.props" />
   </Folder>
+  <Project Path="LiveMarkdown.Avalonia/LiveMarkdown.Avalonia.csproj" Id="6a1fa0d2-42ec-4267-8d30-fd7a700187f1" />
   <Project Path="LunarChatApp.Android/LunarChatApp.Android.csproj">
     <Deploy Solution="Debug|*" />
   </Project>

@@ -14,12 +14,12 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="auto" />
 			<RowDefinition Height="*" />
-			<RowDefinition Height="auto" MaxHeight="100" />
+			<RowDefinition Height="auto" />
 		</Grid.RowDefinitions>
-		<Border BorderBrush="{DynamicResource BorderColor30}" BorderThickness="0,0,0,1">
+		<Border Grid.Row="0" BorderBrush="{DynamicResource BorderColor30}" BorderThickness="0,0,0,1">
 			<TextBlock Padding="6" Classes="Large" Text="{Binding Name}"></TextBlock>
 		</Border>
-		<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsScrollChainingEnabled="false" Padding="24" >
+		<ScrollViewer Grid.Row="1" Margin="10,10,10,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
 			<ItemsRepeater ItemsSource="{Binding CrockeryList}">
 			</ItemsRepeater>
 		</ScrollViewer>

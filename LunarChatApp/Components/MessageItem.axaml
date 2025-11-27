@@ -2,13 +2,14 @@
 			 xmlns:components="using:LunarChatApp.Components"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:md="using:LiveMarkdown.Avalonia"
 			 xmlns:shadui="using:ShadUI"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="LunarChatApp.MessageItem"
 			 x:DataType="components:MessageItemModel">
-	<Border>
+	<Border Background="transparent" Padding="2">
 		<Border.ContextMenu>
 			<ContextMenu>
             <MenuItem Header="Delete Message" Command="{Binding DeleteCommand}" IsVisible="{Binding IsAuthor}" />
@@ -19,16 +20,21 @@
 				<ColumnDefinition Width="auto" />
 				<ColumnDefinition />
 			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition />
+				<RowDefinition />
+			</Grid.RowDefinitions>
 			<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
 				<Image Source="/Assets/avatar.png" Width="32" Height="32"></Image>
 			</Border>
 			<StackPanel Grid.Column="1" Margin="4">
 				<StackPanel Orientation="Horizontal" Spacing="6">
-					<TextBlock x:Name="MessageUsername" Classes="Large" Text="{Binding Username}"></TextBlock>
-					<TextBlock Classes="Muted" VerticalAlignment="Center" Text="10:00 PM"></TextBlock>
+					<SelectableTextBlock x:Name="MessageUsername" Classes="Large" Text="{Binding Username}"></SelectableTextBlock>
+					<SelectableTextBlock Classes="Muted" VerticalAlignment="Center" Text="10:00 PM"></SelectableTextBlock>
 				</StackPanel>
-				<md:MarkdownRenderer x:Name="MarkdownRenderer" />
+				<md:MarkdownRenderer MarkdownBuilder="{Binding Message}" InlineHyperlinkCommand="{Binding LinkClicked}" />
 			</StackPanel>
+			
 		</Grid>
 	</Border>
 </UserControl>

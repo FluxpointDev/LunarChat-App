@@ -33,6 +33,6 @@
     <Application.Styles>
         <themes:ShadTheme />
         <materialIcons:MaterialIconStyles />
-        <StyleInclude Source="avares://LiveMarkdown.Avalonia/Styles.axaml"/>
+        <StyleInclude Source="/Assets/Styles/Markdown.axaml"/>
     </Application.Styles>
 </Application>

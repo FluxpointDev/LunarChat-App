@@ -36,7 +36,7 @@ public partial class ChannelViewModel : ViewModelBase
             Message[]? messages = await services.Rest.GetAsync<Message[]>("/channels/" + state.Socket.CurrentChannel.Id + "/messages");
             if (messages != null)
             {
-                Dispatcher.UIThread.Post(() => { CrockeryList.AddRange(messages.Select(x => new MessageItem(st.Username, x.Content) { DataContext = new MessageItemModel(services, x) })); });
+                Dispatcher.UIThread.Post(() => { CrockeryList.AddRange(messages.Select(x => new MessageItem() { DataContext = new MessageItemModel(services, x) })); });
             }
         });
     }
@@ -46,7 +46,7 @@ public partial class ChannelViewModel : ViewModelBase
         if (message.channel_id != state.Socket.CurrentChannel?.Id)
             return;
 
-        CrockeryList.Add(new MessageItem(message.user.Username, message.content)
+        CrockeryList.Add(new MessageItem()
         {
             DataContext = new MessageItemModel(services, new Message
             {
@@ -66,7 +66,7 @@ public partial class ChannelViewModel : ViewModelBase
 
         var messageItem = CrockeryList.FirstOrDefault(x => (x.DataContext as MessageItemModel).messageId == message.Id);
         if (messageItem != null)
-            messageItem.Update(message.Content);
+            (messageItem.DataContext as MessageItemModel).Update(message.Content);
     }
 
     private async Task MessageDelete(Message message)
