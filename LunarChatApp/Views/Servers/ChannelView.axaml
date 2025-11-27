@@ -2,7 +2,7 @@
 			 xmlns:avrichtextbox="using:AvRichTextBox"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-			 xmlns:lucideAvalonia="using:LucideAvalonia"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:shadui="using:ShadUI"
 			 xmlns:viewmodels="using:LunarChatApp.ViewModels"
@@ -31,7 +31,7 @@
 					<ColumnDefinition Width="auto" />
 				</Grid.ColumnDefinitions>
 				<Button VerticalAlignment="Center" Margin="4,0,0,0" Padding="4">
-					<lucideAvalonia:Lucide Icon="Plus" StrokeBrush="#fff" StrokeThickness="1.5" Width="22" Height="22"/>
+					<materialIcons:MaterialIcon Kind="Add" Width="22" Height="22" Foreground="{DynamicResource PrimaryColor}" />
 				</Button>
 				<TextBox Grid.Column="1" Classes="" AcceptsReturn="True"
 						shadui:ControlAssist.MaxHeight="100"
@@ -43,7 +43,7 @@
 				</TextBox>
 				<!--<avrichtextbox:RichTextBox Grid.Column="1" x:Name="RichBox" Background="#393A41" BorderBrush="Transparent"></avrichtextbox:RichTextBox>-->
 				<Button Grid.Column="2" Margin="0, 0, 4, 0" VerticalAlignment="Center" Padding="4">
-					<lucideAvalonia:Lucide Icon="Smile" StrokeBrush="#fff" StrokeThickness="1.5" Width="22" Height="22"/>
+					<materialIcons:MaterialIcon Kind="Smiley" Width="22" Height="22" Foreground="{DynamicResource PrimaryColor}" />
 				</Button>
 			</Grid>
 		</Border>

@@ -28,7 +28,7 @@
 		Height="30"
 		ToolTip.Tip="Switch Theme"
 		Width="60">
-			<TextBlock Classes="LucideIcon" Text="Theme" />
+			<TextBlock Text="Theme" />
 		</Button>
 	</shadui:Window.RightWindowTitleBarContent>
 	<Window.KeyBindings>

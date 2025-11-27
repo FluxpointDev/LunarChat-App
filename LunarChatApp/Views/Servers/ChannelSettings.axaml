@@ -1,7 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:lucideAvalonia="using:LucideAvalonia"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:servers="using:LunarChatApp.ViewModels.Servers"
              xmlns:shadui="using:ShadUI"
@@ -27,7 +27,7 @@
 				<shadui:SidebarItem Content="Overview" IsChecked="true" Command="{Binding OpenOverviewSettingsCommand}">
 					<shadui:SidebarItem.Icon>
 						<Viewbox>
-							<lucideAvalonia:Lucide Icon="Info" StrokeBrush="{DynamicResource ForegroundColor}" StrokeThickness="1.5" Width="16" Height="16"/>
+							<materialIcons:MaterialIcon Kind="InfoCircle" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
@@ -37,7 +37,7 @@
 			<Grid Grid.ColumnDefinitions="*, auto">
 				<TextBlock Classes="Large" Text="{Binding SelectedTitle}"></TextBlock>
 				<Button Command="{Binding CloseSettingsCommand}" HorizontalAlignment="Right">
-					<lucideAvalonia:Lucide Icon="CircleX" StrokeBrush="{DynamicResource ForegroundColor}" StrokeThickness="1.5" Width="30" Height="30"/>
+					<materialIcons:MaterialIcon Kind="CancelCircleOutline" Width="30" Height="30" Foreground="{DynamicResource PrimaryColor}" />
 				</Button>
 			</Grid>
 			<ContentControl Content="{Binding SelectedPage}" />

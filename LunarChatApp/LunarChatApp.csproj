@@ -31,7 +31,7 @@
     <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="Jab" />
     <PackageReference Include="LiveMarkdown.Avalonia" />
-    <PackageReference Include="LucideAvalonia" />
+    <PackageReference Include="Material.Icons.Avalonia" />
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="ShadUI" />
     <PackageReference Include="Simplecto.Avalonia.RichTextBox" />

@@ -3,7 +3,7 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:local="using:LunarChatApp"
-			 xmlns:lucideAvalonia="using:LucideAvalonia"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:md="using:LiveMarkdown.Avalonia"
 			 xmlns:shadui="using:ShadUI"
@@ -23,7 +23,7 @@
 			<shadui:Sidebar.Header>
 				<StackPanel Orientation="Horizontal">
 					<Button Margin="2" Padding="8" Command="{Binding OpenHomeCommand}">
-						<lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="House" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="28" Height="28"/>
+						<materialIcons:MaterialIcon Kind="House" Width="28" Height="28" Foreground="{DynamicResource PrimaryColor}" />
 					</Button>
 					<ContentControl Content="{Binding SelectedHeader}"></ContentControl>
 				</StackPanel>
@@ -81,23 +81,23 @@
 							</MenuItem.Header>
 							<MenuItem Width="140" Header="Status" Command="{Binding OpenStatusDialogCommand}">
 								<MenuItem.Icon>
-									<lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="Tag" StrokeBrush="{DynamicResource PrimaryColor}" Width="12" Height="12"/>
+									<materialIcons:MaterialIcon Kind="Tag" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
 								</MenuItem.Icon>
 							</MenuItem>
 							<MenuItem Width="140" Header="Logout" Command="{Binding LogoutCommand}">
 								<MenuItem.Icon>
-									<lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="LogOut" StrokeBrush="{DynamicResource PrimaryColor}" Width="12" Height="12"/>
+									<materialIcons:MaterialIcon Kind="Logout" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
 								</MenuItem.Icon>
 							</MenuItem>
 							<MenuItem Width="140" Header="Quit" Command="{Binding QuitCommand}" IsVisible="{OnPlatform Default='True', Browser='False'}">
 								<MenuItem.Icon>
-									<lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="X" StrokeBrush="{DynamicResource PrimaryColor}" Width="12" Height="12"/>
+									<materialIcons:MaterialIcon Kind="Close" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
 								</MenuItem.Icon>
 							</MenuItem>
 						</MenuItem>
 					</Menu>
 					<Button Grid.Column="1" Command="{Binding OpenSettingsCommand}">
-						<lucideAvalonia:Lucide Grid.Column="1" HorizontalAlignment="Left" Icon="Settings" StrokeBrush="{DynamicResource PrimaryColor}" Foreground="{DynamicResource DestructiveColor75}" StrokeThickness="1.5" Width="22" Height="22"/>
+						<materialIcons:MaterialIcon Kind="Settings" Width="22" Height="22" Foreground="{DynamicResource PrimaryColor}" />
 					</Button>
 				</Grid>
 			</Grid>

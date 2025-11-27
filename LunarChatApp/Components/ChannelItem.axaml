@@ -3,7 +3,7 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:local="using:LunarChatApp"
 			 xmlns:shadui="using:ShadUI"
-			 xmlns:lucideAvalonia="using:LucideAvalonia"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:servers="using:LunarChatApp.ViewModels.Servers"
 			 mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="100"
@@ -14,13 +14,13 @@
 			<Grid Grid.ColumnDefinitions="*, auto">
 				<TextBlock Text="{Binding $parent[local:ChannelItem].ChannelName}"></TextBlock>
 				<Button IsVisible="{Binding IsOwner}" HorizontalAlignment="Right" Command="{Binding OpenChannelSettingsCommand}">
-					<lucideAvalonia:Lucide HorizontalAlignment="Right" Icon="Settings" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="16" Height="16"/>
+					<materialIcons:MaterialIcon Kind="Settings" HorizontalAlignment="Right" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 				</Button>
 			</Grid>
 		</shadui:SidebarItem.Content>
 		<shadui:SidebarItem.Icon>
 			<Viewbox>
-				<lucideAvalonia:Lucide x:Name="Test" Icon="{Binding $parent[local:ChannelItem].ChannelIcon}" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="16" Height="16"/>
+				<materialIcons:MaterialIcon x:Name="Test" Kind="{Binding $parent[local:ChannelItem].ChannelIcon}" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 			</Viewbox>
 		</shadui:SidebarItem.Icon>
 	</shadui:SidebarItem>

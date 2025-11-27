@@ -1,8 +1,8 @@
 <UserControl xmlns="https://github.com/avaloniaui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-			 xmlns:lucideAvalonia="using:LucideAvalonia"
 			 xmlns:main="using:LunarChatApp.Views.Main"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:shadui="using:ShadUI"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -26,7 +26,7 @@
 						<shadui:Card.Header>
 							<StackPanel Orientation="Horizontal" Spacing="12">
 								<Border Width="32" Height="32" Background="{DynamicResource BorderColor}" CornerRadius="90" ClipToBounds="True">
-									<lucideAvalonia:Lucide Margin="2,0,2,0" Padding="6" HorizontalAlignment="Left" Icon="Plus" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="28" Height="28" />
+									<materialIcons:MaterialIcon Margin="2,0,2,0" Padding="6" HorizontalAlignment="Left" Kind="Add" Width="28" Height="28" Foreground="{DynamicResource PrimaryColor}" />
 								</Border>
 								<StackPanel Spacing="0">
 									<shadui:CardTitle Margin="0,0,0,4">Create Server</shadui:CardTitle>
@@ -42,7 +42,7 @@
 						<shadui:Card.Header>
 							<StackPanel Orientation="Horizontal" Spacing="12">
 								<Border Width="32" Height="32" Background="{DynamicResource BorderColor}" CornerRadius="90" ClipToBounds="True">
-									<lucideAvalonia:Lucide Margin="2,0,2,0" Padding="6" HorizontalAlignment="Left" Icon="Compass" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="28" Height="28" />
+									<materialIcons:MaterialIcon Margin="2,0,2,0" Padding="6" HorizontalAlignment="Left" Kind="Compass" Width="28" Height="28" Foreground="{DynamicResource PrimaryColor}" />
 								</Border>
 								<StackPanel Spacing="0">
 									<shadui:CardTitle Margin="0,0,0,4">Discover</shadui:CardTitle>
@@ -60,7 +60,7 @@
 						<shadui:Card.Header>
 							<StackPanel Orientation="Horizontal" Spacing="12">
 								<Border Width="32" Height="32" Background="{DynamicResource BorderColor}" CornerRadius="90" ClipToBounds="True">
-									<lucideAvalonia:Lucide Margin="2,0,2,0" Padding="6" HorizontalAlignment="Left" Icon="MessageCircle" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="28" Height="28" />
+									<materialIcons:MaterialIcon Margin="2,0,2,0" Padding="6" HorizontalAlignment="Left" Kind="Chat" Width="28" Height="28" Foreground="{DynamicResource PrimaryColor}" />
 								</Border>
 								<StackPanel Spacing="0">
 									<shadui:CardTitle Margin="0,0,0,4">Lunar Lounge</shadui:CardTitle>
@@ -76,7 +76,7 @@
 						<shadui:Card.Header>
 							<StackPanel Orientation="Horizontal" Spacing="12">
 								<Border Width="32" Height="32" Background="{DynamicResource BorderColor}" CornerRadius="90" ClipToBounds="True">
-									<lucideAvalonia:Lucide Margin="2,0,2,0" Padding="6" HorizontalAlignment="Left" Icon="Code" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="28" Height="28" />
+									<materialIcons:MaterialIcon Margin="2,0,2,0" Padding="6" HorizontalAlignment="Left" Kind="Code" Width="28" Height="28" Foreground="{DynamicResource PrimaryColor}" />
 								</Border>
 								<StackPanel Spacing="0">
 									<shadui:CardTitle Margin="0,0,0,4">Lunar Developers</shadui:CardTitle>

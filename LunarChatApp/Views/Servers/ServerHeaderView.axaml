@@ -1,7 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-			 xmlns:lucideAvalonia="using:LucideAvalonia"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:servers="using:LunarChatApp.ViewModels.Servers"
 			 xmlns:shadui="using:ShadUI"
@@ -25,28 +25,28 @@
 							<ColumnDefinition MinWidth="18" />
 						</Grid.ColumnDefinitions>
 						<TextBlock Classes="h6" Text="{Binding Name}" TextWrapping="WrapWithOverflow"></TextBlock>
-						<lucideAvalonia:Lucide Grid.Column="1" HorizontalAlignment="Right" Icon="ChevronDown" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="0.8" Width="16" Height="16"/>
+						<materialIcons:MaterialIcon Grid.Column="1" HorizontalAlignment="Right" Kind="KeyboardArrowDown" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 					</Grid>
 				</Button>
 			</MenuItem.Header>
 			<MenuItem Header="Server Settings" Width="140" Command="{Binding OpenServerSettingsCommand}" IsVisible="{Binding IsOwner}">
 				<MenuItem.Icon>
-					<lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="Settings" StrokeBrush="{DynamicResource PrimaryColor}" Width="12" Height="12"/>
+					<materialIcons:MaterialIcon Kind="Settings" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="Create Channel" Width="140" Command="{Binding CreateChannelCommand}" IsVisible="{Binding IsOwner}">
 				<MenuItem.Icon>
-					<lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="Plus" StrokeBrush="{DynamicResource PrimaryColor}" Width="12" Height="12"/>
+					<materialIcons:MaterialIcon Kind="Add" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="Report Server" Width="140" Command="{Binding OpenReportServerCommand}">
 				<MenuItem.Icon>
-					<lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="CircleAlert" StrokeBrush="{DynamicResource PrimaryColor}" Width="12" Height="12"/>
+					<materialIcons:MaterialIcon Kind="AlertCircle" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="Leave Server" IsEnabled="False" Width="140" Command="{Binding LeaveServerCommand}" IsVisible="{Binding !IsOwner}">
 				<MenuItem.Icon>
-					<lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="LogOut" StrokeBrush="{DynamicResource PrimaryColor}" Width="12" Height="12"/>
+					<materialIcons:MaterialIcon Kind="Logout" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
 				</MenuItem.Icon>
 			</MenuItem>
 		</MenuItem>

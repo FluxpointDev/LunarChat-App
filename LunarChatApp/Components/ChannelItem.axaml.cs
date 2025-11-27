@@ -1,8 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Media;
-using LucideAvalonia.Enum;
 using LunarChatApp.Shared.Core.Channels;
+using Material.Icons;
 
 namespace LunarChatApp;
 
@@ -13,7 +12,7 @@ public partial class ChannelItem : UserControl
         InitializeComponent();
     }
     private ChannelType _channelType;
-    public ChannelType ChannelType { get { return _channelType; } set { _channelType = value; Test.Icon = GetIcon(); Test.StrokeBrush = new SolidColorBrush(Color.Parse("#ffffff")); } }
+    public ChannelType ChannelType { get { return _channelType; } set { _channelType = value; Test.Kind = GetIcon(); } }
 
     public static readonly StyledProperty<string> ChannelNameProperty = AvaloniaProperty.Register<ChannelItem, string>(nameof(ChannelName));
 
@@ -23,10 +22,10 @@ public partial class ChannelItem : UserControl
         set { SetValue(ChannelNameProperty, value); }
     }
 
-    public static readonly StyledProperty<LucideIconNames> ChannelIconProperty = AvaloniaProperty.Register<ChannelItem, LucideIconNames>(nameof(ChannelIcon), LucideIconNames.Hash);
+    public static readonly StyledProperty<MaterialIconKind> ChannelIconProperty = AvaloniaProperty.Register<ChannelItem, MaterialIconKind>(nameof(ChannelIcon), MaterialIconKind.Hashtag);
 
 
-    public LucideIconNames ChannelIcon
+    public MaterialIconKind ChannelIcon
     {
         get { return GetValue(ChannelIconProperty); }
         set
@@ -35,20 +34,20 @@ public partial class ChannelItem : UserControl
         }
     }
 
-    private LucideIconNames GetIcon()
+    private MaterialIconKind GetIcon()
     {
         switch (ChannelType)
         {
             case ChannelType.Voice:
-                return LucideIconNames.Volume2;
+                return MaterialIconKind.VolumeHigh;
             case ChannelType.Media:
-                return LucideIconNames.Image;
+                return MaterialIconKind.Image;
             case ChannelType.Schedule:
-                return LucideIconNames.Calendar;
+                return MaterialIconKind.Calendar;
             case ChannelType.Rules:
-                return LucideIconNames.BookCheck;
+                return MaterialIconKind.BookCheck;
         }
-        return LucideIconNames.Hash;
+        return MaterialIconKind.Hashtag;
     }
 
     private void Clicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)

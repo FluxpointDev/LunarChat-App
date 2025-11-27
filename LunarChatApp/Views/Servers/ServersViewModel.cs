@@ -71,6 +71,10 @@ public partial class ServersViewModel : ViewModelBase
 
     private void State_OnAddServer(Shared.Core.Servers.Server server)
     {
+        var serverItem = ServersList.FirstOrDefault(x => (x.DataContext as ServerIconViewModel)!.Id == server.Id);
+        if (serverItem != null)
+            return;
+
         ServersList.Add(new ServerIcon()
         {
             DataContext = new ServerIconViewModel(services, new Shared.Core.Servers.Server

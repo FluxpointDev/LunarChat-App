@@ -3,7 +3,7 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:local="using:LunarChatApp"
-			 xmlns:lucideAvalonia="using:LucideAvalonia"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="LunarChatApp.FriendListItem"
@@ -24,10 +24,10 @@
 			</StackPanel>
 			<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
 				<Button Command="{Binding OpenMessagesCommand}">
-					<lucideAvalonia:Lucide Icon="MessageCircle" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="22" Height="22"/>
+					<materialIcons:MaterialIcon Kind="Chat" Width="22" Height="22" Foreground="{DynamicResource PrimaryColor}" />
 				</Button>
 				<Button>
-					<lucideAvalonia:Lucide Icon="EllipsisVertical" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="22" Height="22"/>
+					<materialIcons:MaterialIcon Kind="MoreVert" Width="22" Height="22" Foreground="{DynamicResource PrimaryColor}" />
 				</Button>
 			</StackPanel>
 		</Grid>

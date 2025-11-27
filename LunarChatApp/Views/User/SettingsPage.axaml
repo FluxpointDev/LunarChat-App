@@ -2,7 +2,7 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:local="using:LunarChatApp"
-			 xmlns:lucideAvalonia="using:LucideAvalonia"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:shadui="using:ShadUI"
 			 xmlns:viewmodels="using:LunarChatApp.ViewModels"
@@ -29,21 +29,21 @@
 				<shadui:SidebarItem Content="Account" IsChecked="true" Command="{Binding OpenAccountCommand}">
 					<shadui:SidebarItem.Icon>
 						<Viewbox>
-							<lucideAvalonia:Lucide Icon="User" StrokeBrush="{DynamicResource ForegroundColor}" StrokeThickness="1.5" Width="16" Height="16"/>
+							<materialIcons:MaterialIcon Kind="Account" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
 				<shadui:SidebarItem Content="Profile" Command="{Binding OpenProfileCommand}">
 					<shadui:SidebarItem.Icon>
 						<Viewbox>
-							<lucideAvalonia:Lucide Icon="UserPen" StrokeBrush="{DynamicResource ForegroundColor}" StrokeThickness="1.5" Width="16" Height="16"/>
+							<materialIcons:MaterialIcon Kind="AccountEdit" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
 				<shadui:SidebarItem Content="Connections" Command="{Binding OpenConnectionsCommand}">
 					<shadui:SidebarItem.Icon>
 						<Viewbox>
-							<lucideAvalonia:Lucide Icon="Link" StrokeBrush="{DynamicResource ForegroundColor}" StrokeThickness="1.5" Width="16" Height="16"/>
+							<materialIcons:MaterialIcon Kind="Link" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
@@ -51,14 +51,14 @@
 				<shadui:SidebarItem Content="Theme" Command="{Binding OpenThemeCommand}">
 					<shadui:SidebarItem.Icon>
 						<Viewbox>
-							<lucideAvalonia:Lucide Icon="PaintbrushVertical" StrokeBrush="{DynamicResource ForegroundColor}" StrokeThickness="1.5" Width="16" Height="16"/>
+							<materialIcons:MaterialIcon Kind="FormatPaint" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
 				<shadui:SidebarItem Content="Chat" Command="{Binding OpenChatCommand}">
 					<shadui:SidebarItem.Icon>
 						<Viewbox>
-							<lucideAvalonia:Lucide Icon="MessageCircle" StrokeBrush="{DynamicResource ForegroundColor}" StrokeThickness="1.5" Width="16" Height="16"/>
+							<materialIcons:MaterialIcon Kind="Chat" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
@@ -66,14 +66,14 @@
 				<shadui:SidebarItem Content="Notifications" Command="{Binding OpenNotificationsCommand}">
 					<shadui:SidebarItem.Icon>
 						<Viewbox>
-							<lucideAvalonia:Lucide Icon="Bell" StrokeBrush="{DynamicResource ForegroundColor}" StrokeThickness="1.5" Width="16" Height="16"/>
+							<materialIcons:MaterialIcon Kind="Notifications" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
 				<shadui:SidebarItem Content="Developer" Command="{Binding OpenDeveloperCommand}">
 					<shadui:SidebarItem.Icon>
 						<Viewbox>
-							<lucideAvalonia:Lucide Icon="Code" StrokeBrush="{DynamicResource ForegroundColor}" StrokeThickness="1.5" Width="16" Height="16"/>
+							<materialIcons:MaterialIcon Kind="Code" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
@@ -83,7 +83,7 @@
 			<Grid Grid.ColumnDefinitions="*, auto">
 				<TextBlock Classes="Large" Text="{Binding SelectedTitle}"></TextBlock>
 				<Button Command="{Binding CloseSettingsCommand}" HorizontalAlignment="Right">
-					<lucideAvalonia:Lucide Icon="CircleX" StrokeBrush="{DynamicResource ForegroundColor}" StrokeThickness="1.5" Width="30" Height="30"/>
+					<materialIcons:MaterialIcon Kind="CancelCircleOutline" Width="30" Height="30" Foreground="{DynamicResource PrimaryColor}" />
 				</Button>
 			</Grid>
 			<ContentControl Content="{Binding SelectedPage}" />

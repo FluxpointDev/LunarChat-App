@@ -1,7 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-			 xmlns:lucideAvalonia="using:LucideAvalonia"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:shadui="using:ShadUI"
 			 xmlns:user="using:LunarChatApp.ViewModels.User"
@@ -13,14 +13,14 @@
 							Content="Home">
 			<shadui:SidebarItem.Icon>
 				<Viewbox>
-					<lucideAvalonia:Lucide x:Name="Test" Icon="LayoutGrid" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="16" Height="16"/>
+					<materialIcons:MaterialIcon Kind="ViewGrid" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 				</Viewbox>
 			</shadui:SidebarItem.Icon>
 		</shadui:SidebarItem>
 		<shadui:SidebarItem Content="Friends" Command="{Binding OpenFriendsCommand}">
 			<shadui:SidebarItem.Icon>
 				<Viewbox>
-					<lucideAvalonia:Lucide Icon="UsersRound" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="16" Height="16"/>
+					<materialIcons:MaterialIcon Kind="Accounts" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 				</Viewbox>
 			</shadui:SidebarItem.Icon>
 		</shadui:SidebarItem>

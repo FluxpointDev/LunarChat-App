@@ -1,14 +1,14 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:lucideAvalonia="using:LucideAvalonia"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:servers="using:LunarChatApp.ViewModels.Servers"
-             xmlns:shadui="using:ShadUI"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="LunarChatApp.ServerSettings"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:materialIcons="using:Material.Icons.Avalonia"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:servers="using:LunarChatApp.ViewModels.Servers"
+			 xmlns:shadui="using:ShadUI"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.ServerSettings"
 			 x:DataType="servers:ServerSettingsModel">
-    <Grid ColumnDefinitions="Auto *">
+	<Grid ColumnDefinitions="Auto *">
 		<shadui:Sidebar
 		BorderBrush="{DynamicResource BorderColor30}"
 		BorderThickness="0,0,1,0"
@@ -27,7 +27,7 @@
 				<shadui:SidebarItem Content="Overview" IsChecked="true" Command="{Binding OpenTestSettings}">
 					<shadui:SidebarItem.Icon>
 						<Viewbox>
-							<lucideAvalonia:Lucide Icon="Info" StrokeBrush="{DynamicResource ForegroundColor}" StrokeThickness="1.5" Width="16" Height="16"/>
+							<materialIcons:MaterialIcon Kind="InfoCircle" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
@@ -35,15 +35,15 @@
 				<shadui:SidebarItem Content="System" Command="{Binding OpenSystemSettingsCommand}">
 					<shadui:SidebarItem.Icon>
 						<Viewbox>
-							<lucideAvalonia:Lucide Icon="Zap" StrokeBrush="{DynamicResource ForegroundColor}" StrokeThickness="1.5" Width="16" Height="16"/>
+							<materialIcons:MaterialIcon Kind="LightningBolt" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
 
-<shadui:SidebarItem Content="Emojis" Command="{Binding OpenEmotesSettingsCommand}">
+				<shadui:SidebarItem Content="Emojis" Command="{Binding OpenEmotesSettingsCommand}">
 					<shadui:SidebarItem.Icon>
 						<Viewbox>
-							<lucideAvalonia:Lucide Icon="Smile" StrokeBrush="{DynamicResource ForegroundColor}" StrokeThickness="1.5" Width="16" Height="16"/>
+							<materialIcons:MaterialIcon Kind="Smiley" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
@@ -51,7 +51,7 @@
 				<shadui:SidebarItem Content="Invites" Command="{Binding OpenInvitesSettingsCommand}">
 					<shadui:SidebarItem.Icon>
 						<Viewbox>
-							<lucideAvalonia:Lucide Icon="Plus" StrokeBrush="{DynamicResource ForegroundColor}" StrokeThickness="1.5" Width="16" Height="16"/>
+							<materialIcons:MaterialIcon Kind="Add" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
@@ -60,7 +60,7 @@
 				<shadui:SidebarItem Content="Members" Command="{Binding OpenMembersSettingsCommand}">
 					<shadui:SidebarItem.Icon>
 						<Viewbox>
-							<lucideAvalonia:Lucide Icon="UsersRound" StrokeBrush="{DynamicResource ForegroundColor}" StrokeThickness="1.5" Width="16" Height="16"/>
+							<materialIcons:MaterialIcon Kind="Accounts" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
@@ -68,7 +68,7 @@
 				<shadui:SidebarItem Content="Roles" Command="{Binding OpenRolesSettingsCommand}">
 					<shadui:SidebarItem.Icon>
 						<Viewbox>
-							<lucideAvalonia:Lucide Icon="Tag" StrokeBrush="{DynamicResource ForegroundColor}" StrokeThickness="1.5" Width="16" Height="16"/>
+							<materialIcons:MaterialIcon Kind="Tag" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
@@ -77,7 +77,7 @@
 				<shadui:SidebarItem Content="Bans" Command="{Binding OpenBansSettingsCommand}">
 					<shadui:SidebarItem.Icon>
 						<Viewbox>
-							<lucideAvalonia:Lucide Icon="Gavel" StrokeBrush="{DynamicResource ForegroundColor}" StrokeThickness="1.5" Width="16" Height="16"/>
+							<materialIcons:MaterialIcon Kind="Gavel" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
@@ -87,7 +87,7 @@
 			<Grid Grid.ColumnDefinitions="*, auto">
 				<TextBlock Classes="Large" Text="{Binding SelectedTitle}"></TextBlock>
 				<Button Command="{Binding CloseSettingsCommand}" HorizontalAlignment="Right">
-					<lucideAvalonia:Lucide Icon="CircleX" StrokeBrush="{DynamicResource ForegroundColor}" StrokeThickness="1.5" Width="30" Height="30"/>
+					<materialIcons:MaterialIcon Kind="CancelCircleOutline" Width="30" Height="30" Foreground="{DynamicResource PrimaryColor}" />
 				</Button>
 			</Grid>
 			<ContentControl Content="{Binding SelectedPage}" />

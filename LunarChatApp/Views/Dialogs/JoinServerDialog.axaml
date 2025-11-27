@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dialogs="using:LunarChatApp.ViewModels.Dialogs"
-             xmlns:lucideAvalonia="using:LucideAvalonia"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:shadui="using:ShadUI"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -12,13 +12,13 @@
       <StackPanel IsVisible="{Binding ShowOptions}" Spacing="6" Margin="10">
 		  <Button Command="{Binding ShowJoinServerCommand}" Padding="4">
               <StackPanel Orientation="Horizontal" Spacing="6">
-			        <lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="HousePlus" Classes="Large" StrokeBrush="{DynamicResource PrimaryColor}" Width="18" Height="18"/>
+			        <materialIcons:MaterialIcon Kind="HouseAdd" Width="18" Height="18" Classes="Large" Foreground="{DynamicResource PrimaryColor}" />
                     <TextBlock Classes="Large" Text="Join Server"></TextBlock>
               </StackPanel>
           </Button>
           <Button Command="{Binding ShowCreateServerCommand}" Padding="4">
               <StackPanel Orientation="Horizontal" Spacing="6">
-			        <lucideAvalonia:Lucide HorizontalAlignment="Left" Icon="CirclePlus" Classes="Large" StrokeBrush="{DynamicResource PrimaryColor}" Width="18" Height="18"/>
+			        <materialIcons:MaterialIcon Kind="AddCircle" Width="18" Height="18" Classes="Large" Foreground="{DynamicResource PrimaryColor}" />
                     <TextBlock Classes="Large" Text="Create Server"></TextBlock>
               </StackPanel>
           </Button>
