@@ -13,6 +13,9 @@ public partial class CreateChannelDialogModel(ServiceManager services) : ViewMod
     private string _name;
 
     [ObservableProperty]
+    private string _topic;
+
+    [ObservableProperty]
     private ChannelType type;
 
     [RelayCommand]

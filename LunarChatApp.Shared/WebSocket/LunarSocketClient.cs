@@ -282,6 +282,16 @@ public class LunarSocketClient
                             State.CurrentServer.OnChannelDelete.Invoke(channel);
                     }
                     break;
+                case "channel_update":
+                    {
+                        ChannelUpdatedEvent? data = JsonConvert.DeserializeObject<ChannelUpdatedEvent>(json);
+                        var channel = State.Channels[data.server_id].FirstOrDefault(x => x.Id == data.channel_id);
+                        channel.Name = data.name;
+                        channel.Topic = data.topic;
+                        if (State.CurrentServer.Server.Id == channel.ServerId)
+                            State.CurrentServer.OnChannelUpdate.Invoke(channel);
+                    }
+                    break;
                 case "account_friend_add":
                     {
                         AccountFriendAdd? data = JsonConvert.DeserializeObject<AccountFriendAdd>(json);

@@ -20,7 +20,7 @@
 				Text="Lunar Chat"
 				TextWrapping="Wrap" />
 			</StackPanel>
-			<StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="0">
+			<WrapPanel Grid.Row="1" Orientation="Horizontal">
 				<Button Margin="4" Command="{Binding CreateServerCommand}">
 					<shadui:Card HasShadow="False" Padding="20,10,20,10" Width="240">
 						<shadui:Card.Header>
@@ -53,9 +53,9 @@
 						</shadui:Card.Header>
 					</shadui:Card>
 				</Button>
-			</StackPanel>
-			<StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="0">
-				<Button Margin="4">
+			</WrapPanel>
+			<WrapPanel Grid.Row="2" Orientation="Horizontal">
+				<Button Margin="4" Command="{Binding LunarCommunityCommand}">
 					<shadui:Card HasShadow="False" Padding="20,10,20,10" Width="240">
 						<shadui:Card.Header>
 							<StackPanel Orientation="Horizontal" Spacing="12">
@@ -63,7 +63,7 @@
 									<materialIcons:MaterialIcon Margin="2,0,2,0" Padding="6" HorizontalAlignment="Left" Kind="Chat" Width="28" Height="28" Foreground="{DynamicResource PrimaryColor}" />
 								</Border>
 								<StackPanel Spacing="0">
-									<shadui:CardTitle Margin="0,0,0,4">Lunar Lounge</shadui:CardTitle>
+									<shadui:CardTitle Margin="0,0,0,4">Lunar Community</shadui:CardTitle>
 									<shadui:CardDescription>Chat with the community,</shadui:CardDescription>
 									<shadui:CardDescription>report issues or feedback.</shadui:CardDescription>
 								</StackPanel>
@@ -71,7 +71,7 @@
 						</shadui:Card.Header>
 					</shadui:Card>
 				</Button>
-				<Button Margin="4">
+				<Button Margin="4" Command="{Binding LunarDevsCommand}">
 					<shadui:Card HasShadow="False" Padding="20,10,20,10" Width="240">
 						<shadui:Card.Header>
 							<StackPanel Orientation="Horizontal" Spacing="12">
@@ -87,7 +87,7 @@
 						</shadui:Card.Header>
 					</shadui:Card>
 				</Button>
-			</StackPanel>
+			</WrapPanel>
 		</Grid>
 	</ScrollViewer>
 </UserControl>

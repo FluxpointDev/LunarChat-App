@@ -15,22 +15,18 @@
             <MenuItem Header="Delete Message" Command="{Binding DeleteCommand}" IsVisible="{Binding IsAuthor}" />
           </ContextMenu>
 		</Border.ContextMenu>
-		<Grid HorizontalAlignment="Stretch">
+		<Grid HorizontalAlignment="Stretch" ColumnSpacing="8">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="auto" />
 				<ColumnDefinition />
 			</Grid.ColumnDefinitions>
-			<Grid.RowDefinitions>
-				<RowDefinition />
-				<RowDefinition />
-			</Grid.RowDefinitions>
 			<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
 				<Image Source="/Assets/avatar.png" Width="32" Height="32"></Image>
 			</Border>
 			<StackPanel Grid.Column="1" Margin="4">
 				<StackPanel Orientation="Horizontal" Spacing="6">
 					<SelectableTextBlock x:Name="MessageUsername" Classes="Large" Text="{Binding Username}"></SelectableTextBlock>
-					<SelectableTextBlock Classes="Muted" VerticalAlignment="Center" Text="10:00 PM"></SelectableTextBlock>
+					<SelectableTextBlock Classes="Muted" VerticalAlignment="Center" Text="{Binding Time}"></SelectableTextBlock>
 				</StackPanel>
 				<md:MarkdownRenderer MarkdownBuilder="{Binding Message}" InlineHyperlinkCommand="{Binding LinkClicked}" />
 			</StackPanel>

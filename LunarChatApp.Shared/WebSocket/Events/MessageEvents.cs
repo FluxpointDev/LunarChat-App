@@ -10,6 +10,7 @@ public class MessageRecievedEvent : SocketMessage
     public string content;
     public User user;
     public string channel_id;
+    public DateTime created_at;
 }
 public class MessageDeleteEvent : SocketMessage
 {
@@ -19,6 +20,7 @@ public class MessageDeleteEvent : SocketMessage
     public string content;
     public User user;
     public string channel_id;
+    public DateTime created_at;
 }
 
 public class MessageUpdateEvent : SocketMessage
@@ -29,4 +31,6 @@ public class MessageUpdateEvent : SocketMessage
     public string content;
     public User user;
     public string channel_id;
+    public DateTime created_at;
+    public DateTime? updated_at;
 }

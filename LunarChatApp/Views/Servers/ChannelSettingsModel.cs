@@ -5,22 +5,37 @@ using LunarChatApp.Services;
 using LunarChatApp.Shared.Core.Channels;
 using LunarChatApp.ViewModels.Servers.Channels;
 using LunarChatApp.Views;
+using System.Threading.Tasks;
 
 namespace LunarChatApp.ViewModels.Servers;
 
 public partial class ChannelSettingsModel : ViewModelBase
 {
+    private ServiceManager services;
     private PageManager pageManager;
     private TestState state { get; set; }
     private Channel channel;
-    public ChannelSettingsModel(PageManager page, TestState st, Channel chan)
+    public ChannelSettingsModel(ServiceManager sv, Channel chan)
     {
-        pageManager = page;
-        state = st;
+        services = sv;
+        pageManager = sv.PageManager;
+        state = sv.State;
         channel = chan;
         ChannelName = chan.Name;
+        sv.State.Socket.CurrentServer.OnChannelUpdate += UpdateChannel;
         if (SelectedPage == null)
-            SelectedPage = new ChannelSettingsOverview { DataContext = new ChannelSettingsOverviewModel(chan) };
+            SelectedPage = new ChannelSettingsOverview { DataContext = new ChannelSettingsOverviewModel(services, chan) };
+    }
+
+    private async Task UpdateChannel(Channel channel)
+    {
+        ChannelName = channel.Name;
+        if (SelectedPage is ChannelSettingsOverview overview)
+        {
+            ChannelSettingsOverviewModel model = (overview.DataContext as ChannelSettingsOverviewModel);
+            model.ChannelNameEdit = channel.Name;
+            model.ChannelTopicEdit = channel.Topic;
+        }
     }
 
     [ObservableProperty]
@@ -41,6 +56,6 @@ public partial class ChannelSettingsModel : ViewModelBase
     [RelayCommand]
     public void OpenOverviewSettings()
     {
-        SelectedPage = new ChannelSettingsOverview { DataContext = new ChannelSettingsOverviewModel(channel) };
+        SelectedPage = new ChannelSettingsOverview { DataContext = new ChannelSettingsOverviewModel(services, channel) };
     }
 }

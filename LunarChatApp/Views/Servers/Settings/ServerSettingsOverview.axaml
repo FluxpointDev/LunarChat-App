@@ -1,38 +1,38 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:settings="using:LunarChatApp.ViewModels.Servers.Settings"
-             xmlns:shadui="using:ShadUI"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="LunarChatApp.ServerSettingsOverview"
-             x:DataType="settings:ServerSettingsOverviewModel">
-  <StackPanel Spacing="20" HorizontalAlignment="Left">
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:settings="using:LunarChatApp.ViewModels.Servers.Settings"
+			 xmlns:shadui="using:ShadUI"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.ServerSettingsOverview"
+			 x:DataType="settings:ServerSettingsOverviewModel">
+	<StackPanel Spacing="20" HorizontalAlignment="Left">
 		<StackPanel HorizontalAlignment="Left" Spacing="10">
 			<TextBox
-		Classes="Clearable"
-		Watermark=""
-		Width="225"
-		Text="{Binding ServerNameEdit}"
-		shadui:ControlAssist.Label="Server Name" />
+			Classes="Clearable"
+			Watermark=""
+			Width="225"
+			Text="{Binding ServerNameEdit}"
+			shadui:ControlAssist.Label="Server Name" />
 
 			<TextBox
-    Width="225"
-    shadui:ControlAssist.Height="100"
-    shadui:ControlAssist.Label="Description"
-    AcceptsReturn="True"
-    Watermark="Enter a description here..." />
+			Width="225"
+			shadui:ControlAssist.Height="100"
+			shadui:ControlAssist.Label="Description"
+			AcceptsReturn="True"
+			Watermark="Enter a description here..." />
 		</StackPanel>
-      <StackPanel
+		<StackPanel
 		HorizontalAlignment="Left"
 		Orientation="Horizontal"
 		Spacing="8">
-			<!--<Button Command="{Binding SaveSettingsCommand}"
-		Classes="Primary"
-		Content="Update" />-->
-		  <Button Command="{Binding DeleteServerCommand}"
-		Classes="Destructive"
-		Content="Delete Server" />
+			<Button Command="{Binding SaveSettingsCommand}"
+			Classes="Primary"
+			Content="Update" />
+			<Button Command="{Binding DeleteServerCommand}"
+					Classes="Destructive"
+					Content="Delete Server" />
 		</StackPanel>
 	</StackPanel>
 </UserControl>

@@ -13,7 +13,7 @@ namespace LunarChatApp.ViewModels;
 public partial class MainViewModel : ViewModelBase
 {
     private bool _disposed;
-    private ServiceManager services;
+    public ServiceManager services;
     public MainViewModel(ServiceManager sv)
     {
         services = sv;

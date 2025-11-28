@@ -30,6 +30,7 @@ public partial class DMListItemModel : ViewModelBase
             Id = user.id,
             Name = user.display_name ?? user.username
         };
+
         services.State.Socket.TriggerSelectChannel(services.State.Socket.CurrentChannel, user);
     }
 }

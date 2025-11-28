@@ -20,6 +20,7 @@ public partial class MessageItemModel : ViewModelBase
         Username = message.Username;
         Message = new ObservableStringBuilder();
         Message.Append(message.Content);
+        Time = message.CreatedAt.ToLocalTime().ToString("hh:mm tt");
     }
 
     private ServiceManager services;
@@ -34,6 +35,9 @@ public partial class MessageItemModel : ViewModelBase
 
     [ObservableProperty]
     private ObservableStringBuilder _message;
+
+    [ObservableProperty]
+    private string _time;
 
     [RelayCommand]
     public void LinkClicked(InlineHyperlinkClickedEventArgs args)

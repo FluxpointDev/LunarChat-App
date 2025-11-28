@@ -12,7 +12,7 @@
 	<shadui:SidebarItem Command="{Binding SelectChannelCommand}">
 		<shadui:SidebarItem.Content>
 			<Grid Grid.ColumnDefinitions="*, auto">
-				<TextBlock Text="{Binding $parent[local:ChannelItem].ChannelName}"></TextBlock>
+				<TextBlock Text="{Binding Name}"></TextBlock>
 				<Button IsVisible="{Binding IsOwner}" HorizontalAlignment="Right" Command="{Binding OpenChannelSettingsCommand}">
 					<materialIcons:MaterialIcon Kind="Settings" HorizontalAlignment="Right" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 				</Button>

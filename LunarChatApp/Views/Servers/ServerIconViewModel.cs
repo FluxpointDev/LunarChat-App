@@ -1,5 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
@@ -7,6 +9,7 @@ using LunarChatApp.Shared.Core.Servers;
 using LunarChatApp.Shared.Rest.Servers;
 using LunarChatApp.ViewModels.Dialogs;
 using LunarChatApp.Views;
+using System;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.ViewModels;
@@ -20,6 +23,19 @@ public partial class ServerIconViewModel : ViewModelBase
         Name = server.Name;
         Fallback = server.GetFallbackName();
         Id = server.Id;
+        switch (Name)
+        {
+            case "Fluxpoint Community":
+                Icon = new Bitmap(AssetLoader.Open(new Uri("avares://LunarChatApp/Assets/fluxpoint.ico")));
+                break;
+            case "Lunar Community":
+                Icon = new Bitmap(AssetLoader.Open(new Uri("avares://LunarChatApp/Assets/lunar-icon.png")));
+                break;
+            case "Lunar Developers":
+                Icon = new Bitmap(AssetLoader.Open(new Uri("avares://LunarChatApp/Assets/lunar-dev-icon.png")));
+                break;
+        }
+
         if (Id == "0")
             ShowPlus = true;
     }
@@ -47,11 +63,8 @@ public partial class ServerIconViewModel : ViewModelBase
         }
         else
         {
-            if (Id == services.State.Socket.CurrentServer?.Server.Id)
-                return;
-
-            services.State.Socket.CurrentServer = services.State.Socket.Servers[Id];
-            services.State.Socket.TriggerSelectServer(services.State.Socket.Servers[Id].Server);
+            if (services.State.Socket.Servers.TryGetValue(Id, out var server))
+                services.PageManager.SwitchServer(services, server.Server);
         }
     }
 

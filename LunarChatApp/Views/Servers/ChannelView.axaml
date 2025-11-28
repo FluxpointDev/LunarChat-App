@@ -1,5 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
 			 xmlns:avrichtextbox="using:AvRichTextBox"
+             xmlns:components="using:LunarChatApp.Components"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialIcons="using:Material.Icons.Avalonia"
@@ -17,9 +18,16 @@
 			<RowDefinition Height="auto" />
 		</Grid.RowDefinitions>
 		<Border Grid.Row="0" BorderBrush="{DynamicResource BorderColor30}" BorderThickness="0,0,0,1">
-			<TextBlock Padding="6" Classes="Large" Text="{Binding Name}"></TextBlock>
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Padding="6" Classes="Large" Text="{Binding Name}"></TextBlock>
+				<TextBlock Padding="6" Classes="p" Foreground="{DynamicResource MutedColor}" Text="{Binding Topic}" VerticalAlignment="Center"></TextBlock>
+			</StackPanel>
+			
 		</Border>
 		<ScrollViewer Grid.Row="1" Margin="10,10,10,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
+			<Interaction.Behaviors>
+				<components:ScrollToEndBehavior />
+			</Interaction.Behaviors>
 			<ItemsRepeater ItemsSource="{Binding CrockeryList}">
 			</ItemsRepeater>
 		</ScrollViewer>

@@ -5,6 +5,7 @@ using DynamicData;
 using LunarChatApp.Components;
 using LunarChatApp.Services;
 using LunarChatApp.Shared.Core.Accounts;
+using LunarChatApp.Shared.Core.Channels;
 using LunarChatApp.Shared.Core.Messages;
 using LunarChatApp.Shared.Rest.Messages;
 using LunarChatApp.Shared.WebSocket.Events;
@@ -18,7 +19,7 @@ namespace LunarChatApp.ViewModels;
 public partial class ChannelViewModel : ViewModelBase
 {
     private TestState state;
-    private ServiceManager services;
+    public ServiceManager services;
     private Relation? user;
     public ChannelViewModel(TestState st, ServiceManager sv, Relation? u)
     {
@@ -26,6 +27,8 @@ public partial class ChannelViewModel : ViewModelBase
         services = sv;
         user = u;
         Name = st.Socket.CurrentChannel.Name;
+        Topic = st.Socket.CurrentChannel.Topic;
+        state.Socket.CurrentServer.OnChannelUpdate += ChannelUpdate;
         state.Socket.WebSocket.OnMessageRecieved += State_OnMessageRecieved;
         state.Socket.OnMessageEdit += MessageEdit;
         state.Socket.OnMessageDelete += MessageDelete;
@@ -36,9 +39,22 @@ public partial class ChannelViewModel : ViewModelBase
             Message[]? messages = await services.Rest.GetAsync<Message[]>("/channels/" + state.Socket.CurrentChannel.Id + "/messages");
             if (messages != null)
             {
-                Dispatcher.UIThread.Post(() => { CrockeryList.AddRange(messages.Select(x => new MessageItem() { DataContext = new MessageItemModel(services, x) })); });
+                Dispatcher.UIThread.Post(() => { CrockeryList.AddRange(messages.Select(x => new MessageItem() { DataContext = new MessageItemModel(services, x) })); MessagesFinished = true; });
+            }
+            else
+            {
+                MessagesFinished = true;
             }
         });
+    }
+
+    public bool MessagesFinished = false;
+
+
+    private async Task ChannelUpdate(Channel channel)
+    {
+        Name = channel.Name;
+        Topic = channel.Topic;
     }
 
     private void State_OnMessageRecieved(MessageRecievedEvent message)
@@ -54,7 +70,8 @@ public partial class ChannelViewModel : ViewModelBase
                 AuthorId = message.user.Id,
                 Content = message.content,
                 Id = message.id,
-                Username = message.user.DisplayName ?? message.user.Username
+                Username = message.user.DisplayName ?? message.user.Username,
+                CreatedAt = message.created_at
             })
         });
     }
@@ -81,6 +98,9 @@ public partial class ChannelViewModel : ViewModelBase
 
     [ObservableProperty]
     public string _name;
+
+    [ObservableProperty]
+    private string? _topic;
 
     [ObservableProperty]
     private string? _textbox;

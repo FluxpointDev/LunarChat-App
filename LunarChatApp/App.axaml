@@ -14,7 +14,7 @@
 
      <TrayIcon.Icons>
         <TrayIcons>
-            <TrayIcon Icon="/Assets/test-icon.ico" ToolTipText="Lunar Chat">
+            <TrayIcon Icon="/Assets/lunar-icon.png" ToolTipText="Lunar Chat">
                 <TrayIcon.Menu>
                     <NativeMenu>
                         <!--  added spaces to have a wider menu  -->

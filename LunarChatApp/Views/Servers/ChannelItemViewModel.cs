@@ -11,13 +11,19 @@ public partial class ChannelItemViewModel : ViewModelBase
     private TestState state;
     private Channel channel;
     private ServiceManager services;
+    public string id;
     public ChannelItemViewModel(ServiceManager sv, TestState st, Channel chan)
     {
+        id = chan.Id;
         state = st;
         channel = chan;
         services = sv;
+        Name = chan.Name;
         isOwner = st.Socket.CurrentServer?.Server.OwnerId == st.Socket.CurrentId;
     }
+
+    [ObservableProperty]
+    private string _name;
 
     [ObservableProperty]
     private bool isOwner;
@@ -25,8 +31,7 @@ public partial class ChannelItemViewModel : ViewModelBase
     [RelayCommand]
     public void SelectChannel()
     {
-        state.Socket.CurrentChannel = channel;
-        state.Socket.TriggerSelectChannel(channel, null);
+        services.PageManager.SwitchServerChannel(services, channel);
     }
 
     [RelayCommand]
@@ -34,7 +39,7 @@ public partial class ChannelItemViewModel : ViewModelBase
     {
         services.PageManager.OnSwitchPage(new ChannelSettings
         {
-            DataContext = new ChannelSettingsModel(services.PageManager, state, channel)
+            DataContext = new ChannelSettingsModel(services, channel)
         });
     }
 }

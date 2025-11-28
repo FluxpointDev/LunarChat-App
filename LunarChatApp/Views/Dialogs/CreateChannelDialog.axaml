@@ -18,7 +18,13 @@
 								<KeyBinding Command="{Binding SubmitCommand}" Gesture="Enter" />
 							</TextBox.KeyBindings>
 			</TextBox>
-
+		<TextBox
+		Width="225"
+		shadui:ControlAssist.Label="Topic"
+		Classes="Clearable"
+		Text="{Binding Topic}"
+		Watermark="">
+			</TextBox>
 		<ComboBox Width="225" shadui:ControlAssist.Label="Type" SelectedIndex="{Binding Type}">
 			<ComboBoxItem>Text</ComboBoxItem>
 			<ComboBoxItem>Voice</ComboBoxItem>

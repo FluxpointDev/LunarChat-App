@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
-using LunarChatApp.Shared.Core.Channels;
 using LunarChatApp.Shared.Core.Servers;
 using LunarChatApp.Shared.Rest.Channels;
 using LunarChatApp.ViewModels.Dialogs;
@@ -38,15 +37,10 @@ public partial class ServerHeaderViewModel : ViewModelBase
     {
         CreateChannelDialogModel model = (CreateChannelDialogModel)control.DataContext!;
         string Id = Guid.NewGuid().ToString();
-        Channel chan = new Channel
-        {
-            Id = Id,
-            Name = model.Name,
-            Type = model.Type
-        };
         await Services.Rest.PostAsync("/channels", new CreateChannelRequest
         {
             name = model.Name,
+            topic = model.Topic,
             serverId = Services.State.Socket.CurrentServer.Server.Id,
             type = model.Type,
         });

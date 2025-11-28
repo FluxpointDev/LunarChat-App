@@ -54,7 +54,7 @@ public class SocketState
         OnSelectServer?.Invoke(server);
     }
 
-    public void TriggerSelectChannel(Channel channel, Relation user)
+    public void TriggerSelectChannel(Channel channel, Relation? user)
     {
         OnSelectChannel?.Invoke(channel, user);
     }

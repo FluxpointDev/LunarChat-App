@@ -7,6 +7,8 @@ public class Message
     public string AuthorId { get; set; }
     public string Username { get; set; }
     public string Content { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
     public MessageFlags Flags { get; set; }
     public static Message Create(MessageModel model)
     {

@@ -32,5 +32,6 @@
     <PackageVersion Include="Svg.Controls.Avalonia" Version="11.3.6.2" />
     <PackageVersion Include="TextMateSharp.Grammars" Version="1.0.70" />
     <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.15" />
+    <PackageVersion Include="Xaml.Behaviors.Avalonia" Version="11.3.8.2" />
   </ItemGroup>
 </Project>

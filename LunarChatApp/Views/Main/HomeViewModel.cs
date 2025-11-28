@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.Shared.Rest.Servers;
 using LunarChatApp.ViewModels.Dialogs;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.Views.Main;
@@ -19,6 +20,19 @@ public partial class HomeViewModel(ServiceManager services) : ViewModelBase
     public void CreateServer()
     {
         services.Dialogs.Create(new JoinServerDialog(), new JoinServerDialogModel(services), "Server").WithSubmit(SubmitServer).Open();
+    }
+
+    [RelayCommand]
+    public void LunarCommunity()
+    {
+        services.PageManager.SwitchServer(services, services.State.Socket.Servers.Values.FirstOrDefault(x => x.Server.Name == "Lunar Community").Server);
+    }
+
+
+    [RelayCommand]
+    public void LunarDevs()
+    {
+        services.PageManager.SwitchServer(services, services.State.Socket.Servers.Values.FirstOrDefault(x => x.Server.Name == "Lunar Developers").Server);
     }
 
     public async Task SubmitServer(UserControl control)

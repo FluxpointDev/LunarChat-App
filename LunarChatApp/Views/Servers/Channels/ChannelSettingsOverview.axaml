@@ -14,7 +14,6 @@
 		Watermark=""
 		Width="225"
 		Text="{Binding ChannelNameEdit}"
-		IsReadOnly="true"
 		shadui:ControlAssist.Label="Channel Name" />
 
 			<TextBox
@@ -22,9 +21,20 @@
 		Watermark=""
 		Width="225"
 		Text="{Binding ChannelTopicEdit}"
-		IsReadOnly="true"
+		VerticalContentAlignment="Top"
 		shadui:ControlAssist.Height="200"
 		shadui:ControlAssist.Label="Channel Topic" />
+		</StackPanel>
+		<StackPanel
+		HorizontalAlignment="Left"
+		Orientation="Horizontal"
+		Spacing="8">
+			<Button Command="{Binding UpdateChannelCommand}"
+			Classes="Primary"
+			Content="Update" />
+			<Button Command="{Binding DeleteChannelCommand}"
+					Classes="Destructive"
+					Content="Delete Channel" />
 		</StackPanel>
 	</StackPanel>
 </UserControl>

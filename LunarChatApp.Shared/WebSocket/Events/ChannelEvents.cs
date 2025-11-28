@@ -19,5 +19,8 @@ public class ChannelUpdatedEvent : SocketMessage
 {
     public ChannelUpdatedEvent() : base("channel_update") { }
     public string channel_id;
+    public string server_id;
+    public string name;
+    public string topic;
 
 }
