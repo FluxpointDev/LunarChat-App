@@ -18,6 +18,7 @@ public partial class MessageItemModel : ViewModelBase
         authorId = message.AuthorId;
         IsAuthor = message.AuthorId == sv.State.Socket.CurrentId;
         Username = message.Username;
+        IsBot = message.Username == "Waifu";
         Message = new ObservableStringBuilder();
         Message.Append(message.Content);
         Time = message.CreatedAt.ToLocalTime().ToString("hh:mm tt");
@@ -29,6 +30,9 @@ public partial class MessageItemModel : ViewModelBase
 
     [ObservableProperty]
     private bool _isAuthor;
+
+    [ObservableProperty]
+    private bool _isBot;
 
     [ObservableProperty]
     private string _username;

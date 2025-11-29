@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.ViewModels.Settings;
 using LunarChatApp.Views;
+using LunarChatApp.Views.User.Settings;
 using ShadUI;
 using System;
 
@@ -18,18 +19,19 @@ public partial class SettingsSectionModel : ViewModelBase
         state = st;
     }
 }
-public partial class SettingsViewModel : ViewModelBase
+public partial class SettingsModel : ViewModelBase
 {
     private PageManager pageManager;
     private TestState state { get; set; }
     private ThemeWatcher themeWatcher;
-    private MainViewModel main;
-
-    public SettingsViewModel(PageManager page, TestState st, ThemeWatcher theme, MainViewModel mainModel)
+    private MainModel main;
+    private ServiceManager services;
+    public SettingsModel(ServiceManager sv, MainModel mainModel)
     {
-        pageManager = page;
-        state = st;
-        themeWatcher = theme;
+        services = sv;
+        pageManager = sv.PageManager;
+        state = sv.State;
+        themeWatcher = sv.ThemeWatcher;
         main = mainModel;
         if (SelectedPage == null)
             SelectedPage = new SettingsAccount();
@@ -124,7 +126,7 @@ public partial class SettingsViewModel : ViewModelBase
                 SelectedPage = new SettingsNotifications();
                 break;
             case SettingsPageType.Developer:
-                SelectedPage = new SettingsDeveloper();
+                SelectedPage = new SettingsDeveloper() { DataContext = new SettingsDeveloperModel(services) };
                 break;
         }
     }

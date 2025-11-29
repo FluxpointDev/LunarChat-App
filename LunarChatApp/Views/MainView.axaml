@@ -7,11 +7,11 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="LunarChatApp.Views.MainView"
              Background="{DynamicResource PrimaryForegroundColor}"
-             x:DataType="vm:MainViewModel">
+             x:DataType="vm:MainModel">
   <Design.DataContext>
     <!-- This only sets the DataContext for the previewer in an IDE,
          to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-    <vm:MainViewModel />
+    <vm:MainModel />
   </Design.DataContext>
     <Grid>
         <ContentControl Name="MainContent" Content="{Binding SelectedPage}" />

@@ -16,12 +16,12 @@ using System.Threading.Tasks;
 
 namespace LunarChatApp.ViewModels;
 
-public partial class ChannelViewModel : ViewModelBase
+public partial class ChannelModel : ViewModelBase
 {
     private TestState state;
     public ServiceManager services;
     private Relation? user;
-    public ChannelViewModel(TestState st, ServiceManager sv, Relation? u)
+    public ChannelModel(TestState st, ServiceManager sv, Relation? u)
     {
         state = st;
         services = sv;
@@ -43,7 +43,11 @@ public partial class ChannelViewModel : ViewModelBase
             }
             else
             {
-                MessagesFinished = true;
+                Dispatcher.UIThread.Post(() =>
+                {
+                    MessagesFinished = true;
+                });
+
             }
         });
     }

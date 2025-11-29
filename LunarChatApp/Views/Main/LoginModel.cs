@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace LunarChatApp.ViewModels;
 
-public partial class LoginViewModel(ServiceManager services, MainViewModel main) : ViewModelBase
+public partial class LoginModel(ServiceManager services, MainModel main) : ViewModelBase
 {
     [ObservableProperty]
     public int _currentTab;
@@ -28,7 +28,7 @@ public partial class LoginViewModel(ServiceManager services, MainViewModel main)
 
 
     [ObservableProperty]
-    private string? _username;
+    private string? _username = services.IsDev ? "builderb" : null;
 
     [Required(ErrorMessage = "Email is required")]
     [EmailValidation]
@@ -80,7 +80,7 @@ public partial class LoginViewModel(ServiceManager services, MainViewModel main)
         services.State.Username = Username.ToLower();
         services.State.CachedServersPage = new ServersPage
         {
-            DataContext = new ServersViewModel(services, main)
+            DataContext = new ServersModel(services, main)
         };
         services.PageManager.OnSwitchPage(services.State.CachedServersPage);
 

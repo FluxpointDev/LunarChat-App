@@ -6,13 +6,13 @@ using LunarChatApp.Views;
 
 namespace LunarChatApp.ViewModels.Servers;
 
-public partial class ChannelItemViewModel : ViewModelBase
+public partial class ChannelItemModel : ViewModelBase
 {
     private TestState state;
     private Channel channel;
     private ServiceManager services;
     public string id;
-    public ChannelItemViewModel(ServiceManager sv, TestState st, Channel chan)
+    public ChannelItemModel(ServiceManager sv, TestState st, Channel chan)
     {
         id = chan.Id;
         state = st;

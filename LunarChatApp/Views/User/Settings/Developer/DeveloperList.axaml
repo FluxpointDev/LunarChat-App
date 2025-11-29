@@ -1,0 +1,39 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:developer="using:LunarChatApp.Views.User.Settings.Developer"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.DeveloperList"
+			 x:DataType="developer:DeveloperListModel">
+		<Grid RowDefinitions="auto, auto, auto" RowSpacing="20">
+			<WrapPanel ItemSpacing="8">
+				<ComboBox Width="255" SelectedIndex="0" ItemsSource="{Binding Items}" IsEnabled="{Binding Loaded}"
+						  SelectedItem="{Binding SelectedTeamItem}">
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding Name}" />
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>
+				<Button Classes="Secondary" Content="Create App" IsEnabled="{Binding Loaded}" Command="{Binding CreateAppCommand}" />
+				<Button Classes="Secondary" Content="Create Team" IsEnabled="{Binding Loaded}" Command="{Binding CreateTeamCommand}" />
+			</WrapPanel>
+			<WrapPanel Grid.Row="1" Orientation="Vertical">
+				<TextBlock Classes="Large" Text="My Teams"></TextBlock>
+				<ItemsRepeater Margin="10" ItemsSource="{Binding TeamsList}">
+					<ItemsRepeater.Layout>
+						<UniformGridLayout MinColumnSpacing="8" MinRowSpacing="8" Orientation="Horizontal" />
+					</ItemsRepeater.Layout>
+				</ItemsRepeater>
+			</WrapPanel>
+			<WrapPanel Grid.Row="2" Orientation="Vertical">
+				<TextBlock Classes="Large" Text="My Apps"></TextBlock>
+				<ItemsRepeater Margin="10" HorizontalAlignment="Left" ItemsSource="{Binding AppsList}">
+					<ItemsRepeater.Layout>
+						<UniformGridLayout MinColumnSpacing="8" MinRowSpacing="8" Orientation="Horizontal" />
+					</ItemsRepeater.Layout>
+				</ItemsRepeater>
+			</WrapPanel>
+		</Grid>
+</UserControl>

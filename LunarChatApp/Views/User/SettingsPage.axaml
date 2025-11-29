@@ -8,7 +8,7 @@
 			 xmlns:viewmodels="using:LunarChatApp.ViewModels"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="LunarChatApp.SettingsPage"
-			 x:DataType="viewmodels:SettingsViewModel">
+			 x:DataType="viewmodels:SettingsModel">
 
 	<Grid ColumnDefinitions="Auto *">
 		<shadui:Sidebar

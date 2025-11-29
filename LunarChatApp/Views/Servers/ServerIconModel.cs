@@ -14,10 +14,10 @@ using System.Threading.Tasks;
 
 namespace LunarChatApp.ViewModels;
 
-public partial class ServerIconViewModel : ViewModelBase
+public partial class ServerIconModel : ViewModelBase
 {
     private ServiceManager services;
-    public ServerIconViewModel(ServiceManager sv, Server server)
+    public ServerIconModel(ServiceManager sv, Server server)
     {
         services = sv;
         Name = server.Name;

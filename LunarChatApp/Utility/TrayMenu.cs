@@ -9,7 +9,7 @@ namespace LunarChatApp.Utility;
 
 public static class TrayMenu
 {
-    public static void RegisterTrayIconsEvents(this Application app, MainWindow window, MainViewModel viewModel)
+    public static void RegisterTrayIconsEvents(this Application app, MainWindow window, MainModel viewModel)
     {
         var trayIcons = TrayIcon.GetIcons(app);
         if (trayIcons is null || !trayIcons.Any()) return;

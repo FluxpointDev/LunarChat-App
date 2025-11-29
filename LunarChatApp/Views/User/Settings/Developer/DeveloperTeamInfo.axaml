@@ -1,0 +1,19 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:developer="using:LunarChatApp.Views.User.Settings.Developer"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="LunarChatApp.DeveloperTeamInfo"
+             x:DataType="developer:DeveloperTeamInfoModel">
+  <StackPanel Spacing="20">
+	  <WrapPanel ItemSpacing="8">
+		  <Button Classes="Primary" Content="Back" Command="{Binding BackCommand}" />
+          <Button Classes="Secondary" Content="Update Team" Command="{Binding UpdateTeamCommand}" />
+          <Button Classes="Secondary" Content="Delete Team" Command="{Binding DeleteTeamCommand}" />
+      </WrapPanel>
+      <StackPanel>
+		  <TextBlock Classes="Large" Text="{Binding Name}"></TextBlock>
+	  </StackPanel>
+  </StackPanel>
+</UserControl>

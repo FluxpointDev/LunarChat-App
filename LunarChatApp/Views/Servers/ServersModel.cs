@@ -14,12 +14,12 @@ using System.Linq;
 
 namespace LunarChatApp.ViewModels;
 
-public partial class ServersViewModel : ViewModelBase
+public partial class ServersModel : ViewModelBase
 {
     public TestState state { get; set; }
-    private MainViewModel main;
+    private MainModel main;
     private ServiceManager services;
-    public ServersViewModel(ServiceManager sv, MainViewModel mainModel)
+    public ServersModel(ServiceManager sv, MainModel mainModel)
     {
         services = sv;
         state = services.State;
@@ -31,24 +31,24 @@ public partial class ServersViewModel : ViewModelBase
         services.State.Socket.OnRemoveServer += State_OnRemoveServer;
         if (state.Socket.CurrentServer == null)
         {
-            _selectedPage = new HomeView() { DataContext = new HomeViewModel(services) };
+            _selectedPage = new HomeView() { DataContext = new HomeModel(services) };
             //_selectedHeader = new HomeHeader() { DataContext = new HomeHeaderModel() };
             _selectedSidebar = new DMsListView { DataContext = new DMsListModel(services) };
         }
         else
         {
-            _selectedHeader = new ServerHeaderView() { DataContext = new ServerHeaderViewModel(services, state.Socket.CurrentServer.Server) };
-            _selectedSidebar = new ChannelsListView() { DataContext = new ChannelListViewModel(services, state) };
+            _selectedHeader = new ServerHeaderView() { DataContext = new ServerHeaderModel(services, state.Socket.CurrentServer.Server) };
+            _selectedSidebar = new ChannelsListView() { DataContext = new ChannelListModel(services, state) };
             if (state.Socket.CurrentChannel != null)
-                _selectedPage = new ChannelView() { DataContext = new ChannelViewModel(state, services, null) };
+                _selectedPage = new ChannelView() { DataContext = new ChannelModel(state, services, null) };
         }
 
         if (ServersList == null)
         {
-            ServersList = new ObservableCollection<ServerIcon>(state.Socket.Servers.Values.Select(x => new ServerIcon() { DataContext = new ServerIconViewModel(services, x.Server) }));
+            ServersList = new ObservableCollection<ServerIcon>(state.Socket.Servers.Values.Select(x => new ServerIcon() { DataContext = new ServerIconModel(services, x.Server) }));
             ServersList.Add(new ServerIcon()
             {
-                DataContext = new ServerIconViewModel(services, new Shared.Core.Servers.Server
+                DataContext = new ServerIconModel(services, new Shared.Core.Servers.Server
                 {
                     Id = "0",
                     Name = "+"
@@ -59,7 +59,7 @@ public partial class ServersViewModel : ViewModelBase
 
     private void State_OnRemoveServer(Shared.Core.Servers.Server server)
     {
-        ServersList.Remove(ServersList.FirstOrDefault(x => (x.DataContext as ServerIconViewModel).Id == server.Id));
+        ServersList.Remove(ServersList.FirstOrDefault(x => (x.DataContext as ServerIconModel).Id == server.Id));
         if (server.Id == state.Socket.CurrentServer?.Server.Id)
         {
             SelectedHeader = null;
@@ -71,13 +71,13 @@ public partial class ServersViewModel : ViewModelBase
 
     private void State_OnAddServer(Shared.Core.Servers.Server server)
     {
-        var serverItem = ServersList.FirstOrDefault(x => (x.DataContext as ServerIconViewModel)!.Id == server.Id);
+        var serverItem = ServersList.FirstOrDefault(x => (x.DataContext as ServerIconModel)!.Id == server.Id);
         if (serverItem != null)
             return;
 
         ServersList.Add(new ServerIcon()
         {
-            DataContext = new ServerIconViewModel(services, new Shared.Core.Servers.Server
+            DataContext = new ServerIconModel(services, new Shared.Core.Servers.Server
             {
                 Id = server.Id,
                 Name = server.Name
@@ -92,13 +92,13 @@ public partial class ServersViewModel : ViewModelBase
 
     private void OnSelectChannel(Shared.Core.Channels.Channel channel, Relation user)
     {
-        SelectedPage = new ChannelView() { DataContext = new ChannelViewModel(state, services, user) };
+        SelectedPage = new ChannelView() { DataContext = new ChannelModel(state, services, user) };
     }
 
     private void OnSelectServer(Shared.Core.Servers.Server server)
     {
-        SelectedHeader = new ServerHeaderView() { DataContext = new ServerHeaderViewModel(services, server) };
-        SelectedSidebar = new ChannelsListView() { DataContext = new ChannelListViewModel(services, state) };
+        SelectedHeader = new ServerHeaderView() { DataContext = new ServerHeaderModel(services, server) };
+        SelectedSidebar = new ChannelsListView() { DataContext = new ChannelListModel(services, state) };
         SelectedPage = null;
     }
 
@@ -123,7 +123,7 @@ public partial class ServersViewModel : ViewModelBase
         SelectedHeader = null;
         //SelectedHeader = new HomeHeader() { DataContext = new HomeHeaderModel() };
         SelectedSidebar = new DMsListView { DataContext = new DMsListModel(services) };
-        SelectedPage = new HomeView() { DataContext = new HomeViewModel(services) };
+        SelectedPage = new HomeView() { DataContext = new HomeModel(services) };
         state.Socket.CurrentServer = null;
     }
 
@@ -132,7 +132,7 @@ public partial class ServersViewModel : ViewModelBase
     {
         services.PageManager.OnSwitchPage(new SettingsPage
         {
-            DataContext = new SettingsViewModel(services.PageManager, state, services.ThemeWatcher, main)
+            DataContext = new SettingsModel(services, main)
         });
     }
 
@@ -157,7 +157,7 @@ public partial class ServersViewModel : ViewModelBase
         services.Rest.Http.DefaultRequestHeaders.Remove("Auth-Id");
         services.PageManager.OnSwitchPage(new LoginPage
         {
-            DataContext = new LoginViewModel(services, main)
+            DataContext = new LoginModel(services, main)
         });
     }
 

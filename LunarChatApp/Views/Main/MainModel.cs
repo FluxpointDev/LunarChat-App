@@ -10,11 +10,11 @@ using System.Reflection;
 
 namespace LunarChatApp.ViewModels;
 
-public partial class MainViewModel : ViewModelBase
+public partial class MainModel : ViewModelBase
 {
     private bool _disposed;
     public ServiceManager services;
-    public MainViewModel(ServiceManager sv)
+    public MainModel(ServiceManager sv)
     {
         services = sv;
         services.PageManager.OnSwitchPage += SwitchPage;
@@ -22,7 +22,7 @@ public partial class MainViewModel : ViewModelBase
         {
             SelectedPage = new LoginPage
             {
-                DataContext = new LoginViewModel(services, this)
+                DataContext = new LoginModel(services, this)
             };
             CurrentDialog = new PopupMask { DataContext = new PopupMaskModel(sv.Dialogs) { } };
             services.Dialogs.OnDialogOpen += OpenDialog;
@@ -130,7 +130,7 @@ public partial class MainViewModel : ViewModelBase
         GC.SuppressFinalize(this);
     }
 
-    ~MainViewModel()
+    ~MainModel()
     {
         Dispose();
     }

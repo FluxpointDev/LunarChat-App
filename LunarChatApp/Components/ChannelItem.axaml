@@ -8,7 +8,7 @@
 			 xmlns:servers="using:LunarChatApp.ViewModels.Servers"
 			 mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="100"
 			 x:Class="LunarChatApp.ChannelItem"
-			 x:DataType="servers:ChannelItemViewModel">
+			 x:DataType="servers:ChannelItemModel">
 	<shadui:SidebarItem Command="{Binding SelectChannelCommand}">
 		<shadui:SidebarItem.Content>
 			<Grid Grid.ColumnDefinitions="*, auto">

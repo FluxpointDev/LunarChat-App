@@ -56,6 +56,9 @@
     <Compile Update="Views\Dialogs\ReportServerDialog.axaml.cs">
       <DependentUpon>ReportServerDialog.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\User\Settings\Developer\DeveloperList.axaml.cs">
+      <DependentUpon>DeveloperList.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

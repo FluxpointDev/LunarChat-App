@@ -6,7 +6,7 @@
 			 xmlns:viewmodels="using:LunarChatApp.ViewModels"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="LunarChatApp.LoginPage"
-			 x:DataType="viewmodels:LoginViewModel">
+			 x:DataType="viewmodels:LoginModel">
 
 	<TabControl SelectedIndex="{Binding CurrentTab}" HorizontalAlignment="Center" Margin="10">
 		<TabControl.Items>

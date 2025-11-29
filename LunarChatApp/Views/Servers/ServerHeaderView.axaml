@@ -7,7 +7,7 @@
 			 xmlns:shadui="using:ShadUI"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="LunarChatApp.ServerHeaderView"
-			 x:DataType="servers:ServerHeaderViewModel">
+			 x:DataType="servers:ServerHeaderModel">
 	<Menu Classes="Single">
 		<MenuItem
 		Classes="NoPressedAnimation"

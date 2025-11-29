@@ -7,7 +7,7 @@
 			 xmlns:shadui="using:ShadUI"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="LunarChatApp.HomeView"
-			 x:DataType="main:HomeViewModel">
+			 x:DataType="main:HomeModel">
 	<ScrollViewer>
 		<Grid Grid.RowDefinitions="auto, auto, auto" HorizontalAlignment="Center">
 			<StackPanel Margin="20,4,4,14" HorizontalAlignment="Center">

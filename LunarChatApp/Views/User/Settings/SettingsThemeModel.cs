@@ -6,8 +6,8 @@ namespace LunarChatApp.ViewModels.Settings;
 public partial class SettingsThemeModel : SettingsSectionModel
 {
     private ThemeWatcher themeWatcher;
-    private MainViewModel main;
-    public SettingsThemeModel(TestState st, ThemeWatcher theme, MainViewModel mainModel) : base(st)
+    private MainModel main;
+    public SettingsThemeModel(TestState st, ThemeWatcher theme, MainModel mainModel) : base(st)
     {
         themeWatcher = theme;
         main = mainModel;

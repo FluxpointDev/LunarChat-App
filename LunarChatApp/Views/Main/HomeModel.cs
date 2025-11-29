@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LunarChatApp.Views.Main;
 
-public partial class HomeViewModel(ServiceManager services) : ViewModelBase
+public partial class HomeModel(ServiceManager services) : ViewModelBase
 {
     [RelayCommand]
     public void DiscoverServer()

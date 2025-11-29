@@ -9,7 +9,7 @@
 			 xmlns:shadui="using:ShadUI"
 			 xmlns:viewmodels="using:LunarChatApp.ViewModels"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-			 x:DataType="viewmodels:ServersViewModel"
+			 x:DataType="viewmodels:ServersModel"
 			 x:Class="LunarChatApp.ServersPage">
 	<Grid ColumnDefinitions="Auto *">
 		<shadui:Sidebar

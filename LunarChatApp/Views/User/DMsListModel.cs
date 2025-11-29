@@ -24,7 +24,7 @@ public partial class DMsListModel : ViewModelBase
     [RelayCommand]
     public void OpenHome()
     {
-        services.State.TriggerPageSelect(new HomeView() { DataContext = new HomeViewModel(services) });
+        services.State.TriggerPageSelect(new HomeView() { DataContext = new HomeModel(services) });
     }
 
     [RelayCommand]
