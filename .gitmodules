@@ -1,0 +1,3 @@
+[submodule "ext/LunarChatSharp"]
+	path = ext/LunarChatSharp
+	url = https://github.com/FluxpointDev/LunarChatSharp.git
