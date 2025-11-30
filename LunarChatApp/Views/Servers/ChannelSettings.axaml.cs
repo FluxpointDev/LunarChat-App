@@ -1,10 +1,9 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+using LunarChatApp.Utility;
 
 namespace LunarChatApp;
 
-public partial class ChannelSettings : UserControl
+public partial class ChannelSettings : UserControl, IEscapeHotKey
 {
     public ChannelSettings()
     {

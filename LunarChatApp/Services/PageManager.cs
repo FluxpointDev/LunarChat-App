@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
-using LunarChatApp.Shared.Core.Channels;
-using LunarChatApp.Shared.Core.Servers;
+using LunarChatSharp.Rest.Channels;
+using LunarChatSharp.Rest.Servers;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -38,7 +38,7 @@ public sealed class PageManager(ServiceProvider serviceProvider)
 
     public Action<UserControl> OnSwitchPage;
 
-    public void SwitchServer(ServiceManager services, Server? server, Channel? channel = null)
+    public void SwitchServer(ServiceManager services, RestServer? server, RestChannel? channel = null)
     {
         if (server == null)
             return;
@@ -62,7 +62,7 @@ public sealed class PageManager(ServiceProvider serviceProvider)
         }
     }
 
-    public void SwitchServerChannel(ServiceManager services, Channel? channel = null)
+    public void SwitchServerChannel(ServiceManager services, RestChannel? channel = null)
     {
         if (channel != null)
         {

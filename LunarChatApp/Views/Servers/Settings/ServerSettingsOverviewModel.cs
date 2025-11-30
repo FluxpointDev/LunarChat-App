@@ -1,9 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
-using LunarChatApp.Shared.Rest.Optional;
-using LunarChatApp.Shared.Rest.Servers;
 using LunarChatApp.Views;
+using LunarChatSharp.Rest.Servers;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.ViewModels.Servers.Settings;
@@ -27,10 +26,10 @@ public partial class ServerSettingsOverviewModel : ViewModelBase
     [RelayCommand]
     public async Task SaveSettings()
     {
-        var data = new UpdateServerRequest();
-        data.name = Optional.Some(ServerNameEdit);
-        data.description = Optional.Some(ServerDescriptionEdit);
-        await services.Rest.PatchAsync<UpdateServerRequest>($"/servers/{services.State.Socket.CurrentServer.Server.Id}", data);
+        var data = new EditServerRequest();
+        data.Name = ServerNameEdit;
+        data.Description = ServerDescriptionEdit;
+        await services.Rest.PatchAsync($"/servers/{services.State.Socket.CurrentServer.Server.Id}", data);
     }
 
     [RelayCommand]

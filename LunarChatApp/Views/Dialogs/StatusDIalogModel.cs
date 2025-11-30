@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using LunarChatApp.Views;
+using LunarChatSharp.Core.Users;
 
 namespace LunarChatApp.ViewModels.Dialogs;
 
@@ -14,9 +15,5 @@ public partial class StatusDialogModel : ViewModelBase
     private string? _statusText;
 
     [ObservableProperty]
-    private StatusType _statusType;
-}
-public enum StatusType
-{
-    Online, Idle, Busy, Invisible
+    private UserStatusType _statusType;
 }

@@ -1,18 +1,18 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
-using LunarChatApp.Shared.Core.Channels;
 using LunarChatApp.Views;
+using LunarChatSharp.Rest.Channels;
 
 namespace LunarChatApp.ViewModels.Servers;
 
 public partial class ChannelItemModel : ViewModelBase
 {
     private TestState state;
-    private Channel channel;
+    private RestChannel channel;
     private ServiceManager services;
     public string id;
-    public ChannelItemModel(ServiceManager sv, TestState st, Channel chan)
+    public ChannelItemModel(ServiceManager sv, TestState st, RestChannel chan)
     {
         id = chan.Id;
         state = st;

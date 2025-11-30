@@ -1,11 +1,7 @@
-﻿
-
-using LunarChatApp.Shared.Rest.Accounts;
-using LunarChatApp.Shared.Rest.Optional;
+﻿using LunarChatApp.Shared.Rest.Optional;
 using Newtonsoft.Json;
 using System.Globalization;
 using System.Text;
-using System.Text.Json.Serialization;
 
 namespace LunarChatApp.Shared.Rest;
 
@@ -36,39 +32,6 @@ public class RestClient
             Http.DefaultRequestHeaders.Add("User-Agent", "LunarChatClient");
         }
         catch { }
-        Http.PostAsync(Url + "test1", new StringContent("{ \"test\": \"test\" }", Encoding.UTF8, "application/json"));
-
-        HttpRequestMessage Mes = new HttpRequestMessage(HttpMethod.Post, Url + "test2");
-        Mes.Content = new StringContent(SerializeJson(new CreateAccountRequest
-        {
-            username = "builderb2"
-        }), Encoding.UTF8, "application/json");
-        Http.SendAsync(Mes);
-
-        HttpRequestMessage Mes3 = new HttpRequestMessage(HttpMethod.Post, Url + "test3");
-        Mes3.Content = new StringContent(JsonConvert.SerializeObject(new CreateAccountRequest
-        {
-            username = "builderb2"
-        }, new JsonSerializerSettings
-        {
-            ContractResolver = OptionalContractResolver.Instance
-        }), Encoding.UTF8, "application/json");
-        Http.SendAsync(Mes3);
-
-        HttpRequestMessage Mes2 = new HttpRequestMessage(HttpMethod.Post, Url + "test4");
-        Mes2.Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(new CreateAccountRequest
-        {
-            username = "builderb2"
-        }, new System.Text.Json.JsonSerializerOptions
-        {
-            ReferenceHandler = ReferenceHandler.Preserve
-        }), Encoding.UTF8, "application/json");
-        Http.SendAsync(Mes2);
-
-        //PostAsync("/test1", new CreateAccountRequest
-        //{
-        //    username = "builderb2"
-        //});
     }
 
 

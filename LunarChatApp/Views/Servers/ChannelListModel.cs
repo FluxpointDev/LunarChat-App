@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using LunarChatApp.Services;
-using LunarChatApp.Shared.Core.Channels;
 using LunarChatApp.ViewModels.Servers;
 using LunarChatApp.Views;
+using LunarChatSharp.Rest.Channels;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,14 +24,14 @@ public partial class ChannelListModel : ViewModelBase
         state.Socket.CurrentServer.OnChannelCreate += Server_OnChannelCreate;
     }
 
-    private async Task ChannelDelete(Channel channel)
+    private async Task ChannelDelete(RestChannel channel)
     {
         ChannelItem? item = ChannelsList.FirstOrDefault(x => (x.DataContext as ChannelItemModel).id == channel.Id);
         if (item != null)
             ChannelsList.Remove(item);
     }
 
-    private async Task ChannelUpdate(Channel channel)
+    private async Task ChannelUpdate(RestChannel channel)
     {
         ChannelItem? item = ChannelsList.FirstOrDefault(x => (x.DataContext as ChannelItemModel).id == channel.Id);
         if (item != null)
@@ -40,7 +40,7 @@ public partial class ChannelListModel : ViewModelBase
         }
     }
 
-    private async Task Server_OnChannelCreate(Shared.Core.Channels.Channel channel)
+    private async Task Server_OnChannelCreate(RestChannel channel)
     {
         ChannelsList.Add(new ChannelItem { ChannelName = channel.Name, ChannelType = channel.Type, DataContext = new ChannelItemModel(services, state, channel) });
     }

@@ -11,7 +11,8 @@
 		<ComboBox Width="225" shadui:ControlAssist.Label="Type" SelectedIndex="{Binding StatusType}">
 			<ComboBoxItem>Online</ComboBoxItem>
 			<ComboBoxItem>Idle</ComboBoxItem>
-			<ComboBoxItem>Busy</ComboBoxItem>
+			<ComboBoxItem>Focus</ComboBoxItem>
+			<ComboBoxItem>Do Not Disturb</ComboBoxItem>
 			<ComboBoxItem>Invisible</ComboBoxItem>
 		</ComboBox>
 		<TextBox

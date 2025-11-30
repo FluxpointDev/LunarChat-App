@@ -2,8 +2,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
-using LunarChatApp.Shared.Rest.Apps;
 using LunarChatApp.Views.Dialogs;
+using LunarChatSharp.Rest.Dev;
 using System;
 using System.Threading.Tasks;
 
@@ -13,12 +13,12 @@ public partial class DeveloperAppInfoModel : ViewModelBase
 {
     private ServiceManager services;
     private Action backAction;
-    public DeveloperAppInfoModel(ServiceManager sv, AppJson app, Action back)
+    public DeveloperAppInfoModel(ServiceManager sv, RestApp app, Action back)
     {
         services = sv;
         backAction = back;
-        id = app.id;
-        Name = app.name;
+        id = app.Id;
+        Name = app.Name;
     }
 
     private string id;
@@ -45,7 +45,7 @@ public partial class DeveloperAppInfoModel : ViewModelBase
         {
             await services.Rest.PatchAsync("/apps/" + id, new CreateAppRequest
             {
-                name = model.Name
+                Name = model.Name
             });
             Name = model.Name;
         }

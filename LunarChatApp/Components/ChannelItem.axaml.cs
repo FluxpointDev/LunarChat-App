@@ -1,6 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
-using LunarChatApp.Shared.Core.Channels;
+using LunarChatSharp.Core.Channels;
 using Material.Icons;
 
 namespace LunarChatApp;
@@ -40,12 +40,12 @@ public partial class ChannelItem : UserControl
         {
             case ChannelType.Voice:
                 return MaterialIconKind.VolumeHigh;
-            case ChannelType.Media:
-                return MaterialIconKind.Image;
-            case ChannelType.Schedule:
-                return MaterialIconKind.Calendar;
-            case ChannelType.Rules:
-                return MaterialIconKind.BookCheck;
+                //case ChannelType.Media:
+                //    return MaterialIconKind.Image;
+                //case ChannelType.Schedule:
+                //    return MaterialIconKind.Calendar;
+                //case ChannelType.Rules:
+                //    return MaterialIconKind.BookCheck;
         }
         return MaterialIconKind.Hashtag;
     }

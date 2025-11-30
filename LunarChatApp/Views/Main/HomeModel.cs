@@ -1,8 +1,8 @@
 ﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
-using LunarChatApp.Shared.Rest.Servers;
 using LunarChatApp.ViewModels.Dialogs;
+using LunarChatSharp.Rest.Servers;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -49,7 +49,7 @@ public partial class HomeModel(ServiceManager services) : ViewModelBase
 
             await services.Rest.PostAsync<CreateServerRequest>("/servers", new CreateServerRequest
             {
-                name = model.Textbox
+                Name = model.Textbox
             });
         }
     }

@@ -2,8 +2,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
-using LunarChatApp.Shared.Rest.Apps;
 using LunarChatApp.Views.Dialogs;
+using LunarChatSharp.Rest.Dev;
 using System;
 using System.Threading.Tasks;
 
@@ -13,12 +13,12 @@ public partial class DeveloperTeamInfoModel : ViewModelBase
 {
     private ServiceManager services;
     private Action backAction;
-    public DeveloperTeamInfoModel(ServiceManager sv, TeamJson team, Action back)
+    public DeveloperTeamInfoModel(ServiceManager sv, RestTeam team, Action back)
     {
         services = sv;
         backAction = back;
-        id = team.id;
-        Name = team.name;
+        id = team.Id;
+        Name = team.Name;
     }
 
     private string id;
@@ -43,9 +43,9 @@ public partial class DeveloperTeamInfoModel : ViewModelBase
         CreateNameDialogModel? model = control.DataContext as CreateNameDialogModel;
         try
         {
-            await services.Rest.PatchAsync<TeamJson>("/teams/" + id, new CreateTeamRequest
+            await services.Rest.PatchAsync("/teams/" + id, new CreateTeamRequest
             {
-                name = model.Name
+                Name = model.Name
             });
             Name = model.Name;
         }

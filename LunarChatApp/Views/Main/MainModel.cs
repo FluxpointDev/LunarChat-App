@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
+using LunarChatApp.Utility;
 using LunarChatApp.ViewModels.Dialogs;
 using LunarChatApp.Views;
 using ShadUI;
@@ -102,7 +103,7 @@ public partial class MainModel : ViewModelBase
     [RelayCommand]
     public void EscapeHotKey()
     {
-        if (SelectedPage != null && (SelectedPage!.GetType() == typeof(SettingsPage) || SelectedPage!.GetType() == typeof(ServerSettings)))
+        if (SelectedPage != null && (SelectedPage is IEscapeHotKey))
         {
             services.PageManager.OnSwitchPage(services.State.CachedServersPage);
         }

@@ -31,8 +31,8 @@
 			<TextBlock Text="Theme" />
 		</Button>
 	</shadui:Window.RightWindowTitleBarContent>
-	<Window.KeyBindings>
-		<KeyBinding Gesture="Escape" Command="{Binding EscapeHotKey}" />
-	</Window.KeyBindings>
+	<Control.KeyBindings>
+		<KeyBinding  Gesture="Escape" Command="{Binding EscapeHotKey}" />
+	</Control.KeyBindings>
 	<views:MainView />
 </shadui:Window>

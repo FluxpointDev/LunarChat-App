@@ -4,12 +4,11 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using LunarChatApp.Components;
 using LunarChatApp.Services;
-using LunarChatApp.Shared.Core.Accounts;
-using LunarChatApp.Shared.Core.Channels;
-using LunarChatApp.Shared.Core.Messages;
-using LunarChatApp.Shared.Rest.Messages;
-using LunarChatApp.Shared.WebSocket.Events;
 using LunarChatApp.Views;
+using LunarChatSharp.Rest.Channels;
+using LunarChatSharp.Rest.Messages;
+using LunarChatSharp.Rest.Users;
+using LunarChatSharp.Websocket.Events;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,8 +19,8 @@ public partial class ChannelModel : ViewModelBase
 {
     private TestState state;
     public ServiceManager services;
-    private Relation? user;
-    public ChannelModel(TestState st, ServiceManager sv, Relation? u)
+    private RestRelation? user;
+    public ChannelModel(TestState st, ServiceManager sv, RestRelation? u)
     {
         state = st;
         services = sv;
@@ -36,7 +35,7 @@ public partial class ChannelModel : ViewModelBase
         CrockeryList = new ObservableCollection<MessageItem>();
         _ = Task.Run(async () =>
         {
-            Message[]? messages = await services.Rest.GetAsync<Message[]>("/channels/" + state.Socket.CurrentChannel.Id + "/messages");
+            RestMessage[]? messages = await services.Rest.GetAsync<RestMessage[]>("/channels/" + state.Socket.CurrentChannel.Id + "/messages");
             if (messages != null)
             {
                 Dispatcher.UIThread.Post(() => { CrockeryList.AddRange(messages.Select(x => new MessageItem() { DataContext = new MessageItemModel(services, x) })); MessagesFinished = true; });
@@ -55,32 +54,31 @@ public partial class ChannelModel : ViewModelBase
     public bool MessagesFinished = false;
 
 
-    private async Task ChannelUpdate(Channel channel)
+    private async Task ChannelUpdate(RestChannel channel)
     {
         Name = channel.Name;
         Topic = channel.Topic;
     }
 
-    private void State_OnMessageRecieved(MessageRecievedEvent message)
+    private void State_OnMessageRecieved(MessageCreateEvent message)
     {
-        if (message.channel_id != state.Socket.CurrentChannel?.Id)
+        if (message.Message.ChannelId != state.Socket.CurrentChannel?.Id)
             return;
 
         CrockeryList.Add(new MessageItem()
         {
-            DataContext = new MessageItemModel(services, new Message
+            DataContext = new MessageItemModel(services, new RestMessage
             {
-                ChannelId = message.channel_id,
-                AuthorId = message.user.Id,
-                Content = message.content,
-                Id = message.id,
-                Username = message.user.DisplayName ?? message.user.Username,
-                CreatedAt = message.created_at
+                ChannelId = message.Message.ChannelId,
+                Author = message.Message.Author,
+                Content = message.Message.Content,
+                Id = message.Message.Id,
+                CreatedAt = message.Message.CreatedAt
             })
         });
     }
 
-    private async Task MessageEdit(Message message)
+    private async Task MessageEdit(RestMessage message)
     {
         if (message.ChannelId != state.Socket.CurrentChannel?.Id)
             return;
@@ -90,7 +88,7 @@ public partial class ChannelModel : ViewModelBase
             (messageItem.DataContext as MessageItemModel).Update(message.Content);
     }
 
-    private async Task MessageDelete(Message message)
+    private async Task MessageDelete(RestMessage message)
     {
         if (message.ChannelId != state.Socket.CurrentChannel?.Id)
             return;
@@ -115,9 +113,9 @@ public partial class ChannelModel : ViewModelBase
     [RelayCommand]
     public async Task Enter()
     {
-        await services.Rest.PostAsync("/channels/" + state.Socket.CurrentChannel.Id + "/messages", new SendMessageRequest
+        await services.Rest.PostAsync("/channels/" + state.Socket.CurrentChannel.Id + "/messages", new CreateMessageRequest
         {
-            content = Textbox
+            Content = Textbox
         });
 
         Textbox = null;

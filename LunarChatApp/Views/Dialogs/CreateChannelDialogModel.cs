@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
-using LunarChatApp.Shared.Core.Channels;
 using LunarChatApp.Views;
+using LunarChatSharp.Core.Channels;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.ViewModels.Dialogs;

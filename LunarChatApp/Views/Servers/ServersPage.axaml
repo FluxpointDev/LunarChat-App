@@ -68,8 +68,7 @@
 												<Image Source="/Assets/avatar.png" Width="40" Height="40"></Image>
 											</Border>
 											<Border Width="16" Height="16" VerticalAlignment="Bottom" HorizontalAlignment="Right" CornerRadius="90" ClipToBounds="True" Background="{DynamicResource PrimaryForegroundColor}">
-												<Border Padding="2" Width="14" Height="14" VerticalAlignment="Bottom" HorizontalAlignment="Right" CornerRadius="90" ClipToBounds="True" Background="lightgreen">
-												</Border>
+												<materialIcons:MaterialIcon ClipToBounds="True" Padding="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Kind="{Binding StatusIcon}" Width="14" Height="14" Foreground="{Binding StatusColor}" />
 											</Border>
 										</Grid>
 										<StackPanel>

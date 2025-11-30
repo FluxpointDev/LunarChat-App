@@ -2,15 +2,20 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
-using LunarChatApp.Shared.Core.Accounts;
 using LunarChatApp.ViewModels.Dialogs;
 using LunarChatApp.ViewModels.Servers;
 using LunarChatApp.ViewModels.User;
 using LunarChatApp.Views;
 using LunarChatApp.Views.Main;
+using LunarChatSharp.Core.Users;
+using LunarChatSharp.Rest.Channels;
+using LunarChatSharp.Rest.Servers;
+using LunarChatSharp.Rest.Users;
+using Material.Icons;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace LunarChatApp.ViewModels;
 
@@ -29,6 +34,7 @@ public partial class ServersModel : ViewModelBase
         services.State.Socket.OnSelectChannel += OnSelectChannel;
         services.State.Socket.OnAddServer += State_OnAddServer;
         services.State.Socket.OnRemoveServer += State_OnRemoveServer;
+        services.State.Socket.OnPresenceUpdate += PresenceUpdate;
         if (state.Socket.CurrentServer == null)
         {
             _selectedPage = new HomeView() { DataContext = new HomeModel(services) };
@@ -48,16 +54,24 @@ public partial class ServersModel : ViewModelBase
             ServersList = new ObservableCollection<ServerIcon>(state.Socket.Servers.Values.Select(x => new ServerIcon() { DataContext = new ServerIconModel(services, x.Server) }));
             ServersList.Add(new ServerIcon()
             {
-                DataContext = new ServerIconModel(services, new Shared.Core.Servers.Server
+                DataContext = new ServerIconModel(services, new RestServer
                 {
                     Id = "0",
-                    Name = "+"
+                    Name = "+",
+                    CreatedAt = DateTime.UtcNow,
+                    OwnerId = null!,
+                    SystemMessages = null!
                 })
             });
         }
     }
 
-    private void State_OnRemoveServer(Shared.Core.Servers.Server server)
+    private async Task PresenceUpdate(RestUserPresence presence)
+    {
+
+    }
+
+    private void State_OnRemoveServer(RestServer server)
     {
         ServersList.Remove(ServersList.FirstOrDefault(x => (x.DataContext as ServerIconModel).Id == server.Id));
         if (server.Id == state.Socket.CurrentServer?.Server.Id)
@@ -69,7 +83,7 @@ public partial class ServersModel : ViewModelBase
         }
     }
 
-    private void State_OnAddServer(Shared.Core.Servers.Server server)
+    private void State_OnAddServer(RestServer server)
     {
         var serverItem = ServersList.FirstOrDefault(x => (x.DataContext as ServerIconModel)!.Id == server.Id);
         if (serverItem != null)
@@ -77,11 +91,7 @@ public partial class ServersModel : ViewModelBase
 
         ServersList.Add(new ServerIcon()
         {
-            DataContext = new ServerIconModel(services, new Shared.Core.Servers.Server
-            {
-                Id = server.Id,
-                Name = server.Name
-            })
+            DataContext = new ServerIconModel(services, server)
         });
     }
 
@@ -90,12 +100,12 @@ public partial class ServersModel : ViewModelBase
         SelectedPage = control;
     }
 
-    private void OnSelectChannel(Shared.Core.Channels.Channel channel, Relation user)
+    private void OnSelectChannel(RestChannel channel, RestRelation user)
     {
         SelectedPage = new ChannelView() { DataContext = new ChannelModel(state, services, user) };
     }
 
-    private void OnSelectServer(Shared.Core.Servers.Server server)
+    private void OnSelectServer(RestServer server)
     {
         SelectedHeader = new ServerHeaderView() { DataContext = new ServerHeaderModel(services, server) };
         SelectedSidebar = new ChannelsListView() { DataContext = new ChannelListModel(services, state) };
@@ -147,7 +157,38 @@ public partial class ServersModel : ViewModelBase
         StatusDialogModel? model = control.DataContext as StatusDialogModel;
         state.StatusText = model.StatusText;
         state.StatusType = model.StatusType;
+
+        switch (state.StatusType)
+        {
+            case UserStatusType.Online:
+                StatusIcon = MaterialIconKind.Circle;
+                StatusColor = "#FF00C853";
+                break;
+            case UserStatusType.Idle:
+                StatusIcon = MaterialIconKind.MoonLastQuarter;
+                StatusColor = "#FFFFD600";
+                break;
+            case UserStatusType.Focus:
+                StatusIcon = MaterialIconKind.Adjust;
+                StatusColor = "#FF2979FF";
+                break;
+            case UserStatusType.DoNotDisturb:
+                StatusIcon = MaterialIconKind.DoNotDisturbOn;
+                StatusColor = "#FFFF1744";
+                break;
+            case UserStatusType.Invisible:
+            case UserStatusType.Offline:
+                StatusIcon = MaterialIconKind.CircleOutline;
+                StatusColor = "#80E5E5E5";
+                break;
+        }
     }
+
+    [ObservableProperty]
+    private MaterialIconKind _statusIcon = MaterialIconKind.Circle;
+
+    [ObservableProperty]
+    private string _statusColor = "#FF00C853";
 
     [RelayCommand]
     public void Logout()

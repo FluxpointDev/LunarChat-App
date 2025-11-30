@@ -2,10 +2,10 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
-using LunarChatApp.Shared.Core.Servers;
-using LunarChatApp.Shared.Rest.Channels;
 using LunarChatApp.ViewModels.Dialogs;
 using LunarChatApp.Views;
+using LunarChatSharp.Rest.Channels;
+using LunarChatSharp.Rest.Servers;
 using System;
 using System.Threading.Tasks;
 
@@ -14,7 +14,7 @@ namespace LunarChatApp.ViewModels.Servers;
 public partial class ServerHeaderModel : ViewModelBase
 {
     private ServiceManager Services;
-    public ServerHeaderModel(ServiceManager sv, Server s)
+    public ServerHeaderModel(ServiceManager sv, RestServer s)
     {
         Services = sv;
         Name = s.Name;
@@ -39,10 +39,10 @@ public partial class ServerHeaderModel : ViewModelBase
         string Id = Guid.NewGuid().ToString();
         await Services.Rest.PostAsync("/channels", new CreateChannelRequest
         {
-            name = model.Name,
-            topic = model.Topic,
-            serverId = Services.State.Socket.CurrentServer.Server.Id,
-            type = model.Type,
+            Name = model.Name,
+            Topic = model.Topic,
+            ServerId = Services.State.Socket.CurrentServer.Server.Id,
+            Type = model.Type,
         });
     }
 

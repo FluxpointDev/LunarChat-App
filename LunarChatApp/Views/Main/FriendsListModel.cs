@@ -3,9 +3,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Components;
 using LunarChatApp.Services;
-using LunarChatApp.Shared.Core.Accounts;
 using LunarChatApp.Views;
 using LunarChatApp.Views.Dialogs;
+using LunarChatSharp.Rest.Users;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,27 +35,27 @@ public partial class FriendsListModel : ViewModelBase
         }
     }
 
-    private async Task OnFriendAdd(Relation user)
+    private async Task OnFriendAdd(RestRelation user)
     {
         FriendsList.Add(new FriendListItem() { DataContext = new FriendListItemModel(services, user) });
     }
 
-    private async Task OnFriendRemove(Relation user)
+    private async Task OnFriendRemove(RestRelation user)
     {
-        var item = FriendsList.FirstOrDefault(x => ((FriendListItemModel)x.DataContext!).id == user.id);
+        var item = FriendsList.FirstOrDefault(x => ((FriendListItemModel)x.DataContext!).id == user.UserId);
         if (item == null)
             return;
         FriendsList.Remove(item);
     }
 
-    private async Task OnBlockAdd(Relation user)
+    private async Task OnBlockAdd(RestRelation user)
     {
         BlocksList.Add(new BlockListItem() { DataContext = new BlockListItemModel(services, user) });
     }
 
-    private async Task OnBlockRemove(Relation user)
+    private async Task OnBlockRemove(RestRelation user)
     {
-        var item = BlocksList.FirstOrDefault(x => ((BlockListItemModel)x.DataContext!).id == user.id);
+        var item = BlocksList.FirstOrDefault(x => ((BlockListItemModel)x.DataContext!).id == user.UserId);
         if (item == null)
             return;
         BlocksList.Remove(item);

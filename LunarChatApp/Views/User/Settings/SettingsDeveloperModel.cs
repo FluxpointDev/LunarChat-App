@@ -1,8 +1,9 @@
 ﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using LunarChatApp.Services;
-using LunarChatApp.Shared.Rest.Apps;
 using LunarChatApp.Views.User.Settings.Developer;
+using LunarChatSharp.Rest.Dev;
+using System;
 
 namespace LunarChatApp.Views.User.Settings;
 
@@ -31,10 +32,12 @@ public partial class SettingsDeveloperModel : ViewModelBase
         {
             SelectedPage = new DeveloperTeamInfo()
             {
-                DataContext = new DeveloperTeamInfoModel(services, new TeamJson
+                DataContext = new DeveloperTeamInfoModel(services, new RestTeam
                 {
-                    id = item.Id,
-                    name = item.Name
+                    Id = item.Id,
+                    Name = item.Name,
+                    OwnerId = null!,
+                    CreatedAt = DateTime.Now
                 }, BackAction)
             };
         }
@@ -42,10 +45,12 @@ public partial class SettingsDeveloperModel : ViewModelBase
         {
             SelectedPage = new DeveloperAppInfo()
             {
-                DataContext = new DeveloperAppInfoModel(services, new AppJson
+                DataContext = new DeveloperAppInfoModel(services, new RestApp
                 {
-                    id = item.Id,
-                    name = item.Name
+                    Id = item.Id,
+                    Name = item.Name,
+                    CreatedAt = DateTime.Now,
+                    OwnerId = null!
                 }, BackAction)
             };
         }

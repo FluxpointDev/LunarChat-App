@@ -1,12 +1,12 @@
 ﻿using Avalonia;
 using Jab;
-using LunarChatApp.Shared.Rest;
+using LunarChatSharp.Rest;
 using ShadUI;
 
 namespace LunarChatApp.Services;
 
 [ServiceProvider]
-[Singleton(typeof(RestClient))]
+[Singleton(typeof(LunarRestClient))]
 [Singleton(typeof(TestState))]
 [Singleton(typeof(DialogService))]
 [Singleton(typeof(PageManager), Factory = nameof(PageManagerFactory))]
@@ -26,6 +26,6 @@ public partial class ServiceProvider
 
     public ServiceManager ServiceManagerFactory()
     {
-        return new ServiceManager(GetService<PageManager>(), GetService<TestState>(), GetService<RestClient>(), GetService<ThemeWatcher>(), GetService<DialogService>());
+        return new ServiceManager(GetService<PageManager>(), GetService<TestState>(), GetService<LunarRestClient>(), GetService<ThemeWatcher>(), GetService<DialogService>());
     }
 }

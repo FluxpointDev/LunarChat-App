@@ -5,10 +5,9 @@ using Avalonia.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
-using LunarChatApp.Shared.Core.Servers;
-using LunarChatApp.Shared.Rest.Servers;
 using LunarChatApp.ViewModels.Dialogs;
 using LunarChatApp.Views;
+using LunarChatSharp.Rest.Servers;
 using System;
 using System.Threading.Tasks;
 
@@ -17,11 +16,11 @@ namespace LunarChatApp.ViewModels;
 public partial class ServerIconModel : ViewModelBase
 {
     private ServiceManager services;
-    public ServerIconModel(ServiceManager sv, Server server)
+    public ServerIconModel(ServiceManager sv, RestServer server)
     {
         services = sv;
         Name = server.Name;
-        Fallback = server.GetFallbackName();
+        Fallback = server.GetFallback();
         Id = server.Id;
         switch (Name)
         {
@@ -82,7 +81,7 @@ public partial class ServerIconModel : ViewModelBase
 
             await services.Rest.PostAsync<CreateServerRequest>("/servers", new CreateServerRequest
             {
-                name = model.Textbox
+                Name = model.Textbox
             });
         }
     }

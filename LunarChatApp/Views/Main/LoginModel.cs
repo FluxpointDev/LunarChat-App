@@ -1,11 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
-using LunarChatApp.Shared.Rest.Accounts;
-using LunarChatApp.Shared.Rest.Users;
-using LunarChatApp.Shared.WebSocket;
 using LunarChatApp.Validators;
 using LunarChatApp.Views;
+using LunarChatSharp.Rest.Accounts;
+using LunarChatSharp.Rest.Users;
+using LunarChatSharp.Websocket;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -65,17 +65,17 @@ public partial class LoginModel(ServiceManager services, MainModel main) : ViewM
         if (HasErrors)
             return;
 
-        StoatUser Json = await services.Rest.PostAsync<StoatUser>("/accounts/test", new CreateAccountRequest
+        RestUser Json = await services.Rest.PostAsync<RestUser>("/accounts/test", new CreateDemoAccountRequest
         {
-            username = Username!.ToLower()
+            Username = Username!.ToLower()
         });
-        services.Rest.Http.DefaultRequestHeaders.Add("Auth-Id", Json._id);
+        services.Rest.Http.DefaultRequestHeaders.Add("Auth-Id", Json.Id);
 
         LunarSocketClient socket = new LunarSocketClient(
-            services.IsDev ? "ws://localhost:5156/gateway" : "wss://lunar.fluxpoint.dev/api/gateway", Json._id);
+            services.IsDev ? "ws://localhost:5156/gateway" : "wss://lunar.fluxpoint.dev/api/gateway", Json.Id);
         services.State.Socket = socket.State;
         services.State.Socket.WebSocket = socket;
-        services.State.Socket.CurrentId = Json._id;
+        services.State.Socket.CurrentId = Json.Id;
         services.State.DisplayName = Username.ToLower();
         services.State.Username = Username.ToLower();
         services.State.CachedServersPage = new ServersPage

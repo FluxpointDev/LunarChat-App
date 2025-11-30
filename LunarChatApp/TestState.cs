@@ -1,13 +1,13 @@
 ﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
-using LunarChatApp.Shared.WebSocket;
-using LunarChatApp.ViewModels.Dialogs;
+using LunarChatSharp.Core.Users;
+using LunarChatSharp.Websocket;
 
 namespace LunarChatApp;
 
 public partial class TestState : ObservableObject
 {
-    public StatusType StatusType;
+    public UserStatusType StatusType;
     public string? StatusText;
     public ServersPage? CachedServersPage;
     public SocketState Socket;

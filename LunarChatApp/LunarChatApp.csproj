@@ -42,9 +42,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ext\LunarChatSharp\LunarChatSharp\LunarChatSharp.csproj" />
     <ProjectReference Include="..\LiveMarkdown.Avalonia\LiveMarkdown.Avalonia.csproj" />
     <ProjectReference Include="..\LunarChatApp.Data\LunarChatApp.Data.csproj" />
-    <ProjectReference Include="..\LunarChatApp.Shared\LunarChatApp.Shared.csproj" />
 	<TrimmerRootAssembly Include="LunarChatApp.Shared" />
 	<TrimmerRootAssembly Include="LunarChatApp.Data" />
   </ItemGroup>

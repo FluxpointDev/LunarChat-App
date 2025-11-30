@@ -1,23 +1,23 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
-using LunarChatApp.Shared.Core.Accounts;
 using LunarChatApp.Views;
+using LunarChatSharp.Rest.Users;
 
 namespace LunarChatApp.Components;
 
 public partial class FriendListItemModel : ViewModelBase
 {
     private ServiceManager services;
-    private Relation user;
+    private RestRelation user;
 
-    public FriendListItemModel(ServiceManager sv, Relation u)
+    public FriendListItemModel(ServiceManager sv, RestRelation u)
     {
         services = sv;
         user = u;
-        id = u.id;
-        Username = u.username;
-        DisplayName = u.display_name ?? u.username;
+        id = u.UserId;
+        Username = u.Username;
+        DisplayName = u.DisplayName ?? u.Username;
     }
 
     public string id;

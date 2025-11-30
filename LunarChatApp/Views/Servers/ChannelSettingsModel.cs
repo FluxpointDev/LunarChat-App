@@ -2,9 +2,9 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
-using LunarChatApp.Shared.Core.Channels;
 using LunarChatApp.ViewModels.Servers.Channels;
 using LunarChatApp.Views;
+using LunarChatSharp.Rest.Channels;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.ViewModels.Servers;
@@ -14,8 +14,8 @@ public partial class ChannelSettingsModel : ViewModelBase
     private ServiceManager services;
     private PageManager pageManager;
     private TestState state { get; set; }
-    private Channel channel;
-    public ChannelSettingsModel(ServiceManager sv, Channel chan)
+    private RestChannel channel;
+    public ChannelSettingsModel(ServiceManager sv, RestChannel chan)
     {
         services = sv;
         pageManager = sv.PageManager;
@@ -27,7 +27,7 @@ public partial class ChannelSettingsModel : ViewModelBase
             SelectedPage = new ChannelSettingsOverview { DataContext = new ChannelSettingsOverviewModel(services, chan) };
     }
 
-    private async Task UpdateChannel(Channel channel)
+    private async Task UpdateChannel(RestChannel channel)
     {
         ChannelName = channel.Name;
         if (SelectedPage is ChannelSettingsOverview overview)

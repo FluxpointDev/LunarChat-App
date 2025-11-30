@@ -4,8 +4,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using LunarChatApp.Services;
-using LunarChatApp.Shared.Rest.Apps;
 using LunarChatApp.Views.Dialogs;
+using LunarChatSharp.Rest.Dev;
+using LunarChatSharp.Rest.Users;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,7 +18,7 @@ namespace LunarChatApp.Views.User.Settings.Developer;
 public partial class DeveloperListModel : ViewModelBase
 {
     private ServiceManager services;
-    public DeveloperListModel(ServiceManager sv, TeamJson? team, System.Action back, Action<DevItemModel> ac)
+    public DeveloperListModel(ServiceManager sv, RestTeam? team, System.Action back, Action<DevItemModel> ac)
     {
         services = sv;
         actionSelect = ac;
@@ -34,19 +35,19 @@ public partial class DeveloperListModel : ViewModelBase
 
         _ = Task.Run(async () =>
         {
-            DevJson? dev = await services.Rest.GetAsync<DevJson>("/users/@me/dev");
+            RestDev? dev = await services.Rest.GetAsync<RestDev>("/users/@me/dev");
             if (dev != null)
             {
                 Dispatcher.UIThread.Post(() =>
                 {
-                    if (dev.teams.Any())
+                    if (dev.Teams.Any())
                     {
-                        Items.AddRange(dev.teams.Select(x => new TeamListItem { Id = x.id, Name = x.name }));
-                        TeamsList.AddRange(dev.teams.Select(x => new DevItem { DataContext = new DevItemModel(services, x.id, x.name, true, ac) }));
+                        Items.AddRange(dev.Teams.Select(x => new TeamListItem { Id = x.Id, Name = x.Name }));
+                        TeamsList.AddRange(dev.Teams.Select(x => new DevItem { DataContext = new DevItemModel(services, x.Id, x.Name, true, ac) }));
                     }
 
-                    if (dev.apps.Any())
-                        AppsList.AddRange(dev.apps.Select(x => new DevItem { DataContext = new DevItemModel(services, x.id, x.name, false, ac) }));
+                    if (dev.Apps.Any())
+                        AppsList.AddRange(dev.Apps.Select(x => new DevItem { DataContext = new DevItemModel(services, x.Id, x.Name, false, ac) }));
                     Loaded = true;
                 });
             }
@@ -97,11 +98,11 @@ public partial class DeveloperListModel : ViewModelBase
         CreateNameDialogModel? model = control.DataContext as CreateNameDialogModel;
         try
         {
-            AppJson app = await services.Rest.PostAsync<AppJson>("/apps", new CreateAppRequest
+            RestApp app = await services.Rest.PostAsync<RestApp>("/apps", new CreateAppRequest
             {
-                name = model.Name
+                Name = model.Name
             });
-            AppsList.Add(new DevItem { DataContext = new DevItemModel(services, app.id, app.name, false, actionSelect) });
+            AppsList.Add(new DevItem { DataContext = new DevItemModel(services, app.Id, app.Name, false, actionSelect) });
 
         }
         catch { }
@@ -112,12 +113,12 @@ public partial class DeveloperListModel : ViewModelBase
         CreateNameDialogModel? model = control.DataContext as CreateNameDialogModel;
         try
         {
-            TeamJson team = await services.Rest.PostAsync<TeamJson>("/teams", new CreateTeamRequest
+            RestTeam team = await services.Rest.PostAsync<RestTeam>("/teams", new CreateTeamRequest
             {
-                name = model.Name
+                Name = model.Name
             });
-            Items.Add(new TeamListItem { Id = team.id, Name = team.name });
-            TeamsList.Add(new DevItem { DataContext = new DevItemModel(services, team.id, team.name, true, actionSelect) });
+            Items.Add(new TeamListItem { Id = team.Id, Name = team.Name });
+            TeamsList.Add(new DevItem { DataContext = new DevItemModel(services, team.Id, team.Name, true, actionSelect) });
 
         }
         catch { }

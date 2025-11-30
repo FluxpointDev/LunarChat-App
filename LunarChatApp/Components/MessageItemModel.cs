@@ -3,22 +3,22 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LiveMarkdown.Avalonia;
 using LunarChatApp.Services;
-using LunarChatApp.Shared.Core.Messages;
 using LunarChatApp.Views;
+using LunarChatSharp.Rest.Messages;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.Components;
 
 public partial class MessageItemModel : ViewModelBase
 {
-    public MessageItemModel(ServiceManager sv, Message message)
+    public MessageItemModel(ServiceManager sv, RestMessage message)
     {
         services = sv;
         messageId = message.Id;
-        authorId = message.AuthorId;
-        IsAuthor = message.AuthorId == sv.State.Socket.CurrentId;
-        Username = message.Username;
-        IsBot = message.Username == "Waifu";
+        authorId = message.Author.Id;
+        IsAuthor = message.Author.Id == sv.State.Socket.CurrentId;
+        Username = message.Author.Username;
+        IsBot = message.Author.IsBot;
         Message = new ObservableStringBuilder();
         Message.Append(message.Content);
         Time = message.CreatedAt.ToLocalTime().ToString("hh:mm tt");
