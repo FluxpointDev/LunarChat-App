@@ -122,6 +122,12 @@ public partial class ChannelModel : ViewModelBase
     }
 
     [RelayCommand]
+    public void CopyChannelID()
+    {
+        services.CopyText(services.State.Socket.CurrentChannel?.Id);
+    }
+
+    [RelayCommand]
     public void Clear()
     {
         Textbox = null;

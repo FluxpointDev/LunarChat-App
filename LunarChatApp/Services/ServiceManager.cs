@@ -1,4 +1,5 @@
-﻿using LunarChatApp.ViewModels.Dialogs;
+﻿using Avalonia.Controls;
+using LunarChatApp.ViewModels.Dialogs;
 using LunarChatSharp.Rest;
 using ShadUI;
 
@@ -22,4 +23,11 @@ public sealed class ServiceManager
         Dialogs = diag;
     }
     public PopupMaskModel Popup;
+
+    public void CopyText(string? text)
+    {
+        var topLevel = TopLevel.GetTopLevel(State.CachedServersPage)!;
+        if (topLevel.Clipboard != null)
+            topLevel.Clipboard.SetTextAsync(text);
+    }
 }

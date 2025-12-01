@@ -23,11 +23,14 @@
 				</StackPanel>
 			</StackPanel>
 			<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
-				<Button Command="{Binding OpenMessagesCommand}">
-					<materialIcons:MaterialIcon Kind="Chat" Width="22" Height="22" Foreground="{DynamicResource PrimaryColor}" />
+				<Button Command="{Binding OpenMessagesCommand}" Padding="10,6,10,6" Background="{DynamicResource BorderColor}">
+					<materialIcons:MaterialIcon Kind="Chat" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 				</Button>
-				<Button>
-					<materialIcons:MaterialIcon Kind="MoreVert" Width="22" Height="22" Foreground="{DynamicResource PrimaryColor}" />
+				<Button Command="{Binding RemoveFriendCommand}" Padding="10,6,10,6" Background="{DynamicResource BorderColor}">
+					<materialIcons:MaterialIcon Kind="Close" Width="16" Height="16" Foreground="{DynamicResource ErrorColor}" />
+				</Button>
+				<Button Command="{Binding OpenNoteCommand}" Padding="10,6,10,6" Background="{DynamicResource BorderColor}">
+					<materialIcons:MaterialIcon Kind="NoteText" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 				</Button>
 			</StackPanel>
 		</Grid>

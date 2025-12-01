@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
-using LunarChatApp.ViewModels.Servers.Channels;
+using LunarChatApp.ViewModels.Channels.Settings;
 using LunarChatApp.Views;
 using LunarChatSharp.Rest.Channels;
 using System.Threading.Tasks;

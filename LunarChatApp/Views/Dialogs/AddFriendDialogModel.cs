@@ -5,5 +5,5 @@ namespace LunarChatApp.Views.Dialogs;
 public partial class AddFriendDialogModel : ViewModelBase
 {
     [ObservableProperty]
-    private string? _statusText;
+    private string? _username;
 }

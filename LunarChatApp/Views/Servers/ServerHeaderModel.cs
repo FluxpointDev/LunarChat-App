@@ -47,6 +47,12 @@ public partial class ServerHeaderModel : ViewModelBase
     }
 
     [RelayCommand]
+    public void CopyServerID()
+    {
+        Services.CopyText(Services.State.Socket.CurrentServer?.Server.Id);
+    }
+
+    [RelayCommand]
     public void OpenServerSettings()
     {
         Services.PageManager.OnSwitchPage(new ServerSettings

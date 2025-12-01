@@ -138,6 +138,12 @@ public partial class ServersModel : ViewModelBase
     }
 
     [RelayCommand]
+    public void CopyUserID()
+    {
+        services.CopyText(state.Socket.CurrentId);
+    }
+
+    [RelayCommand]
     public void OpenSettings()
     {
         services.PageManager.OnSwitchPage(new SettingsPage

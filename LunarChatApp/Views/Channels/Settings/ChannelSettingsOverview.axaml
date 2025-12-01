@@ -1,12 +1,12 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-			 xmlns:channels="using:LunarChatApp.ViewModels.Servers.Channels"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:settings="using:LunarChatApp.ViewModels.Channels.Settings"
              xmlns:shadui="using:ShadUI"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="LunarChatApp.ChannelSettingsOverview"
-			 x:DataType="channels:ChannelSettingsOverviewModel">
+			 x:DataType="settings:ChannelSettingsOverviewModel">
 	<StackPanel Spacing="20" HorizontalAlignment="Left">
 		<StackPanel HorizontalAlignment="Left" Spacing="10">
 			<TextBox

@@ -50,7 +50,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Components\ChannelItem.axaml.cs">
+    <Compile Update="Views\Account\FriendRequestIListtem.axaml.cs">
+      <DependentUpon>FriendRequestIListtem.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Channels\ChannelItem.axaml.cs">
       <DependentUpon>ChannelItem.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Dialogs\ReportServerDialog.axaml.cs">

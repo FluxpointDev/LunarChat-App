@@ -83,6 +83,11 @@
 									<materialIcons:MaterialIcon Kind="Tag" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
 								</MenuItem.Icon>
 							</MenuItem>
+							<MenuItem Width="140" Header="Copy User ID" Command="{Binding CopyUserID}">
+								<MenuItem.Icon>
+									<materialIcons:MaterialIcon Kind="ContentCopy" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
+								</MenuItem.Icon>
+							</MenuItem>
 							<MenuItem Width="140" Header="Logout" Command="{Binding LogoutCommand}">
 								<MenuItem.Icon>
 									<materialIcons:MaterialIcon Kind="Logout" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />

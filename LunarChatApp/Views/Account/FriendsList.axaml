@@ -21,7 +21,19 @@
 				</StackPanel>
 			</TabItem>
 			<TabItem Header="Pending">
-
+				<StackPanel Spacing="4">
+					<ItemsRepeater ItemsSource="{Binding RequestList}">
+					</ItemsRepeater>
+				</StackPanel>
+			</TabItem>
+			<TabItem Header="Ignored">
+				<StackPanel Spacing="4">
+					<Button Command="{Binding AddIgnoreCommand}"
+		Classes="Primary"
+		Content="Add Ignore" />
+					<ItemsRepeater ItemsSource="{Binding IgnoreList}">
+					</ItemsRepeater>
+				</StackPanel>
 			</TabItem>
 			<TabItem Header="Blocked">
 				<StackPanel Spacing="4">

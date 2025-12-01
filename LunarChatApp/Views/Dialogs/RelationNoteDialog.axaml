@@ -5,15 +5,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:shadui="using:ShadUI"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="LunarChatApp.AddFriendDialog"
-			 x:DataType="dialogs:AddFriendDialogModel">
+             x:Class="LunarChatApp.RelationNoteDialog"
+			 x:DataType="dialogs:RelationNoteDialogModel">
   <StackPanel Spacing="10" HorizontalAlignment="Left" Margin="10">
-		
+	  <TextBlock Classes="Large" Text="{Binding Username}"></TextBlock>
 		<TextBox
 		Width="225"
-		shadui:ControlAssist.Label="Username"
+		shadui:ControlAssist.Height="100"
+		shadui:ControlAssist.Label="Note"
 		Classes="Clearable"
-		Text="{Binding Username}"
+		Text="{Binding Note}"
 		Watermark="" />
 	</StackPanel>
 </UserControl>

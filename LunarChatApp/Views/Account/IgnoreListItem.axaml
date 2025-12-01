@@ -1,12 +1,13 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:components="using:LunarChatApp.Components"
+             xmlns:account="using:LunarChatApp.Views.Account"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="LunarChatApp.BlockListItem"
-             x:DataType="components:BlockListItemModel">
-    <Button HorizontalContentAlignment="Left" Padding="8">
+             x:Class="LunarChatApp.IgnoreListItem"
+			 x:DataType="account:IgnoreListItemModel">
+  <Button HorizontalContentAlignment="Left" Padding="8">
 		<Grid Grid.ColumnDefinitions="*, auto" ColumnSpacing="20">
 			<StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
 				<StackPanel Orientation="Horizontal" Spacing="6">
@@ -21,12 +22,12 @@
 				</StackPanel>
 			</StackPanel>
 			<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
-				<!--<Button Command="{Binding OpenMessagesCommand}">
-					<lucideAvalonia:Lucide Icon="MessageCircle" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="22" Height="22"/>
+				<Button Command="{Binding RemoveIgnoreCommand}" Padding="10,6,10,6" Background="{DynamicResource BorderColor}">
+					<materialIcons:MaterialIcon Kind="Close" Width="16" Height="16" Foreground="{DynamicResource ErrorColor}" />
 				</Button>
-				<Button>
-					<lucideAvalonia:Lucide Icon="EllipsisVertical" StrokeBrush="{DynamicResource PrimaryColor}" StrokeThickness="1.5" Width="22" Height="22"/>
-				</Button>-->
+				<Button Command="{Binding OpenNoteCommand}" Padding="10,6,10,6" Background="{DynamicResource BorderColor}">
+					<materialIcons:MaterialIcon Kind="NoteText" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
+				</Button>
 			</StackPanel>
 		</Grid>
 	</Button>

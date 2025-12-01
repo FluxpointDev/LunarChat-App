@@ -1,0 +1,68 @@
+﻿using Avalonia.Controls;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using LunarChatApp.Services;
+using LunarChatApp.Views.Dialogs;
+using LunarChatSharp.Rest.Users;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace LunarChatApp.Views.Account;
+
+public partial class FriendRequestListItemModel : ViewModelBase
+{
+    private ServiceManager services;
+    private RestRelation user;
+
+    public FriendRequestListItemModel(ServiceManager sv, RestRelation u)
+    {
+        services = sv;
+        user = u;
+        id = u.UserId;
+        CanAccept = u.RequestBy != sv.State.Socket.CurrentId;
+        Username = u.Username;
+        DisplayName = u.DisplayName ?? u.Username;
+    }
+
+    public string id;
+
+    [ObservableProperty]
+    private string? _username;
+
+    [ObservableProperty]
+    private string? _displayName;
+
+    [ObservableProperty]
+    private bool _canAccept;
+
+    [RelayCommand]
+    public async Task AcceptRequest()
+    {
+        await services.Rest.PutAsync($"/users/{Username}/friend");
+    }
+
+    [RelayCommand]
+    public async Task RemoveRequest()
+    {
+        await services.Rest.DeleteAsync($"/users/{id}/friend");
+    }
+
+    [RelayCommand]
+    public void OpenNote()
+    {
+        services.Dialogs.Create(new RelationNoteDialog(), new RelationNoteDialogModel
+        {
+            Username = id,
+            Note = services.State.Socket.Relations.GetValueOrDefault(id)?.Note
+        }, "Note").WithSubmit(SubmitNote).Open();
+    }
+
+    public async Task SubmitNote(UserControl control)
+    {
+        RelationNoteDialogModel model = control.DataContext as RelationNoteDialogModel;
+        await services.Rest.PatchAsync($"/users/{id}/note", new UpdateNoteRequest
+        {
+            Note = model.Note
+        });
+    }
+}

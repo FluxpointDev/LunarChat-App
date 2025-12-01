@@ -5,7 +5,7 @@ using LunarChatApp.Views;
 using LunarChatSharp.Rest.Channels;
 using System.Threading.Tasks;
 
-namespace LunarChatApp.ViewModels.Servers.Channels;
+namespace LunarChatApp.ViewModels.Channels.Settings;
 
 public partial class ChannelSettingsOverviewModel : ViewModelBase
 {

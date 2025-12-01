@@ -1,9 +1,9 @@
 <UserControl xmlns="https://github.com/avaloniaui"
 			 xmlns:avrichtextbox="using:AvRichTextBox"
-             xmlns:components="using:LunarChatApp.Components"
+			 xmlns:components="using:LunarChatApp.Components"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:materialIcons="using:Material.Icons.Avalonia"
+			 xmlns:materialIcons="using:Material.Icons.Avalonia"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:shadui="using:ShadUI"
 			 xmlns:viewmodels="using:LunarChatApp.ViewModels"
@@ -17,12 +17,36 @@
 			<RowDefinition Height="*" />
 			<RowDefinition Height="auto" />
 		</Grid.RowDefinitions>
-		<Border Grid.Row="0" BorderBrush="{DynamicResource BorderColor30}" BorderThickness="0,0,0,1">
-			<StackPanel Orientation="Horizontal">
-				<TextBlock Padding="6" Classes="Large" Text="{Binding Name}"></TextBlock>
-				<TextBlock Padding="6" Classes="p" Foreground="{DynamicResource MutedColor}" Text="{Binding Topic}" VerticalAlignment="Center"></TextBlock>
-			</StackPanel>
-			
+		<Border MinHeight="40" Grid.Row="0" BorderBrush="{DynamicResource BorderColor30}" BorderThickness="0,0,0,1">
+			<Grid ColumnDefinitions="auto, *, auto" Margin="10,0,10,0">
+				<Menu Classes="Single">
+					<MenuItem
+					Classes="NoPressedAnimation"
+					CornerRadius="{DynamicResource LgCornerRadius}"
+					HorizontalAlignment="Left" Padding="10,2,10,2" Margin="0,3,0,0"
+					Cursor="Hand" Height="32" VerticalAlignment="Center"
+					shadui:MenuItemAssist.PopupHorizontalOffset="4"
+					shadui:MenuItemAssist.PopupPlacement="BottomEdgeAlignedLeft"
+					shadui:MenuItemAssist.PopupVerticalOffset="4">
+						<MenuItem.Header>
+							<Button Height="32" IsHitTestVisible="False">
+								<TextBlock Classes="Large" Text="{Binding Name}" VerticalAlignment="Top"></TextBlock>
+							</Button>
+						</MenuItem.Header>
+						<MenuItem Header="Copy Channel ID" Width="150" Command="{Binding CopyChannelID}">
+							<MenuItem.Icon>
+								<materialIcons:MaterialIcon Kind="ContentCopy" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
+							</MenuItem.Icon>
+						</MenuItem>
+					</MenuItem>
+				</Menu>
+				<Button Grid.Column="1" HorizontalContentAlignment="Left" Padding="10,2,10,2" VerticalAlignment="Center" Height="32">
+					<TextBlock Classes="p" Foreground="{DynamicResource MutedColor}" Text="{Binding Topic}"></TextBlock>
+				</Button>
+				<!--<Button Grid.Column="2" Width="32" Height="32" VerticalAlignment="Center" ToolTip.Tip="Copy Channel ID">
+				<materialIcons:MaterialIcon Kind="ContentCopy" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
+				</Button>-->
+			</Grid>
 		</Border>
 		<ScrollViewer Grid.Row="1" Margin="10,10,10,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
 			<Interaction.Behaviors>
@@ -42,7 +66,7 @@
 					<materialIcons:MaterialIcon Kind="Add" Width="22" Height="22" Foreground="{DynamicResource PrimaryColor}" />
 				</Button>
 				<TextBox Grid.Column="1" Classes="" AcceptsReturn="True"
-						shadui:ControlAssist.MaxHeight="100"
+						 shadui:ControlAssist.MaxHeight="100"
 						 Text="{Binding Textbox}">
 					<TextBox.KeyBindings>
 						<KeyBinding Command="{Binding EnterCommand}" Gesture="Enter" />

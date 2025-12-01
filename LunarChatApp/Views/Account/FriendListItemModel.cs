@@ -1,8 +1,12 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Avalonia.Controls;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.Views;
+using LunarChatApp.Views.Dialogs;
 using LunarChatSharp.Rest.Users;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LunarChatApp.Components;
 
@@ -37,5 +41,30 @@ public partial class FriendListItemModel : ViewModelBase
         //    Name = user.display_name ?? user.username
         //};
         //services.State.Socket.TriggerSelectChannel(services.State.Socket.CurrentChannel, user);
+    }
+
+    [RelayCommand]
+    public async Task RemoveFriend()
+    {
+        await services.Rest.DeleteAsync($"/users/{id}/friend");
+    }
+
+    [RelayCommand]
+    public void OpenNote()
+    {
+        services.Dialogs.Create(new RelationNoteDialog(), new RelationNoteDialogModel
+        {
+            Username = id,
+            Note = services.State.Socket.Relations.GetValueOrDefault(id)?.Note
+        }, "Note").WithSubmit(SubmitNote).Open();
+    }
+
+    public async Task SubmitNote(UserControl control)
+    {
+        RelationNoteDialogModel model = control.DataContext as RelationNoteDialogModel;
+        await services.Rest.PatchAsync($"/users/{id}/note", new UpdateNoteRequest
+        {
+            Note = model.Note
+        });
     }
 }
