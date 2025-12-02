@@ -11,7 +11,7 @@ using LunarChatSharp.Core.Users;
 using LunarChatSharp.Rest.Channels;
 using LunarChatSharp.Rest.Servers;
 using LunarChatSharp.Rest.Users;
-using LunarChatSharp.Websocket.Events;
+using LunarChatSharp.Websocket.Events.Account;
 using Material.Icons;
 using System;
 using System.Collections.ObjectModel;

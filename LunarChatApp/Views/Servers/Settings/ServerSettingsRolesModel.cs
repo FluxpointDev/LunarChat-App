@@ -1,12 +1,17 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using LunarChatApp.Services;
+using LunarChatApp.Views.Dialogs;
+using LunarChatSharp.Rest.Roles;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Timers;
 
 namespace LunarChatApp.Views.Servers.Settings;
@@ -16,23 +21,39 @@ public partial class ServerSettingsRolesModel : ViewModelBase
     private readonly List<RoleListItem> _originalItems = new List<RoleListItem>();
 
     private readonly Timer? _searchTimer;
-
-    public ServerSettingsRolesModel()
+    private ServiceManager services;
+    public ServerSettingsRolesModel(ServiceManager sv)
     {
+        services = sv;
         _searchTimer = new Timer(500); // 500ms debounce
         _searchTimer.Elapsed += SearchTimerElapsed;
         _searchTimer.AutoReset = false;
 
         PropertyChanged += OnPropertyChanged;
 
-        foreach (var i in _originalItems) i.PropertyChanged += OnItemsChanged;
+        foreach (var i in _originalItems)
+            i.PropertyChanged += OnItemsChanged;
         Items = new ObservableCollection<RoleListItem>(_originalItems);
     }
 
     [RelayCommand]
     public void CreateRole()
     {
+        services.Dialogs.Create(new CreateNameDialog(), new CreateNameDialogModel
+        {
+        }, "Create Role").WithSubmit(SubmitRole).Open();
+    }
 
+    public async Task SubmitRole(UserControl control)
+    {
+        CreateNameDialogModel? model = control.DataContext as CreateNameDialogModel;
+        if (model.Name == null)
+            model.Name = "";
+
+        await services.Rest.PatchAsync($"/servers/{services.State.Socket.CurrentServer?.Server.Id}/roles", new CreateRoleRequest
+        {
+            Name = model.Name
+        });
     }
 
     private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)

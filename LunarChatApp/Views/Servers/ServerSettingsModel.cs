@@ -63,7 +63,7 @@ public partial class ServerSettingsModel : ViewModelBase
     public void OpenRolesSettings()
     {
         SelectedTitle = "Roles";
-        SelectedPage = new ServerSettingsRoles() { DataContext = new ServerSettingsRolesModel() };
+        SelectedPage = new ServerSettingsRoles() { DataContext = new ServerSettingsRolesModel(services) };
     }
 
     [RelayCommand]

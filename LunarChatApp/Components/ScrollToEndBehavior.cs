@@ -3,7 +3,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Xaml.Interactivity;
 using LunarChatApp.Services;
 using LunarChatApp.ViewModels;
-using LunarChatSharp.Websocket.Events;
+using LunarChatSharp.Websocket.Events.Messages;
 using System;
 using System.Diagnostics;
 

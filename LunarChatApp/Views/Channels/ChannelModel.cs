@@ -8,7 +8,7 @@ using LunarChatApp.Views;
 using LunarChatSharp.Rest.Channels;
 using LunarChatSharp.Rest.Messages;
 using LunarChatSharp.Rest.Users;
-using LunarChatSharp.Websocket.Events;
+using LunarChatSharp.Websocket.Events.Messages;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;

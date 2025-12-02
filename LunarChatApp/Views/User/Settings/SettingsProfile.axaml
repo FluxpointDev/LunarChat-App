@@ -30,7 +30,7 @@
 					<Label Classes="Small">Email</Label>
 					<SelectableTextBlock Margin="4,0,0,0" Classes="Lead" FontSize="16" Text="{Binding Email}"></SelectableTextBlock>
 				</StackPanel>
-				<Button Classes="Secondary" Content="Edit" Command="{Binding EditEmailCommand}" />
+				<Button Classes="Secondary" Content="Edit" Command="{Binding EditEmailCommand}" IsEnabled="False" />
 			</StackPanel>
 		</StackPanel>
 		<WrapPanel
@@ -39,19 +39,19 @@
 		ItemSpacing="8">
 			<Button
 			Classes="Primary"
-			Content="Change Password" />
+			Content="Change Password" IsEnabled="False" />
 
 			<Button Command="{Binding DisableAccountCommand}"
 					Classes="Secondary"
-					Content="Disable Account" />
+					Content="Disable Account" IsEnabled="False" />
 
 			<Button Command="{Binding DeleteAccountCommand}"
 					Classes="Destructive"
-					Content="Delete Account" />
+					Content="Delete Account" IsEnabled="False" />
 		</WrapPanel>
 		<TextBlock Classes="Large" Text="Friend Requests"></TextBlock>
 		<StackPanel Spacing="10">
-			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding RequestsEveryone}">
+			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding RequestsEveryone}" IsEnabled="False">
 				<ToggleSwitch.OffContent>
 					<Label Classes="Small" VerticalAlignment="Center" Width="200">Everyone</Label>
 				</ToggleSwitch.OffContent>
@@ -60,7 +60,7 @@
 				</ToggleSwitch.OnContent>
 			</ToggleSwitch>
 
-			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding RequestsServerMembers}">
+			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding RequestsServerMembers}" IsEnabled="False">
 				<ToggleSwitch.OffContent>
 					<Label Classes="Small" VerticalAlignment="Center" Width="200">Server Members</Label>
 				</ToggleSwitch.OffContent>
@@ -69,7 +69,7 @@
 				</ToggleSwitch.OnContent>
 			</ToggleSwitch>
 
-			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding RequestsMutualFriends}">
+			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding RequestsMutualFriends}" IsEnabled="False">
 				<ToggleSwitch.OffContent>
 					<Label Classes="Small" VerticalAlignment="Center" Width="200">Mutual Friends</Label>
 				</ToggleSwitch.OffContent>

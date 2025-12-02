@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.Views.Dialogs;
 using LunarChatSharp.Rest.Accounts;
-using LunarChatSharp.Websocket.Events;
+using LunarChatSharp.Websocket.Events.Account;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.Views.User.Settings;
