@@ -8,7 +8,6 @@ using LunarChatApp.Views;
 using LunarChatSharp.Rest.Channels;
 using LunarChatSharp.Rest.Messages;
 using LunarChatSharp.Rest.Users;
-using LunarChatSharp.Websocket.Events.Messages;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,7 +27,7 @@ public partial class ChannelModel : ViewModelBase
         Name = st.Socket.CurrentChannel.Name;
         Topic = st.Socket.CurrentChannel.Topic;
         state.Socket.CurrentServer.OnChannelUpdate += ChannelUpdate;
-        state.Socket.WebSocket.OnMessageRecieved += State_OnMessageRecieved;
+        state.Socket.OnMessageRecieved += State_OnMessageRecieved;
         state.Socket.OnMessageEdit += MessageEdit;
         state.Socket.OnMessageDelete += MessageDelete;
 
@@ -60,20 +59,20 @@ public partial class ChannelModel : ViewModelBase
         Topic = channel.Topic;
     }
 
-    private void State_OnMessageRecieved(MessageCreateEvent message)
+    private async Task State_OnMessageRecieved(RestMessage message)
     {
-        if (message.Message.ChannelId != state.Socket.CurrentChannel?.Id)
+        if (message.ChannelId != state.Socket.CurrentChannel?.Id)
             return;
 
         CrockeryList.Add(new MessageItem()
         {
             DataContext = new MessageItemModel(services, new RestMessage
             {
-                ChannelId = message.Message.ChannelId,
-                Author = message.Message.Author,
-                Content = message.Message.Content,
-                Id = message.Message.Id,
-                CreatedAt = message.Message.CreatedAt
+                ChannelId = message.ChannelId,
+                Author = message.Author,
+                Content = message.Content,
+                Id = message.Id,
+                CreatedAt = message.CreatedAt
             })
         });
     }

@@ -32,6 +32,6 @@ public partial class DMListItemModel : ViewModelBase
             Type = LunarChatSharp.Core.Channels.ChannelType.Direct
         };
 
-        services.State.Socket.TriggerSelectChannel(services.State.Socket.CurrentChannel, user);
+        services.State.Socket.OnSelectChannel?.Invoke(services.State.Socket.CurrentChannel, user);
     }
 }

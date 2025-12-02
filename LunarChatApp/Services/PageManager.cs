@@ -46,7 +46,7 @@ public sealed class PageManager(ServiceProvider serviceProvider)
         if (server.Id != services.State.Socket.CurrentServer?.Server.Id)
         {
             services.State.Socket.CurrentServer = services.State.Socket.Servers[server.Id];
-            services.State.Socket.TriggerSelectServer(services.State.Socket.Servers[server.Id].Server);
+            services.State.Socket.OnSelectServer?.Invoke(server);
         }
 
         if (services.State.Socket.CurrentServer != null)
@@ -57,7 +57,7 @@ public sealed class PageManager(ServiceProvider serviceProvider)
             if (channel != null && services.State.Socket.CurrentChannel?.Id != channel.Id)
             {
                 services.State.Socket.CurrentChannel = channel;
-                services.State.Socket.TriggerSelectChannel(channel, null);
+                services.State.Socket.OnSelectChannel?.Invoke(channel, null);
             }
         }
     }
@@ -67,7 +67,7 @@ public sealed class PageManager(ServiceProvider serviceProvider)
         if (channel != null)
         {
             services.State.Socket.CurrentChannel = channel;
-            services.State.Socket.TriggerSelectChannel(channel, null);
+            services.State.Socket.OnSelectChannel?.Invoke(channel, null);
         }
     }
 }

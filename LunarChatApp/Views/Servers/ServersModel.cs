@@ -88,7 +88,7 @@ public partial class ServersModel : ViewModelBase
 
     }
 
-    private void State_OnRemoveServer(RestServer server)
+    private async Task State_OnRemoveServer(RestServer server)
     {
         ServersList.Remove(ServersList.FirstOrDefault(x => (x.DataContext as ServerIconModel).Id == server.Id));
         if (server.Id == state.Socket.CurrentServer?.Server.Id)
@@ -100,7 +100,7 @@ public partial class ServersModel : ViewModelBase
         }
     }
 
-    private void State_OnAddServer(RestServer server)
+    private async Task State_OnAddServer(RestServer server)
     {
         var serverItem = ServersList.FirstOrDefault(x => (x.DataContext as ServerIconModel)!.Id == server.Id);
         if (serverItem != null)
@@ -117,12 +117,12 @@ public partial class ServersModel : ViewModelBase
         SelectedPage = control;
     }
 
-    private void OnSelectChannel(RestChannel channel, RestRelation user)
+    private async Task OnSelectChannel(RestChannel channel, RestRelation user)
     {
         SelectedPage = new ChannelView() { DataContext = new ChannelModel(state, services, user) };
     }
 
-    private void OnSelectServer(RestServer server)
+    private async Task OnSelectServer(RestServer server)
     {
         SelectedHeader = new ServerHeaderView() { DataContext = new ServerHeaderModel(services, server) };
         SelectedSidebar = new ChannelsListView() { DataContext = new ChannelListModel(services, state) };

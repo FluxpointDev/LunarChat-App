@@ -3,9 +3,10 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Xaml.Interactivity;
 using LunarChatApp.Services;
 using LunarChatApp.ViewModels;
-using LunarChatSharp.Websocket.Events.Messages;
+using LunarChatSharp.Rest.Messages;
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace LunarChatApp.Components;
 
@@ -32,12 +33,12 @@ public class ScrollToEndBehavior : Behavior<ScrollViewer>
         var sw = sender as ScrollViewer;
         sw.ScrollChanged += SwOnScrollChanged;
         services = (sw.DataContext as ChannelModel).services;
-        services.State.Socket.WebSocket.OnMessageRecieved += WebSocket_OnMessageRecieved;
+        services.State.Socket.OnMessageRecieved += WebSocket_OnMessageRecieved;
     }
 
-    private void WebSocket_OnMessageRecieved(MessageCreateEvent message)
+    private async Task WebSocket_OnMessageRecieved(RestMessage message)
     {
-        if (_shouldScrollToEnd || message.Message.Author.Id == services.State.Socket.CurrentId)
+        if (_shouldScrollToEnd || message.Author.Id == services.State.Socket.CurrentId)
         {
             Debug.WriteLine("New Message Scroll: " + _scrolling);
             if (AssociatedObject != null)

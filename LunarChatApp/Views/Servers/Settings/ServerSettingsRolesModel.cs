@@ -6,6 +6,8 @@ using DynamicData;
 using LunarChatApp.Services;
 using LunarChatApp.Views.Dialogs;
 using LunarChatSharp.Rest.Roles;
+using LunarChatSharp.Rest.Servers;
+using LunarChatSharp.Websocket.Events.Roles;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -25,15 +27,74 @@ public partial class ServerSettingsRolesModel : ViewModelBase
     public ServerSettingsRolesModel(ServiceManager sv)
     {
         services = sv;
+        services.State.Socket.OnRoleCreate += RoleCreated;
+        services.State.Socket.OnRoleUpdate += RoleUpdated;
+        services.State.Socket.OnRoleDelete += RoleDeleted;
         _searchTimer = new Timer(500); // 500ms debounce
         _searchTimer.Elapsed += SearchTimerElapsed;
         _searchTimer.AutoReset = false;
+
+        _originalItems = services.State.Socket.CurrentServer.Roles.Values.Select(x => new RoleListItem(services)
+        {
+            Name = x.Name,
+            Id = x.Id,
+        }).ToList();
 
         PropertyChanged += OnPropertyChanged;
 
         foreach (var i in _originalItems)
             i.PropertyChanged += OnItemsChanged;
         Items = new ObservableCollection<RoleListItem>(_originalItems);
+    }
+
+    private async Task RoleDeleted(RestRole role)
+    {
+        RoleListItem? item = _originalItems.FirstOrDefault(x => x.Id == role.Id);
+        if (item == null)
+            return;
+
+        item.PropertyChanged -= OnItemsChanged;
+        _originalItems.Remove(item);
+        UpdateList();
+    }
+
+    private async Task RoleUpdated(RoleUpdateEvent ev, RestRole role)
+    {
+        RoleListItem? item = _originalItems.FirstOrDefault(x => x.Id == role.Id);
+        if (item == null)
+            return;
+
+        item.Name = ev.Name!;
+        UpdateList();
+    }
+
+    private async Task RoleCreated(RestServer server, RestRole role)
+    {
+        RoleListItem item = new RoleListItem(services)
+        {
+            Id = role.Id,
+            Name = role.Name,
+        };
+        _originalItems.Add(item);
+        item.PropertyChanged += OnItemsChanged;
+        UpdateList();
+    }
+
+    public void UpdateList()
+    {
+        _searchTimer?.Stop();
+        Items.Clear();
+        if (string.IsNullOrEmpty(SearchString))
+            Items.AddRange(_originalItems);
+        else
+        {
+            var filteredItems = _originalItems
+                .Where(item => item.Name.Contains(SearchString, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            Items.AddRange(filteredItems);
+        }
+        UpdateTotal();
     }
 
     [RelayCommand]
@@ -50,7 +111,7 @@ public partial class ServerSettingsRolesModel : ViewModelBase
         if (model.Name == null)
             model.Name = "";
 
-        await services.Rest.PatchAsync($"/servers/{services.State.Socket.CurrentServer?.Server.Id}/roles", new CreateRoleRequest
+        await services.Rest.PostAsync($"/servers/{services.State.Socket.CurrentServer?.Server.Id}/roles", new CreateRoleRequest
         {
             Name = model.Name
         });
@@ -148,11 +209,26 @@ public partial class ServerSettingsRolesModel : ViewModelBase
     [ObservableProperty]
     private ObservableCollection<RoleListItem> _items;
 }
-public partial class RoleListItem : ObservableObject
+public partial class RoleListItem(ServiceManager services) : ObservableObject
 {
     [ObservableProperty]
     private bool _isSelected;
 
     [ObservableProperty]
     private string _name;
+
+    [ObservableProperty]
+    private string _id;
+
+    [RelayCommand]
+    public void CopyId()
+    {
+        services.CopyText(Id);
+    }
+
+    [RelayCommand]
+    public async Task DeleteRole()
+    {
+        await services.Rest.DeleteAsync($"/servers/{services.State.Socket.CurrentServer?.Server.Id}/roles/{Id}");
+    }
 }

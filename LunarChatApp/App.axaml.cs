@@ -34,6 +34,7 @@ public partial class App : Application
             {
                 DataContext = new MainModel(services)
             };
+            services.MainControl = desktop.MainWindow;
             this.RegisterTrayIconsEvents(desktop.MainWindow as MainWindow, desktop.MainWindow.DataContext as MainModel);
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
@@ -42,6 +43,7 @@ public partial class App : Application
             {
                 DataContext = new MainModel(services)
             };
+            services.MainControl = singleViewPlatform.MainView;
         }
 
         base.OnFrameworkInitializationCompleted();
