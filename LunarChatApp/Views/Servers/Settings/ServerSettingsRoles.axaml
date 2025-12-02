@@ -49,6 +49,16 @@
 					IsChecked="{Binding SelectAll}" />
 					</DataGridCheckBoxColumn.Header>
 					</DataGridCheckBoxColumn>-->
+					
+					<DataGridTemplateColumn Header="">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<Border Width="20" Height="20"
+											Background="{Binding Color}"
+											CornerRadius="90" />
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
 					<DataGridTextColumn
 					Binding="{Binding Name}"
 					CanUserSort="False"
@@ -58,7 +68,7 @@
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
-									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}">
+									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding OpenRoleCommand}">
 										<materialIcons:MaterialIcon Kind="Pencil" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 									</Button>
 									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding CopyIdCommand}">

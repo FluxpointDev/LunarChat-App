@@ -24,9 +24,13 @@ public partial class ServerSettingsRolesModel : ViewModelBase
 
     private readonly Timer? _searchTimer;
     private ServiceManager services;
-    public ServerSettingsRolesModel(ServiceManager sv)
+    private Action openRoles;
+    private Action<RestRole> openInfo;
+    public ServerSettingsRolesModel(ServiceManager sv, Action openRole, Action<RestRole> openInfo)
     {
         services = sv;
+        this.openRoles = openRole;
+        this.openInfo = openInfo;
         services.State.Socket.OnRoleCreate += RoleCreated;
         services.State.Socket.OnRoleUpdate += RoleUpdated;
         services.State.Socket.OnRoleDelete += RoleDeleted;
@@ -34,8 +38,9 @@ public partial class ServerSettingsRolesModel : ViewModelBase
         _searchTimer.Elapsed += SearchTimerElapsed;
         _searchTimer.AutoReset = false;
 
-        _originalItems = services.State.Socket.CurrentServer.Roles.Values.Select(x => new RoleListItem(services)
+        _originalItems = services.State.Socket.CurrentServer.Roles.Values.Select(x => new RoleListItem(services, openInfo)
         {
+            Color = x.Color ?? "#99AAB5",
             Name = x.Name,
             Id = x.Id,
         }).ToList();
@@ -65,13 +70,15 @@ public partial class ServerSettingsRolesModel : ViewModelBase
             return;
 
         item.Name = ev.Name!;
+        item.Color = ev.Color ?? "#99AAB5";
         UpdateList();
     }
 
     private async Task RoleCreated(RestServer server, RestRole role)
     {
-        RoleListItem item = new RoleListItem(services)
+        RoleListItem item = new RoleListItem(services, openInfo)
         {
+            Color = role.Color ?? "#99AAB5",
             Id = role.Id,
             Name = role.Name,
         };
@@ -209,7 +216,7 @@ public partial class ServerSettingsRolesModel : ViewModelBase
     [ObservableProperty]
     private ObservableCollection<RoleListItem> _items;
 }
-public partial class RoleListItem(ServiceManager services) : ObservableObject
+public partial class RoleListItem(ServiceManager services, Action<RestRole> openInfo) : ObservableObject
 {
     [ObservableProperty]
     private bool _isSelected;
@@ -218,7 +225,17 @@ public partial class RoleListItem(ServiceManager services) : ObservableObject
     private string _name;
 
     [ObservableProperty]
+    private string _color;
+
+    [ObservableProperty]
     private string _id;
+
+    [RelayCommand]
+    public void OpenRole()
+    {
+        if (services.State.Socket.Roles.TryGetValue(Id, out var role))
+            openInfo.Invoke(role);
+    }
 
     [RelayCommand]
     public void CopyId()

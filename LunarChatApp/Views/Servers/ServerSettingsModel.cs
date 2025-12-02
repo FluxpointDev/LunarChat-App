@@ -5,6 +5,7 @@ using LunarChatApp.Services;
 using LunarChatApp.ViewModels.Servers.Settings;
 using LunarChatApp.Views;
 using LunarChatApp.Views.Servers.Settings;
+using LunarChatSharp.Rest.Roles;
 
 namespace LunarChatApp.ViewModels.Servers;
 
@@ -63,7 +64,13 @@ public partial class ServerSettingsModel : ViewModelBase
     public void OpenRolesSettings()
     {
         SelectedTitle = "Roles";
-        SelectedPage = new ServerSettingsRoles() { DataContext = new ServerSettingsRolesModel(services) };
+        SelectedPage = new ServerSettingsRoles() { DataContext = new ServerSettingsRolesModel(services, OpenRolesSettings, OpenRoleInfo) };
+    }
+
+    public void OpenRoleInfo(RestRole role)
+    {
+        SelectedTitle = "Edit Role - " + role.Name;
+        SelectedPage = new ServerSettingsRoleInfo { DataContext = new ServerSettingsRoleInfoModel(services, role, OpenRolesSettings) };
     }
 
     [RelayCommand]

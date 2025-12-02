@@ -5,6 +5,7 @@ using LiveMarkdown.Avalonia;
 using LunarChatApp.Services;
 using LunarChatApp.Views;
 using LunarChatSharp.Rest.Messages;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.Components;
@@ -21,6 +22,7 @@ public partial class MessageItemModel : ViewModelBase
         IsBot = message.Author.IsBot;
         Message = new ObservableStringBuilder();
         Message.Append(message.Content);
+        NameColor = services.State.Socket.Roles.First().Value.Color;
         Time = message.CreatedAt.ToLocalTime().ToString("hh:mm tt");
     }
 
@@ -42,6 +44,9 @@ public partial class MessageItemModel : ViewModelBase
 
     [ObservableProperty]
     private string _time;
+
+    [ObservableProperty]
+    private string? _nameColor;
 
     [RelayCommand]
     public void LinkClicked(InlineHyperlinkClickedEventArgs args)
