@@ -2,53 +2,81 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:settings="using:LunarChatApp.Views.User.Settings"
 			 xmlns:shadui="using:ShadUI"
-             xmlns:viewmodels="using:LunarChatApp.ViewModels"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="LunarChatApp.SettingsProfile"
-			 x:DataType="viewmodels:SettingsSectionModel">
+			 x:DataType="settings:SettingsProfileModel">
 	<StackPanel Spacing="20" HorizontalAlignment="Left">
 		<StackPanel HorizontalAlignment="Left" Spacing="10">
-		<TextBox
-		Classes="Clearable"
-		Watermark="builderb"
-		Width="225"
-		Text="{Binding state.DisplayName}"
-		IsReadOnly="true"
-		shadui:ControlAssist.Label="Display Name" />
-
-		<TextBox
-		Classes="Clearable"
-		Watermark="builderb"
-		Width="225"
-		Text="{Binding state.Username}"
-		shadui:ControlAssist.Label="Username" />
-
-		<TextBox
-		Classes="Clearable"
-		Watermark="user@email.com"
-		Width="225"
-		Text="user@gmail.com"
-		IsReadOnly="true"
-		shadui:ControlAssist.Label="Email" />
-
-		
+			<StackPanel Orientation="Horizontal" Spacing="10">
+				<StackPanel Width="200">
+					<Label Classes="Small">Display Name</Label>
+					<SelectableTextBlock Margin="4,0,0,0" Classes="Lead" FontSize="16" Text="{Binding DisplayName}"></SelectableTextBlock>
+				</StackPanel>
+				<Button Classes="Secondary" Content="Edit" Command="{Binding EditDisplayNameCommand}" />
 			</StackPanel>
-		<StackPanel
+
+			<StackPanel Orientation="Horizontal" Spacing="10">
+				<StackPanel Width="200">
+					<Label Classes="Small">Username</Label>
+					<SelectableTextBlock Margin="4,0,0,0" Classes="Lead" FontSize="16" Text="{Binding Username}"></SelectableTextBlock>
+				</StackPanel>
+				<Button Classes="Secondary" Content="Edit" Command="{Binding EditUsernameCommand}" />
+			</StackPanel>
+
+			<StackPanel Orientation="Horizontal" Spacing="10">
+				<StackPanel Width="200">
+					<Label Classes="Small">Email</Label>
+					<SelectableTextBlock Margin="4,0,0,0" Classes="Lead" FontSize="16" Text="{Binding Email}"></SelectableTextBlock>
+				</StackPanel>
+				<Button Classes="Secondary" Content="Edit" Command="{Binding EditEmailCommand}" />
+			</StackPanel>
+		</StackPanel>
+		<WrapPanel
 		HorizontalAlignment="Left"
 		Orientation="Horizontal"
-		Spacing="8">
+		ItemSpacing="8">
 			<Button
-		Classes="Primary"
-		Content="Change Password" />
+			Classes="Primary"
+			Content="Change Password" />
 
-			<Button
-		Classes="Secondary"
-		Content="Disable Account" />
+			<Button Command="{Binding DisableAccountCommand}"
+					Classes="Secondary"
+					Content="Disable Account" />
 
-			<Button
-		Classes="Destructive"
-		Content="Delete Account" />
-		</StackPanel>
+			<Button Command="{Binding DeleteAccountCommand}"
+					Classes="Destructive"
+					Content="Delete Account" />
+		</WrapPanel>
+		<TextBlock Classes="Large" Text="Friend Requests"></TextBlock>
+		<StackPanel Spacing="10">
+			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding RequestsEveryone}">
+				<ToggleSwitch.OffContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Everyone</Label>
+				</ToggleSwitch.OffContent>
+				<ToggleSwitch.OnContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Everyone</Label>
+				</ToggleSwitch.OnContent>
+			</ToggleSwitch>
+
+			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding RequestsServerMembers}">
+				<ToggleSwitch.OffContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Server Members</Label>
+				</ToggleSwitch.OffContent>
+				<ToggleSwitch.OnContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Server Members</Label>
+				</ToggleSwitch.OnContent>
+			</ToggleSwitch>
+
+			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding RequestsMutualFriends}">
+				<ToggleSwitch.OffContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Mutual Friends</Label>
+				</ToggleSwitch.OffContent>
+				<ToggleSwitch.OnContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Mutual Friends</Label>
+				</ToggleSwitch.OnContent>
+			</ToggleSwitch>
+	</StackPanel>
 	</StackPanel>
 </UserControl>

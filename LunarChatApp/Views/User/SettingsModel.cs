@@ -107,7 +107,7 @@ public partial class SettingsModel : ViewModelBase
             case SettingsPageType.Profile:
                 SelectedPage = new SettingsProfile
                 {
-                    DataContext = new SettingsSectionModel(state)
+                    DataContext = new SettingsProfileModel(services)
                 };
                 break;
             case SettingsPageType.Connections:

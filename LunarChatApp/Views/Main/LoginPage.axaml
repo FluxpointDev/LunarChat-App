@@ -38,7 +38,7 @@
 					</shadui:Card.Footer>
 				</shadui:Card>
 			</TabItem>
-			<TabItem Header="Login">
+			<TabItem Header="Login" IsVisible="False">
 				<shadui:Card
 				Width="350"
 				HorizontalAlignment="Center"
@@ -67,7 +67,7 @@
 					</shadui:Card.Footer>
 				</shadui:Card>
 			</TabItem>
-			<TabItem Header="Register">
+			<TabItem Header="Register" IsVisible="False">
 				<shadui:Card
 				Width="350"
 				HorizontalAlignment="Center"

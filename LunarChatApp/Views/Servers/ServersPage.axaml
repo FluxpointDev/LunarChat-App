@@ -72,7 +72,7 @@
 											</Border>
 										</Grid>
 										<StackPanel>
-											<TextBlock Text="{Binding state.DisplayName}"></TextBlock>
+											<TextBlock Text="{Binding state.CurrentDisplayName}"></TextBlock>
 											<TextBlock Classes="Muted" Text="{Binding state.Username}"></TextBlock>
 										</StackPanel>
 									</StackPanel>

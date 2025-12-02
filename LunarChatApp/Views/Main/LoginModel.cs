@@ -65,9 +65,13 @@ public partial class LoginModel(ServiceManager services, MainModel main) : ViewM
         if (HasErrors)
             return;
 
+        string? CleanUsername = services.State.CleanUsername(Username);
+        if (string.IsNullOrEmpty(CleanUsername))
+            return;
+
         RestUser Json = await services.Rest.PostAsync<RestUser>("/accounts/test", new CreateDemoAccountRequest
         {
-            Username = Username!.ToLower()
+            Username = CleanUsername
         });
         services.Rest.Http.DefaultRequestHeaders.Add("Auth-Id", Json.Id);
 
@@ -76,8 +80,9 @@ public partial class LoginModel(ServiceManager services, MainModel main) : ViewM
         services.State.Socket = socket.State;
         services.State.Socket.WebSocket = socket;
         services.State.Socket.CurrentId = Json.Id;
-        services.State.DisplayName = Username.ToLower();
-        services.State.Username = Username.ToLower();
+        services.State.CurrentDisplayName = Json.DisplayName ?? Json.Username;
+        services.State.DisplayName = Json.DisplayName;
+        services.State.Username = Json.Username;
         services.State.CachedServersPage = new ServersPage
         {
             DataContext = new ServersModel(services, main)

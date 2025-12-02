@@ -11,6 +11,7 @@ using LunarChatSharp.Core.Users;
 using LunarChatSharp.Rest.Channels;
 using LunarChatSharp.Rest.Servers;
 using LunarChatSharp.Rest.Users;
+using LunarChatSharp.Websocket.Events;
 using Material.Icons;
 using System;
 using System.Collections.ObjectModel;
@@ -35,6 +36,7 @@ public partial class ServersModel : ViewModelBase
         services.State.Socket.OnAddServer += State_OnAddServer;
         services.State.Socket.OnRemoveServer += State_OnRemoveServer;
         services.State.Socket.OnPresenceUpdate += PresenceUpdate;
+        services.State.Socket.OnAccountUpdate += AccountUpdate;
         if (state.Socket.CurrentServer == null)
         {
             _selectedPage = new HomeView() { DataContext = new HomeModel(services) };
@@ -64,6 +66,21 @@ public partial class ServersModel : ViewModelBase
                 })
             });
         }
+    }
+
+    private async Task AccountUpdate(AccountUpdateEvent ev)
+    {
+        if (ev.DisplayName != null)
+        {
+            state.DisplayName = ev.DisplayName;
+            state.CurrentDisplayName = ev.DisplayName;
+        }
+
+        if (ev.Username != null)
+            state.Username = ev.Username;
+
+        if (string.IsNullOrEmpty(state.CurrentDisplayName))
+            state.CurrentDisplayName = state.Username;
     }
 
     private async Task PresenceUpdate(RestUserPresence presence)
