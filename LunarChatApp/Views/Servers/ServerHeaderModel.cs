@@ -13,10 +13,10 @@ namespace LunarChatApp.ViewModels.Servers;
 
 public partial class ServerHeaderModel : ViewModelBase
 {
-    private ServiceManager Services;
+    private ServiceManager services;
     public ServerHeaderModel(ServiceManager sv, RestServer s)
     {
-        Services = sv;
+        services = sv;
         Name = s.Name;
         isOwner = sv.State.Socket.CurrentId == s.OwnerId;
     }
@@ -30,18 +30,18 @@ public partial class ServerHeaderModel : ViewModelBase
     [RelayCommand]
     public async Task CreateChannel()
     {
-        Services.Dialogs.Create(new CreateChannelDialog(), new CreateChannelDialogModel(Services), "Create Channel").WithSubmit(SubmitChannel).Open();
+        services.Dialogs.Create(new CreateChannelDialog(), new CreateChannelDialogModel(services), "Create Channel").WithSubmit(SubmitChannel).Open();
     }
 
     public async Task SubmitChannel(UserControl control)
     {
         CreateChannelDialogModel model = (CreateChannelDialogModel)control.DataContext!;
         string Id = Guid.NewGuid().ToString();
-        await Services.Rest.PostAsync("/channels", new CreateChannelRequest
+        await services.Rest.PostAsync("/channels", new CreateChannelRequest
         {
             Name = model.Name,
             Topic = model.Topic,
-            ServerId = Services.State.Socket.CurrentServer.Server.Id,
+            ServerId = services.State.Socket.CurrentServer.Server.Id,
             Type = model.Type,
         });
     }
@@ -49,28 +49,29 @@ public partial class ServerHeaderModel : ViewModelBase
     [RelayCommand]
     public void CopyServerID()
     {
-        Services.CopyText(Services.State.Socket.CurrentServer?.Server.Id);
+        services.CopyText(services.State.Socket.CurrentServer?.Server.Id);
     }
 
     [RelayCommand]
     public void OpenServerSettings()
     {
-        Services.PageManager.OnSwitchPage(new ServerSettings
+        services.PageManager.OnSwitchPage(new ServerSettings
         {
-            DataContext = new ServerSettingsModel(Services.PageManager, Services.State, Services)
+            DataContext = new ServerSettingsModel(services.PageManager, services.State, services)
         });
     }
 
     [RelayCommand]
     public void OpenReportServer()
     {
-        Services.Dialogs.Create(new ReportServerDialog(), new ReportServerDialogModel(), "Report Server: " + Services.State.Socket.CurrentServer.Server.Name).Open();
+        services.Dialogs.Create(new ReportServerDialog(), new ReportServerDialogModel(), "Report Server: " + services.State.Socket.CurrentServer.Server.Name).Open();
     }
 
 
     [RelayCommand]
-    public void LeaveServer()
+    public async Task LeaveServer()
     {
-
+        await services.Rest.DeleteAsync($"/servers/{services.State.Socket.CurrentServer?.Server.Id}/members/{services.State.Socket.CurrentId}");
+        services.State.Socket.OnSelectServer?.Invoke(null);
     }
 }

@@ -122,11 +122,21 @@ public partial class ServersModel : ViewModelBase
         SelectedPage = new ChannelView() { DataContext = new ChannelModel(state, services, user) };
     }
 
-    private async Task OnSelectServer(RestServer server)
+    private async Task OnSelectServer(RestServer? server)
     {
-        SelectedHeader = new ServerHeaderView() { DataContext = new ServerHeaderModel(services, server) };
-        SelectedSidebar = new ChannelsListView() { DataContext = new ChannelListModel(services, state) };
-        SelectedPage = null;
+        if (server == null)
+        {
+            state.Socket.CurrentServer = null;
+            SelectedHeader = null;
+            SelectedSidebar = null;
+            SelectedPage = null;
+        }
+        else
+        {
+            SelectedHeader = new ServerHeaderView() { DataContext = new ServerHeaderModel(services, server) };
+            SelectedSidebar = new ChannelsListView() { DataContext = new ChannelListModel(services, state) };
+            SelectedPage = null;
+        }
     }
 
     [ObservableProperty]
