@@ -1,21 +1,22 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System.Collections.Generic;
+using LunarChatApp.Services;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace LunarChatApp.Views.Servers.Settings;
 
 public partial class ServerSettingsSystemModel : ViewModelBase
 {
-    public ServerSettingsSystemModel()
+    public ServerSettingsSystemModel(ServiceManager services)
     {
-        Items = new List<ChannelListItem>();
-        Items.Add(new ChannelListItem
+        Items = new ObservableCollection<ChannelListItem>(services.State.Socket.CurrentServer.Channels.Values.Select(x => new ChannelListItem
         {
-            Name = "Test",
-            id = "1"
-        });
+            id = x.Id,
+            Name = x.Name
+        }));
     }
     [ObservableProperty]
-    private List<ChannelListItem> _items;
+    private ObservableCollection<ChannelListItem> _items;
 
     [ObservableProperty]
     private ChannelListItem? _selectedJoinMessage;

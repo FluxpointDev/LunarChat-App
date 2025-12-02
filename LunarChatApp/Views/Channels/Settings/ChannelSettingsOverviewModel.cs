@@ -30,7 +30,6 @@ public partial class ChannelSettingsOverviewModel : ViewModelBase
     {
         await services.Rest.PatchAsync($"/channels/{channel.Id}", new UpdateChannelRequest
         {
-            ServerId = channel.ServerId,
             Name = ChannelNameEdit,
             Topic = ChannelTopicEdit
         });

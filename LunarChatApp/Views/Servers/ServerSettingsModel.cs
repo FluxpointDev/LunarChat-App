@@ -49,7 +49,7 @@ public partial class ServerSettingsModel : ViewModelBase
     public void OpenSystemSettings()
     {
         SelectedTitle = "System";
-        SelectedPage = new ServerSettingsSystem() { DataContext = new ServerSettingsSystemModel() };
+        SelectedPage = new ServerSettingsSystem() { DataContext = new ServerSettingsSystemModel(services) };
     }
 
     [RelayCommand]
