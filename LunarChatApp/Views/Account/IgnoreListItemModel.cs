@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.Views.Dialogs;
+using LunarChatSharp;
 using LunarChatSharp.Rest.Users;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -34,7 +35,7 @@ public partial class IgnoreListItemModel : ViewModelBase
     [RelayCommand]
     public async Task RemoveIgnore()
     {
-        await services.Rest.DeleteAsync($"/users/{id}/ignore");
+        await services.Rest.RemoveIgnoreAsync(id);
     }
 
     [RelayCommand]
@@ -50,9 +51,6 @@ public partial class IgnoreListItemModel : ViewModelBase
     public async Task SubmitNote(UserControl control)
     {
         RelationNoteDialogModel model = control.DataContext as RelationNoteDialogModel;
-        await services.Rest.PatchAsync($"/users/{id}/note", new UpdateNoteRequest
-        {
-            Note = model.Note
-        });
+        await services.Rest.UpdateNoteAsync(id, model.Note);
     }
 }

@@ -37,6 +37,7 @@
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="ShadUI" />
     <PackageReference Include="Simplecto.Avalonia.RichTextBox" />
+    <PackageReference Include="WebView.Avalonia" />
     <PackageReference Include="Xaml.Behaviors.Avalonia" />
   </ItemGroup>
 

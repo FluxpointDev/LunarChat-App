@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using LunarChatApp.Services;
 using LunarChatApp.Views.Dialogs;
+using LunarChatSharp;
 using LunarChatSharp.Rest.Dev;
 using LunarChatSharp.Rest.Users;
 using System;
@@ -35,7 +36,7 @@ public partial class DeveloperListModel : ViewModelBase
 
         _ = Task.Run(async () =>
         {
-            RestDev? dev = await services.Rest.GetAsync<RestDev>("/users/@me/dev");
+            RestDev? dev = await services.Rest.GetDevAsync();
             if (dev != null)
             {
                 Dispatcher.UIThread.Post(() =>
@@ -98,7 +99,7 @@ public partial class DeveloperListModel : ViewModelBase
         CreateNameDialogModel? model = control.DataContext as CreateNameDialogModel;
         try
         {
-            RestApp app = await services.Rest.PostAsync<RestApp>("/apps", new CreateAppRequest
+            RestApp app = await services.Rest.CreateAppAsync(new CreateAppRequest
             {
                 Name = model.Name
             });
@@ -113,7 +114,7 @@ public partial class DeveloperListModel : ViewModelBase
         CreateNameDialogModel? model = control.DataContext as CreateNameDialogModel;
         try
         {
-            RestTeam team = await services.Rest.PostAsync<RestTeam>("/teams", new CreateTeamRequest
+            RestTeam team = await services.Rest.CreateTeamAsync(new CreateTeamRequest
             {
                 Name = model.Name
             });

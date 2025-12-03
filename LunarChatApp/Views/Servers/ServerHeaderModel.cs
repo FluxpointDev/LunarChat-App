@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.ViewModels.Dialogs;
 using LunarChatApp.Views;
+using LunarChatSharp;
 using LunarChatSharp.Rest.Channels;
 using LunarChatSharp.Rest.Servers;
 using System;
@@ -37,7 +38,7 @@ public partial class ServerHeaderModel : ViewModelBase
     {
         CreateChannelDialogModel model = (CreateChannelDialogModel)control.DataContext!;
         string Id = Guid.NewGuid().ToString();
-        await services.Rest.PostAsync("/channels", new CreateChannelRequest
+        await services.Rest.CreateChannelAsync(new CreateChannelRequest
         {
             Name = model.Name,
             Topic = model.Topic,
@@ -71,7 +72,7 @@ public partial class ServerHeaderModel : ViewModelBase
     [RelayCommand]
     public async Task LeaveServer()
     {
-        await services.Rest.DeleteAsync($"/servers/{services.State.Socket.CurrentServer?.Server.Id}/members/{services.State.Socket.CurrentId}");
+        await services.Rest.RemoveMemberAsync(services.State.Socket.CurrentServer?.Server.Id, services.State.Socket.CurrentId);
         services.State.Socket.OnSelectServer?.Invoke(null);
     }
 }

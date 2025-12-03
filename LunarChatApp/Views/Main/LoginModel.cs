@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.Validators;
 using LunarChatApp.Views;
+using LunarChatSharp;
 using LunarChatSharp.Rest.Accounts;
 using LunarChatSharp.Rest.Users;
 using LunarChatSharp.Websocket;
@@ -69,7 +70,7 @@ public partial class LoginModel(ServiceManager services, MainModel main) : ViewM
         if (string.IsNullOrEmpty(CleanUsername))
             return;
 
-        RestUser Json = await services.Rest.PostAsync<RestUser>("/accounts/test", new CreateDemoAccountRequest
+        RestUser Json = await services.Rest.CreateDemoAccount(new CreateDemoAccountRequest
         {
             Username = CleanUsername
         });

@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.Views.Dialogs;
+using LunarChatSharp;
 using LunarChatSharp.Rest.Dev;
 using System;
 using System.Threading.Tasks;
@@ -43,7 +44,7 @@ public partial class DeveloperAppInfoModel : ViewModelBase
         CreateNameDialogModel? model = control.DataContext as CreateNameDialogModel;
         try
         {
-            await services.Rest.PatchAsync("/apps/" + id, new CreateAppRequest
+            await services.Rest.EditAppAsync(id, new CreateAppRequest
             {
                 Name = model.Name
             });
@@ -55,7 +56,7 @@ public partial class DeveloperAppInfoModel : ViewModelBase
     [RelayCommand]
     public async Task DeleteApp()
     {
-        await services.Rest.DeleteAsync("/apps/" + id);
+        await services.Rest.DeleteAppAsync(id);
         backAction.Invoke();
     }
 }

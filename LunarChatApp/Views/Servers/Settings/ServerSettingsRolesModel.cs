@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using LunarChatApp.Services;
 using LunarChatApp.Views.Dialogs;
+using LunarChatSharp;
 using LunarChatSharp.Rest.Roles;
 using LunarChatSharp.Rest.Servers;
 using LunarChatSharp.Websocket.Events.Roles;
@@ -118,7 +119,7 @@ public partial class ServerSettingsRolesModel : ViewModelBase
         if (model.Name == null)
             model.Name = "";
 
-        await services.Rest.PostAsync($"/servers/{services.State.Socket.CurrentServer?.Server.Id}/roles", new CreateRoleRequest
+        await services.Rest.CreateRoleAsync(services.State.Socket.CurrentServer?.Server.Id, new CreateRoleRequest
         {
             Name = model.Name
         });
@@ -246,6 +247,6 @@ public partial class RoleListItem(ServiceManager services, Action<RestRole> open
     [RelayCommand]
     public async Task DeleteRole()
     {
-        await services.Rest.DeleteAsync($"/servers/{services.State.Socket.CurrentServer?.Server.Id}/roles/{Id}");
+        await services.Rest.DeleteRoleAsync(services.State.Socket.CurrentServer?.Server.Id, Id);
     }
 }

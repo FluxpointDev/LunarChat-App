@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using AvaloniaWebView;
 using LunarChatApp.Services;
 using LunarChatApp.Utility;
 using LunarChatApp.ViewModels;
@@ -13,6 +14,17 @@ namespace LunarChatApp;
 
 public partial class App : Application
 {
+    public override void RegisterServices()
+    {
+        base.RegisterServices();
+
+        // if you use only WebView  
+        AvaloniaWebViewBuilder.Initialize(x =>
+        {
+
+        });
+    }
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);

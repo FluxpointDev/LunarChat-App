@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.Views;
 using LunarChatApp.Views.Dialogs;
+using LunarChatSharp;
 using LunarChatSharp.Rest.Users;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -35,7 +36,7 @@ public partial class BlockListItemModel : ViewModelBase
     [RelayCommand]
     public async Task RemoveBlock()
     {
-        await services.Rest.DeleteAsync($"/users/{id}/block");
+        await services.Rest.RemoveBlockAsync(id);
     }
 
     [RelayCommand]
@@ -51,9 +52,6 @@ public partial class BlockListItemModel : ViewModelBase
     public async Task SubmitNote(UserControl control)
     {
         RelationNoteDialogModel model = control.DataContext as RelationNoteDialogModel;
-        await services.Rest.PatchAsync($"/users/{id}/note", new UpdateNoteRequest
-        {
-            Note = model.Note
-        });
+        await services.Rest.UpdateNoteAsync(id, model.Note);
     }
 }

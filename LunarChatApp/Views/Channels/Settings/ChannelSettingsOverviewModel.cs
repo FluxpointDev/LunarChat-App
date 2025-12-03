@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.Views;
+using LunarChatSharp;
 using LunarChatSharp.Rest.Channels;
 using System.Threading.Tasks;
 
@@ -28,7 +29,7 @@ public partial class ChannelSettingsOverviewModel : ViewModelBase
     [RelayCommand]
     public async Task UpdateChannel()
     {
-        await services.Rest.PatchAsync($"/channels/{channel.Id}", new UpdateChannelRequest
+        await services.Rest.UpdateChannelAsync(channel.Id, new UpdateChannelRequest
         {
             Name = ChannelNameEdit,
             Topic = ChannelTopicEdit
@@ -38,7 +39,7 @@ public partial class ChannelSettingsOverviewModel : ViewModelBase
     [RelayCommand]
     public async Task DeleteChannel()
     {
-        await services.Rest.DeleteAsync($"/channels/{channel.Id}", new DeleteChannelRequest
+        await services.Rest.DeleteChannelAsync(channel.Id, new DeleteChannelRequest
         {
             ServerId = channel.ServerId
         });

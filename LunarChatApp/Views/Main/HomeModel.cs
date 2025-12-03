@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.ViewModels.Dialogs;
+using LunarChatSharp;
 using LunarChatSharp.Rest.Servers;
 using System.Threading.Tasks;
 
@@ -25,7 +26,7 @@ public partial class HomeModel(ServiceManager services) : ViewModelBase
     public async Task LunarCommunity()
     {
         if (!services.State.Socket.Servers.ContainsKey(services.State.Socket.LunarCommunityId))
-            await services.Rest.PutAsync($"/servers/{services.State.Socket.LunarCommunityId}/members/{services.State.Socket.CurrentId}");
+            await services.Rest.AddMemberAsync(services.State.Socket.LunarCommunityId, services.State.Socket.CurrentId);
 
         if (services.State.Socket.Servers.TryGetValue(services.State.Socket.LunarCommunityId, out var server))
             services.PageManager.SwitchServer(services, server.Server);
@@ -36,7 +37,7 @@ public partial class HomeModel(ServiceManager services) : ViewModelBase
     public async Task LunarDevs()
     {
         if (!services.State.Socket.Servers.ContainsKey(services.State.Socket.LunarDevId))
-            await services.Rest.PutAsync($"/servers/{services.State.Socket.LunarDevId}/members/{services.State.Socket.CurrentId}");
+            await services.Rest.AddMemberAsync(services.State.Socket.LunarDevId, services.State.Socket.CurrentId);
 
         if (services.State.Socket.Servers.TryGetValue(services.State.Socket.LunarDevId, out var server))
             services.PageManager.SwitchServer(services, server.Server);
@@ -54,7 +55,7 @@ public partial class HomeModel(ServiceManager services) : ViewModelBase
             if (string.IsNullOrEmpty(model.Textbox))
                 return;
 
-            await services.Rest.PostAsync<CreateServerRequest>("/servers", new CreateServerRequest
+            await services.Rest.CreateServerAsync(new CreateServerRequest
             {
                 Name = model.Textbox
             });

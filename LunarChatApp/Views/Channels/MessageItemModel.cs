@@ -4,8 +4,8 @@ using CommunityToolkit.Mvvm.Input;
 using LiveMarkdown.Avalonia;
 using LunarChatApp.Services;
 using LunarChatApp.Views;
+using LunarChatSharp;
 using LunarChatSharp.Rest.Messages;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.Components;
@@ -22,7 +22,7 @@ public partial class MessageItemModel : ViewModelBase
         IsBot = message.Author.IsBot;
         Message = new ObservableStringBuilder();
         Message.Append(message.Content);
-        NameColor = services.State.Socket.Roles.First().Value.Color;
+        //NameColor = services.State.Socket.Roles.First().Value.Color;
         Time = message.CreatedAt.ToLocalTime().ToString("hh:mm tt");
     }
 
@@ -59,7 +59,7 @@ public partial class MessageItemModel : ViewModelBase
     [RelayCommand]
     public async Task Delete()
     {
-        await services.Rest.DeleteAsync($"/channels/{services.State.Socket.CurrentChannel!.Id}/messages/{messageId}");
+        await services.Rest.DeleteMessageAsync(services.State.Socket.CurrentChannel!.Id, messageId);
     }
 
     public void Update(string content)

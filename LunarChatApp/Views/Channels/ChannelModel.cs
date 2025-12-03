@@ -5,6 +5,7 @@ using DynamicData;
 using LunarChatApp.Components;
 using LunarChatApp.Services;
 using LunarChatApp.Views;
+using LunarChatSharp;
 using LunarChatSharp.Rest.Channels;
 using LunarChatSharp.Rest.Messages;
 using LunarChatSharp.Rest.Users;
@@ -34,7 +35,7 @@ public partial class ChannelModel : ViewModelBase
         CrockeryList = new ObservableCollection<MessageItem>();
         _ = Task.Run(async () =>
         {
-            RestMessage[]? messages = await services.Rest.GetAsync<RestMessage[]>("/channels/" + state.Socket.CurrentChannel.Id + "/messages");
+            RestMessage[]? messages = await services.Rest.GetMessagesAsync(state.Socket.CurrentChannel.Id);
             if (messages != null)
             {
                 Dispatcher.UIThread.Post(() => { CrockeryList.AddRange(messages.Select(x => new MessageItem() { DataContext = new MessageItemModel(services, x) })); MessagesFinished = true; });
@@ -112,12 +113,11 @@ public partial class ChannelModel : ViewModelBase
     [RelayCommand]
     public async Task Enter()
     {
-        await services.Rest.PostAsync("/channels/" + state.Socket.CurrentChannel.Id + "/messages", new CreateMessageRequest
+        Textbox = null;
+        await services.Rest.SendMesssageAsync(state.Socket.CurrentChannel.Id, new CreateMessageRequest
         {
             Content = Textbox
         });
-
-        Textbox = null;
     }
 
     [RelayCommand]

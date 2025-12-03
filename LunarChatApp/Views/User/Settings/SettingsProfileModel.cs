@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.Views.Dialogs;
-using LunarChatSharp.Rest.Accounts;
+using LunarChatSharp;
 using LunarChatSharp.Websocket.Events.Account;
 using System.Threading.Tasks;
 
@@ -78,10 +78,7 @@ public partial class SettingsProfileModel : ViewModelBase
         if (model.Name == null)
             model.Name = "";
 
-        await services.Rest.PatchAsync($"/accounts/@me/displayname", new EditDisplayNameRequest
-        {
-            DisplayName = model.Name
-        });
+        await services.Rest.AccountEditDisplayName(model.Name);
     }
 
     [RelayCommand]
@@ -103,10 +100,7 @@ public partial class SettingsProfileModel : ViewModelBase
         if (string.IsNullOrEmpty(CleanUsername))
             return;
 
-        await services.Rest.PatchAsync($"/accounts/@me/username", new EditUsernameRequest
-        {
-            Username = CleanUsername
-        });
+        await services.Rest.AccountEditUsername(CleanUsername);
     }
 
     [RelayCommand]

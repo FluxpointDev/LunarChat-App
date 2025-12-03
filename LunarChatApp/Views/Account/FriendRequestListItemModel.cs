@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.Views.Dialogs;
+using LunarChatSharp;
 using LunarChatSharp.Rest.Users;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -38,13 +39,13 @@ public partial class FriendRequestListItemModel : ViewModelBase
     [RelayCommand]
     public async Task AcceptRequest()
     {
-        await services.Rest.PutAsync($"/users/{Username}/friend");
+        await services.Rest.AddFriendAsync(Username);
     }
 
     [RelayCommand]
     public async Task RemoveRequest()
     {
-        await services.Rest.DeleteAsync($"/users/{id}/friend");
+        await services.Rest.RemoveFriendAsync(id);
     }
 
     [RelayCommand]
@@ -60,9 +61,6 @@ public partial class FriendRequestListItemModel : ViewModelBase
     public async Task SubmitNote(UserControl control)
     {
         RelationNoteDialogModel model = control.DataContext as RelationNoteDialogModel;
-        await services.Rest.PatchAsync($"/users/{id}/note", new UpdateNoteRequest
-        {
-            Note = model.Note
-        });
+        await services.Rest.UpdateNoteAsync(id, model.Note);
     }
 }

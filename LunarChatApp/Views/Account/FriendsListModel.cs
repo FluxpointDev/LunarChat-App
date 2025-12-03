@@ -6,6 +6,7 @@ using LunarChatApp.Services;
 using LunarChatApp.Views;
 using LunarChatApp.Views.Account;
 using LunarChatApp.Views.Dialogs;
+using LunarChatSharp;
 using LunarChatSharp.Core.Users;
 using LunarChatSharp.Rest.Users;
 using System.Collections.ObjectModel;
@@ -94,7 +95,7 @@ public partial class FriendsListModel : ViewModelBase
     public async Task SubmitFriend(UserControl control)
     {
         AddFriendDialogModel? data = control.DataContext as AddFriendDialogModel;
-        await services.Rest.PutAsync("/users/" + data.Username + "/friend");
+        await services.Rest.AddFriendAsync(data.Username);
     }
 
     [RelayCommand]
@@ -106,7 +107,7 @@ public partial class FriendsListModel : ViewModelBase
     public async Task SubmitIgnore(UserControl control)
     {
         AddFriendDialogModel? data = control.DataContext as AddFriendDialogModel;
-        await services.Rest.PutAsync("/users/" + data.Username + "/ignore");
+        await services.Rest.AddIgnoreAsync(data.Username);
     }
 
     [RelayCommand]
@@ -118,7 +119,7 @@ public partial class FriendsListModel : ViewModelBase
     public async Task SubmitBlock(UserControl control)
     {
         AddFriendDialogModel? data = control.DataContext as AddFriendDialogModel;
-        await services.Rest.PutAsync("/users/" + data.Username + "/block");
+        await services.Rest.AddBlockAsync(data.Username);
     }
 
     [ObservableProperty]

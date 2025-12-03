@@ -28,14 +28,84 @@
 											CornerRadius="{DynamicResource SmCornerRadius}" />
 									<TextBlock Text="{Binding Color}" Classes="Clearable" />
 								</StackPanel>
+								
 							</ColorPicker.Content>
 						</ColorPicker>
 						<Button Classes="Secondary" Content="Clear Color" Command="{Binding ClearColorCommand}" />
 					</StackPanel>
 				</TabItem>
 				<TabItem Header="Permissions">
-					<StackPanel HorizontalAlignment="Left" Spacing="10">
-						</StackPanel>
+					<StackPanel HorizontalAlignment="Stretch" Spacing="10">
+						<shadui:Card Padding="20,10,20,10" HasShadow="True">
+							<shadui:Card.Header>
+								<StackPanel>
+									<shadui:CardTitle>Server Permissions</shadui:CardTitle>
+								</StackPanel>
+							</shadui:Card.Header>
+							<StackPanel Spacing="6">
+								<ToggleSwitch Margin="12,0,10,0">
+									<ToggleSwitch.OffContent>
+										<Label Classes="Small" VerticalAlignment="Center">Change Nickname</Label>
+									</ToggleSwitch.OffContent>
+									<ToggleSwitch.OnContent>
+										<Label Classes="Small" VerticalAlignment="Center">Change Nickname</Label>
+									</ToggleSwitch.OnContent>
+								</ToggleSwitch>
+								<SelectableTextBlock Margin="8,-4,0,0" Classes="Muted" FontSize="14" Text="Test"></SelectableTextBlock>
+							</StackPanel>
+						</shadui:Card>
+						<shadui:Card Padding="20,10,20,10" HasShadow="True">
+							<shadui:Card.Header>
+								<StackPanel>
+									<shadui:CardTitle>Mod Permissions</shadui:CardTitle>
+								</StackPanel>
+							</shadui:Card.Header>
+							<StackPanel Spacing="6">
+								<ToggleSwitch Margin="12,0,10,0">
+									<ToggleSwitch.OffContent>
+										<Label Classes="Small" VerticalAlignment="Center">Kick Members</Label>
+									</ToggleSwitch.OffContent>
+									<ToggleSwitch.OnContent>
+										<Label Classes="Small" VerticalAlignment="Center">Kick Members</Label>
+									</ToggleSwitch.OnContent>
+								</ToggleSwitch>
+							</StackPanel>
+						</shadui:Card>
+						<shadui:Card Padding="20,10,20,10" HasShadow="True">
+							<shadui:Card.Header>
+								<StackPanel>
+									<shadui:CardTitle>Channel Permissions</shadui:CardTitle>
+								</StackPanel>
+							</shadui:Card.Header>
+							<StackPanel Spacing="6">
+								<ToggleSwitch Margin="12,0,10,0">
+									<ToggleSwitch.OffContent>
+										<Label Classes="Small" VerticalAlignment="Center">View Channels</Label>
+									</ToggleSwitch.OffContent>
+									<ToggleSwitch.OnContent>
+										<Label Classes="Small" VerticalAlignment="Center">View Channels</Label>
+									</ToggleSwitch.OnContent>
+								</ToggleSwitch>
+							</StackPanel>
+						</shadui:Card>
+						<shadui:Card Padding="20,10,20,10" HasShadow="True">
+							<shadui:Card.Header>
+								<StackPanel>
+									<shadui:CardTitle>Voice Permissions</shadui:CardTitle>
+								</StackPanel>
+							</shadui:Card.Header>
+							<StackPanel Spacing="6">
+								<ToggleSwitch Margin="12,0,10,0">
+									<ToggleSwitch.OffContent>
+										<Label Classes="Small" VerticalAlignment="Center">Connect</Label>
+									</ToggleSwitch.OffContent>
+									<ToggleSwitch.OnContent>
+										<Label Classes="Small" VerticalAlignment="Center">Connect</Label>
+									</ToggleSwitch.OnContent>
+								</ToggleSwitch>
+							</StackPanel>
+						</shadui:Card>
+					</StackPanel>
 				</TabItem>
 			</TabControl.Items>
 		</TabControl>

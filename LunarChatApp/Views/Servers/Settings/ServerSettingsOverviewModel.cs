@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.Views;
+using LunarChatSharp;
 using LunarChatSharp.Rest.Servers;
 using System.Threading.Tasks;
 
@@ -29,12 +30,12 @@ public partial class ServerSettingsOverviewModel : ViewModelBase
         var data = new EditServerRequest();
         data.Name = ServerNameEdit;
         data.Description = ServerDescriptionEdit;
-        await services.Rest.PatchAsync($"/servers/{services.State.Socket.CurrentServer.Server.Id}", data);
+        await services.Rest.EditServerAsync(services.State.Socket.CurrentServer.Server.Id, data);
     }
 
     [RelayCommand]
     public async Task DeleteServer()
     {
-        await services.Rest.DeleteAsync("/servers/" + services.State.Socket.CurrentServer.Server.Id);
+        await services.Rest.LeaveServerAsync(services.State.Socket.CurrentServer.Server.Id);
     }
 }

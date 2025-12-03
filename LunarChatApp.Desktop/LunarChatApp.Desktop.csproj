@@ -22,6 +22,7 @@
     <PackageReference Include="HotAvalonia">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="WebView.Avalonia.Desktop" />
   </ItemGroup>
 
   <ItemGroup>

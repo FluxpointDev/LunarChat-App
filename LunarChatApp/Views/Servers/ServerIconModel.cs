@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.ViewModels.Dialogs;
 using LunarChatApp.Views;
+using LunarChatSharp;
 using LunarChatSharp.Rest.Servers;
 using System;
 using System.Threading.Tasks;
@@ -79,7 +80,7 @@ public partial class ServerIconModel : ViewModelBase
             if (string.IsNullOrEmpty(model.Textbox))
                 return;
 
-            await services.Rest.PostAsync<CreateServerRequest>("/servers", new CreateServerRequest
+            await services.Rest.CreateServerAsync(new CreateServerRequest
             {
                 Name = model.Textbox
             });
