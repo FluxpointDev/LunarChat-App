@@ -25,8 +25,13 @@ public partial class HomeModel(ServiceManager services) : ViewModelBase
     [RelayCommand]
     public async Task LunarCommunity()
     {
-        if (!services.State.Socket.Servers.ContainsKey(services.State.Socket.LunarCommunityId))
-            await services.Rest.AddMemberAsync(services.State.Socket.LunarCommunityId, services.State.Socket.CurrentId);
+        try
+        {
+            if (!services.State.Socket.Servers.ContainsKey(services.State.Socket.LunarCommunityId))
+                await services.Rest.AddMemberAsync(services.State.Socket.LunarCommunityId, services.State.Socket.CurrentId);
+
+        }
+        catch { }
 
         if (services.State.Socket.Servers.TryGetValue(services.State.Socket.LunarCommunityId, out var server))
             services.PageManager.SwitchServer(services, server.Server);
@@ -36,8 +41,13 @@ public partial class HomeModel(ServiceManager services) : ViewModelBase
     [RelayCommand]
     public async Task LunarDevs()
     {
-        if (!services.State.Socket.Servers.ContainsKey(services.State.Socket.LunarDevId))
-            await services.Rest.AddMemberAsync(services.State.Socket.LunarDevId, services.State.Socket.CurrentId);
+        try
+        {
+            if (!services.State.Socket.Servers.ContainsKey(services.State.Socket.LunarDevId))
+                await services.Rest.AddMemberAsync(services.State.Socket.LunarDevId, services.State.Socket.CurrentId);
+
+        }
+        catch { }
 
         if (services.State.Socket.Servers.TryGetValue(services.State.Socket.LunarDevId, out var server))
             services.PageManager.SwitchServer(services, server.Server);
@@ -55,10 +65,15 @@ public partial class HomeModel(ServiceManager services) : ViewModelBase
             if (string.IsNullOrEmpty(model.Textbox))
                 return;
 
-            await services.Rest.CreateServerAsync(new CreateServerRequest
+            try
             {
-                Name = model.Textbox
-            });
+                await services.Rest.CreateServerAsync(new CreateServerRequest
+                {
+                    Name = model.Textbox,
+                });
+            }
+            catch { }
+
         }
     }
 }

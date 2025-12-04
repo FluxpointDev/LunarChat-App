@@ -32,6 +32,14 @@
 						Classes="Primary"
 						Content="Create" />
 			</Grid>
+			<Button HorizontalAlignment="Left" Command="{Binding DefaultMembersRoleCommand}">
+				<shadui:Card Padding="20,20,20,20">
+				<StackPanel>
+					<shadui:CardTitle>Default Members Role</shadui:CardTitle>
+					<shadui:CardDescription>Set the permissions that all members should have.</shadui:CardDescription>
+				</StackPanel>
+			</shadui:Card>
+			</Button>
 			<DataGrid
 			x:Name="DataGrid"
 			CanUserReorderColumns="False"
@@ -49,13 +57,13 @@
 					IsChecked="{Binding SelectAll}" />
 					</DataGridCheckBoxColumn.Header>
 					</DataGridCheckBoxColumn>-->
-					
+
 					<DataGridTemplateColumn Header="">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<Border Width="20" Height="20"
-											Background="{Binding Color}"
-											CornerRadius="90" />
+										Background="{Binding Color}"
+										CornerRadius="90" />
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>

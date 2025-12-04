@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-using System.Text;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Documents;
 using Avalonia.Interactivity;
@@ -9,6 +7,8 @@ using Avalonia.Media;
 using Avalonia.Media.TextFormatting;
 using Avalonia.Utilities;
 using Markdig.Syntax;
+using System.Reflection;
+using System.Text;
 
 namespace LiveMarkdown.Avalonia;
 
@@ -35,25 +35,25 @@ public class MarkdownTextBlock : SelectableTextBlock
                 switch (inline)
                 {
                     case Run run:
-                    {
-                        stringBuilder.Append(run.Text);
-                        break;
-                    }
+                        {
+                            stringBuilder.Append(run.Text);
+                            break;
+                        }
                     case Span span:
-                    {
-                        foreach (var childInline in span.Inlines) AppendText(childInline);
-                        break;
-                    }
+                        {
+                            foreach (var childInline in span.Inlines) AppendText(childInline);
+                            break;
+                        }
                     case LineBreak:
-                    {
-                        stringBuilder.Append(Environment.NewLine);
-                        break;
-                    }
+                        {
+                            stringBuilder.Append(Environment.NewLine);
+                            break;
+                        }
                     case InlineUIContainer { Child: { } logicalChild }:
-                    {
-                        AppendLogicalText(logicalChild);
-                        break;
-                    }
+                        {
+                            AppendLogicalText(logicalChild);
+                            break;
+                        }
                 }
             }
 
@@ -140,29 +140,29 @@ public class MarkdownTextBlock : SelectableTextBlock
             switch (inline)
             {
                 case Run run:
-                {
-                    accumulatedLength += run.Text?.Length ?? 0;
-                    break;
-                }
-                case Span span:
-                {
-                    foreach (var childInline in span.Inlines)
                     {
-                        FixTextPosition(childInline);
-                        if (accumulatedLength >= textPosition) break;
+                        accumulatedLength += run.Text?.Length ?? 0;
+                        break;
                     }
-                    break;
-                }
+                case Span span:
+                    {
+                        foreach (var childInline in span.Inlines)
+                        {
+                            FixTextPosition(childInline);
+                            if (accumulatedLength >= textPosition) break;
+                        }
+                        break;
+                    }
                 case LineBreak:
-                {
-                    accumulatedLength++;
-                    break;
-                }
+                    {
+                        accumulatedLength++;
+                        break;
+                    }
                 case InlineUIContainer { Child: { } logicalChild }:
-                {
-                    FixLogicalText(logicalChild);
-                    break;
-                }
+                    {
+                        FixLogicalText(logicalChild);
+                        break;
+                    }
             }
         }
 

@@ -59,7 +59,12 @@ public partial class MessageItemModel : ViewModelBase
     [RelayCommand]
     public async Task Delete()
     {
-        await services.Rest.DeleteMessageAsync(services.State.Socket.CurrentChannel!.Id, messageId);
+        try
+        {
+            await services.Rest.DeleteMessageAsync(services.State.Socket.CurrentChannel!.Id, messageId);
+        }
+        catch { }
+
     }
 
     public void Update(string content)

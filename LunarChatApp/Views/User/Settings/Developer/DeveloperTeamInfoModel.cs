@@ -56,7 +56,12 @@ public partial class DeveloperTeamInfoModel : ViewModelBase
     [RelayCommand]
     public async Task DeleteTeam()
     {
-        await services.Rest.DeleteTeamAsync(id);
-        backAction.Invoke();
+        try
+        {
+            await services.Rest.DeleteTeamAsync(id);
+            backAction.Invoke();
+        }
+        catch { }
+
     }
 }

@@ -78,7 +78,12 @@ public partial class SettingsProfileModel : ViewModelBase
         if (model.Name == null)
             model.Name = "";
 
-        await services.Rest.AccountEditDisplayName(model.Name);
+        try
+        {
+            await services.Rest.AccountEditDisplayName(model.Name);
+        }
+        catch { }
+
     }
 
     [RelayCommand]
@@ -100,7 +105,12 @@ public partial class SettingsProfileModel : ViewModelBase
         if (string.IsNullOrEmpty(CleanUsername))
             return;
 
-        await services.Rest.AccountEditUsername(CleanUsername);
+        try
+        {
+            await services.Rest.AccountEditUsername(CleanUsername);
+        }
+        catch { }
+
     }
 
     [RelayCommand]

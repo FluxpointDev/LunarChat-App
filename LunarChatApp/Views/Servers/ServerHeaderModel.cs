@@ -7,7 +7,6 @@ using LunarChatApp.Views;
 using LunarChatSharp;
 using LunarChatSharp.Rest.Channels;
 using LunarChatSharp.Rest.Servers;
-using System;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.ViewModels.Servers;
@@ -36,15 +35,19 @@ public partial class ServerHeaderModel : ViewModelBase
 
     public async Task SubmitChannel(UserControl control)
     {
-        CreateChannelDialogModel model = (CreateChannelDialogModel)control.DataContext!;
-        string Id = Guid.NewGuid().ToString();
-        await services.Rest.CreateChannelAsync(new CreateChannelRequest
+        try
         {
-            Name = model.Name,
-            Topic = model.Topic,
-            ServerId = services.State.Socket.CurrentServer.Server.Id,
-            Type = model.Type,
-        });
+            CreateChannelDialogModel model = (CreateChannelDialogModel)control.DataContext!;
+            await services.Rest.CreateChannelAsync(new CreateChannelRequest
+            {
+                Name = model.Name,
+                Topic = model.Topic,
+                ServerId = services.State.Socket.CurrentServer.Server.Id,
+                Type = model.Type,
+            });
+        }
+        catch { }
+
     }
 
     [RelayCommand]
@@ -72,7 +75,12 @@ public partial class ServerHeaderModel : ViewModelBase
     [RelayCommand]
     public async Task LeaveServer()
     {
-        await services.Rest.RemoveMemberAsync(services.State.Socket.CurrentServer?.Server.Id, services.State.Socket.CurrentId);
-        services.State.Socket.OnSelectServer?.Invoke(null);
+        try
+        {
+            await services.Rest.RemoveMemberAsync(services.State.Socket.CurrentServer?.Server.Id, services.State.Socket.CurrentId);
+            services.State.Socket.OnSelectServer?.Invoke(null);
+        }
+        catch { }
+
     }
 }

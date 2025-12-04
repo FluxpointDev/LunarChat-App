@@ -119,10 +119,15 @@ public partial class ServerSettingsRolesModel : ViewModelBase
         if (model.Name == null)
             model.Name = "";
 
-        await services.Rest.CreateRoleAsync(services.State.Socket.CurrentServer?.Server.Id, new CreateRoleRequest
+        try
         {
-            Name = model.Name
-        });
+            await services.Rest.CreateRoleAsync(services.State.Socket.CurrentServer?.Server.Id, new CreateRoleRequest
+            {
+                Name = model.Name
+            });
+        }
+        catch { }
+
     }
 
     private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -208,6 +213,18 @@ public partial class ServerSettingsRolesModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
+    public void DefaultMembersRole()
+    {
+        openInfo.Invoke(new RestRole
+        {
+            Id = "0",
+            CreatedAt = DateTime.Now,
+            Name = "Default Members Role",
+            Permissions = services.State.Socket.CurrentServer.Server.DefaultPermissions
+        });
+    }
+
     [ObservableProperty]
     private int _selectedCount;
 
@@ -247,6 +264,11 @@ public partial class RoleListItem(ServiceManager services, Action<RestRole> open
     [RelayCommand]
     public async Task DeleteRole()
     {
-        await services.Rest.DeleteRoleAsync(services.State.Socket.CurrentServer?.Server.Id, Id);
+        try
+        {
+            await services.Rest.DeleteRoleAsync(services.State.Socket.CurrentServer?.Server.Id, Id);
+        }
+        catch { }
+
     }
 }

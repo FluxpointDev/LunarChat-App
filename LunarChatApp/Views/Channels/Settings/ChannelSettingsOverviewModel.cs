@@ -29,19 +29,29 @@ public partial class ChannelSettingsOverviewModel : ViewModelBase
     [RelayCommand]
     public async Task UpdateChannel()
     {
-        await services.Rest.UpdateChannelAsync(channel.Id, new UpdateChannelRequest
+        try
         {
-            Name = ChannelNameEdit,
-            Topic = ChannelTopicEdit
-        });
+            await services.Rest.UpdateChannelAsync(channel.Id, new UpdateChannelRequest
+            {
+                Name = ChannelNameEdit,
+                Topic = ChannelTopicEdit
+            });
+        }
+        catch { }
+
     }
 
     [RelayCommand]
     public async Task DeleteChannel()
     {
-        await services.Rest.DeleteChannelAsync(channel.Id, new DeleteChannelRequest
+        try
         {
-            ServerId = channel.ServerId
-        });
+            await services.Rest.DeleteChannelAsync(channel.Id, new DeleteChannelRequest
+            {
+                ServerId = channel.ServerId
+            });
+        }
+        catch { }
+
     }
 }

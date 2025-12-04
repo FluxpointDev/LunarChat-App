@@ -35,7 +35,12 @@ public partial class IgnoreListItemModel : ViewModelBase
     [RelayCommand]
     public async Task RemoveIgnore()
     {
-        await services.Rest.RemoveIgnoreAsync(id);
+        try
+        {
+            await services.Rest.RemoveIgnoreAsync(id);
+        }
+        catch { }
+
     }
 
     [RelayCommand]
@@ -50,7 +55,12 @@ public partial class IgnoreListItemModel : ViewModelBase
 
     public async Task SubmitNote(UserControl control)
     {
-        RelationNoteDialogModel model = control.DataContext as RelationNoteDialogModel;
-        await services.Rest.UpdateNoteAsync(id, model.Note);
+        try
+        {
+            RelationNoteDialogModel model = control.DataContext as RelationNoteDialogModel;
+            await services.Rest.UpdateNoteAsync(id, model.Note);
+        }
+        catch { }
+
     }
 }

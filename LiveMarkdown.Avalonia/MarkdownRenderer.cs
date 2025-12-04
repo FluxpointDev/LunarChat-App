@@ -2,13 +2,13 @@
 // @author https://github.com/AuroraZiling
 // @author https://github.com/SlimeNull
 
-using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Logging;
 using Avalonia.Threading;
 using Markdig;
+using System.Windows.Input;
 
 namespace LiveMarkdown.Avalonia;
 

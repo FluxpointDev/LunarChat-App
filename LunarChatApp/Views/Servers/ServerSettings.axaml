@@ -83,14 +83,14 @@
 				</shadui:SidebarItem>
 			</StackPanel>
 		</shadui:Sidebar>
-		<StackPanel Grid.Column="1" Margin="6" MaxWidth="800">
+		<Grid Grid.Column="1" Margin="6" MaxWidth="800" RowDefinitions="auto, *">
 			<Grid Grid.ColumnDefinitions="*, auto">
 				<TextBlock Classes="Large" Text="{Binding SelectedTitle}"></TextBlock>
 				<Button Command="{Binding CloseSettingsCommand}" HorizontalAlignment="Right">
 					<materialIcons:MaterialIcon Kind="CancelCircleOutline" Width="30" Height="30" Foreground="{DynamicResource PrimaryColor}" />
 				</Button>
 			</Grid>
-			<ContentControl Content="{Binding SelectedPage}" />
-		</StackPanel>
+			<ContentControl Grid.Row="1" Content="{Binding SelectedPage}" />
+		</Grid>
 	</Grid>
 </UserControl>

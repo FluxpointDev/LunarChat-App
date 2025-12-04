@@ -113,11 +113,16 @@ public partial class ChannelModel : ViewModelBase
     [RelayCommand]
     public async Task Enter()
     {
-        Textbox = null;
-        await services.Rest.SendMesssageAsync(state.Socket.CurrentChannel.Id, new CreateMessageRequest
+        try
         {
-            Content = Textbox
-        });
+            await services.Rest.SendMesssageAsync(state.Socket.CurrentChannel.Id, new CreateMessageRequest
+            {
+                Content = Textbox
+            });
+        }
+        catch { }
+
+        Textbox = null;
     }
 
     [RelayCommand]

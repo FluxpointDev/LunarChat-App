@@ -1,12 +1,12 @@
 ﻿#pragma warning disable CS0618 // MathUtilities is Obsolete
 
-using System.Text;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
 using Avalonia.Utilities;
+using System.Text;
 
 namespace LiveMarkdown.Avalonia;
 
@@ -164,54 +164,54 @@ public partial class MarkdownRenderer
             switch (e.ClickCount)
             {
                 case 1:
-                {
-                    if (clickToSelect)
                     {
-                        var previousWord = StringUtils.PreviousWord(text, textPosition);
-
-                        if (textPosition > wordSelectionStart)
+                        if (clickToSelect)
                         {
-                            SetCurrentValue(SelectableTextBlock.SelectionEndProperty, StringUtils.NextWord(text, textPosition));
+                            var previousWord = StringUtils.PreviousWord(text, textPosition);
+
+                            if (textPosition > wordSelectionStart)
+                            {
+                                SetCurrentValue(SelectableTextBlock.SelectionEndProperty, StringUtils.NextWord(text, textPosition));
+                            }
+
+                            if (textPosition < wordSelectionStart || previousWord == wordSelectionStart)
+                            {
+                                SetCurrentValue(SelectableTextBlock.SelectionStartProperty, previousWord);
+                            }
+                        }
+                        else
+                        {
+                            selectionStartBlock.SetCurrentValue(SelectableTextBlock.SelectionStartProperty, textPosition);
+                            selectionStartBlock.SetCurrentValue(SelectableTextBlock.SelectionEndProperty, textPosition);
+                            startBlockSelectionStart = textPosition;
                         }
 
-                        if (textPosition < wordSelectionStart || previousWord == wordSelectionStart)
-                        {
-                            SetCurrentValue(SelectableTextBlock.SelectionStartProperty, previousWord);
-                        }
+                        break;
                     }
-                    else
-                    {
-                        selectionStartBlock.SetCurrentValue(SelectableTextBlock.SelectionStartProperty, textPosition);
-                        selectionStartBlock.SetCurrentValue(SelectableTextBlock.SelectionEndProperty, textPosition);
-                        startBlockSelectionStart = textPosition;
-                    }
-
-                    break;
-                }
                 case 2:
-                {
-                    if (!StringUtils.IsStartOfWord(text, textPosition))
                     {
-                        selectionStartBlock.SetCurrentValue(SelectableTextBlock.SelectionStartProperty, StringUtils.PreviousWord(text, textPosition));
+                        if (!StringUtils.IsStartOfWord(text, textPosition))
+                        {
+                            selectionStartBlock.SetCurrentValue(SelectableTextBlock.SelectionStartProperty, StringUtils.PreviousWord(text, textPosition));
+                        }
+
+                        startBlockSelectionStart = wordSelectionStart;
+
+                        if (!StringUtils.IsEndOfWord(text, textPosition))
+                        {
+                            selectionStartBlock.SetCurrentValue(SelectableTextBlock.SelectionEndProperty, StringUtils.NextWord(text, textPosition));
+                        }
+
+                        break;
                     }
-
-                    startBlockSelectionStart = wordSelectionStart;
-
-                    if (!StringUtils.IsEndOfWord(text, textPosition))
-                    {
-                        selectionStartBlock.SetCurrentValue(SelectableTextBlock.SelectionEndProperty, StringUtils.NextWord(text, textPosition));
-                    }
-
-                    break;
-                }
                 case 3:
-                {
-                    // select all
-                    selectionStartBlock.SetCurrentValue(SelectableTextBlock.SelectionStartProperty, 0);
-                    selectionStartBlock.SetCurrentValue(SelectableTextBlock.SelectionEndProperty, text.Length);
-                    startBlockSelectionStart = wordSelectionStart;
-                    break;
-                }
+                    {
+                        // select all
+                        selectionStartBlock.SetCurrentValue(SelectableTextBlock.SelectionStartProperty, 0);
+                        selectionStartBlock.SetCurrentValue(SelectableTextBlock.SelectionEndProperty, text.Length);
+                        startBlockSelectionStart = wordSelectionStart;
+                        break;
+                    }
             }
         }
 

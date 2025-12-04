@@ -36,7 +36,11 @@ public partial class BlockListItemModel : ViewModelBase
     [RelayCommand]
     public async Task RemoveBlock()
     {
-        await services.Rest.RemoveBlockAsync(id);
+        try
+        {
+            await services.Rest.RemoveBlockAsync(id);
+        }
+        catch { }
     }
 
     [RelayCommand]
@@ -51,7 +55,11 @@ public partial class BlockListItemModel : ViewModelBase
 
     public async Task SubmitNote(UserControl control)
     {
-        RelationNoteDialogModel model = control.DataContext as RelationNoteDialogModel;
-        await services.Rest.UpdateNoteAsync(id, model.Note);
+        try
+        {
+            RelationNoteDialogModel model = control.DataContext as RelationNoteDialogModel;
+            await services.Rest.UpdateNoteAsync(id, model.Note);
+        }
+        catch { }
     }
 }

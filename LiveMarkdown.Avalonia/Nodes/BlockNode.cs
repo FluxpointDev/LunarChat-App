@@ -1,6 +1,6 @@
-﻿using System.Runtime.CompilerServices;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Markdig.Syntax;
+using System.Runtime.CompilerServices;
 
 namespace LiveMarkdown.Avalonia;
 

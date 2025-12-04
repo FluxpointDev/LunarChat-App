@@ -1,10 +1,10 @@
 ﻿// @author https://github.com/DearVa
 
-using System.Diagnostics;
 using Avalonia.Controls;
 using Avalonia.Controls.Documents;
 using Avalonia.Media.TextFormatting.Unicode;
 using Markdig.Syntax;
+using System.Diagnostics;
 
 namespace LiveMarkdown.Avalonia;
 

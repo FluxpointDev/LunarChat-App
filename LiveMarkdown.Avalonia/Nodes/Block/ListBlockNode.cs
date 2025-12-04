@@ -44,7 +44,7 @@ public class ListBlockNode : BlockNode<ListBlock>
 
             var itemBlock = listBlock[i];
             var numberIndex = i * 2;
-            
+
             TextBlock itemControl;
             if (proxy.Count > numberIndex && proxy[numberIndex].Control is TextBlock existingItemControl)
             {

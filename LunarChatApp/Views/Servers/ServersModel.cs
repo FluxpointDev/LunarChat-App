@@ -62,7 +62,8 @@ public partial class ServersModel : ViewModelBase
                     Name = "+",
                     CreatedAt = DateTime.UtcNow,
                     OwnerId = null!,
-                    SystemMessages = null!
+                    SystemMessages = null!,
+                    DefaultPermissions = null!,
                 })
             });
         }

@@ -8,106 +8,503 @@
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="LunarChatApp.ServerSettingsRoleInfo"
 			 x:DataType="settings:ServerSettingsRoleInfoModel">
-	<StackPanel Spacing="20">
+
+	<Grid RowSpacing="20" RowDefinitions="auto, *">
 		<WrapPanel ItemSpacing="8">
 			<Button Classes="Secondary" Content="Back" Command="{Binding BackCommand}" />
 			<Button Classes="Primary" Content="Save" Command="{Binding SaveCommand}" />
 		</WrapPanel>
-
+		<ScrollViewer Grid.Row="1">
 		<TabControl>
 			<TabControl.Items>
 				<TabItem Header="Display">
-					<StackPanel HorizontalAlignment="Left" Spacing="10">
-						<TextBox Width="255" shadui:ControlAssist.Label="Role Name" Text="{Binding RoleName}"></TextBox>
-						<ColorPicker Width="255" shadui:ControlAssist.Label="Color"
-									 Color="{Binding Color, Mode=TwoWay}" IsAlphaVisible="False">
-							<ColorPicker.Content>
-								<StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Stretch">
-									<Border Width="20" Height="20"
-											Background="{Binding Color}"
-											CornerRadius="{DynamicResource SmCornerRadius}" />
-									<TextBlock Text="{Binding Color}" Classes="Clearable" />
-								</StackPanel>
-								
-							</ColorPicker.Content>
-						</ColorPicker>
-						<Button Classes="Secondary" Content="Clear Color" Command="{Binding ClearColorCommand}" />
-					</StackPanel>
+						<StackPanel HorizontalAlignment="Left" Spacing="10">
+							<TextBox Width="255" shadui:ControlAssist.Label="Role Name" Text="{Binding RoleName}" IsEnabled="{Binding AllowEdit}"></TextBox>
+							<ColorPicker Width="255" shadui:ControlAssist.Label="Color" IsEnabled="{Binding AllowEdit}"
+										 Color="{Binding Color, Mode=TwoWay}" IsAlphaVisible="False">
+								<ColorPicker.Content>
+									<StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Stretch">
+										<Border Width="20" Height="20"
+												Background="{Binding Color}"
+												CornerRadius="{DynamicResource SmCornerRadius}" />
+										<TextBlock Text="{Binding Color}" Classes="Clearable" />
+									</StackPanel>
+
+								</ColorPicker.Content>
+							</ColorPicker>
+							<Button Classes="Secondary" Content="Clear Color" Command="{Binding ClearColorCommand}" />
+						</StackPanel>
 				</TabItem>
 				<TabItem Header="Permissions">
-					<StackPanel HorizontalAlignment="Stretch" Spacing="10">
-						<shadui:Card Padding="20,10,20,10" HasShadow="True">
-							<shadui:Card.Header>
-								<StackPanel>
-									<shadui:CardTitle>Server Permissions</shadui:CardTitle>
+						<StackPanel HorizontalAlignment="Stretch" Spacing="10">
+							<shadui:Card Padding="20,10,20,10" HasShadow="True">
+								<shadui:Card.Header>
+									<StackPanel>
+										<shadui:CardTitle>Server Permissions</shadui:CardTitle>
+									</StackPanel>
+								</shadui:Card.Header>
+								<StackPanel Spacing="6">
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.ChangeNickname}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Change Nickname</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Change Nickname</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Change your nickname in the server."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.CreateExpressions}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Create Expressions</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Create Expressions</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Create emojis."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.ManageExpressions}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Expressions</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Expressions</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Manage all emojis."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.ManageServer}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Server</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Server</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Change server settings."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.ManageApps}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Apps</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Apps</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Add or remove apps from the server."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.Administrator}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Administrator</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Administrator</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Full access and permissions for the server."></SelectableTextBlock>
 								</StackPanel>
-							</shadui:Card.Header>
-							<StackPanel Spacing="6">
-								<ToggleSwitch Margin="12,0,10,0">
-									<ToggleSwitch.OffContent>
-										<Label Classes="Small" VerticalAlignment="Center">Change Nickname</Label>
-									</ToggleSwitch.OffContent>
-									<ToggleSwitch.OnContent>
-										<Label Classes="Small" VerticalAlignment="Center">Change Nickname</Label>
-									</ToggleSwitch.OnContent>
-								</ToggleSwitch>
-								<SelectableTextBlock Margin="8,-4,0,0" Classes="Muted" FontSize="14" Text="Test"></SelectableTextBlock>
-							</StackPanel>
-						</shadui:Card>
-						<shadui:Card Padding="20,10,20,10" HasShadow="True">
-							<shadui:Card.Header>
-								<StackPanel>
-									<shadui:CardTitle>Mod Permissions</shadui:CardTitle>
+							</shadui:Card>
+							<shadui:Card Padding="20,10,20,10" HasShadow="True">
+								<shadui:Card.Header>
+									<StackPanel>
+										<shadui:CardTitle>Mod Permissions</shadui:CardTitle>
+									</StackPanel>
+								</shadui:Card.Header>
+								<StackPanel Spacing="6">
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.KickMembers}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Kick Members</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Kick Members</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Remove users from the server."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.BanMembers}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Ban Members</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Ban Members</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Ban users from joining the server."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.TimeoutMembers}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Time out Members</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Time out Members</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Mute users from chatting and interacting in the channels."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.ViewAuditLogs}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">View Audit Logs</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">View Audit Logs</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="View server, role and member changes."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.AssignRoles}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Assign Roles</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Assign Roles</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Give or remove roles from users."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.ManageRoles}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Roles</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Roles</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Manage roles for the server."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.ManageRolePermissions}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Role Permissions</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Role Permissions</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Manage permissions for a role."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.ManageNicknames}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Nicknames</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Nicknames</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Change nicknames for other users."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.ManageApprovals}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Approvals</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Approvals</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Allow or deny requests to join the server."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.ManageAppeals}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Appeals</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Appeals</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Allow or deny ban appeals for users to rejoin."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.UseModView}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Use Mod View</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Use Mod View</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="View access to mod history and info for other users."></SelectableTextBlock>
 								</StackPanel>
-							</shadui:Card.Header>
-							<StackPanel Spacing="6">
-								<ToggleSwitch Margin="12,0,10,0">
-									<ToggleSwitch.OffContent>
-										<Label Classes="Small" VerticalAlignment="Center">Kick Members</Label>
-									</ToggleSwitch.OffContent>
-									<ToggleSwitch.OnContent>
-										<Label Classes="Small" VerticalAlignment="Center">Kick Members</Label>
-									</ToggleSwitch.OnContent>
-								</ToggleSwitch>
-							</StackPanel>
-						</shadui:Card>
-						<shadui:Card Padding="20,10,20,10" HasShadow="True">
-							<shadui:Card.Header>
-								<StackPanel>
-									<shadui:CardTitle>Channel Permissions</shadui:CardTitle>
+							</shadui:Card>
+							<shadui:Card Padding="20,10,20,10" HasShadow="True">
+								<shadui:Card.Header>
+									<StackPanel>
+										<shadui:CardTitle>Channel Permissions</shadui:CardTitle>
+									</StackPanel>
+								</shadui:Card.Header>
+								<StackPanel Spacing="6">
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.ViewChannels}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">View Channels</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">View Channels</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="View channels"></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.ReadMessageHistory}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Read Message History</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Read Message History</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="View past messages in channels."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.SendMessages}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Send Messages</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Send Messages</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Send messages in channels."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.EmbedLinks}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Embed Links</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Embed Links</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Show url/website previews on messages."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.AttachFiles}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Attach Files</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Attach Files</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Upload files and images in channels."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.AddReactions}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Add Reactions</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Add Reactions</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Add reaction emojis to messages."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.CreateInvites}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Create Invites</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Create Invites</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Create invites for others to join."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.SendPolls}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Send Polls</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Send Polls</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Create polls that expire in a channel."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.UseExternalEmojis}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Use External Emojis</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Use External Emojis</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Use Emojis from other servers."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.UseAppCommands}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Use App Commands</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Use App Commands</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Use app commands in a channel."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.MentionEveryone}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Mention Everyone</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Mention Everyone</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Mention @everyone, @here and @roles."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.ManageMessages}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Messages</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Messages</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Manaage and delete messages."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.ManagePins}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Pins</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Pins</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Pin and unpin messages."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.BypassSlowmode}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Bypass Slowmode</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Bypass Slowmode</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Not effected by channel slow modes."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.ManageChannels}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Channels</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Channels</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Create, update and delete channels."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.ManageChannelPermissions}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Channel Permissions</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Channel Permissions</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Manage permissions for a channel."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.ManageWebhooks}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Webhooks</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Webhooks</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Create and delete channel webhooks for external messages."></SelectableTextBlock>
+
 								</StackPanel>
-							</shadui:Card.Header>
-							<StackPanel Spacing="6">
-								<ToggleSwitch Margin="12,0,10,0">
-									<ToggleSwitch.OffContent>
-										<Label Classes="Small" VerticalAlignment="Center">View Channels</Label>
-									</ToggleSwitch.OffContent>
-									<ToggleSwitch.OnContent>
-										<Label Classes="Small" VerticalAlignment="Center">View Channels</Label>
-									</ToggleSwitch.OnContent>
-								</ToggleSwitch>
-							</StackPanel>
-						</shadui:Card>
-						<shadui:Card Padding="20,10,20,10" HasShadow="True">
-							<shadui:Card.Header>
-								<StackPanel>
-									<shadui:CardTitle>Voice Permissions</shadui:CardTitle>
+							</shadui:Card>
+							<shadui:Card Padding="20,10,20,10" HasShadow="True">
+								<shadui:Card.Header>
+									<StackPanel>
+										<shadui:CardTitle>Voice Permissions</shadui:CardTitle>
+									</StackPanel>
+								</shadui:Card.Header>
+								<StackPanel Spacing="6">
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.Connect}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Connect</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Connect</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Join voice channels."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.Speak}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Speak</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Speak</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Can speak in voice channels."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.Video}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Video</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Video</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Can use video streams in voice channels."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.UseVoiceActivity}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Use Voice Activity</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Use Voice Activity</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Can speak without using push to talk."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.MuteMembers}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Mute Members</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Mute Members</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Mute users from speaking."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.DeafenMembers}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Deafen Members</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Deafen Members</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Prevent users from hearing."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.MoveMembers}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Move Members</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Move Members</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Move users to other voice channels."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.SetVoiceStatus}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Set Voice Status</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Set Voice Status</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Set your voice status."></SelectableTextBlock>
+
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.RequestToSpeak}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Request to Speak</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Request to Speak</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Request to speak in a stage channel."></SelectableTextBlock>
+
 								</StackPanel>
-							</shadui:Card.Header>
-							<StackPanel Spacing="6">
-								<ToggleSwitch Margin="12,0,10,0">
-									<ToggleSwitch.OffContent>
-										<Label Classes="Small" VerticalAlignment="Center">Connect</Label>
-									</ToggleSwitch.OffContent>
-									<ToggleSwitch.OnContent>
-										<Label Classes="Small" VerticalAlignment="Center">Connect</Label>
-									</ToggleSwitch.OnContent>
-								</ToggleSwitch>
-							</StackPanel>
-						</shadui:Card>
-					</StackPanel>
+							</shadui:Card>
+						</StackPanel>
 				</TabItem>
 			</TabControl.Items>
 		</TabControl>
-	</StackPanel>
+		</ScrollViewer>
+	</Grid>
 </UserControl>

@@ -56,7 +56,13 @@ public partial class DeveloperAppInfoModel : ViewModelBase
     [RelayCommand]
     public async Task DeleteApp()
     {
-        await services.Rest.DeleteAppAsync(id);
-        backAction.Invoke();
+        try
+        {
+            await services.Rest.DeleteAppAsync(id);
+            backAction.Invoke();
+        }
+        catch { }
+
+
     }
 }

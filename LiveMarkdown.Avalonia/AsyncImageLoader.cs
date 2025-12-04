@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-using System.Globalization;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Documents;
 using Avalonia.Media;
@@ -9,6 +7,8 @@ using Avalonia.Platform;
 using Avalonia.Svg;
 using Avalonia.Threading;
 using Svg.Model;
+using System.ComponentModel;
+using System.Globalization;
 
 namespace LiveMarkdown.Avalonia;
 

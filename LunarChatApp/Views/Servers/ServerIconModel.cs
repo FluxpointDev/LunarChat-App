@@ -80,10 +80,16 @@ public partial class ServerIconModel : ViewModelBase
             if (string.IsNullOrEmpty(model.Textbox))
                 return;
 
-            await services.Rest.CreateServerAsync(new CreateServerRequest
+            try
             {
-                Name = model.Textbox
-            });
+                await services.Rest.CreateServerAsync(new CreateServerRequest
+                {
+                    Name = model.Textbox
+                });
+            }
+            catch { }
+
+
         }
     }
 }

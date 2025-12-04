@@ -47,7 +47,11 @@ public partial class FriendListItemModel : ViewModelBase
     [RelayCommand]
     public async Task RemoveFriend()
     {
-        await services.Rest.RemoveFriendAsync(id);
+        try
+        {
+            await services.Rest.RemoveFriendAsync(id);
+        }
+        catch { }
     }
 
     [RelayCommand]
@@ -62,7 +66,11 @@ public partial class FriendListItemModel : ViewModelBase
 
     public async Task SubmitNote(UserControl control)
     {
-        RelationNoteDialogModel model = control.DataContext as RelationNoteDialogModel;
-        await services.Rest.UpdateNoteAsync(id, model.Note);
+        try
+        {
+            RelationNoteDialogModel model = control.DataContext as RelationNoteDialogModel;
+            await services.Rest.UpdateNoteAsync(id, model.Note);
+        }
+        catch { }
     }
 }

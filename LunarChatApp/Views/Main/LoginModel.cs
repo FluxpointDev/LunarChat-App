@@ -70,28 +70,32 @@ public partial class LoginModel(ServiceManager services, MainModel main) : ViewM
         if (string.IsNullOrEmpty(CleanUsername))
             return;
 
-        RestUser Json = await services.Rest.CreateDemoAccount(new CreateDemoAccountRequest
+        try
         {
-            Username = CleanUsername
-        });
-        services.Rest.Http.DefaultRequestHeaders.Add("Auth-Id", Json.Id);
+            RestUser Json = await services.Rest.CreateDemoAccount(new CreateDemoAccountRequest
+            {
+                Username = CleanUsername,
+            });
+            services.Rest.Http.DefaultRequestHeaders.Add("Auth-Id", Json.Id);
 
-        LunarSocketClient socket = new LunarSocketClient(
-            services.IsDev ? "ws://localhost:5156/gateway" : "wss://lunar.fluxpoint.dev/api/gateway", Json.Id);
-        services.State.Socket = socket.State;
-        services.State.Socket.WebSocket = socket;
-        services.State.Socket.CurrentId = Json.Id;
-        services.State.CurrentDisplayName = Json.DisplayName ?? Json.Username;
-        services.State.DisplayName = Json.DisplayName;
-        services.State.Username = Json.Username;
-        services.State.CachedServersPage = new ServersPage
-        {
-            DataContext = new ServersModel(services, main)
-        };
-        services.PageManager.OnSwitchPage(services.State.CachedServersPage);
+            LunarSocketClient socket = new LunarSocketClient(
+                services.IsDev ? "ws://localhost:5156/gateway" : "wss://lunar.fluxpoint.dev/api/gateway", Json.Id);
+            services.State.Socket = socket.State;
+            services.State.Socket.WebSocket = socket;
+            services.State.Socket.CurrentId = Json.Id;
+            services.State.CurrentDisplayName = Json.DisplayName ?? Json.Username;
+            services.State.DisplayName = Json.DisplayName;
+            services.State.Username = Json.Username;
+            services.State.CachedServersPage = new ServersPage
+            {
+                DataContext = new ServersModel(services, main)
+            };
+            services.PageManager.OnSwitchPage(services.State.CachedServersPage);
 
-        if (services.State.Socket.APIEnabled)
-            _ = services.State.Socket.WebSocket.SetupWebsocket();
+            if (services.State.Socket.APIEnabled)
+                _ = services.State.Socket.WebSocket.SetupWebsocket();
+        }
+        catch { }
     }
 
 

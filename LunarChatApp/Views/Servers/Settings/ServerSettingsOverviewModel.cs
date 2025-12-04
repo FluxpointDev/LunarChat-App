@@ -30,12 +30,23 @@ public partial class ServerSettingsOverviewModel : ViewModelBase
         var data = new EditServerRequest();
         data.Name = ServerNameEdit;
         data.Description = ServerDescriptionEdit;
-        await services.Rest.EditServerAsync(services.State.Socket.CurrentServer.Server.Id, data);
+
+        try
+        {
+            await services.Rest.EditServerAsync(services.State.Socket.CurrentServer.Server.Id, data);
+        }
+        catch { }
+
     }
 
     [RelayCommand]
     public async Task DeleteServer()
     {
-        await services.Rest.LeaveServerAsync(services.State.Socket.CurrentServer.Server.Id);
+        try
+        {
+            await services.Rest.LeaveServerAsync(services.State.Socket.CurrentServer.Server.Id);
+        }
+        catch { }
+
     }
 }

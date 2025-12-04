@@ -94,8 +94,13 @@ public partial class FriendsListModel : ViewModelBase
 
     public async Task SubmitFriend(UserControl control)
     {
-        AddFriendDialogModel? data = control.DataContext as AddFriendDialogModel;
-        await services.Rest.AddFriendAsync(data.Username);
+        try
+        {
+            AddFriendDialogModel? data = control.DataContext as AddFriendDialogModel;
+            await services.Rest.AddFriendAsync(data.Username);
+        }
+        catch { }
+
     }
 
     [RelayCommand]
@@ -106,8 +111,12 @@ public partial class FriendsListModel : ViewModelBase
 
     public async Task SubmitIgnore(UserControl control)
     {
-        AddFriendDialogModel? data = control.DataContext as AddFriendDialogModel;
-        await services.Rest.AddIgnoreAsync(data.Username);
+        try
+        {
+            AddFriendDialogModel? data = control.DataContext as AddFriendDialogModel;
+            await services.Rest.AddIgnoreAsync(data.Username);
+        }
+        catch { }
     }
 
     [RelayCommand]
@@ -118,8 +127,13 @@ public partial class FriendsListModel : ViewModelBase
 
     public async Task SubmitBlock(UserControl control)
     {
-        AddFriendDialogModel? data = control.DataContext as AddFriendDialogModel;
-        await services.Rest.AddBlockAsync(data.Username);
+        try
+        {
+            AddFriendDialogModel? data = control.DataContext as AddFriendDialogModel;
+            await services.Rest.AddBlockAsync(data.Username);
+        }
+        catch { }
+
     }
 
     [ObservableProperty]
