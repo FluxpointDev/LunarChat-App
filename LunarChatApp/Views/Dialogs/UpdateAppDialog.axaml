@@ -1,0 +1,54 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:dialogs="using:LunarChatApp.Views.Dialogs"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:shadui="using:ShadUI"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.UpdateAppDialog"
+			 x:DataType="dialogs:UpdateAppDialogModel">
+		<StackPanel Spacing="10" HorizontalAlignment="Left" Margin="10">
+			<TextBox
+			Width="225"
+			shadui:ControlAssist.Label="Name"
+			Text="{Binding Name}"
+			Watermark="" />
+
+			<TextBox
+			Width="225" VerticalContentAlignment="Top"
+			shadui:ControlAssist.Height="100"
+			shadui:ControlAssist.Label="Description"
+			Text="{Binding Description}"
+			Watermark="" />
+
+			<StackPanel Spacing="10" Width="215">
+				<ToggleSwitch IsChecked="{Binding IsPublic}">
+					<ToggleSwitch.OffContent>
+						<Label Classes="Small" VerticalAlignment="Center">Private App</Label>
+					</ToggleSwitch.OffContent>
+					<ToggleSwitch.OnContent>
+						<Label Classes="Small" VerticalAlignment="Center">Public App</Label>
+					</ToggleSwitch.OnContent>
+				</ToggleSwitch>
+				<TextBlock TextWrapping="WrapWithOverflow" Margin="0,0,-20,0" Classes="Lead" FontSize="15" Text="Public apps can be invited by anyone!"></TextBlock>
+			</StackPanel>
+
+			<TextBox
+			Width="225"
+			shadui:ControlAssist.Label="Website"
+			Text="{Binding Website}"
+			Watermark="" />
+
+			<TextBox
+			Width="225"
+			shadui:ControlAssist.Label="Terms of Service"
+			Text="{Binding Terms}"
+			Watermark="" />
+
+			<TextBox
+			Width="225"
+			shadui:ControlAssist.Label="Privacy Policy"
+			Text="{Binding Privacy}"
+			Watermark="" />
+		</StackPanel>
+</UserControl>

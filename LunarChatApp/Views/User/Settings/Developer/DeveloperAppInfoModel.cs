@@ -14,18 +14,41 @@ public partial class DeveloperAppInfoModel : ViewModelBase
 {
     private ServiceManager services;
     private Action backAction;
+    private RestApp app;
     public DeveloperAppInfoModel(ServiceManager sv, RestApp app, Action back)
     {
         services = sv;
         backAction = back;
-        id = app.Id;
-        Name = app.Name;
+        this.app = app;
+        _id = app.Id;
+        _name = app.Name;
+        _type = app.IsPublic.GetValueOrDefault() ? "Public App" : "Private App";
+        _description = app.Description;
+        _website = app.Website;
+        _terms = app.Terms;
+        _privacy = app.Privacy;
     }
 
-    private string id;
+    [ObservableProperty]
+    private string _id;
 
     [ObservableProperty]
     private string _name;
+
+    [ObservableProperty]
+    private string _type;
+
+    [ObservableProperty]
+    private string? _description;
+
+    [ObservableProperty]
+    private string? _website;
+
+    [ObservableProperty]
+    private string? _terms;
+
+    [ObservableProperty]
+    private string? _privacy;
 
     [RelayCommand]
     public void Back()
@@ -36,19 +59,58 @@ public partial class DeveloperAppInfoModel : ViewModelBase
     [RelayCommand]
     public void UpdateApp()
     {
-        services.Dialogs.Create(new CreateNameDialog(), new CreateNameDialogModel { Name = Name }, "Update App").WithSubmit(SubmitApp).Open();
+        services.Dialogs.Create(new UpdateAppDialog(), new UpdateAppDialogModel(app), "Update App").WithSubmit(SubmitApp).Open();
+    }
+
+    [RelayCommand]
+    public void InviteApp()
+    {
+        services.Dialogs.Create(new InviteAppDialog(), new InviteAppDialogModel(services), "Invite " + app.Name).WithSubmit(InviteApp).Open();
+    }
+
+    public async Task InviteApp(UserControl control)
+    {
+        try
+        {
+            InviteAppDialogModel? model = control.DataContext as InviteAppDialogModel;
+            await services.Rest.AddAppAsync(model.SelectedServer.id, app.Id);
+        }
+        catch { }
     }
 
     public async Task SubmitApp(UserControl control)
     {
-        CreateNameDialogModel? model = control.DataContext as CreateNameDialogModel;
+
         try
         {
-            await services.Rest.EditAppAsync(id, new CreateAppRequest
+            UpdateAppDialogModel? model = control.DataContext as UpdateAppDialogModel;
+            await services.Rest.EditAppAsync(Id, new CreateAppRequest
             {
-                Name = model.Name
+                Name = model.Name,
+                Description = model.Description ?? "",
+                IsPublic = model.IsPublic,
+                Privacy = model.Privacy ?? "",
+                Terms = model.Terms ?? "",
+                Website = model.Website ?? ""
             });
+
             Name = model.Name;
+            app.Name = model.Name;
+
+            Description = model.Description;
+            app.Description = model.Description;
+
+            Type = app.IsPublic.GetValueOrDefault() ? "Public App" : "Private App";
+            app.IsPublic = model.IsPublic;
+
+            Privacy = model.Privacy;
+            app.Privacy = model.Privacy;
+
+            Terms = model.Terms;
+            app.Terms = model.Terms;
+
+            Website = model.Website;
+            app.Website = model.Website;
         }
         catch { }
     }
@@ -58,11 +120,9 @@ public partial class DeveloperAppInfoModel : ViewModelBase
     {
         try
         {
-            await services.Rest.DeleteAppAsync(id);
+            await services.Rest.DeleteAppAsync(Id);
             backAction.Invoke();
         }
         catch { }
-
-
     }
 }

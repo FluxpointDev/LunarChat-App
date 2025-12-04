@@ -1,19 +1,49 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:developer="using:LunarChatApp.Views.User.Settings.Developer"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="LunarChatApp.DeveloperAppInfo"
-             x:DataType="developer:DeveloperAppInfoModel">
-  <StackPanel Spacing="20">
-	  <WrapPanel ItemSpacing="8">
-		  <Button Classes="Primary" Content="Back" Command="{Binding BackCommand}" />
-          <Button Classes="Secondary" Content="Update App" Command="{Binding UpdateAppCommand}" />
-          <Button Classes="Secondary" Content="Delete App" Command="{Binding DeleteAppCommand}" />
-      </WrapPanel>
-      <StackPanel>
-		  <TextBlock Classes="Large" Text="{Binding Name}"></TextBlock>
-	  </StackPanel>
-  </StackPanel>
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:developer="using:LunarChatApp.Views.User.Settings.Developer"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.DeveloperAppInfo"
+			 x:DataType="developer:DeveloperAppInfoModel">
+	<StackPanel Spacing="20">
+		<WrapPanel ItemSpacing="8">
+			<Button Classes="Primary" Content="Back" Command="{Binding BackCommand}" />
+			<Button Classes="Secondary" Content="Update App" Command="{Binding UpdateAppCommand}" />
+			<Button Classes="Secondary" Content="Invite App" Command="{Binding InviteAppCommand}" />
+			<Button Classes="Destructive" Content="Delete App" Command="{Binding DeleteAppCommand}" />
+		</WrapPanel>
+		<StackPanel Spacing="10">
+			<TextBlock Classes="Large" Text="{Binding Name}"></TextBlock>
+			<StackPanel>
+				<Label Classes="Small">ID</Label>
+				<SelectableTextBlock Margin="4,0,0,0" Classes="Lead" FontSize="16" Text="{Binding Id}"></SelectableTextBlock>
+			</StackPanel>
+
+			<StackPanel>
+				<Label Classes="Small">Type</Label>
+				<SelectableTextBlock Margin="4,0,0,0" Classes="Lead" FontSize="16" Text="{Binding Type}"></SelectableTextBlock>
+			</StackPanel>
+
+			<StackPanel>
+				<Label Classes="Small">Description</Label>
+				<SelectableTextBlock Margin="4,0,0,0" Classes="Lead" FontSize="16" Text="{Binding Description}"></SelectableTextBlock>
+			</StackPanel>
+
+			<StackPanel>
+				<Label Classes="Small">Website</Label>
+				<SelectableTextBlock Margin="4,0,0,0" Classes="Lead" FontSize="16" Text="{Binding Website}"></SelectableTextBlock>
+			</StackPanel>
+
+			<StackPanel>
+				<Label Classes="Small">Terms of Service</Label>
+				<SelectableTextBlock Margin="4,0,0,0" Classes="Lead" FontSize="16" Text="{Binding Terms}"></SelectableTextBlock>
+			</StackPanel>
+
+			<StackPanel>
+				<Label Classes="Small">Privacy Policy</Label>
+				<SelectableTextBlock Margin="4,0,0,0" Classes="Lead" FontSize="16" Text="{Binding Privacy}"></SelectableTextBlock>
+			</StackPanel>
+		</StackPanel>
+	</StackPanel>
 </UserControl>

@@ -14,15 +14,18 @@ public partial class DeveloperTeamInfoModel : ViewModelBase
 {
     private ServiceManager services;
     private Action backAction;
+    private RestTeam team;
     public DeveloperTeamInfoModel(ServiceManager sv, RestTeam team, Action back)
     {
         services = sv;
+        this.team = team;
         backAction = back;
-        id = team.Id;
+        _id = team.Id;
         Name = team.Name;
     }
 
-    private string id;
+    [ObservableProperty]
+    private string _id;
 
     [ObservableProperty]
     private string _name;
@@ -44,11 +47,12 @@ public partial class DeveloperTeamInfoModel : ViewModelBase
         CreateNameDialogModel? model = control.DataContext as CreateNameDialogModel;
         try
         {
-            await services.Rest.EditTeamAsync(id, new CreateTeamRequest
+            await services.Rest.EditTeamAsync(Id, new CreateTeamRequest
             {
                 Name = model.Name
             });
             Name = model.Name;
+            team.Name = model.Name;
         }
         catch { }
     }
@@ -58,7 +62,7 @@ public partial class DeveloperTeamInfoModel : ViewModelBase
     {
         try
         {
-            await services.Rest.DeleteTeamAsync(id);
+            await services.Rest.DeleteTeamAsync(Id);
             backAction.Invoke();
         }
         catch { }
