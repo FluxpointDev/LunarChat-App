@@ -32,7 +32,7 @@
 
 								</ColorPicker.Content>
 							</ColorPicker>
-							<Button Classes="Secondary" Content="Clear Color" Command="{Binding ClearColorCommand}" />
+							<Button Classes="Secondary" Content="Clear Color" Command="{Binding ClearColorCommand}" IsEnabled="{Binding AllowEdit}" />
 						</StackPanel>
 				</TabItem>
 				<TabItem Header="Permissions">

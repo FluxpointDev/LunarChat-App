@@ -73,7 +73,7 @@ public partial class DeveloperAppInfoModel : ViewModelBase
         try
         {
             InviteAppDialogModel? model = control.DataContext as InviteAppDialogModel;
-            await services.Rest.AddAppAsync(model.SelectedServer.id, app.Id);
+            await services.Rest.AddServerAppAsync(model.SelectedServer.id, app.Id);
         }
         catch { }
     }

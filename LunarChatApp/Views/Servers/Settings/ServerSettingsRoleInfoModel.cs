@@ -68,7 +68,11 @@ public partial class ServerSettingsRoleInfoModel : ViewModelBase
                     DefaultPermissions = req.Permissions,
                 });
             else
-                await services.Rest.EditRoleAsync(services.State.Socket.CurrentServer?.Server.Id, role.Id, req);
+            {
+                RestRole getRole = await services.Rest.EditRoleAsync(services.State.Socket.CurrentServer?.Server.Id, role.Id, req);
+                RoleName = getRole.Name;
+                role.Name = getRole.Name;
+            }
         }
         catch { }
 
