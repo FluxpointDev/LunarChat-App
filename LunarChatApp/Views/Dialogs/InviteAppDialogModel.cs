@@ -8,9 +8,9 @@ namespace LunarChatApp.Views.Dialogs;
 
 public partial class InviteAppDialogModel : ViewModelBase
 {
-    public InviteAppDialogModel(ServiceManager services)
+    public InviteAppDialogModel(ServiceManager services, string appId)
     {
-        Items = new ObservableCollection<AppListItem>(services.State.Socket.Servers.Values.Where(x => x.HasPermission(x.Member, ServerPermission.ManageApps)).Select(x => new AppListItem
+        Items = new ObservableCollection<AppListItem>(services.State.Socket.Servers.Values.Where(x => !x.Apps.ContainsKey(appId) && x.HasPermission(x.Member, ServerPermission.ManageApps)).Select(x => new AppListItem
         {
             id = x.Server.Id,
             Name = x.Server.Name

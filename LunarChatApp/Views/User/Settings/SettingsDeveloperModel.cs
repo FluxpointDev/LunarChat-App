@@ -2,8 +2,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using LunarChatApp.Services;
 using LunarChatApp.Views.User.Settings.Developer;
-using LunarChatSharp.Rest.Dev;
-using System;
+using LunarChatSharp;
+using System.Threading.Tasks;
 
 namespace LunarChatApp.Views.User.Settings;
 
@@ -19,40 +19,37 @@ public partial class SettingsDeveloperModel : ViewModelBase
     [ObservableProperty]
     private UserControl? _selectedPage;
 
-
-
     public void BackAction()
     {
         SelectedPage = new DeveloperList() { DataContext = new DeveloperListModel(services, null, BackAction, SelectDevItem) };
     }
 
-    public void SelectDevItem(DevItemModel item)
+    public async Task SelectDevItem(DevItemModel item)
     {
         if (item.IsTeam)
         {
-            SelectedPage = new DeveloperTeamInfo()
+            try
             {
-                DataContext = new DeveloperTeamInfoModel(services, new RestTeam
+                var Team = await services.Rest.GetTeamAsync(item.Id);
+                SelectedPage = new DeveloperTeamInfo()
                 {
-                    Id = item.Id,
-                    Name = item.Name,
-                    OwnerId = null!,
-                    CreatedAt = DateTime.Now
-                }, BackAction)
-            };
+                    DataContext = new DeveloperTeamInfoModel(services, Team, BackAction)
+                };
+            }
+            catch { }
         }
         else
         {
-            SelectedPage = new DeveloperAppInfo()
+            try
             {
-                DataContext = new DeveloperAppInfoModel(services, new RestApp
+                var App = await services.Rest.GetAppAsync(item.Id);
+                SelectedPage = new DeveloperAppInfo()
                 {
-                    Id = item.Id,
-                    Name = item.Name,
-                    CreatedAt = DateTime.Now,
-                    OwnerId = null!
-                }, BackAction)
-            };
+                    DataContext = new DeveloperAppInfoModel(services, App, BackAction)
+                };
+            }
+            catch { }
+
         }
     }
 }

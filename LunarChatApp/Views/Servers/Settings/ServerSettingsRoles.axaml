@@ -29,10 +29,10 @@
 					</TextBox.InnerRightContent>
 				</TextBox>
 				<Button Grid.Column="1" Command="{Binding CreateRoleCommand}"
-						Classes="Primary"
+						Classes="Primary" IsEnabled="{Binding CanManage}"
 						Content="Create" />
 			</Grid>
-			<Button HorizontalAlignment="Left" Command="{Binding DefaultMembersRoleCommand}">
+			<Button HorizontalAlignment="Left" Command="{Binding DefaultMembersRoleCommand}" IsEnabled="{Binding CanManage}">
 				<shadui:Card Padding="20,20,20,20">
 				<StackPanel>
 					<shadui:CardTitle>Default Members Role</shadui:CardTitle>
@@ -76,13 +76,13 @@
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
-									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding OpenRoleCommand}">
+									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding OpenRoleCommand}" IsEnabled="{Binding CanManage}">
 										<materialIcons:MaterialIcon Kind="Pencil" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 									</Button>
 									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding CopyIdCommand}">
 										<materialIcons:MaterialIcon Kind="Identifier" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 									</Button>
-									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding DeleteRoleCommand}">
+									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding DeleteRoleCommand}" IsEnabled="{Binding CanManage}">
 										<materialIcons:MaterialIcon Kind="TrashCan" Width="16" Height="16" Foreground="{DynamicResource ErrorColor}" />
 									</Button>
 								</StackPanel>

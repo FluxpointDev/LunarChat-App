@@ -19,7 +19,7 @@ namespace LunarChatApp.Views.User.Settings.Developer;
 public partial class DeveloperListModel : ViewModelBase
 {
     private ServiceManager services;
-    public DeveloperListModel(ServiceManager sv, RestTeam? team, System.Action back, Action<DevItemModel> ac)
+    public DeveloperListModel(ServiceManager sv, RestTeam? team, System.Action back, Func<DevItemModel, Task> ac)
     {
         services = sv;
         actionSelect = ac;
@@ -65,7 +65,7 @@ public partial class DeveloperListModel : ViewModelBase
         SelectedTeamItem = Items.First();
     }
 
-    private Action<DevItemModel> actionSelect;
+    private Func<DevItemModel, Task> actionSelect;
 
     [ObservableProperty]
     private bool _loaded;

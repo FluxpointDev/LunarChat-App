@@ -12,21 +12,21 @@ public partial class ChannelItemModel : ViewModelBase
     private RestChannel channel;
     private ServiceManager services;
     public string id;
-    public ChannelItemModel(ServiceManager sv, TestState st, RestChannel chan)
+    public ChannelItemModel(ServiceManager sv, TestState st, RestChannel chan, bool manage)
     {
         id = chan.Id;
         state = st;
         channel = chan;
         services = sv;
         Name = chan.Name;
-        isOwner = st.Socket.CurrentServer?.Server.OwnerId == st.Socket.CurrentId;
+        canManage = manage;
     }
 
     [ObservableProperty]
     private string _name;
 
     [ObservableProperty]
-    private bool isOwner;
+    private bool canManage;
 
     [RelayCommand]
     public void SelectChannel()

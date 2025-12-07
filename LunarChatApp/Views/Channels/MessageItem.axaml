@@ -2,7 +2,7 @@
 			 xmlns:components="using:LunarChatApp.Components"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:materialIcons="using:Material.Icons.Avalonia"
+			 xmlns:materialIcons="using:Material.Icons.Avalonia"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:md="using:LiveMarkdown.Avalonia"
 			 xmlns:shadui="using:ShadUI"
@@ -12,19 +12,21 @@
 	<Border Background="transparent" Padding="2">
 		<Border.ContextMenu>
 			<ContextMenu>
-            <MenuItem Header="Delete Message" Command="{Binding DeleteCommand}" IsVisible="{Binding IsAuthor}" />
-          </ContextMenu>
+				<MenuItem Header="Delete Message" Command="{Binding DeleteCommand}" IsVisible="{Binding CanDelete}" />
+				<MenuItem Header="Copy Text" Command="{Binding CopyIdCommand}" />
+				<MenuItem Header="Copy Message ID" Command="{Binding CopyIdCommand}" />
+			</ContextMenu>
 		</Border.ContextMenu>
 		<Grid HorizontalAlignment="Stretch" ColumnSpacing="8">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="auto" />
 				<ColumnDefinition />
 			</Grid.ColumnDefinitions>
-			<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
+			<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True" IsVisible="{Binding !IsSystem}">
 				<Image Source="/Assets/avatar.png" Width="32" Height="32"></Image>
 			</Border>
 			<StackPanel Grid.Column="1" Margin="4">
-				<StackPanel Orientation="Horizontal" Spacing="6">
+				<StackPanel Orientation="Horizontal" Spacing="6" IsVisible="{Binding !IsSystem}">
 					<SelectableTextBlock x:Name="MessageUsername" Classes="Large" Text="{Binding Username}"></SelectableTextBlock>
 					<SelectableTextBlock Classes="Muted" VerticalAlignment="Center" Text="{Binding Time}"></SelectableTextBlock>
 					<Border VerticalAlignment="Center" CornerRadius="8" ClipToBounds="True">
@@ -33,7 +35,7 @@
 				</StackPanel>
 				<md:MarkdownRenderer MarkdownBuilder="{Binding Message}" InlineHyperlinkCommand="{Binding LinkClicked}" />
 			</StackPanel>
-			
+
 		</Grid>
 	</Border>
 </UserControl>

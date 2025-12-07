@@ -13,6 +13,7 @@
 			Classes="Clearable"
 			Watermark=""
 			Width="225"
+			IsReadOnly="{Binding !CanManage}"
 			Text="{Binding ServerNameEdit}"
 			shadui:ControlAssist.Label="Server Name" />
 
@@ -20,17 +21,19 @@
 			Width="225"
 			shadui:ControlAssist.Height="100"
 			shadui:ControlAssist.Label="Description"
+			IsReadOnly="{Binding !CanManage}"
 			AcceptsReturn="True"
+			Text="{Binding ServerDescriptionEdit}"
 			Watermark="Enter a description here..." />
 		</StackPanel>
 		<StackPanel
 		HorizontalAlignment="Left"
 		Orientation="Horizontal"
 		Spacing="8">
-			<Button Command="{Binding SaveSettingsCommand}"
+			<Button Command="{Binding SaveSettingsCommand}" IsEnabled="{Binding CanManage}"
 			Classes="Primary"
 			Content="Update" />
-			<Button Command="{Binding DeleteServerCommand}"
+			<Button Command="{Binding DeleteServerCommand}" IsEnabled="{Binding CanManage}"
 					Classes="Destructive"
 					Content="Delete Server" />
 		</StackPanel>

@@ -2,6 +2,7 @@
 using LunarChatApp.Services;
 using LunarChatApp.ViewModels.Servers;
 using LunarChatApp.Views;
+using LunarChatSharp.Core.Servers;
 using LunarChatSharp.Rest.Channels;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -17,11 +18,22 @@ public partial class ChannelListModel : ViewModelBase
     {
         state = st;
         services = sv;
+        bool CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
         if (ChannelsList == null)
-            ChannelsList = new ObservableCollection<ChannelItem>(state.Socket.CurrentServer.Channels.Values.Select(x => new ChannelItem() { ChannelName = x.Name, ChannelType = x.Type, DataContext = new ChannelItemModel(services, state, x) }));
+            ChannelsList = new ObservableCollection<ChannelItem>(state.Socket.CurrentServer.Channels.Values.Select(x => new ChannelItem() { ChannelName = x.Name, ChannelType = x.Type, DataContext = new ChannelItemModel(services, state, x, CanManage) }));
         state.Socket.CurrentServer.OnChannelUpdate += ChannelUpdate;
         state.Socket.CurrentServer.OnChannelDelete += ChannelDelete;
         state.Socket.CurrentServer.OnChannelCreate += Server_OnChannelCreate;
+        services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+    }
+
+    private async Task PermissionUpdate()
+    {
+        bool CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
+        foreach (var i in ChannelsList)
+        {
+            (i.DataContext as ChannelItemModel).CanManage = CanManage;
+        }
     }
 
     private async Task ChannelDelete(RestChannel channel)
@@ -42,7 +54,8 @@ public partial class ChannelListModel : ViewModelBase
 
     private async Task Server_OnChannelCreate(RestChannel channel)
     {
-        ChannelsList.Add(new ChannelItem { ChannelName = channel.Name, ChannelType = channel.Type, DataContext = new ChannelItemModel(services, state, channel) });
+        bool CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
+        ChannelsList.Add(new ChannelItem { ChannelName = channel.Name, ChannelType = channel.Type, DataContext = new ChannelItemModel(services, state, channel, CanManage) });
     }
 
     [ObservableProperty]

@@ -13,7 +13,7 @@
 		<shadui:SidebarItem.Content>
 			<Grid Grid.ColumnDefinitions="*, auto">
 				<TextBlock Text="{Binding Name}"></TextBlock>
-				<Button IsVisible="{Binding IsOwner}" HorizontalAlignment="Right" Command="{Binding OpenChannelSettingsCommand}">
+				<Button HorizontalAlignment="Right" Command="{Binding OpenChannelSettingsCommand}" IsVisible="{Binding CanManage}">
 					<materialIcons:MaterialIcon Kind="Settings" HorizontalAlignment="Right" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 				</Button>
 			</Grid>

@@ -72,6 +72,7 @@
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
+
 				<shadui:SidebarItemLabel AsSeparator="True" Text="Moderation" />
 
 				<shadui:SidebarItem Content="Bans" Command="{Binding OpenBansSettingsCommand}">
@@ -81,6 +82,23 @@
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
+
+				<shadui:SidebarItemLabel AsSeparator="True" Text="Integrations" />
+				<shadui:SidebarItem Content="Apps" Command="{Binding OpenAppsSettings}">
+					<shadui:SidebarItem.Icon>
+						<Viewbox>
+							<materialIcons:MaterialIcon Kind="Robot" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
+						</Viewbox>
+					</shadui:SidebarItem.Icon>
+				</shadui:SidebarItem>
+
+				<!--<shadui:SidebarItem Content="Webhooks">
+					<shadui:SidebarItem.Icon>
+						<Viewbox>
+							<materialIcons:MaterialIcon Kind="Webhook" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
+						</Viewbox>
+					</shadui:SidebarItem.Icon>
+				</shadui:SidebarItem>-->
 			</StackPanel>
 		</shadui:Sidebar>
 		<Grid Grid.Column="1" Margin="6" MaxWidth="800" RowDefinitions="auto, *">

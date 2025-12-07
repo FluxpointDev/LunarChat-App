@@ -3,6 +3,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Xaml.Interactivity;
 using LunarChatApp.Services;
 using LunarChatApp.ViewModels;
+using LunarChatSharp.Rest.Channels;
 using LunarChatSharp.Rest.Messages;
 using System;
 using System.Diagnostics;
@@ -36,7 +37,7 @@ public class ScrollToEndBehavior : Behavior<ScrollViewer>
         services.State.Socket.OnMessageRecieved += WebSocket_OnMessageRecieved;
     }
 
-    private async Task WebSocket_OnMessageRecieved(RestMessage message)
+    private async Task WebSocket_OnMessageRecieved(RestChannel channel, RestMessage message)
     {
         if (_shouldScrollToEnd || message.Author.Id == services.State.Socket.CurrentId)
         {

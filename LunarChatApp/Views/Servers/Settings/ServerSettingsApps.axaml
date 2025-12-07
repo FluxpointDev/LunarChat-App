@@ -6,9 +6,9 @@
              xmlns:settings="using:LunarChatApp.Views.Servers.Settings"
              xmlns:shadui="using:ShadUI"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="LunarChatApp.ServerSettingsEmojis"
-             x:DataType="settings:ServerSettingsEmojisModel">
-    <ScrollViewer HorizontalScrollBarVisibility="Auto">
+             x:Class="LunarChatApp.ServerSettingsApps"
+             x:DataType="settings:ServerSettingsAppsModel">
+  <ScrollViewer HorizontalScrollBarVisibility="Auto">
         <StackPanel
             Width="600"
             HorizontalAlignment="Left"
@@ -16,11 +16,12 @@
             <Grid ColumnDefinitions="* Auto">
                 <TextBox
                     Width="225"
+                    IsEnabled="{Binding IsLoaded}"
                     HorizontalAlignment="Left"
                     shadui:ControlAssist.ShowProgress="{Binding IsSearching}"
                     Classes="Clearable"
                     Text="{Binding SearchString, Mode=TwoWay}"
-                    Watermark="Search emotes...">
+                    Watermark="Search apps...">
                     <TextBox.InnerRightContent>
                         <PathIcon
                             Width="16"
@@ -28,9 +29,9 @@
                             Opacity="0.75" />
                     </TextBox.InnerRightContent>
                 </TextBox>
-                <Button Grid.Column="1" Command="{Binding CreateEmoteCommand}" IsEnabled="{Binding CanCreate}"
+                <!--<Button Grid.Column="1" Command="{Binding CreateEmoteCommand}"
 		Classes="Primary"
-		Content="Create" />
+		Content="Create" />-->
             </Grid>
             <DataGrid
                 x:Name="DataGrid"
@@ -54,22 +55,17 @@
                         CanUserSort="False"
                         Header="Name"
                         IsReadOnly="True" />
-                    <DataGridTextColumn
-                        Binding="{Binding Creator}"
-                        CanUserSort="False"
-                        Header="Creator"
-                        IsReadOnly="True" />
                     <DataGridTemplateColumn Header="">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
-									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding EditEmojiCommand}" IsEnabled="{Binding CanManage}">
+									<!--<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding OpenRoleCommand}">
 										<materialIcons:MaterialIcon Kind="Pencil" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
-									</Button>
+									</Button>-->
 									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding CopyIdCommand}">
 										<materialIcons:MaterialIcon Kind="Identifier" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 									</Button>
-									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding DeleteEmojiCommand}" IsEnabled="{Binding CanManage}">
+									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding DeleteAppCommand}">
 										<materialIcons:MaterialIcon Kind="TrashCan" Width="16" Height="16" Foreground="{DynamicResource ErrorColor}" />
 									</Button>
 								</StackPanel>

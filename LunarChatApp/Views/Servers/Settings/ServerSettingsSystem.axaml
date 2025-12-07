@@ -8,8 +8,9 @@
 			 x:Class="LunarChatApp.ServerSettingsSystem"
 			 x:DataType="settings:ServerSettingsSystemModel">
 	<StackPanel Spacing="20" HorizontalAlignment="Left">
+		<Button HorizontalAlignment="Left" Classes="Primary" Content="Save" Command="{Binding UpdateSystemCommand}" IsEnabled="{Binding CanManage}" />
 		<StackPanel HorizontalAlignment="Left" Spacing="10">
-			<ComboBox Width="255" SelectedIndex="0" ItemsSource="{Binding Items}"
+			<ComboBox Width="255" SelectedIndex="0" ItemsSource="{Binding Items}" IsEnabled="{Binding CanManage}"
 			 SelectedItem="{Binding SelectedJoinMessage}"
 					  shadui:ControlAssist.Label="Join Messages">
 				<ComboBox.ItemTemplate>
@@ -18,7 +19,7 @@
 					</DataTemplate>
 				</ComboBox.ItemTemplate>
 			</ComboBox>
-			<ComboBox Width="255" SelectedIndex="0" ItemsSource="{Binding Items}"
+			<ComboBox Width="255" SelectedIndex="0" ItemsSource="{Binding Items}" IsEnabled="{Binding CanManage}"
 			 SelectedItem="{Binding SelectedLeftMessage}"
 					  shadui:ControlAssist.Label="Leave Messages">
 				<ComboBox.ItemTemplate>
@@ -27,7 +28,7 @@
 					</DataTemplate>
 				</ComboBox.ItemTemplate>
 			</ComboBox>
-			<ComboBox Width="255" SelectedIndex="0" ItemsSource="{Binding Items}"
+			<ComboBox Width="255" SelectedIndex="0" ItemsSource="{Binding Items}" IsEnabled="{Binding CanManage}"
 			 SelectedItem="{Binding SelectedBanMessage}"
 					  shadui:ControlAssist.Label="Ban Messages">
 				<ComboBox.ItemTemplate>
@@ -36,7 +37,7 @@
 					</DataTemplate>
 				</ComboBox.ItemTemplate>
 			</ComboBox>
-			<ComboBox Width="255" SelectedIndex="0" ItemsSource="{Binding Items}"
+			<ComboBox Width="255" SelectedIndex="0" ItemsSource="{Binding Items}" IsEnabled="{Binding CanManage}"
 			 SelectedItem="{Binding SelectedKickMessage}"
 					  shadui:ControlAssist.Label="Kick Messages">
 				<ComboBox.ItemTemplate>
@@ -45,9 +46,27 @@
 					</DataTemplate>
 				</ComboBox.ItemTemplate>
 			</ComboBox>
-			<ComboBox Width="255" SelectedIndex="0" ItemsSource="{Binding Items}"
+			<ComboBox Width="255" SelectedIndex="0" ItemsSource="{Binding Items}" IsEnabled="{Binding CanManage}"
 			 SelectedItem="{Binding SelectedTimeoutMessage}"
 					  shadui:ControlAssist.Label="Timeout Messages">
+				<ComboBox.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding Name}" />
+					</DataTemplate>
+				</ComboBox.ItemTemplate>
+			</ComboBox>
+			<ComboBox Width="255" SelectedIndex="0" ItemsSource="{Binding Items}" IsEnabled="{Binding CanManage}"
+			 SelectedItem="{Binding SelectedAppAdded}"
+					  shadui:ControlAssist.Label="App Added">
+				<ComboBox.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding Name}" />
+					</DataTemplate>
+				</ComboBox.ItemTemplate>
+			</ComboBox>
+			<ComboBox Width="255" SelectedIndex="0" ItemsSource="{Binding Items}" IsEnabled="{Binding CanManage}"
+			 SelectedItem="{Binding SelectedAppRemoved}"
+					  shadui:ControlAssist.Label="App Removed">
 				<ComboBox.ItemTemplate>
 					<DataTemplate>
 						<TextBlock Text="{Binding Name}" />

@@ -4,8 +4,10 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using LunarChatApp.Components;
 using LunarChatApp.Services;
+using LunarChatApp.ViewModels.Servers;
 using LunarChatApp.Views;
 using LunarChatSharp;
+using LunarChatSharp.Core.Servers;
 using LunarChatSharp.Rest.Channels;
 using LunarChatSharp.Rest.Messages;
 using LunarChatSharp.Rest.Users;
@@ -31,6 +33,9 @@ public partial class ChannelModel : ViewModelBase
         state.Socket.OnMessageRecieved += State_OnMessageRecieved;
         state.Socket.OnMessageEdit += MessageEdit;
         state.Socket.OnMessageDelete += MessageDelete;
+        canManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
+        canSend = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.SendMessages);
+        services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
 
         CrockeryList = new ObservableCollection<MessageItem>();
         _ = Task.Run(async () =>
@@ -51,6 +56,18 @@ public partial class ChannelModel : ViewModelBase
         });
     }
 
+    private async Task PermissionUpdate()
+    {
+        CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
+        CanSend = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.SendMessages);
+    }
+
+    [ObservableProperty]
+    private bool canManage;
+
+    [ObservableProperty]
+    private bool canSend;
+
     public bool MessagesFinished = false;
 
 
@@ -60,7 +77,7 @@ public partial class ChannelModel : ViewModelBase
         Topic = channel.Topic;
     }
 
-    private async Task State_OnMessageRecieved(RestMessage message)
+    private async Task State_OnMessageRecieved(RestChannel channel, RestMessage message)
     {
         if (message.ChannelId != state.Socket.CurrentChannel?.Id)
             return;
@@ -78,7 +95,7 @@ public partial class ChannelModel : ViewModelBase
         });
     }
 
-    private async Task MessageEdit(RestMessage message)
+    private async Task MessageEdit(RestChannel channel, RestMessage message)
     {
         if (message.ChannelId != state.Socket.CurrentChannel?.Id)
             return;
@@ -88,7 +105,7 @@ public partial class ChannelModel : ViewModelBase
             (messageItem.DataContext as MessageItemModel).Update(message.Content);
     }
 
-    private async Task MessageDelete(RestMessage message)
+    private async Task MessageDelete(RestChannel channel, RestMessage message)
     {
         if (message.ChannelId != state.Socket.CurrentChannel?.Id)
             return;
@@ -129,6 +146,28 @@ public partial class ChannelModel : ViewModelBase
     public void CopyChannelID()
     {
         services.CopyText(services.State.Socket.CurrentChannel?.Id);
+    }
+
+    [RelayCommand]
+    public void ChannelSettings()
+    {
+        services.PageManager.OnSwitchPage(new ChannelSettings
+        {
+            DataContext = new ChannelSettingsModel(services, state.Socket.CurrentChannel)
+        });
+    }
+
+    [RelayCommand]
+    public async Task DeleteChannel()
+    {
+        try
+        {
+            await services.Rest.DeleteChannelAsync(state.Socket.CurrentChannel?.Id, new DeleteChannelRequest
+            {
+                ServerId = state.Socket.CurrentServer.Server.Id
+            });
+        }
+        catch { }
     }
 
     [RelayCommand]

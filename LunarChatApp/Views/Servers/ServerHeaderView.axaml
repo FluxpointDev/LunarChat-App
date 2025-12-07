@@ -29,12 +29,12 @@
 					</Grid>
 				</Button>
 			</MenuItem.Header>
-			<MenuItem Header="Server Settings" Width="140" Command="{Binding OpenServerSettingsCommand}" IsVisible="{Binding IsOwner}">
+			<MenuItem Header="Server Settings" Width="140" Command="{Binding OpenServerSettingsCommand}" IsVisible="{Binding CanViewSettings}">
 				<MenuItem.Icon>
 					<materialIcons:MaterialIcon Kind="Settings" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
 				</MenuItem.Icon>
 			</MenuItem>
-			<MenuItem Header="Create Channel" Width="140" Command="{Binding CreateChannelCommand}" IsVisible="{Binding IsOwner}">
+			<MenuItem Header="Create Channel" Width="140" Command="{Binding CreateChannelCommand}" IsVisible="{Binding CanManageChannels}">
 				<MenuItem.Icon>
 					<materialIcons:MaterialIcon Kind="Add" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
 				</MenuItem.Icon>

@@ -16,10 +16,18 @@ public partial class MessageItemModel : ViewModelBase
     {
         services = sv;
         messageId = message.Id;
-        authorId = message.Author.Id;
-        IsAuthor = message.Author.Id == sv.State.Socket.CurrentId;
-        Username = message.Author.Username;
-        IsBot = message.Author.IsBot;
+        if (message.Author != null)
+        {
+            authorId = message.Author.Id;
+            IsAuthor = message.Author.Id == sv.State.Socket.CurrentId;
+            Username = message.Author.Username;
+            IsBot = message.Author.IsBot;
+            CanDelete = sv.State.Socket.CurrentId == authorId;
+        }
+        if (!CanDelete.GetValueOrDefault() && sv.State.Socket.CurrentServer != null)
+            CanDelete = sv.State.Socket.CurrentServer.Server.OwnerId == sv.State.Socket.CurrentId;
+
+        IsSystem = message.SystemMessage != null;
         Message = new ObservableStringBuilder();
         Message.Append(message.Content);
         //NameColor = services.State.Socket.Roles.First().Value.Color;
@@ -37,6 +45,9 @@ public partial class MessageItemModel : ViewModelBase
     private bool _isBot;
 
     [ObservableProperty]
+    private bool _isSystem;
+
+    [ObservableProperty]
     private string _username;
 
     [ObservableProperty]
@@ -47,6 +58,9 @@ public partial class MessageItemModel : ViewModelBase
 
     [ObservableProperty]
     private string? _nameColor;
+
+    [ObservableProperty]
+    private bool? _canDelete;
 
     [RelayCommand]
     public void LinkClicked(InlineHyperlinkClickedEventArgs args)
@@ -64,7 +78,19 @@ public partial class MessageItemModel : ViewModelBase
             await services.Rest.DeleteMessageAsync(services.State.Socket.CurrentChannel!.Id, messageId);
         }
         catch { }
+    }
 
+    [RelayCommand]
+    public void CopyText()
+    {
+        if (Message != null)
+            services.CopyText(Message.ToString());
+    }
+
+    [RelayCommand]
+    public void CopyId()
+    {
+        services.CopyText(messageId);
     }
 
     public void Update(string content)

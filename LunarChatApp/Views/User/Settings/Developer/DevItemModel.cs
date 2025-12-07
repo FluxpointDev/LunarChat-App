@@ -2,12 +2,13 @@
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using System;
+using System.Threading.Tasks;
 
 namespace LunarChatApp.Views.User.Settings.Developer;
 
 public partial class DevItemModel : ViewModelBase
 {
-    public DevItemModel(ServiceManager sv, string id, string name, bool isTeam, Action<DevItemModel> ac)
+    public DevItemModel(ServiceManager sv, string id, string name, bool isTeam, Func<DevItemModel, Task> ac)
     {
         services = sv;
         Id = id;
@@ -30,7 +31,7 @@ public partial class DevItemModel : ViewModelBase
     private ServiceManager services;
     public string Id;
     public bool IsTeam;
-    private Action<DevItemModel> action;
+    private Func<DevItemModel, Task> action;
 
     [ObservableProperty]
     private string _name;

@@ -5,6 +5,7 @@ using LunarChatApp.Services;
 using LunarChatApp.ViewModels.Dialogs;
 using LunarChatApp.Views;
 using LunarChatSharp;
+using LunarChatSharp.Core.Servers;
 using LunarChatSharp.Rest.Channels;
 using LunarChatSharp.Rest.Servers;
 using System.Threading.Tasks;
@@ -19,6 +20,44 @@ public partial class ServerHeaderModel : ViewModelBase
         services = sv;
         Name = s.Name;
         isOwner = sv.State.Socket.CurrentId == s.OwnerId;
+        UpdatePermissions();
+        services.State.Socket.CurrentServer.OnPermissionUpdate += Update;
+    }
+
+    public async Task Update()
+    {
+        UpdatePermissions();
+    }
+
+    [ObservableProperty]
+    private bool canManageChannels;
+
+    public void UpdatePermissions()
+    {
+        CanManageChannels = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
+        bool CanView = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.CreateExpressions);
+        if (!CanView)
+            CanView = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageExpressions);
+        if (!CanView)
+            CanView = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageServer);
+        if (!CanView)
+            CanView = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageApps);
+        if (!CanView)
+            CanView = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.BanMembers);
+        if (!CanView)
+            CanView = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ViewAuditLogs);
+        if (!CanView)
+            CanView = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.AssignRoles);
+        if (!CanView)
+            CanView = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ManageRoles);
+        if (!CanView)
+            CanView = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ManageApprovals);
+        if (!CanView)
+            CanView = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ManageAppeals);
+        if (!CanView)
+            CanView = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageWebhooks);
+
+        CanViewSettings = CanView;
     }
 
     [ObservableProperty]
@@ -26,6 +65,9 @@ public partial class ServerHeaderModel : ViewModelBase
 
     [ObservableProperty]
     private bool isOwner;
+
+    [ObservableProperty]
+    private bool _canViewSettings;
 
     [RelayCommand]
     public async Task CreateChannel()

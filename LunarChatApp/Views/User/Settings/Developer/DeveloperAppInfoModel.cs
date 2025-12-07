@@ -65,7 +65,7 @@ public partial class DeveloperAppInfoModel : ViewModelBase
     [RelayCommand]
     public void InviteApp()
     {
-        services.Dialogs.Create(new InviteAppDialog(), new InviteAppDialogModel(services), "Invite " + app.Name).WithSubmit(InviteApp).Open();
+        services.Dialogs.Create(new InviteAppDialog(), new InviteAppDialogModel(services, app.Id), "Invite " + app.Name).WithSubmit(InviteApp).Open();
     }
 
     public async Task InviteApp(UserControl control)
@@ -84,7 +84,7 @@ public partial class DeveloperAppInfoModel : ViewModelBase
         try
         {
             UpdateAppDialogModel? model = control.DataContext as UpdateAppDialogModel;
-            await services.Rest.EditAppAsync(Id, new CreateAppRequest
+            var getApp = await services.Rest.EditAppAsync(Id, new CreateAppRequest
             {
                 Name = model.Name,
                 Description = model.Description ?? "",
@@ -94,23 +94,23 @@ public partial class DeveloperAppInfoModel : ViewModelBase
                 Website = model.Website ?? ""
             });
 
-            Name = model.Name;
-            app.Name = model.Name;
+            Name = getApp.Name;
+            app.Name = getApp.Name;
 
-            Description = model.Description;
-            app.Description = model.Description;
+            Description = getApp.Description;
+            app.Description = getApp.Description;
 
-            Type = app.IsPublic.GetValueOrDefault() ? "Public App" : "Private App";
-            app.IsPublic = model.IsPublic;
+            Type = getApp.IsPublic.GetValueOrDefault() ? "Public App" : "Private App";
+            app.IsPublic = getApp.IsPublic;
 
-            Privacy = model.Privacy;
-            app.Privacy = model.Privacy;
+            Privacy = getApp.Privacy;
+            app.Privacy = getApp.Privacy;
 
-            Terms = model.Terms;
-            app.Terms = model.Terms;
+            Terms = getApp.Terms;
+            app.Terms = getApp.Terms;
 
-            Website = model.Website;
-            app.Website = model.Website;
+            Website = getApp.Website;
+            app.Website = getApp.Website;
         }
         catch { }
     }

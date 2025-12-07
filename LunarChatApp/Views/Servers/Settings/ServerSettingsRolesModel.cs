@@ -6,6 +6,7 @@ using DynamicData;
 using LunarChatApp.Services;
 using LunarChatApp.Views.Dialogs;
 using LunarChatSharp;
+using LunarChatSharp.Core.Servers;
 using LunarChatSharp.Rest.Roles;
 using LunarChatSharp.Rest.Servers;
 using LunarChatSharp.Websocket.Events.Roles;
@@ -32,18 +33,21 @@ public partial class ServerSettingsRolesModel : ViewModelBase
         services = sv;
         this.openRoles = openRole;
         this.openInfo = openInfo;
+        _canManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ManageRoles);
         services.State.Socket.OnRoleCreate += RoleCreated;
         services.State.Socket.OnRoleUpdate += RoleUpdated;
         services.State.Socket.OnRoleDelete += RoleDeleted;
+        services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
         _searchTimer = new Timer(500); // 500ms debounce
         _searchTimer.Elapsed += SearchTimerElapsed;
         _searchTimer.AutoReset = false;
 
-        _originalItems = services.State.Socket.CurrentServer.Roles.Values.Select(x => new RoleListItem(services, openInfo)
+        _originalItems = services.State.Socket.CurrentServer.Roles.Values.OrderByDescending(x => x.Position).Select(x => new RoleListItem(services, openInfo)
         {
             Color = x.Color ?? "#99AAB5",
             Name = x.Name,
             Id = x.Id,
+            Position = x.Position,
         }).ToList();
 
         PropertyChanged += OnPropertyChanged;
@@ -53,7 +57,19 @@ public partial class ServerSettingsRolesModel : ViewModelBase
         Items = new ObservableCollection<RoleListItem>(_originalItems);
     }
 
-    private async Task RoleDeleted(RestRole role)
+    private async Task PermissionUpdate()
+    {
+        CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ManageRoles);
+        foreach (var i in _originalItems)
+        {
+            i.CanManage = CanManage;
+        }
+    }
+
+    [ObservableProperty]
+    private bool _canManage;
+
+    private async Task RoleDeleted(RestServer server, RestRole role)
     {
         RoleListItem? item = _originalItems.FirstOrDefault(x => x.Id == role.Id);
         if (item == null)
@@ -64,7 +80,7 @@ public partial class ServerSettingsRolesModel : ViewModelBase
         UpdateList();
     }
 
-    private async Task RoleUpdated(RoleUpdateEvent ev, RestRole role)
+    private async Task RoleUpdated(RestServer server, RestRole role, RoleUpdateEvent ev)
     {
         RoleListItem? item = _originalItems.FirstOrDefault(x => x.Id == role.Id);
         if (item == null)
@@ -82,6 +98,7 @@ public partial class ServerSettingsRolesModel : ViewModelBase
             Color = role.Color ?? "#99AAB5",
             Id = role.Id,
             Name = role.Name,
+            Position = role.Position
         };
         _originalItems.Add(item);
         item.PropertyChanged += OnItemsChanged;
@@ -97,7 +114,7 @@ public partial class ServerSettingsRolesModel : ViewModelBase
         else
         {
             var filteredItems = _originalItems
-                .Where(item => item.Name.Contains(SearchString, StringComparison.OrdinalIgnoreCase))
+                .Where(item => item.Name.Contains(SearchString, StringComparison.OrdinalIgnoreCase)).OrderByDescending(x => x.Position)
                 .ToList();
 
             Items.AddRange(filteredItems);
@@ -127,7 +144,6 @@ public partial class ServerSettingsRolesModel : ViewModelBase
             });
         }
         catch { }
-
     }
 
     private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -242,11 +258,16 @@ public partial class RoleListItem(ServiceManager services, Action<RestRole> open
     [ObservableProperty]
     private string _name;
 
+    public int Position;
+
     [ObservableProperty]
     private string _color;
 
     [ObservableProperty]
     private string _id;
+
+    [ObservableProperty]
+    private bool _canManage;
 
     [RelayCommand]
     public void OpenRole()
@@ -269,6 +290,5 @@ public partial class RoleListItem(ServiceManager services, Action<RestRole> open
             await services.Rest.DeleteRoleAsync(services.State.Socket.CurrentServer?.Server.Id, Id);
         }
         catch { }
-
     }
 }

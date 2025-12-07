@@ -33,6 +33,16 @@
 								<TextBlock Classes="Large" Text="{Binding Name}" VerticalAlignment="Top"></TextBlock>
 							</Button>
 						</MenuItem.Header>
+						<MenuItem Header="Edit Channel" Width="150" Command="{Binding ChannelSettingsCommand}" IsVisible="{Binding CanManage}">
+							<MenuItem.Icon>
+								<materialIcons:MaterialIcon Kind="Settings" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
+							</MenuItem.Icon>
+						</MenuItem>
+						<MenuItem Header="Delete Channel" Width="150" Command="{Binding DeleteChannelCommand}" IsVisible="{Binding CanManage}">
+							<MenuItem.Icon>
+								<materialIcons:MaterialIcon Kind="TrashCan" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
+							</MenuItem.Icon>
+						</MenuItem>
 						<MenuItem Header="Copy Channel ID" Width="150" Command="{Binding CopyChannelID}">
 							<MenuItem.Icon>
 								<materialIcons:MaterialIcon Kind="ContentCopy" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
@@ -65,7 +75,7 @@
 				<Button VerticalAlignment="Center" Margin="4,0,0,0" Padding="4">
 					<materialIcons:MaterialIcon Kind="Add" Width="22" Height="22" Foreground="{DynamicResource PrimaryColor}" />
 				</Button>
-				<TextBox Grid.Column="1" Classes="" AcceptsReturn="True"
+				<TextBox Grid.Column="1" Classes="" AcceptsReturn="True" IsEnabled="{Binding CanSend}"
 						 shadui:ControlAssist.MaxHeight="100"
 						 Text="{Binding Textbox}">
 					<TextBox.KeyBindings>

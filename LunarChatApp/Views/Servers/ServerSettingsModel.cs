@@ -77,7 +77,7 @@ public partial class ServerSettingsModel : ViewModelBase
     public void OpenEmotesSettings()
     {
         SelectedTitle = "Emotes";
-        SelectedPage = new ServerSettingsEmojis() { DataContext = new ServerSettingsEmojisModel() };
+        SelectedPage = new ServerSettingsEmojis() { DataContext = new ServerSettingsEmojisModel(services) };
     }
 
     [RelayCommand]
@@ -92,5 +92,12 @@ public partial class ServerSettingsModel : ViewModelBase
     {
         SelectedTitle = "Bans";
         SelectedPage = new ServerSettingsBans() { DataContext = new ServerSettingsBansModel() };
+    }
+
+    [RelayCommand]
+    public void OpenAppsSettings()
+    {
+        SelectedTitle = "Apps";
+        SelectedPage = new ServerSettingsApps() { DataContext = new ServerSettingsAppsModel(services) };
     }
 }
