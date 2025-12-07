@@ -13,7 +13,7 @@
 		<Border.ContextMenu>
 			<ContextMenu>
 				<MenuItem Header="Delete Message" Command="{Binding DeleteCommand}" IsVisible="{Binding CanDelete}" />
-				<MenuItem Header="Copy Text" Command="{Binding CopyIdCommand}" />
+				<MenuItem Header="Copy Text" Command="{Binding CopyTextCommand}" />
 				<MenuItem Header="Copy Message ID" Command="{Binding CopyIdCommand}" />
 			</ContextMenu>
 		</Border.ContextMenu>
