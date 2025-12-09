@@ -30,9 +30,9 @@ public partial class ChannelModel : ViewModelBase
         Name = st.Socket.CurrentChannel.Name;
         Topic = st.Socket.CurrentChannel.Topic;
         state.Socket.CurrentServer.OnChannelUpdate += ChannelUpdate;
-        state.Socket.OnMessageRecieved += State_OnMessageRecieved;
-        state.Socket.OnMessageEdit += MessageEdit;
-        state.Socket.OnMessageDelete += MessageDelete;
+        services.Client.OnMessageRecieved += State_OnMessageRecieved;
+        services.Client.OnMessageEdit += MessageEdit;
+        services.Client.OnMessageDelete += MessageDelete;
         canManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
         canSend = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.SendMessages);
         services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;

@@ -28,7 +28,7 @@ public partial class HomeModel(ServiceManager services) : ViewModelBase
         try
         {
             if (!services.State.Socket.Servers.ContainsKey(services.State.Socket.LunarCommunityId))
-                await services.Rest.AddMemberAsync(services.State.Socket.LunarCommunityId, services.State.Socket.CurrentId);
+                await services.Rest.AddMemberAsync(services.State.Socket.LunarCommunityId, services.Client.CurrentId);
 
         }
         catch { }
@@ -44,7 +44,7 @@ public partial class HomeModel(ServiceManager services) : ViewModelBase
         try
         {
             if (!services.State.Socket.Servers.ContainsKey(services.State.Socket.LunarDevId))
-                await services.Rest.AddMemberAsync(services.State.Socket.LunarDevId, services.State.Socket.CurrentId);
+                await services.Rest.AddMemberAsync(services.State.Socket.LunarDevId, services.Client.CurrentId);
 
         }
         catch { }

@@ -6,7 +6,6 @@ using LunarChatApp.Views;
 using LunarChatSharp;
 using LunarChatSharp.Rest.Accounts;
 using LunarChatSharp.Rest.Users;
-using LunarChatSharp.Websocket;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -29,7 +28,7 @@ public partial class LoginModel(ServiceManager services, MainModel main) : ViewM
 
 
     [ObservableProperty]
-    private string? _username = services.IsDev ? "builderb" : null;
+    private string? _username = ServiceManager.IsDev ? "builderb" : null;
 
     [Required(ErrorMessage = "Email is required")]
     [EmailValidation]
@@ -72,17 +71,16 @@ public partial class LoginModel(ServiceManager services, MainModel main) : ViewM
 
         try
         {
+
+
             RestUser Json = await services.Rest.CreateDemoAccount(new CreateDemoAccountRequest
             {
                 Username = CleanUsername,
             });
-            services.Rest.Http.DefaultRequestHeaders.Add("Auth-Id", Json.Id);
 
-            LunarSocketClient socket = new LunarSocketClient(
-                services.IsDev ? "ws://localhost:5156/gateway" : "wss://lunar.fluxpoint.dev/api/gateway", Json.Id);
-            services.State.Socket = socket.State;
-            services.State.Socket.WebSocket = socket;
-            services.State.Socket.CurrentId = Json.Id;
+            await services.Client.LoginAsync(Json.Id);
+
+            services.State.Socket = services.Socket.State;
             services.State.CurrentDisplayName = Json.DisplayName ?? Json.Username;
             services.State.DisplayName = Json.DisplayName;
             services.State.Username = Json.Username;
@@ -92,8 +90,7 @@ public partial class LoginModel(ServiceManager services, MainModel main) : ViewM
             };
             services.PageManager.OnSwitchPage(services.State.CachedServersPage);
 
-            if (services.State.Socket.APIEnabled)
-                _ = services.State.Socket.WebSocket.SetupWebsocket();
+            _ = services.Socket.SetupWebsocket();
         }
         catch { }
     }

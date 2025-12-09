@@ -34,12 +34,12 @@ public class ScrollToEndBehavior : Behavior<ScrollViewer>
         var sw = sender as ScrollViewer;
         sw.ScrollChanged += SwOnScrollChanged;
         services = (sw.DataContext as ChannelModel).services;
-        services.State.Socket.OnMessageRecieved += WebSocket_OnMessageRecieved;
+        services.Client.OnMessageRecieved += WebSocket_OnMessageRecieved;
     }
 
     private async Task WebSocket_OnMessageRecieved(RestChannel channel, RestMessage message)
     {
-        if (_shouldScrollToEnd || message.Author.Id == services.State.Socket.CurrentId)
+        if (_shouldScrollToEnd || message.Author.Id == services.Client.CurrentId)
         {
             Debug.WriteLine("New Message Scroll: " + _scrolling);
             if (AssociatedObject != null)

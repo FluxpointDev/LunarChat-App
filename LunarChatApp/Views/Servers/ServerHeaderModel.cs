@@ -19,7 +19,7 @@ public partial class ServerHeaderModel : ViewModelBase
     {
         services = sv;
         Name = s.Name;
-        isOwner = sv.State.Socket.CurrentId == s.OwnerId;
+        isOwner = sv.Client.CurrentId == s.OwnerId;
         UpdatePermissions();
         services.State.Socket.CurrentServer.OnPermissionUpdate += Update;
     }
@@ -119,8 +119,8 @@ public partial class ServerHeaderModel : ViewModelBase
     {
         try
         {
-            await services.Rest.RemoveMemberAsync(services.State.Socket.CurrentServer?.Server.Id, services.State.Socket.CurrentId);
-            services.State.Socket.OnSelectServer?.Invoke(null);
+            await services.Rest.RemoveMemberAsync(services.State.Socket.CurrentServer?.Server.Id, services.Client.CurrentId);
+            services.Client.OnSelectServer?.Invoke(null);
         }
         catch { }
 

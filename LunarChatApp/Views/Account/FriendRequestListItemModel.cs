@@ -20,7 +20,7 @@ public partial class FriendRequestListItemModel : ViewModelBase
         services = sv;
         user = u;
         id = u.UserId;
-        CanAccept = u.RequestBy != sv.State.Socket.CurrentId;
+        CanAccept = u.RequestBy != sv.Client.CurrentId;
         Username = u.Username;
         DisplayName = u.DisplayName ?? u.Username;
     }

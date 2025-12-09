@@ -29,9 +29,9 @@ public partial class ServerSettingsEmojisModel : ViewModelBase
     public ServerSettingsEmojisModel(ServiceManager sv)
     {
         services = sv;
-        services.State.Socket.OnEmojiCreate += EmojiCreated;
-        services.State.Socket.OnEmojiUpdate += EmojiUpdated;
-        services.State.Socket.OnEmojiDelete += EmojiDeleted;
+        services.Client.OnEmojiCreate += EmojiCreated;
+        services.Client.OnEmojiUpdate += EmojiUpdated;
+        services.Client.OnEmojiDelete += EmojiDeleted;
         services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
         _canCreate = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.CreateExpressions);
         bool CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageExpressions);
@@ -46,7 +46,7 @@ public partial class ServerSettingsEmojisModel : ViewModelBase
             Id = x.Id,
             Name = x.Name,
             Creator = x.CreatedBy,
-            CanManage = x.CreatedBy == services.State.Socket.CurrentId || CanManage
+            CanManage = x.CreatedBy == services.Client.CurrentId || CanManage
         }).ToList();
 
         foreach (var i in _originalItems) i.PropertyChanged += OnItemsChanged;
@@ -59,7 +59,7 @@ public partial class ServerSettingsEmojisModel : ViewModelBase
         bool CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageExpressions);
         foreach (var i in _originalItems)
         {
-            i.CanManage = i.Creator == services.State.Socket.CurrentId || CanManage;
+            i.CanManage = i.Creator == services.Client.CurrentId || CanManage;
         }
     }
 
@@ -95,7 +95,7 @@ public partial class ServerSettingsEmojisModel : ViewModelBase
             Id = emoji.Id,
             Creator = emoji.CreatedBy,
             Name = emoji.Name,
-            CanManage = emoji.CreatedBy == services.State.Socket.CurrentId || CanManage
+            CanManage = emoji.CreatedBy == services.Client.CurrentId || CanManage
         };
         _originalItems.Add(item);
         item.PropertyChanged += OnItemsChanged;

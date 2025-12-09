@@ -31,12 +31,12 @@ public partial class ServersModel : ViewModelBase
         state = services.State;
         main = mainModel;
         services.State.OnPageSelect += State_OnPageSelect;
-        services.State.Socket.OnSelectServer += OnSelectServer;
-        services.State.Socket.OnSelectChannel += OnSelectChannel;
-        services.State.Socket.OnAddServer += State_OnAddServer;
-        services.State.Socket.OnRemoveServer += State_OnRemoveServer;
-        services.State.Socket.OnPresenceUpdate += PresenceUpdate;
-        services.State.Socket.OnAccountUpdate += AccountUpdate;
+        services.Client.OnSelectServer += OnSelectServer;
+        services.Client.OnSelectChannel += OnSelectChannel;
+        services.Client.OnAddServer += State_OnAddServer;
+        services.Client.OnRemoveServer += State_OnRemoveServer;
+        services.Client.OnPresenceUpdate += PresenceUpdate;
+        services.Client.OnAccountUpdate += AccountUpdate;
         if (state.Socket.CurrentServer == null)
         {
             _selectedPage = new HomeView() { DataContext = new HomeModel(services) };
@@ -168,7 +168,7 @@ public partial class ServersModel : ViewModelBase
     [RelayCommand]
     public void CopyUserID()
     {
-        services.CopyText(state.Socket.CurrentId);
+        services.CopyText(services.Client.CurrentId);
     }
 
     [RelayCommand]
@@ -227,8 +227,9 @@ public partial class ServersModel : ViewModelBase
     [RelayCommand]
     public void Logout()
     {
-        state.Socket.WebSocket.StopWebSocket = true;
-        state.Socket.CurrentId = null;
+        services.Socket.StopWebSocket = true;
+        services.Client.CurrentId = null;
+        services.Client.Token = null;
         services.Rest.Http.DefaultRequestHeaders.Remove("Auth-Id");
         services.PageManager.OnSwitchPage(new LoginPage
         {

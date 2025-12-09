@@ -18,7 +18,7 @@ public partial class SettingsProfileModel : ViewModelBase
     {
         services = sv;
         state = sv.State;
-        sv.State.Socket.OnAccountUpdate += AccountUpdate;
+        sv.Client.OnAccountUpdate += AccountUpdate;
         DisplayName = state.DisplayName;
         Username = state.Username;
         Email = state.Socket.Account.Email;

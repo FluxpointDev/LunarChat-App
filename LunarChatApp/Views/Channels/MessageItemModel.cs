@@ -19,13 +19,13 @@ public partial class MessageItemModel : ViewModelBase
         if (message.Author != null)
         {
             authorId = message.Author.Id;
-            IsAuthor = message.Author.Id == sv.State.Socket.CurrentId;
+            IsAuthor = message.Author.Id == sv.Client.CurrentId;
             Username = message.Author.Username;
             IsBot = message.Author.IsBot;
-            CanDelete = sv.State.Socket.CurrentId == authorId;
+            CanDelete = sv.Client.CurrentId == authorId;
         }
         if (!CanDelete.GetValueOrDefault() && sv.State.Socket.CurrentServer != null)
-            CanDelete = sv.State.Socket.CurrentServer.Server.OwnerId == sv.State.Socket.CurrentId;
+            CanDelete = sv.State.Socket.CurrentServer.Server.OwnerId == sv.Client.CurrentId;
 
         IsSystem = message.SystemMessage != null;
         Message = new ObservableStringBuilder();

@@ -1,26 +1,31 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using LunarChatApp.ViewModels.Dialogs;
+using LunarChatSharp;
 using LunarChatSharp.Rest;
+using LunarChatSharp.Websocket;
 using ShadUI;
 
 namespace LunarChatApp.Services;
 
 public sealed class ServiceManager
 {
-    public bool IsDev = false;
+    public static bool IsDev = false;
     public readonly PageManager PageManager;
     public readonly TestState State;
+    public readonly LunarClient Client;
     public readonly LunarRestClient Rest;
+    public readonly LunarSocketClient Socket;
     public readonly ThemeWatcher ThemeWatcher;
     public readonly DialogService Dialogs;
     public Visual MainControl;
-    public ServiceManager(PageManager page, TestState st, LunarRestClient rs, ThemeWatcher theme, DialogService diag)
+    public ServiceManager(PageManager page, TestState st, LunarClient client, ThemeWatcher theme, DialogService diag)
     {
         PageManager = page;
         State = st;
-        Rest = rs;
-        Rest.Initialize(IsDev ? "http://localhost:5156/" : "https://lunar.fluxpoint.dev/api/");
+        Client = client;
+        Rest = Client.Rest;
+        Socket = Client.WebSocket!;
         ThemeWatcher = theme;
         Dialogs = diag;
     }

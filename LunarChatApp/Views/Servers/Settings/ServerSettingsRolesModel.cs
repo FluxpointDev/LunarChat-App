@@ -34,9 +34,9 @@ public partial class ServerSettingsRolesModel : ViewModelBase
         this.openRoles = openRole;
         this.openInfo = openInfo;
         _canManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ManageRoles);
-        services.State.Socket.OnRoleCreate += RoleCreated;
-        services.State.Socket.OnRoleUpdate += RoleUpdated;
-        services.State.Socket.OnRoleDelete += RoleDeleted;
+        services.Client.OnRoleCreate += RoleCreated;
+        services.Client.OnRoleUpdate += RoleUpdated;
+        services.Client.OnRoleDelete += RoleDeleted;
         services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
         _searchTimer = new Timer(500); // 500ms debounce
         _searchTimer.Elapsed += SearchTimerElapsed;

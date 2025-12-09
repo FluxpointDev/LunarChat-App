@@ -21,8 +21,8 @@ public partial class FriendsListModel : ViewModelBase
     public FriendsListModel(ServiceManager sv)
     {
         services = sv;
-        services.State.Socket.OnRelationAdd += OnRelationAdd;
-        services.State.Socket.OnRelationRemove += OnRelationRemove;
+        services.Client.OnRelationAdd += OnRelationAdd;
+        services.Client.OnRelationRemove += OnRelationRemove;
         _friendsList = new ObservableCollection<FriendListItem>();
         foreach (var i in services.State.Socket.Relations.Values.Where(x => x.Type == LunarChatSharp.Core.Users.UserRelationType.Friend))
         {
