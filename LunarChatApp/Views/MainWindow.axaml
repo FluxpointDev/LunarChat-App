@@ -8,7 +8,6 @@
 			   mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			   x:Class="LunarChatApp.Views.MainWindow"
 			   x:DataType="vm:MainModel"
-			   Background="{DynamicResource PrimaryForegroundColor}"
 			   MinHeight="400"
 			   MinWidth="600"
 			   Icon="/Assets/lunar-icon.png"

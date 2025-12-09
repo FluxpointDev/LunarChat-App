@@ -20,8 +20,9 @@
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="HotAvalonia">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
+		<IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+		<PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+	</PackageReference>
     <PackageReference Include="WebView.Avalonia.Desktop" />
   </ItemGroup>
 

@@ -1,5 +1,4 @@
 <Application xmlns="https://github.com/avaloniaui"
-             xmlns:dialogHostAvalonia="using:DialogHostAvalonia"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="using:LunarChatApp"
              xmlns:materialIcons="using:Material.Icons.Avalonia"
