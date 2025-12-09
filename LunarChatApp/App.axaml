@@ -7,9 +7,6 @@
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
-    <Application.DataTemplates>
-        <local:ViewLocator/>
-    </Application.DataTemplates>
 
      <TrayIcon.Icons>
         <TrayIcons>
@@ -27,7 +24,7 @@
     </TrayIcon.Icons>
 
     <Application.Resources>
-		<!--<FontFamily x:Key="ShadUIIcon">/Assets/Fonts#shadui</FontFamily>-->
+
     </Application.Resources>
     <Application.Styles>
         <themes:ShadTheme />

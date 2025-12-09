@@ -13,16 +13,19 @@ namespace LunarChatApp;
 
 public partial class App : Application
 {
-    //public override void RegisterServices()
-    //{
-    //    base.RegisterServices();
+    public override void RegisterServices()
+    {
+        base.RegisterServices();
 
-    //    // if you use only WebView  
-    //    AvaloniaWebViewBuilder.Initialize(x =>
-    //    {
-
-    //    });
-    //}
+        // if you use only WebView  
+        //AvaloniaWebViewBuilder.Initialize(x =>
+        //{
+        //    x.AreDefaultContextMenusEnabled = false;
+        //    x.AreDevToolEnabled = false;
+        //    x.IsInPrivateModeEnabled = false;
+        //    x.IsStatusBarEnabled = false;
+        //});
+    }
 
     public override void Initialize()
     {

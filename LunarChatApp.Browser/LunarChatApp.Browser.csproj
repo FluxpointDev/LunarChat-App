@@ -17,6 +17,5 @@
   <ItemGroup>
     <ProjectReference Include="..\LunarChatApp\LunarChatApp.csproj" />
 	<TrimmerRootAssembly Include="LunarChatSharp" />
-	<TrimmerRootAssembly Include="LunarChatApp.Data" />
   </ItemGroup>
 </Project>
