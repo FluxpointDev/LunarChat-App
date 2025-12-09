@@ -65,8 +65,7 @@ public partial class MessageItemModel : ViewModelBase
     [RelayCommand]
     public void LinkClicked(InlineHyperlinkClickedEventArgs args)
     {
-        //services.Dialogs.Create(new CreateChannelDialog(), new CreateChannelDialogModel(services), "Link: ").Open();
-        var launcher = TopLevel.GetTopLevel(services.State.CachedServersPage).Launcher;
+        var launcher = TopLevel.GetTopLevel(services.MainControl).Launcher;
         launcher.LaunchUriAsync(args.HRef);
     }
 

@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace LunarChatApp.Shared.Rest.Accounts;
 
 public class CreateAccountRequest : ILunarRequest
 {
-    [JsonProperty("username")]
+    [JsonPropertyName("username")]
     public string username { get; set; }
     public string email { get; set; }
     public string password { get; set; }
