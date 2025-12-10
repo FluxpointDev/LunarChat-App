@@ -9,7 +9,7 @@
 			 x:Class="LunarChatApp.HomeView"
 			 x:DataType="main:HomeModel">
 	<ScrollViewer>
-		<Grid Grid.RowDefinitions="auto, auto, auto" HorizontalAlignment="Center">
+		<Grid Grid.RowDefinitions="auto, auto, auto, auto" HorizontalAlignment="Center">
 			<StackPanel Margin="20,4,4,14" HorizontalAlignment="Center">
 				<TextBlock
 				Classes="h2"
@@ -87,7 +87,7 @@
 						</shadui:Card.Header>
 					</shadui:Card>
 				</Button>
-				<WrapPanel Grid.Row="2" Orientation="Horizontal">
+				<WrapPanel Grid.Row="3" Orientation="Horizontal">
 					<Button Margin="4" Command="{Binding OpenUserDocsCommand}">
 						<shadui:Card HasShadow="False" Padding="20,10,20,10" Width="240">
 							<shadui:Card.Header>

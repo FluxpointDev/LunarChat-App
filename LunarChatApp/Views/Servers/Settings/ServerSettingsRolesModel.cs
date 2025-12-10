@@ -48,6 +48,7 @@ public partial class ServerSettingsRolesModel : ViewModelBase
             Name = x.Name,
             Id = x.Id,
             Position = x.Position,
+            CanManage = _canManage
         }).ToList();
 
         PropertyChanged += OnPropertyChanged;
