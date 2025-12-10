@@ -33,7 +33,7 @@ public class ScrollToEndBehavior : Behavior<ScrollViewer>
     {
         var sw = sender as ScrollViewer;
         sw.ScrollChanged += SwOnScrollChanged;
-        services = (sw.DataContext as ChannelModel).services;
+        services = (sw.DataContext as ChannelViewModel).services;
         services.Client.OnMessageRecieved += WebSocket_OnMessageRecieved;
     }
 
@@ -49,7 +49,7 @@ public class ScrollToEndBehavior : Behavior<ScrollViewer>
 
     private void Children_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
-        Debug.WriteLine("Trigger Scroll Collection: " + (AssociatedObject.DataContext as ChannelModel).MessagesFinished);
+        Debug.WriteLine("Trigger Scroll Collection: " + (AssociatedObject.DataContext as ChannelViewModel).MessagesFinished);
         if (Math.Abs(AssociatedObject.Offset.Y - AssociatedObject.Extent.Height + AssociatedObject.Viewport.Height) < 5)
         {
             Debug.WriteLine("Now scroll");

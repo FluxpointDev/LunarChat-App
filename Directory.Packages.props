@@ -15,6 +15,7 @@
     <PackageVersion Include="Avalonia.iOS" Version="12.0.999-cibuild0060659-alpha" />
     <PackageVersion Include="Avalonia.Browser" Version="12.0.999-cibuild0060655-alpha" />
     <PackageVersion Include="Avalonia.Android" Version="12.0.999-cibuild0060659-alpha" />
+    <PackageVersion Include="Avalonia.Markup.Xaml.Loader" Version="12.0.999-cibuild0060659-alpha" />
     <PackageVersion Include="Avalonia.Themes.Simple" Version="12.0.999-cibuild0060659-alpha" />
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageVersion Include="DynamicData" Version="9.4.1" />

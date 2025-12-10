@@ -2,6 +2,7 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:dialogs="using:LunarChatApp.ViewModels.Dialogs"
+             xmlns:lunarchatsharp="using:LunarChatSharp"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:shadui="using:ShadUI"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -15,7 +16,7 @@
 			<ComboBoxItem>Do Not Disturb</ComboBoxItem>
 			<ComboBoxItem>Invisible</ComboBoxItem>
 		</ComboBox>
-		<TextBox
+		<TextBox MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxLinkLength}}"
 		Width="225"
 		shadui:ControlAssist.Label="Text"
 		Classes="Clearable"

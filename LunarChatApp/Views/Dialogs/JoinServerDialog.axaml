@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dialogs="using:LunarChatApp.ViewModels.Dialogs"
+             xmlns:lunarchatsharp="using:LunarChatSharp"
              xmlns:materialIcons="using:Material.Icons.Avalonia"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:shadui="using:ShadUI"
@@ -24,7 +25,7 @@
           </Button>
       </StackPanel>
       <StackPanel IsVisible="{Binding ShowJoin}" Spacing="6" Margin="10">
-		  <TextBox
+		  <TextBox MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxNameLength}}"
 		Width="225"
 		shadui:ControlAssist.Label="Invite Code"
 		Classes="Clearable"
@@ -32,7 +33,7 @@
 		Watermark="" />
       </StackPanel>
       <StackPanel IsVisible="{Binding ShowCreate}" Spacing="6" Margin="10">
-		  <TextBox
+		  <TextBox MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxNameLength}}"
 		Width="225"
 		shadui:ControlAssist.Label="Server Name"
 		Classes="Clearable"

@@ -50,26 +50,26 @@ public partial class ServersModel : ViewModelBase
             _selectedHeader = new ServerHeaderView() { DataContext = new ServerHeaderModel(services, state.Socket.CurrentServer.Server) };
             _selectedSidebar = new ChannelsListView() { DataContext = new ChannelListModel(services, state) };
             if (state.Socket.CurrentChannel != null)
-                _selectedPage = new ChannelView() { DataContext = new ChannelModel(state, services, null) };
+                _selectedPage = new ChannelView() { DataContext = new ChannelViewModel(state, services, null) };
         }
 
         if (ServersList == null)
         {
             ServersList = new ObservableCollection<ServerIcon>(state.Socket.Servers.Values.Select(x => new ServerIcon() { DataContext = new ServerIconModel(services, x.Server) }));
-            ServersList.Add(new ServerIcon()
+            addServerModel = new ServerIconModel(services, new RestServer
             {
-                DataContext = new ServerIconModel(services, new RestServer
-                {
-                    Id = "0",
-                    Name = "+",
-                    CreatedAt = DateTime.UtcNow,
-                    OwnerId = null!,
-                    SystemMessages = null!,
-                    DefaultPermissions = null!,
-                })
+                Id = "0",
+                Name = "+",
+                CreatedAt = DateTime.UtcNow,
+                OwnerId = null!,
+                SystemMessages = null!,
+                DefaultPermissions = null!,
             });
         }
     }
+
+    [ObservableProperty]
+    private ServerIconModel addServerModel;
 
     private async Task ServerUpdate(RestServer server, ServerUpdateEvent ev)
     {
@@ -139,7 +139,7 @@ public partial class ServersModel : ViewModelBase
 
     private async Task OnSelectChannel(RestChannel channel, RestRelation user)
     {
-        SelectedPage = new ChannelView() { DataContext = new ChannelModel(state, services, user) };
+        SelectedPage = new ChannelView() { DataContext = new ChannelViewModel(state, services, user) };
     }
 
     private async Task OnSelectServer(RestServer? server)

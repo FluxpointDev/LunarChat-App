@@ -330,7 +330,7 @@ public partial class MemberListItem : ObservableObject
             if (timeoutItemText.StartsWith("Remove"))
                 await services.Rest.TimeoutMemberAsync(services.Socket.State.CurrentServer.Server.Id, id, null);
             else
-                await services.Rest.TimeoutMemberAsync(services.Socket.State.CurrentServer.Server.Id, id, DateTime.UtcNow.AddHours(1));
+                await services.Rest.TimeoutMemberAsync(services.Socket.State.CurrentServer.Server.Id, id, DateTime.UtcNow.AddSeconds(60));
         }
         catch { }
     }

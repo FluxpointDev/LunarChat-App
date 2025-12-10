@@ -3,13 +3,14 @@
 			 xmlns:components="using:LunarChatApp.Components"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:lunarchatsharp="using:LunarChatSharp"
 			 xmlns:materialIcons="using:Material.Icons.Avalonia"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:shadui="using:ShadUI"
 			 xmlns:viewmodels="using:LunarChatApp.ViewModels"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="LunarChatApp.ChannelView"
-			 x:DataType="viewmodels:ChannelModel">
+			 x:DataType="viewmodels:ChannelViewModel">
 
 	<Grid Grid.Column="1">
 		<Grid.RowDefinitions>
@@ -33,22 +34,22 @@
 								<TextBlock Classes="Large" Text="{Binding Name}" VerticalAlignment="Top"></TextBlock>
 							</Button>
 						</MenuItem.Header>
-						<MenuItem Header="Create Invite" Width="150" Command="{Binding CreateInviteCommand}" IsVisible="{Binding CanInvite}">
+						<MenuItem Header="Create Invite" Width="160" Command="{Binding CreateInviteCommand}" IsVisible="{Binding CanInvite}">
 							<MenuItem.Icon>
 								<materialIcons:MaterialIcon Kind="Plus" Width="12" Height="12" Foreground="{DynamicResource SuccessColor}" />
 							</MenuItem.Icon>
 						</MenuItem>
-						<MenuItem Header="Edit Channel" Width="150" Command="{Binding ChannelSettingsCommand}" IsVisible="{Binding CanManage}">
+						<MenuItem Header="Edit Channel" Width="160" Command="{Binding ChannelSettingsCommand}" IsVisible="{Binding CanManage}">
 							<MenuItem.Icon>
 								<materialIcons:MaterialIcon Kind="Settings" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
 							</MenuItem.Icon>
 						</MenuItem>
-						<MenuItem Header="Delete Channel" Width="150" Command="{Binding DeleteChannelCommand}" IsVisible="{Binding CanDelete}">
+						<MenuItem Header="Delete Channel" Width="160" Command="{Binding DeleteChannelCommand}" IsVisible="{Binding CanDelete}">
 							<MenuItem.Icon>
 								<materialIcons:MaterialIcon Kind="TrashCan" Width="12" Height="12" Foreground="{DynamicResource ErrorColor}" />
 							</MenuItem.Icon>
 						</MenuItem>
-						<MenuItem Header="Copy Channel ID" Width="150" Command="{Binding CopyChannelID}">
+						<MenuItem Header="Copy Channel ID" Width="160" Command="{Binding CopyChannelID}">
 							<MenuItem.Icon>
 								<materialIcons:MaterialIcon Kind="ContentCopy" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
 							</MenuItem.Icon>
@@ -81,12 +82,17 @@
 					<materialIcons:MaterialIcon Kind="Add" Width="22" Height="22" Foreground="{DynamicResource PrimaryColor}" />
 				</Button>
 				<TextBox Grid.Column="1" Classes="" AcceptsReturn="True" IsEnabled="{Binding CanSend}"
-						 shadui:ControlAssist.MaxHeight="100"
+						 MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxMessageContentLength}}"
+						 shadui:ControlAssist.MaxHeight="100" IsVisible="{Binding !InTimeout}"
 						 Text="{Binding Textbox}">
 					<TextBox.KeyBindings>
 						<KeyBinding Command="{Binding EnterCommand}" Gesture="Enter" />
 						<KeyBinding Command="{Binding ClearCommand}" Gesture="Delete" />
 					</TextBox.KeyBindings>
+				</TextBox>
+				<TextBox Grid.Column="1" Classes="" IsEnabled="False"
+						 shadui:ControlAssist.MaxHeight="100" IsVisible="{Binding InTimeout}"
+						 Text="You have been timed out">
 				</TextBox>
 				<!--<avrichtextbox:RichTextBox Grid.Column="1" x:Name="RichBox" Background="#393A41" BorderBrush="Transparent"></avrichtextbox:RichTextBox>-->
 				<Button Grid.Column="2" Margin="0, 0, 4, 0" VerticalAlignment="Center" Padding="4">

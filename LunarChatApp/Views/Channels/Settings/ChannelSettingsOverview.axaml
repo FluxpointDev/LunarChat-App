@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:lunarchatsharp="using:LunarChatSharp"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:settings="using:LunarChatApp.ViewModels.Channels.Settings"
              xmlns:shadui="using:ShadUI"
@@ -9,7 +10,7 @@
 			 x:DataType="settings:ChannelSettingsOverviewModel">
 	<StackPanel Spacing="20" HorizontalAlignment="Left">
 		<StackPanel HorizontalAlignment="Left" Spacing="10">
-			<TextBox
+			<TextBox MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxNameLength}}"
 		Classes="Clearable"
 		Watermark=""
 		Width="225"
@@ -17,8 +18,8 @@
 		Text="{Binding ChannelNameEdit}"
 		shadui:ControlAssist.Label="Channel Name" />
 
-			<TextBox
-		Watermark=""
+			<TextBox MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxDescriptionLength}}"
+		Watermark="" AcceptsReturn="True"
 		Width="225"
 		IsReadOnly="{Binding !CanManage}"
 		Text="{Binding ChannelTopicEdit}"

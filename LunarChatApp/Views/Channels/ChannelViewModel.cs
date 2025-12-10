@@ -10,19 +10,21 @@ using LunarChatSharp;
 using LunarChatSharp.Core.Servers;
 using LunarChatSharp.Rest.Channels;
 using LunarChatSharp.Rest.Messages;
+using LunarChatSharp.Rest.Servers;
 using LunarChatSharp.Rest.Users;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.ViewModels;
 
-public partial class ChannelModel : ViewModelBase
+public partial class ChannelViewModel : ViewModelBase
 {
     private TestState state;
     public ServiceManager services;
     private RestRelation? user;
-    public ChannelModel(TestState st, ServiceManager sv, RestRelation? u)
+    public ChannelViewModel(TestState st, ServiceManager sv, RestRelation? u)
     {
         state = st;
         services = sv;
@@ -33,6 +35,8 @@ public partial class ChannelModel : ViewModelBase
         services.Client.OnMessageRecieved += State_OnMessageRecieved;
         services.Client.OnMessageEdit += MessageEdit;
         services.Client.OnMessageDelete += MessageDelete;
+        services.Client.OnMemberUpdate += MemberUpdate;
+        inTimeout = (services.State.Socket.CurrentServer.Member.Timeout.HasValue && services.State.Socket.CurrentServer.Member.Timeout.Value < DateTime.UtcNow);
         canInvite = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.CreateInvites);
         canManage = services.State.Socket.CurrentServer.CanManageChannel(services.State.Socket.CurrentServer.Member);
         canDelete = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
@@ -58,6 +62,24 @@ public partial class ChannelModel : ViewModelBase
         });
     }
 
+    private async Task MemberUpdate(RestServer server, string arg2, EditMemberRequest request)
+    {
+        if (services.State.Socket.CurrentServer.Server.Id != server.Id)
+            return;
+
+        if (arg2 != services.State.Socket.CurrentServer.Member.Id)
+            return;
+
+        if (request.TimeoutRemove)
+        {
+            InTimeout = false;
+        }
+        else if (request.Timeout.HasValue)
+        {
+            InTimeout = true;
+        }
+    }
+
     private async Task PermissionUpdate()
     {
         CanInvite = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.CreateInvites);
@@ -74,6 +96,9 @@ public partial class ChannelModel : ViewModelBase
 
     [ObservableProperty]
     private bool canSend;
+
+    [ObservableProperty]
+    private bool inTimeout;
 
     [ObservableProperty]
     private bool canInvite;

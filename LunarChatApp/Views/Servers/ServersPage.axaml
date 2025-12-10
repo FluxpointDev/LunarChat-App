@@ -19,7 +19,7 @@
 		Grid.Column="0"
 		MinWidth="60"
 		Padding="4"
-		Width="220">
+		Width="240">
 			<shadui:Sidebar.Header>
 				<StackPanel Orientation="Horizontal">
 					<Button Margin="2" Padding="8" Command="{Binding OpenHomeCommand}">
@@ -42,6 +42,7 @@
 					<StackPanel HorizontalAlignment="Left">
 						<ItemsRepeater MinWidth="40"  ItemsSource="{Binding ServersList}">
 						</ItemsRepeater>
+						<local:ServerIcon DataContext="{Binding AddServerModel}"></local:ServerIcon>
 					</StackPanel>
 					<ContentControl Grid.Column="1" Content="{Binding SelectedSidebar}"></ContentControl>
 				</Grid>
@@ -58,8 +59,8 @@
 						Padding="8,0"
 						Cursor="Hand"
 						shadui:MenuItemAssist.PopupHorizontalOffset="4"
-						shadui:MenuItemAssist.PopupPlacement="RightEdgeAlignedBottom"
-						shadui:MenuItemAssist.PopupVerticalOffset="4">
+						shadui:MenuItemAssist.PopupPlacement="TopEdgeAlignedLeft"
+						shadui:MenuItemAssist.PopupVerticalOffset="0">
 							<MenuItem.Header>
 								<Button HorizontalAlignment="Left" Padding="4" IsHitTestVisible="False">
 									<StackPanel Orientation="Horizontal" Spacing="6">
@@ -78,22 +79,22 @@
 									</StackPanel>
 								</Button>
 							</MenuItem.Header>
-							<MenuItem Width="140" Header="Status" Command="{Binding OpenStatusDialogCommand}">
+							<MenuItem Width="160" Header="Status" Command="{Binding OpenStatusDialogCommand}">
 								<MenuItem.Icon>
 									<materialIcons:MaterialIcon Kind="Tag" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
 								</MenuItem.Icon>
 							</MenuItem>
-							<MenuItem Width="140" Header="Copy User ID" Command="{Binding CopyUserID}">
+							<MenuItem Width="160" Header="Copy User ID" Command="{Binding CopyUserID}">
 								<MenuItem.Icon>
 									<materialIcons:MaterialIcon Kind="ContentCopy" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
 								</MenuItem.Icon>
 							</MenuItem>
-							<MenuItem Width="140" Header="Logout" Command="{Binding LogoutCommand}">
+							<MenuItem Width="160" Header="Logout" Command="{Binding LogoutCommand}">
 								<MenuItem.Icon>
 									<materialIcons:MaterialIcon Kind="Logout" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
 								</MenuItem.Icon>
 							</MenuItem>
-							<MenuItem Width="140" Header="Quit" Command="{Binding QuitCommand}" IsVisible="{OnPlatform Default='True', Browser='False'}">
+							<MenuItem Width="160" Header="Quit" Command="{Binding QuitCommand}" IsVisible="{OnPlatform Default='True', Browser='False'}">
 								<MenuItem.Icon>
 									<materialIcons:MaterialIcon Kind="Close" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
 								</MenuItem.Icon>

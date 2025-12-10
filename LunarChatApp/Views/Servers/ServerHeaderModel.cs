@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.ViewModels.Dialogs;
 using LunarChatApp.Views;
+using LunarChatApp.Views.Dialogs;
 using LunarChatSharp;
 using LunarChatSharp.Core.Servers;
 using LunarChatSharp.Rest.Channels;
@@ -46,7 +47,7 @@ public partial class ServerHeaderModel : ViewModelBase
     public void UpdatePermissions()
     {
         CanManageChannels = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
-
+        CanChangeNickname = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ChangeNickname) || services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ManageNicknames);
         CanViewSettings = services.State.Socket.CurrentServer.CanManageServer(services.State.Socket.CurrentServer.Member);
     }
 
@@ -58,6 +59,9 @@ public partial class ServerHeaderModel : ViewModelBase
 
     [ObservableProperty]
     private bool _canViewSettings;
+
+    [ObservableProperty]
+    private bool canChangeNickname;
 
     [RelayCommand]
     public async Task CreateChannel()
@@ -86,6 +90,28 @@ public partial class ServerHeaderModel : ViewModelBase
     public void CopyServerID()
     {
         services.CopyText(services.State.Socket.CurrentServer?.Server.Id);
+    }
+
+    [RelayCommand]
+    public void ChangeNickname()
+    {
+        services.Dialogs.Create(new CreateNameDialog(), new CreateNameDialogModel { Name = services.State.Socket.CurrentServer?.Member.Nickname }, "Change Nickname").WithSubmit(SubmitNickname).Open();
+    }
+
+    public async Task SubmitNickname(UserControl control)
+    {
+        CreateNameDialogModel? model = control.DataContext as CreateNameDialogModel;
+        if (model == null)
+            return;
+
+        try
+        {
+            await services.Rest.EditMemberAsync(services.State.Socket.CurrentServer.Server.Id, services.State.Socket.CurrentServer.Member.Id, new EditMemberRequest
+            {
+                Nickname = model.Name ?? ""
+            });
+        }
+        catch { }
     }
 
     [RelayCommand]

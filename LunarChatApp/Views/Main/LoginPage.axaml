@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:lunarchatsharp="using:LunarChatSharp"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:shadui="using:ShadUI"
 			 xmlns:viewmodels="using:LunarChatApp.ViewModels"
@@ -25,6 +26,7 @@
 						<TextBox
 						shadui:ControlAssist.Label="Username"
 						Classes="Clearable"
+						MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxNameLength}}"
 						Text="{Binding Username, Mode=TwoWay}"
 						Watermark="bob">
 							<TextBox.KeyBindings>
@@ -50,12 +52,12 @@
 						</StackPanel>
 					</shadui:Card.Header>
 					<StackPanel Spacing="16">
-						<TextBox
+						<TextBox MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxLinkLength}}"
 						shadui:ControlAssist.Label="Email"
 						Classes="Clearable"
 						Text="{Binding Email, Mode=TwoWay}"
 						Watermark="user@example.com" />
-						<TextBox
+						<TextBox MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxLinkLength}}"
 						shadui:ControlAssist.Label="Password"
 						Classes="PasswordReveal"
 						PasswordChar="*"
@@ -79,24 +81,24 @@
 						</StackPanel>
 					</shadui:Card.Header>
 					<StackPanel Spacing="16">
-						<TextBox
+						<TextBox MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxLinkLength}}"
 						shadui:ControlAssist.Label="Email"
 						Classes="Clearable"
 						Text="{Binding Email, Mode=TwoWay}"
 						Watermark="user@example.com" />
-						<TextBox
+						<TextBox MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxNameLength}}"
 						shadui:ControlAssist.Hint="This is your public display name."
 						shadui:ControlAssist.Label="Username"
 						Classes="Clearable"
 						Text="{Binding Username, Mode=TwoWay}"
 						Watermark="bob" />
-						<TextBox
+						<TextBox MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxLinkLength}}"
 						shadui:ControlAssist.Label="Password"
 						Classes="PasswordReveal"
 						PasswordChar="*"
 						Text="{Binding Password, Mode=TwoWay}"
 						Watermark="Enter password" />
-						<TextBox
+						<TextBox MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxLinkLength}}"
 						shadui:ControlAssist.Label="Confirm"
 						Classes="PasswordReveal"
 						PasswordChar="*"

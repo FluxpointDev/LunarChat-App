@@ -2,6 +2,7 @@
 			 xmlns:converters="using:LunarChatApp.Utility.Converters"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:lunarchatsharp="using:LunarChatSharp"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:settings="using:LunarChatApp.Views.Servers.Settings"
 			 xmlns:shadui="using:ShadUI"
@@ -19,7 +20,8 @@
 			<TabControl.Items>
 				<TabItem Header="Display">
 						<StackPanel HorizontalAlignment="Left" Spacing="10">
-							<TextBox Width="255" shadui:ControlAssist.Label="Role Name" Text="{Binding RoleName}" IsEnabled="{Binding AllowEdit}"></TextBox>
+							<TextBox Width="255" shadui:ControlAssist.Label="Role Name" Text="{Binding RoleName}" IsEnabled="{Binding AllowEdit}"
+								MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxNameLength}}"></TextBox>
 							<ColorPicker Width="255" shadui:ControlAssist.Label="Color" IsEnabled="{Binding AllowEdit}"
 										 Color="{Binding Color, Mode=TwoWay}" IsAlphaVisible="False">
 								<ColorPicker.Content>
