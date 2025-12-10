@@ -1,0 +1,234 @@
+﻿<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shadui="clr-namespace:ShadUI"
+    xmlns:system="clr-namespace:System;assembly=netstandard"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="avares://ShadUI/Controls/Common.axaml" />
+    </ResourceDictionary.MergedDictionaries>
+    <Design.PreviewWith>
+        <Border
+            Height="500"
+            Padding="24"
+            Width="255">
+            <StackPanel Spacing="8">
+                <shadui:TimeInput ClockIdentifier="12HourClock" UseSeconds="True" />
+                <shadui:TimeInput shadui:ControlAssist.Label="Start time" />
+                <shadui:TimeInput shadui:ControlAssist.Hint="Set end time" shadui:ControlAssist.Label="End time" />
+                <shadui:TimeInput IsEnabled="False" shadui:ControlAssist.Label="Disable" />
+                <shadui:TimeInput>
+                    <DataValidationErrors.Error>
+                        <system:Exception />
+                    </DataValidationErrors.Error>
+                </shadui:TimeInput>
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+    <ControlTheme TargetType="ToggleButton" x:Key="ToggleButtonTheme">
+        <Setter Property="Padding" Value="8,0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="CornerRadius" Value="{DynamicResource MdCornerRadius}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <Border
+                        Background="{DynamicResource GhostColor}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Name="Background"
+                        Opacity="0">
+                        <Border.Transitions>
+                            <Transitions>
+                                <DoubleTransition Duration="0:0:0.20" Property="Opacity" />
+                            </Transitions>
+                        </Border.Transitions>
+                    </Border>
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Name="RootBorder"
+                        Padding="{TemplateBinding Padding}"
+                        TextElement.Foreground="{TemplateBinding Foreground}">
+                        <Border.Transitions>
+                            <Transitions>
+                                <DoubleTransition Duration="0:0:0.20" Property="Opacity" />
+                            </Transitions>
+                        </Border.Transitions>
+                        <ContentPresenter
+                            Content="{TemplateBinding Content}"
+                            FontSize="{TemplateBinding FontSize}"
+                            FontWeight="SemiBold"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            RecognizesAccessKey="True"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+        </Style>
+        <Style Selector="^ /template/ ContentPresenter">
+            <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+        </Style>
+        <Style Selector="^:pointerover /template/ Border#Background">
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^:pressed">
+            <Style Selector="^ /template/ Border">
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <ScaleTransform ScaleX="0.95" ScaleY="0.95" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Style>
+        <Style Selector="^[IsChecked=True]">
+            <Setter Property="Content" Value="PM" />
+        </Style>
+        <Style Selector="^[IsChecked=False]">
+            <Setter Property="Content" Value="AM" />
+        </Style>
+    </ControlTheme>
+    <ControlTheme TargetType="{x:Type shadui:TimeInput}" x:Key="{x:Type shadui:TimeInput}">
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Background" Value="{DynamicResource SelectionColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource LgCornerRadius}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+        <Setter Property="shadui:ElementAssist.FocusOnLoad" Value="False" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <StackPanel Background="Transparent" Focusable="False">
+                    <TextBlock
+                        Classes="Small"
+                        IsVisible="{TemplateBinding shadui:ControlAssist.Label,
+                                                    Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                        Margin="0,0,0,6"
+                        Name="Label"
+                        Text="{TemplateBinding shadui:ControlAssist.Label}" />
+                    <DataValidationErrors Focusable="False">
+                        <StackPanel>
+                            <Border
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{TemplateBinding CornerRadius}"
+                                HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                Name="Container"
+                                Padding="{TemplateBinding Padding}"
+                                VerticalAlignment="{TemplateBinding VerticalAlignment}">
+                                <Grid ColumnDefinitions="* Auto * Auto * Auto">
+                                    <TextBox
+                                        Cursor="IBeam"
+                                        Grid.Column="0"
+                                        Name="PART_HourTextBox"
+                                        Text="{TemplateBinding HourString,
+                                                               Mode=TwoWay}"
+                                        Theme="{StaticResource InputBoxTheme}"
+                                        Watermark="hh"
+                                        shadui:ElementAssist.FocusOnLoad="{TemplateBinding shadui:ElementAssist.FocusOnLoad}" />
+                                    <TextBlock
+                                        FontSize="18"
+                                        Grid.Column="1"
+                                        Margin="8,0,8,2"
+                                        VerticalAlignment="Center">
+                                        :
+                                    </TextBlock>
+                                    <TextBox
+                                        Cursor="IBeam"
+                                        Grid.Column="2"
+                                        Name="PART_MinuteTextBox"
+                                        Text="{TemplateBinding MinuteString,
+                                                               Mode=TwoWay}"
+                                        Theme="{StaticResource InputBoxTheme}"
+                                        Watermark="mm" />
+                                    <TextBlock
+                                        FontSize="18"
+                                        Grid.Column="3"
+                                        IsVisible="{TemplateBinding UseSeconds}"
+                                        Margin="8,0,8,2"
+                                        VerticalAlignment="Center">
+                                        :
+                                    </TextBlock>
+                                    <TextBox
+                                        Cursor="IBeam"
+                                        Grid.Column="4"
+                                        IsVisible="{TemplateBinding UseSeconds}"
+                                        Name="PART_SecondTextBox"
+                                        Text="{TemplateBinding SecondString,
+                                                               Mode=TwoWay}"
+                                        Theme="{StaticResource InputBoxTheme}"
+                                        Watermark="ss" />
+                                    <ToggleButton
+                                        Grid.Column="5"
+                                        IsVisible="{TemplateBinding ClockIdentifier,
+                                                                    Converter={x:Static shadui:StringConverters.IsMatch},
+                                                                    ConverterParameter='12HourClock'}"
+                                        Margin="8,0,0,0"
+                                        Name="PART_ToggleButton"
+                                        Theme="{StaticResource ToggleButtonTheme}" />
+                                </Grid>
+                            </Border>
+                            <TextBlock
+                                Classes="Caption Muted"
+                                IsVisible="{TemplateBinding shadui:ControlAssist.Hint,
+                                                            Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                Margin="0,4,0,0"
+                                Text="{TemplateBinding shadui:ControlAssist.Hint}" />
+                        </StackPanel>
+                    </DataValidationErrors>
+                </StackPanel>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^[ClockIdentifier=24HourClock] /template/ TextBox#PART_HourTextBox">
+            <Setter Property="Watermark" Value="HH" />
+        </Style>
+        <Style Selector="^[InputFocus=True]">
+            <Setter Property="BorderBrush" Value="{DynamicResource PrimaryColor}" />
+        </Style>
+        <Style Selector="^:focus /template/ Border#Container">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Duration="0:0:0.20" Property="BorderBrush" />
+                </Transitions>
+            </Setter>
+            <Setter Property="BorderBrush" Value="{DynamicResource PrimaryColor}" />
+        </Style>
+        <Style Selector="^ /template/ TextBox:focus">
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryForegroundColor}" />
+            <Setter Property="CaretBrush" Value="{DynamicResource PrimaryForegroundColor}" />
+            <Setter Property="SelectionBrush" Value="{DynamicResource MutedColor}" />
+        </Style>
+        <Style Selector="^:pointerover /template/ Border#Container">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Duration="0:0:0.20" Property="BorderBrush" />
+                </Transitions>
+            </Setter>
+            <Setter Property="BorderBrush" Value="{DynamicResource PrimaryColor}" />
+        </Style>
+        <Style Selector="^:error">
+            <Style Selector="^/template/ Border#Container">
+                <Setter Property="BorderBrush" Value="{DynamicResource ErrorColor}" />
+            </Style>
+            <Style Selector="^/template/ TextBlock#Label">
+                <Setter Property="Foreground" Value="{DynamicResource ErrorColor}" />
+            </Style>
+        </Style>
+
+        <Style Selector="^:disabled /template/ Border#Container">
+            <Setter Property="Opacity" Value="0.5" />
+        </Style>
+    </ControlTheme>
+
+</ResourceDictionary>

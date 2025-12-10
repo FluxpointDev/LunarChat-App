@@ -1,0 +1,215 @@
+﻿<ResourceDictionary
+    x:ClassModifier="internal"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shadui="clr-namespace:ShadUI"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Panel Height="500" Width="500">
+            <CalendarItem HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Panel>
+    </Design.PreviewWith>
+    <ControlTheme TargetType="CalendarItem" x:Key="{x:Type CalendarItem}">
+        <Setter Property="CornerRadius" Value="{DynamicResource LgCornerRadius}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+        <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="4,12,4,8" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        BoxShadow="{DynamicResource Shadow}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Margin="2,0,2,4">
+                        <Border CornerRadius="{TemplateBinding CornerRadius}" Margin="{TemplateBinding Padding}">
+                            <Grid ColumnDefinitions="Auto * Auto" RowDefinitions="Auto *">
+                                <Grid.Styles>
+                                    <Style Selector="Button.CalendarHeader">
+                                        <Setter Property="Cursor" Value="Hand" />
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="BorderThickness" Value="0" />
+                                    </Style>
+                                    <Style Selector="Button.CalendarHeader:pressed  /template/ ContentPresenter">
+                                        <Setter Property="Background" Value="Transparent" />
+                                    </Style>
+                                    <Style Selector="Button.CalendarNavigation">
+                                        <Setter Property="Height" Value="20" />
+                                        <Setter Property="Width" Value="28" />
+                                    </Style>
+                                    <Style Selector="Button.CalendarNavigation &gt; Path">
+                                        <Setter Property="Fill" Value="{DynamicResource ThemeForegroundBrush}" />
+                                    </Style>
+                                    <Style Selector="Button.CalendarNavigation:pointerover &gt; Path">
+                                        <Setter Property="Fill" Value="{DynamicResource HighlightBrush}" />
+                                    </Style>
+                                    <Style Selector="Button#HeaderButton:pointerover">
+                                        <Setter Property="Foreground" Value="{DynamicResource HighlightBrush}" />
+                                    </Style>
+                                </Grid.Styles>
+                                <Border
+                                    Background="{TemplateBinding HeaderBackground}"
+                                    CornerRadius="{TemplateBinding CornerRadius,
+                                                                   Converter={x:Static shadui:CornerRadiusConverters.TopOnly}}"
+                                    Grid.ColumnSpan="3"
+                                    Height="40"
+                                    VerticalAlignment="Top" />
+                                <Button
+                                    BorderBrush="{DynamicResource BorderColor}"
+                                    Classes="Icon"
+                                    Grid.Column="0"
+                                    Grid.Row="0"
+                                    Height="26"
+                                    HorizontalAlignment="Left"
+                                    Margin="10,0,0,0"
+                                    Name="PART_PreviousButton"
+                                    Opacity="0.5"
+                                    Width="26">
+                                    <PathIcon Data="{x:Static shadui:Icons.ChevronLeft}" Height="9" />
+                                </Button>
+                                <Button
+                                    Classes="CalendarHeader"
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    Grid.Column="1"
+                                    Grid.Row="0"
+                                    HorizontalAlignment="Center"
+                                    Name="PART_HeaderButton"
+                                    Padding="16,8"
+                                    VerticalAlignment="Center"
+                                    shadui:ButtonAssist.HoverBackground="{DynamicResource GhostHoverColor}" />
+                                <Button
+                                    BorderBrush="{DynamicResource BorderColor}"
+                                    Classes="Icon"
+                                    Grid.Column="2"
+                                    Grid.Row="0"
+                                    Height="26"
+                                    HorizontalAlignment="Left"
+                                    Margin="0,0,10,0"
+                                    Name="PART_NextButton"
+                                    Opacity="0.5"
+                                    Width="26">
+                                    <PathIcon Data="{x:Static shadui:Icons.ChevronRight}" Height="9" />
+                                </Button>
+                                <Grid
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="3"
+                                    Grid.Row="1"
+                                    IsVisible="False"
+                                    Margin="6,-1,6,6"
+                                    Name="PART_MonthView">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                </Grid>
+                                <Grid
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="3"
+                                    Grid.Row="1"
+                                    IsVisible="False"
+                                    Margin="6,-3,7,6"
+                                    Name="PART_YearView">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </Border>
+                    <Border
+                        Background="{DynamicResource GhostColor}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        IsVisible="False"
+                        Margin="{TemplateBinding Padding}"
+                        Name="DisabledVisual"
+                        Opacity="0.50" />
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ Button.Icon">
+            <Setter Property="Width" Value="28" />
+            <Setter Property="Height" Value="28" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundColor}" />
+            <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+            <Style Selector="^ /template/ Border#RootBorder">
+                <Setter Property="Transitions">
+                    <Transitions>
+                        <BrushTransition Duration="0:0:0.2" Property="Background" />
+                        <BrushTransition Duration="0:0:0.2" Property="BorderBrush" />
+                    </Transitions>
+                </Setter>
+            </Style>
+            <Style Selector="^ /template/ TextBlock">
+                <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+                <Setter Property="Transitions">
+                    <Transitions>
+                        <BrushTransition Duration="0:0:0.3" Property="Foreground" />
+                    </Transitions>
+                </Setter>
+            </Style>
+            <Style Selector="^ /template/ ContentPresenter">
+                <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+                <Setter Property="Transitions">
+                    <Transitions>
+                        <BrushTransition Duration="0:0:0.3" Property="Foreground" />
+                    </Transitions>
+                </Setter>
+            </Style>
+            <Style Selector="^:pointerover /template/ Border#RootBorder">
+                <Setter Property="Background" Value="{DynamicResource OutlineColor}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource OutlineColor}" />
+            </Style>
+
+            <Style Selector="^:pressed">
+                <Style Selector="^.IconContent /template/ Border">
+                    <Setter Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="0.95" ScaleY="0.95" />
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Style>
+        </Style>
+
+        <Setter Property="DayTitleTemplate">
+            <Template x:DataType="x:String">
+                <TextBlock
+                    Classes="Caption Muted"
+                    HorizontalAlignment="Center"
+                    Margin="0,4,0,4"
+                    Text="{CompiledBinding}"
+                    VerticalAlignment="Center" />
+            </Template>
+        </Setter>
+
+        <Style Selector="^:calendardisabled /template/ Border#DisabledVisual">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>

@@ -1,0 +1,112 @@
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shadui="clr-namespace:ShadUI"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <!--  Add Controls for Previewer Here  -->
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="shadui|SimpleDropdown Button">
+        <Setter Property="Margin" Value="4,0" />
+        <Setter Property="Padding" Value="12 8" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+        <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource MdCornerRadius}" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="shadui:ButtonAssist.Icon" Value="{x:Null}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Panel Name="RootPanel">
+                        <Panel.Transitions>
+                            <Transitions>
+                                <TransformOperationsTransition Duration="0:0:0.10" Property="RenderTransform" />
+                            </Transitions>
+                        </Panel.Transitions>
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            Name="PART_BaseBackground"
+                            Opacity="1">
+                            <Border.Transitions>
+                                <Transitions>
+                                    <DoubleTransition Duration="0:0:0.20" Property="Opacity" />
+                                </Transitions>
+                            </Border.Transitions>
+                        </Border>
+                        <Border
+                            Background="{DynamicResource GhostColor}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            Name="PART_HoverBackground"
+                            Opacity="0">
+                            <Border.Transitions>
+                                <Transitions>
+                                    <DoubleTransition Duration="0:0:0.20" Property="Opacity" />
+                                </Transitions>
+                            </Border.Transitions>
+                        </Border>
+                        <Border
+                            Background="Transparent"
+                            ClipToBounds="True"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                            <Grid Margin="{TemplateBinding Padding}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition SharedSizeGroup="A" Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter
+                                    Content="{TemplateBinding shadui:ButtonAssist.Icon}"
+                                    IsVisible="{TemplateBinding shadui:ButtonAssist.Icon,
+                                                                Converter={x:Static ObjectConverters.IsNotNull}}"
+                                    Margin="0,0,8,0" />
+                                <ContentPresenter
+                                    Content="{TemplateBinding Content}"
+                                    FontSize="{TemplateBinding FontSize}"
+                                    FontWeight="{TemplateBinding FontWeight}"
+                                    Foreground="{TemplateBinding Foreground}"
+                                    Grid.Column="1"
+                                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    RecognizesAccessKey="True"
+                                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            </Grid>
+                        </Border>
+                    </Panel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style Selector="shadui|SimpleDropdown Button:pressed">
+        <Style Selector="^ /template/ Panel#RootPanel">
+            <Setter Property="RenderTransform" Value="scale(1, 1)" />
+        </Style>
+    </Style>
+    <Style Selector="shadui|SimpleDropdown Button:pointerover">
+        <Style Selector="^ /template/ Border#PART_HoverBackground">
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^ /template/ Border#PART_BaseBackground">
+            <Setter Property="Opacity" Value="0" />
+        </Style>
+    </Style>
+    <Style Selector="shadui|SimpleDropdown Button.DestructiveMenu">
+        <Setter Property="Foreground" Value="{DynamicResource DestructiveColor}" />
+        <Style Selector="^ /template/ Border#PART_HoverBackground">
+            <Setter Property="Background" Value="{DynamicResource DestructiveColor10}" />
+        </Style>
+    </Style>
+    <Style Selector="shadui|SimpleDropdown Button:disabled">
+        <Setter Property="Opacity" Value="0.5" />
+    </Style>
+    <Style Selector="shadui|SimpleDropdown Separator">
+        <Setter Property="Margin" Value="0,4" />
+    </Style>
+    <Style Selector="shadui|SimpleDropdown">
+        <Setter Property="Grid.IsSharedSizeScope" Value="True" />
+    </Style>
+</Styles>

@@ -1,0 +1,39 @@
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shadui="clr-namespace:ShadUI"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style Selector="Button shadui|Loading">
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+    </Style>
+    <Style Selector="Button.Primary shadui|Loading">
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryForegroundColor}" />
+    </Style>
+
+    <Style Selector="Button.Secondary shadui|Loading">
+        <Setter Property="Foreground" Value="{DynamicResource SecondaryForegroundColor}" />
+    </Style>
+
+    <Style Selector="Button.Destructive shadui|Loading">
+        <Setter Property="Foreground" Value="{DynamicResource DestructiveForegroundColor}" />
+    </Style>
+
+    <Style Selector="Button.Outline shadui|Loading">
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+    </Style>
+
+    <Style Selector="Button.Ghost shadui|Loading">
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+    </Style>
+
+    <Style Selector="Button.Icon shadui|Loading">
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+    </Style>
+
+    <Style Selector="Button.DestructiveIcon shadui|Loading">
+        <Setter Property="Foreground" Value="{DynamicResource DestructiveForegroundColor}" />
+    </Style>
+
+    <Style Selector="TextBox shadui|Loading">
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryColor}" />
+    </Style>
+</Styles>

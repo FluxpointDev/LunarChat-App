@@ -1,0 +1,124 @@
+﻿<ResourceDictionary
+    x:ClassModifier="internal"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shadui="clr-namespace:ShadUI"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border Padding="24">
+            <StackPanel Spacing="12">
+                <Border
+                    BorderBrush="{DynamicResource BorderColor}"
+                    BorderThickness="1"
+                    CornerRadius="{DynamicResource LgCornerRadius}"
+                    MaxWidth="500">
+                    <shadui:SimpleDialog
+                        CancelButtonStyle="Outline"
+                        CancelButtonText="Cancel"
+                        Message="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
+                        PrimaryButtonText="Continue"
+                        Title="Are you absolutely sure?" />
+                </Border>
+                <Border
+                    BorderBrush="{DynamicResource BorderColor}"
+                    BorderThickness="1"
+                    CornerRadius="{DynamicResource LgCornerRadius}"
+                    MaxWidth="500">
+                    <shadui:SimpleDialog
+                        CancelButtonStyle="Outline"
+                        CancelButtonText="Cancel"
+                        Message="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
+                        PrimaryButtonStyle="Destructive"
+                        PrimaryButtonText="Delete"
+                        Title="Are you absolutely sure?" />
+                </Border>
+                <Border
+                    BorderBrush="{DynamicResource BorderColor}"
+                    BorderThickness="1"
+                    CornerRadius="{DynamicResource LgCornerRadius}"
+                    MaxWidth="500">
+                    <shadui:SimpleDialog
+                        CancelButtonStyle="Ghost"
+                        CancelButtonText="Cancel"
+                        Message="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
+                        PrimaryButtonText="Yes"
+                        SecondaryButtonStyle="Secondary"
+                        SecondaryButtonText="No"
+                        TertiaryButtonStyle="Outline"
+                        TertiaryButtonText="Maybe"
+                        Title="Are you absolutely sure?" />
+                </Border>
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+    <ControlTheme TargetType="shadui:SimpleDialog" x:Key="SimpleDialogTheme">
+        <Setter Property="Padding" Value="24" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <StackPanel Margin="{TemplateBinding Padding}" Spacing="16">
+                        <TextBlock
+                            FontSize="18"
+                            FontWeight="DemiBold"
+                            Text="{TemplateBinding Title}"
+                            TextWrapping="Wrap" />
+                        <TextBlock
+                            FontSize="14"
+                            FontWeight="Medium"
+                            Foreground="{DynamicResource MutedColor}"
+                            LineHeight="20"
+                            Text="{TemplateBinding Message}"
+                            TextWrapping="Wrap" />
+                        <StackPanel
+                            HorizontalAlignment="Right"
+                            Name="ButtonContainer"
+                            Orientation="Horizontal"
+                            Spacing="8">
+                            <Button
+                                Content="{TemplateBinding CancelButtonText}"
+                                IsVisible="{CompiledBinding Content,
+                                                            ElementName=PART_CancelButton,
+                                                            Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                MinWidth="80"
+                                Name="PART_CancelButton"
+                                shadui:ElementAssist.Classes="{TemplateBinding CancelButtonStyle,
+                                                                               Converter={x:Static shadui:DialogButtonStyleConverters.ToClass}}" />
+                            <Button
+                                Content="{TemplateBinding TertiaryButtonText}"
+                                IsVisible="{CompiledBinding Content,
+                                                            ElementName=PART_TertiaryButton,
+                                                            Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                MinWidth="80"
+                                Name="PART_TertiaryButton"
+                                shadui:ElementAssist.Classes="{TemplateBinding TertiaryButtonStyle,
+                                                                               Converter={x:Static shadui:DialogButtonStyleConverters.ToClass}}" />
+                            <Button
+                                Content="{TemplateBinding SecondaryButtonText}"
+                                IsVisible="{CompiledBinding Content,
+                                                            ElementName=PART_SecondaryButton,
+                                                            Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                MinWidth="80"
+                                Name="PART_SecondaryButton"
+                                shadui:ElementAssist.Classes="{TemplateBinding SecondaryButtonStyle,
+                                                                               Converter={x:Static shadui:DialogButtonStyleConverters.ToClass}}" />
+                            <Button
+                                Content="{TemplateBinding PrimaryButtonText}"
+                                IsVisible="{CompiledBinding Content,
+                                                            ElementName=PART_PrimaryButton,
+                                                            Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                MinWidth="80"
+                                Name="PART_PrimaryButton"
+                                shadui:ElementAssist.Classes="{TemplateBinding PrimaryButtonStyle,
+                                                                               Converter={x:Static shadui:DialogButtonStyleConverters.ToClass}}"
+                                shadui:ElementAssist.FocusOnLoad="True" />
+                        </StackPanel>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </ControlTheme>
+
+    <ControlTheme
+        BasedOn="{StaticResource SimpleDialogTheme}"
+        TargetType="shadui:SimpleDialog"
+        x:Key="{x:Type shadui:SimpleDialog}" />
+</ResourceDictionary>

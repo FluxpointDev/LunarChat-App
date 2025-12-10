@@ -6,14 +6,16 @@
   <ItemGroup>
     <!-- Avalonia packages -->
     <!-- Important: keep version in sync! -->
-    <PackageVersion Include="Avalonia" Version="11.3.9" />
-    <PackageVersion Include="Avalonia.Controls.ItemsRepeater" Version="11.1.5" />
-    <PackageVersion Include="Avalonia.Fonts.Inter" Version="11.3.9" />
-    <PackageVersion Include="Avalonia.Diagnostics" Version="11.3.9" />
-    <PackageVersion Include="Avalonia.Desktop" Version="11.3.9" />
-    <PackageVersion Include="Avalonia.iOS" Version="11.3.9" />
-    <PackageVersion Include="Avalonia.Browser" Version="11.3.9" />
-    <PackageVersion Include="Avalonia.Android" Version="11.3.9" />
+    <PackageVersion Include="Avalonia" Version="12.0.999-cibuild0060659-alpha" />
+    <PackageVersion Include="Avalonia.Controls.ColorPicker" Version="12.0.999-cibuild0060659-alpha" />
+    <PackageVersion Include="Avalonia.Controls.ItemsRepeater" Version="11.2.999-cibuild0046261-alpha" />
+    <PackageVersion Include="Avalonia.Fonts.Inter" Version="12.0.999-cibuild0060659-alpha" />
+    <PackageVersion Include="Avalonia.Diagnostics" Version="12.0.999-cibuild0060659-alpha" />
+    <PackageVersion Include="Avalonia.Desktop" Version="12.0.999-cibuild0060659-alpha" />
+    <PackageVersion Include="Avalonia.iOS" Version="12.0.999-cibuild0060659-alpha" />
+    <PackageVersion Include="Avalonia.Browser" Version="12.0.999-cibuild0060655-alpha" />
+    <PackageVersion Include="Avalonia.Android" Version="12.0.999-cibuild0060659-alpha" />
+    <PackageVersion Include="Avalonia.Themes.Simple" Version="12.0.999-cibuild0060659-alpha" />
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageVersion Include="DynamicData" Version="9.4.1" />
     <PackageVersion Include="HotAvalonia" Version="3.0.1" />
@@ -27,8 +29,8 @@
     <PackageVersion Include="TextMateSharp.Grammars" Version="1.0.70" />
     <PackageVersion Include="WebView.Avalonia" Version="11.0.0.1" />
     <PackageVersion Include="WebView.Avalonia.Desktop" Version="11.0.0.1" />
-    <PackageVersion Include="WebView.Avalonia.Windows" Version="11.0.0.1" />
     <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.17" />
     <PackageVersion Include="Xaml.Behaviors.Avalonia" Version="11.3.9" />
+    <PackageVersion Include="Avalonia.Controls.DataGrid" Version="11.3.999-cibuild0055466-alpha" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,74 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--  basic colors  -->
+    <Color x:Key="ForegroundColor">#E5E5E5</Color>
+    <Color x:Key="ForegroundLeadColor">#A1A1AA</Color>
+    <Color x:Key="BackgroundColor">Transparent</Color>
+    <Color x:Key="MutedColor">#A0A0A9</Color>
+    <Color x:Key="BorderColor">#353535</Color>
+    <Color x:Key="BorderColor60">#262626</Color>
+    <Color x:Key="BorderColor30">#4C353535</Color>
+    <Color x:Key="OutlineColor">#3E3E3E</Color>
+    <Color x:Key="GhostColor">#252525</Color>
+    <Color x:Key="GhostHoverColor">#7F252525</Color>
+    <Color x:Key="GhostHoverColor50">#33252525</Color>
+    <Color x:Key="SelectionColor">#0CE5E5E5</Color>
+
+    <!--  theme colors  -->
+    <Color x:Key="PrimaryColor">#E5E5E5</Color>
+    <Color x:Key="PrimaryColor75">#BFE5E5E5</Color>
+    <Color x:Key="PrimaryColor50">#80E5E5E5</Color>
+    <Color x:Key="PrimaryColor10">#19E5E5E5</Color>
+    <Color x:Key="PrimaryForegroundColor">#18181B</Color>
+    <Color x:Key="SecondaryColor">#2C2C30</Color>
+    <Color x:Key="SecondaryColor75">#BF2C2C30</Color>
+    <Color x:Key="SecondaryColor50">#802C2C30</Color>
+    <Color x:Key="SecondaryForegroundColor">#E5E5E5</Color>
+    <Color x:Key="DestructiveColor">#9D4042</Color>
+    <Color x:Key="DestructiveColor75">#BF9D4042</Color>
+    <Color x:Key="DestructiveColor50">#809D4042</Color>
+    <Color x:Key="DestructiveColor10">#199D4042</Color>
+    <Color x:Key="DestructiveForegroundColor">#E5E5E5</Color>
+
+    <!--  notification colors  -->
+    <Color x:Key="InfoColor">#2979FF</Color>
+    <Color x:Key="InfoColor60">#992979FF</Color>
+    <Color x:Key="InfoColor20">#332979FF</Color>
+    <Color x:Key="InfoColor10">#192979FF</Color>
+    <Color x:Key="InfoColor5">#0D2979FF</Color>
+    <Color x:Key="SuccessColor">#00C853</Color>
+    <Color x:Key="SuccessColor60">#9900C853</Color>
+    <Color x:Key="SuccessColor20">#3300C853</Color>
+    <Color x:Key="SuccessColor10">#1900C853</Color>
+    <Color x:Key="SuccessColor5">#0D00C853</Color>
+    <Color x:Key="WarningColor">#FFD600</Color>
+    <Color x:Key="WarningColor60">#99FFD600</Color>
+    <Color x:Key="WarningColor20">#33FFD600</Color>
+    <Color x:Key="WarningColor10">#19FFD600</Color>
+    <Color x:Key="WarningColor5">#0DFFD600</Color>
+    <Color x:Key="ErrorColor">#FF1744</Color>
+    <Color x:Key="ErrorColor60">#99FF1744</Color>
+    <Color x:Key="ErrorColor20">#33FF1744</Color>
+    <Color x:Key="ErrorColor10">#19FF1744</Color>
+    <Color x:Key="ErrorColor5">#0DFF1744</Color>
+
+    <!--  specific control colors  -->
+    <Color x:Key="BusyAreaOverlayColor">#1971717A</Color>
+
+    <Color x:Key="CardBackgroundColor">#171717</Color>
+
+    <Color x:Key="DialogOverlayColor">#000000</Color>
+    <Color x:Key="DialogBackgroundColor">#0A0A0A</Color>
+
+    <Color x:Key="TitleBarBackgroundColor">#0A0A0A</Color>
+    <Color x:Key="WindowBackgroundColor">#0A0A0A</Color>
+    <Color x:Key="WindowButtonHoverColor">#0DFAFAFA</Color>
+
+    <Color x:Key="SidebarBackgroundColor">#0A0A0A</Color>
+
+    <Color x:Key="SwitchBackgroundColor">#282828</Color>
+    <Color x:Key="SwitchForegroundColor">#FAFAFA</Color>
+
+    <Color x:Key="TabItemSelectedColor">#09090B</Color>
+    <Color x:Key="TabItemsBackgroundColor">#27272A</Color>
+</ResourceDictionary>

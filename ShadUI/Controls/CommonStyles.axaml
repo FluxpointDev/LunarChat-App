@@ -1,0 +1,49 @@
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shadUI="clr-namespace:ShadUI"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style Selector="shadUI|Badge, Button">
+        <Style Selector="^.rounded-none">
+            <Setter Property="CornerRadius" Value="0" />
+        </Style>
+
+        <Style Selector="^.rounded-xs">
+            <Setter Property="CornerRadius" Value="2" />
+        </Style>
+
+        <Style Selector="^.rounded-sm">
+            <Setter Property="CornerRadius" Value="{DynamicResource SmCornerRadius}" />
+        </Style>
+        <Style Selector="^.rounded">
+            <Setter Property="CornerRadius" Value="{DynamicResource SmCornerRadius}" />
+        </Style>
+
+        <Style Selector="^.rounded-md">
+            <Setter Property="CornerRadius" Value="{DynamicResource MdCornerRadius}" />
+        </Style>
+
+        <Style Selector="^.rounded-lg">
+            <Setter Property="CornerRadius" Value="{DynamicResource LgCornerRadius}" />
+        </Style>
+
+        <Style Selector="^.rounded-xl">
+            <Setter Property="CornerRadius" Value="{DynamicResource XlCornerRadius}" />
+        </Style>
+
+        <Style Selector="^.rounded-2xl">
+            <Setter Property="CornerRadius" Value="{DynamicResource 2XlCornerRadius}" />
+        </Style>
+
+        <Style Selector="^.rounded-3xl">
+            <Setter Property="CornerRadius" Value="{DynamicResource 3XlCornerRadius}" />
+        </Style>
+
+        <Style Selector="^.rounded-4xl">
+            <Setter Property="CornerRadius" Value="{DynamicResource 4XlCornerRadius}" />
+        </Style>
+
+        <Style Selector="^.rounded-full">
+            <Setter Property="CornerRadius" Value="{DynamicResource FullCornerRadius}" />
+        </Style>
+    </Style>
+</Styles>

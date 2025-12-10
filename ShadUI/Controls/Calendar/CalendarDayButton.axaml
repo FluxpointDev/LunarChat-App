@@ -1,0 +1,126 @@
+﻿<ResourceDictionary
+    x:ClassModifier="internal"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shaui="clr-namespace:ShadUI"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Panel Height="500" Width="500">
+            <CalendarDayButton HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Panel>
+    </Design.PreviewWith>
+
+    <ControlTheme TargetType="CalendarDayButton" x:Key="{x:Type CalendarDayButton}">
+        <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource LgCornerRadius}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Width" Value="32" />
+        <Setter Property="Margin" Value="2" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Name="BaseBackground"
+                        Opacity="1">
+                        <Border.Transitions>
+                            <Transitions>
+                                <DoubleTransition Duration="0:0:0.20" Property="Opacity" />
+                            </Transitions>
+                        </Border.Transitions>
+                    </Border>
+                    <Border
+                        Background="{DynamicResource GhostColor}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Name="HoverBackground"
+                        Opacity="0">
+                        <Border.Transitions>
+                            <Transitions>
+                                <DoubleTransition Duration="0:0:0.20" Property="Opacity" />
+                            </Transitions>
+                        </Border.Transitions>
+                    </Border>
+                    <ContentPresenter
+                        Content="{TemplateBinding Content}"
+                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                        FontSize="{TemplateBinding FontSize}"
+                        Foreground="{TemplateBinding Foreground}"
+                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        Margin="{TemplateBinding Padding}"
+                        Name="ContentPresenter"
+                        Opacity="1"
+                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    <Path
+                        Data="{x:Static shaui:Icons.Cross}"
+                        Fill="{DynamicResource ForegroundColor}"
+                        Height="24"
+                        IsVisible="False"
+                        Name="BlackoutVisual"
+                        Opacity="0"
+                        Width="24">
+                        <Path.Transitions>
+                            <Transitions>
+                                <DoubleTransition Duration="0:0:0.20" Property="Opacity" />
+                            </Transitions>
+                        </Path.Transitions>
+                    </Path>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover /template/ Border#HoverBackground">
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^:pointerover /template/ Border#BaseBackground">
+            <Setter Property="Opacity" Value="0" />
+        </Style>
+        <Style Selector="^:selected">
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryForegroundColor}" />
+            <Setter Property="Background" Value="{DynamicResource PrimaryColor}" />
+            <Style Selector="^ /template/ Border#BaseBackground">
+                <Setter Property="Opacity" Value="1" />
+            </Style>
+            <Style Selector="^ /template/ Border#HoverBackground">
+                <Setter Property="Opacity" Value="0" />
+            </Style>
+        </Style>
+
+        <Style Selector="^:dayfocused">
+            <Style Selector="^ /template/ Border#BaseBackground">
+                <Setter Property="Background" Value="{DynamicResource OutlineColor}" />
+                <Setter Property="Opacity" Value="1" />
+            </Style>
+            <Style Selector="^ /template/ Border#HoverBackground">
+                <Setter Property="Opacity" Value="0" />
+            </Style>
+        </Style>
+
+        <Style Selector="^:today:not(:selected)">
+            <Style Selector="^ /template/ Border#BaseBackground">
+                <Setter Property="Background" Value="{DynamicResource PrimaryColor10}" />
+                <Setter Property="Opacity" Value="1" />
+            </Style>
+            <Style Selector="^ /template/ Border#HoverBackground">
+                <Setter Property="Opacity" Value="0" />
+            </Style>
+        </Style>
+
+        <Style Selector="^:inactive /template/ ContentPresenter#ContentPresenter">
+            <Setter Property="Opacity" Value="0.50" />
+        </Style>
+
+        <Style Selector="^:blackout /template/ Path#BlackoutVisual">
+            <Setter Property="Opacity" Value="0.3" />
+        </Style>
+
+        <Style Selector="^:disabled">
+            <Setter Property="Opacity" Value="0.50" />
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>

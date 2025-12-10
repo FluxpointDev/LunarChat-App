@@ -8,12 +8,7 @@
 	<NuGetAuditMode>direct</NuGetAuditMode>
 	<JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>portable</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>portable</DebugType>
-  </PropertyGroup>
+ 
   
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
@@ -33,14 +28,15 @@
     <PackageReference Include="DynamicData" />
     <PackageReference Include="Jab" />
     <PackageReference Include="Material.Icons.Avalonia" />
-    <PackageReference Include="ShadUI" />
     <PackageReference Include="WebView.Avalonia" />
     <PackageReference Include="Xaml.Behaviors.Avalonia" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Avalonia.Controls.DataGrid\Avalonia.Controls.DataGrid.csproj" />
     <ProjectReference Include="..\ext\LunarChatSharp\LunarChatSharp\LunarChatSharp.csproj" />
     <ProjectReference Include="..\LiveMarkdown.Avalonia\LiveMarkdown.Avalonia.csproj" />
+    <ProjectReference Include="..\ShadUI\ShadUI.csproj" />
   </ItemGroup>
 
   <ItemGroup>

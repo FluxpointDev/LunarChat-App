@@ -1,0 +1,75 @@
+﻿<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shadui="clr-namespace:ShadUI"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <shadui:BusyArea
+            Height="300"
+            IsBusy="True"
+            Width="140">
+            Busy...
+        </shadui:BusyArea>
+    </Design.PreviewWith>
+    <ControlTheme TargetType="shadui:BusyArea" x:Key="{x:Type shadui:BusyArea}">
+        <Setter Property="LoadingSize" Value="32" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <Border
+                        Background="{DynamicResource BusyAreaOverlayColor}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Height="{TemplateBinding Height}"
+                        Name="AreaBackground"
+                        Opacity="0"
+                        Width="{TemplateBinding Width}">
+                        <Border.Transitions>
+                            <Transitions>
+                                <DoubleTransition Duration="0:0:0.4" Property="Opacity" />
+                            </Transitions>
+                        </Border.Transitions>
+                    </Border>
+                    <StackPanel
+                        HorizontalAlignment="Center"
+                        Name="Content"
+                        VerticalAlignment="Center">
+                        <StackPanel.Transitions>
+                            <Transitions>
+                                <DoubleTransition Duration="0:0:0.4" Property="Opacity" />
+                            </Transitions>
+                        </StackPanel.Transitions>
+                        <Viewbox Height="{TemplateBinding LoadingSize}" Width="{TemplateBinding LoadingSize}">
+                            <ContentPresenter Content="{TemplateBinding IsBusy, Converter={x:Static shadui:BooleanConverters.ToLoading}}" />
+                        </Viewbox>
+                        <ContentPresenter Content="{TemplateBinding Content}" HorizontalContentAlignment="Center" />
+                    </StackPanel>
+                    <Panel.Styles>
+                        <Style Selector="shadui|BusyArea[IsBusy=True]">
+                            <Style Selector="^ Border#AreaBackground">
+                                <Setter Property="Opacity" Value="0.80" />
+                                <Setter Property="IsHitTestVisible" Value="True" />
+                            </Style>
+                            <Style Selector="^ StackPanel#Content">
+                                <Setter Property="Opacity" Value="1" />
+                                <Setter Property="IsVisible" Value="True" />
+                                <Setter Property="IsHitTestVisible" Value="True" />
+                                <Setter Property="RenderTransform" Value="scale(1)" />
+                            </Style>
+                        </Style>
+                        <Style Selector="shadui|BusyArea[IsBusy=False]">
+                            <Style Selector="^ Border#AreaBackground">
+                                <Setter Property="Opacity" Value="0" />
+                                <Setter Property="IsHitTestVisible" Value="False" />
+                            </Style>
+                            <Style Selector="^ StackPanel#Content">
+                                <Setter Property="Opacity" Value="0" />
+                                <Setter Property="IsHitTestVisible" Value="False" />
+                                <Setter Property="RenderTransform" Value="scale(0.70)" />
+                            </Style>
+                        </Style>
+                    </Panel.Styles>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

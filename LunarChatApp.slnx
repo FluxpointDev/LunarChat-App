@@ -2,6 +2,7 @@
   <Folder Name="/Solution Items/">
     <File Path="Directory.Packages.props" />
   </Folder>
+  <Project Path="Avalonia.Controls.DataGrid/Avalonia.Controls.DataGrid.csproj" />
   <Project Path="ext/LunarChatSharp/LunarChatSharp/LunarChatSharp.csproj" />
   <Project Path="LiveMarkdown.Avalonia/LiveMarkdown.Avalonia.csproj" Id="6a1fa0d2-42ec-4267-8d30-fd7a700187f1" />
   <Project Path="LunarChatApp.Android/LunarChatApp.Android.csproj">
@@ -12,4 +13,5 @@
   <Project Path="LunarChatApp.Host/LunarChatApp.Host.csproj" Id="6b2f5d09-b5cd-4d03-8bd8-81ae5a4ea341" />
   <Project Path="LunarChatApp.iOS/LunarChatApp.iOS.csproj" />
   <Project Path="LunarChatApp/LunarChatApp.csproj" />
+  <Project Path="ShadUI/ShadUI.csproj" Id="2338ee09-e586-41f7-b1f6-d7d1b74199db" />
 </Solution>

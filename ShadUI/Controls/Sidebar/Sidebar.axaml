@@ -1,0 +1,87 @@
+﻿<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shadui="clr-namespace:ShadUI"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ControlTheme TargetType="ToggleButton" x:Key="SideTogglerTheme">
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource LgCornerRadius}" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel Name="RootPanel">
+                    <Panel.Transitions>
+                        <Transitions>
+                            <TransformOperationsTransition Duration="0:0:0.10" Property="RenderTransform" />
+                        </Transitions>
+                    </Panel.Transitions>
+                    <Border
+                        Background="{DynamicResource GhostHoverColor}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Name="HoverBackground"
+                        Opacity="0">
+                        <Border.Transitions>
+                            <Transitions>
+                                <DoubleTransition Duration="0:0:0.20" Property="Opacity" />
+                            </Transitions>
+                        </Border.Transitions>
+                    </Border>
+                    <ContentPresenter Content="{TemplateBinding Content}" Padding="{TemplateBinding Padding}" />
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pressed /template/ Panel#RootPanel">
+            <Setter Property="RenderTransform" Value="scale(0.95, 0.95)" />
+        </Style>
+        <Style Selector="^:pointerover /template/ Border#HoverBackground">
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^:disabled">
+            <Setter Property="Opacity" Value="0.50" />
+        </Style>
+    </ControlTheme>
+
+    <ControlTheme TargetType="{x:Type shadui:Sidebar}" x:Key="{x:Type shadui:Sidebar}">
+        <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
+        <Setter Property="ItemIconContentSpacing" Value="12" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    Name="Border">
+                    <Grid IsSharedSizeScope="True" RowDefinitions="Auto * Auto">
+                        <ContentPresenter
+                            Content="{TemplateBinding Header}"
+                            Grid.Row="0"
+                            Margin="{TemplateBinding Padding,
+                                                     Converter={x:Static shadui:ThicknessConverters.NoBottom}}" />
+                        <ScrollViewer
+                            Classes.Stack="{TemplateBinding Expanded,
+                                                            Converter={x:Static BoolConverters.Not}}"
+                            Grid.Row="1"
+                            Margin="0,8"
+                            Padding="{TemplateBinding Padding,
+                                                      Converter={x:Static shadui:ThicknessConverters.LeftRight}}">
+                            <ScrollViewer.Transitions>
+                                <Transitions>
+                                    <DoubleTransition Duration="0:0:0.20" Property="Height" />
+                                </Transitions>
+                            </ScrollViewer.Transitions>
+                            <ContentPresenter Content="{TemplateBinding Content}" />
+                        </ScrollViewer>
+                        <ContentPresenter
+                            Content="{TemplateBinding Footer}"
+                            Grid.Row="2"
+                            Margin="{TemplateBinding Padding,
+                                                     Converter={x:Static shadui:ThicknessConverters.NoTop}}" />
+                    </Grid>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

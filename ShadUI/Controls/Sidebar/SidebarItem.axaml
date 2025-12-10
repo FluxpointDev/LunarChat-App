@@ -1,0 +1,152 @@
+﻿<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shadui="clr-namespace:ShadUI"
+    xmlns:system="clr-namespace:System;assembly=netstandard"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ControlTheme TargetType="{x:Type shadui:SidebarItem}" x:Key="{x:Type shadui:SidebarItem}">
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="SharedSizeGroup" Value="{Binding $parent[shadui:Sidebar].DefaultItemsSharedSizeGroup}" />
+        <Setter Property="GroupName" Value="{Binding $parent[shadui:Sidebar].DefaultItemsGroup}" />
+        <Setter Property="Expanded" Value="{Binding $parent[shadui:Sidebar].Expanded}" />
+        <Setter Property="Spacing" Value="{Binding $parent[shadui:Sidebar].ItemIconContentSpacing}" />
+        <Setter Property="ParentRoute" Value="{Binding $parent[shadui:Sidebar].CurrentRoute}" />
+        <Setter Property="TextBlock.TextTrimming" Value="CharacterEllipsis" />
+        <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+        <Setter Property="TextBlock.MaxLines" Value="2" />
+        <Setter Property="Padding" Value="16,12" />
+        <Setter Property="CornerRadius" Value="{DynamicResource LgCornerRadius}" />
+        <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel Background="Transparent" Name="RootPanel">
+                    <Panel.Transitions>
+                        <Transitions>
+                            <TransformOperationsTransition Duration="0:0:0.10" Property="RenderTransform" />
+                        </Transitions>
+                    </Panel.Transitions>
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Name="BaseBackground"
+                        Opacity="1">
+                        <Border.Transitions>
+                            <Transitions>
+                                <DoubleTransition Duration="0:0:0.20" Property="Opacity" />
+                            </Transitions>
+                        </Border.Transitions>
+                    </Border>
+                    <Border
+                        Background="{DynamicResource GhostHoverColor}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Name="HoverBackground"
+                        Opacity="0">
+                        <Border.Transitions>
+                            <Transitions>
+                                <DoubleTransition Duration="0:0:0.20" Property="Opacity" />
+                            </Transitions>
+                        </Border.Transitions>
+                    </Border>
+                    <Border
+                        Background="{DynamicResource GhostColor}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Name="SelectedBackground"
+                        Opacity="0">
+                        <Border.Transitions>
+                            <Transitions>
+                                <DoubleTransition Duration="0:0:0.20" Property="Opacity" />
+                            </Transitions>
+                        </Border.Transitions>
+                    </Border>
+                    <Border
+                        ClipToBounds="True"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Name="PART_BorderContainer"
+                        Padding="{TemplateBinding Padding}"
+                        TextElement.Foreground="{TemplateBinding Foreground}">
+                        <Grid Name="Grid">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition SharedSizeGroup="{TemplateBinding SharedSizeGroup}" Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <ContentControl Content="{TemplateBinding Icon}" Grid.Column="0" />
+                            <Panel Grid.Column="1" Width="{TemplateBinding Spacing}">
+                                <Panel.IsVisible>
+                                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                        <Binding Converter="{x:Static ObjectConverters.IsNotNull}" Path="#PART_ContentPresenter.Content" />
+                                        <Binding Path="#PART_ContentPresenter.IsVisible" />
+                                    </MultiBinding>
+                                </Panel.IsVisible>
+                            </Panel>
+                            <ContentPresenter
+                                Content="{TemplateBinding Content}"
+                                Grid.Column="2"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                Name="PART_ContentPresenter"
+                                RecognizesAccessKey="True"
+                                TextBlock.FontSize="{TemplateBinding FontSize}"
+                                TextBlock.FontWeight="{TemplateBinding FontWeight}"
+                                TextBlock.MaxLines="{TemplateBinding TextBlock.MaxLines}"
+                                TextBlock.TextTrimming="{TemplateBinding TextBlock.TextTrimming}"
+                                TextBlock.TextWrapping="{TemplateBinding TextBlock.TextWrapping}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                                <ContentPresenter.DataTemplates>
+                                    <DataTemplate DataType="system:String">
+                                        <TextBlock Text="{CompiledBinding}" />
+                                    </DataTemplate>
+                                </ContentPresenter.DataTemplates>
+                            </ContentPresenter>
+                        </Grid>
+                    </Border>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+
+        <!--  Nested Selectors For Default Button  -->
+        <Style Selector="^ /template/ TextBlock">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Medium" />
+        </Style>
+        <Style Selector="^[Expanded=False]">
+            <Setter Property="Padding" Value="4,10" />
+            <Style Selector="^ /template/ Grid#Grid">
+                <Setter Property="HorizontalAlignment" Value="Center" />
+            </Style>
+            <Style Selector="^[HasIcon=False]">
+                <Setter Property="IsVisible" Value="False" />
+            </Style>
+        </Style>
+        <Style Selector="^:disabled">
+            <Setter Property="Opacity" Value="0.5" />
+        </Style>
+        <Style Selector="^:pointerover /template/ Border#HoverBackground">
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^:pointerover /template/ Border#BaseBackground">
+            <Setter Property="Opacity" Value="0" />
+        </Style>
+        <Style Selector="^:checked /template/ Border#SelectedBackground">
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^:pressed /template/ Panel#RootPanel">
+            <Setter Property="RenderTransform" Value="scale(0.95, 0.95)" />
+        </Style>
+
+        <!--  NoPressedAnimation  -->
+        <Style Selector="^.NoPressedAnimation">
+            <Style Selector="^:pressed /template/ Panel#RootPanel">
+                <Setter Property="RenderTransform" Value="scale(1, 1)" />
+            </Style>
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>

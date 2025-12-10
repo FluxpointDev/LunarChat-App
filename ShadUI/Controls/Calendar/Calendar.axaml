@@ -1,0 +1,33 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Panel Height="500" Width="500">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Calendar SelectionMode="MultipleRange" />
+            </StackPanel>
+        </Panel>
+    </Design.PreviewWith>
+    <ControlTheme TargetType="Calendar" x:Key="{x:Type Calendar}">
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource XlCornerRadius}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+        <Setter Property="Background" Value="{DynamicResource CardBackgroundColor}" />
+        <Setter Property="HeaderBackground" Value="{DynamicResource BackgroundColor}" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <StackPanel
+                    ClipToBounds="True"
+                    HorizontalAlignment="Center"
+                    Name="PART_Root">
+                    <CalendarItem
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        ClipToBounds="True"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        HeaderBackground="{TemplateBinding HeaderBackground}"
+                        Name="PART_CalendarItem" />
+                </StackPanel>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

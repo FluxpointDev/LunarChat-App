@@ -1,0 +1,106 @@
+﻿<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shadui="clr-namespace:ShadUI"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border Padding="24">
+            <shadui:Card HasShadow="True" VerticalAlignment="Center">
+                <shadui:Card.Header>
+                    <StackPanel>
+                        <shadui:CardTitle>Create project</shadui:CardTitle>
+                        <shadui:CardDescription>Deploy your new project in one-click.</shadui:CardDescription>
+                    </StackPanel>
+                </shadui:Card.Header>
+                <StackPanel Spacing="16">
+                    <TextBox Watermark="Name of your project" shadui:ControlAssist.Label="Name" />
+                    <ComboBox
+                        SelectedIndex="0"
+                        Width="300"
+                        shadui:ControlAssist.Label="Framework">
+                        <ComboBox.Items>
+                            <ComboBoxItem>Next.js</ComboBoxItem>
+                            <ComboBoxItem>React</ComboBoxItem>
+                            <ComboBoxItem>Vue.js</ComboBoxItem>
+                            <ComboBoxItem>Angular</ComboBoxItem>
+                        </ComboBox.Items>
+                    </ComboBox>
+                </StackPanel>
+                <shadui:Card.Footer>
+                    <DockPanel>
+                        <Button
+                            Classes="Outline"
+                            HorizontalAlignment="Left"
+                            Margin="0,20,0,0">
+                            Cancel
+                        </Button>
+                        <Button
+                            Classes="Primary"
+                            HorizontalAlignment="Right"
+                            Margin="0,20,0,0">
+                            Deploy
+                        </Button>
+                    </DockPanel>
+                </shadui:Card.Footer>
+            </shadui:Card>
+        </Border>
+    </Design.PreviewWith>
+
+    <ControlTheme TargetType="{x:Type shadui:Card}" x:Key="CardControlTheme">
+        <Setter Property="Padding" Value="24" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Background" Value="{DynamicResource CardBackgroundColor}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource XlCornerRadius}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border
+                        Height="{TemplateBinding Height}"
+                        Margin="{TemplateBinding Margin}"
+                        Name="OuterBorder"
+                        Width="{TemplateBinding Width}">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            Name="Container">
+                            <Grid Margin="{TemplateBinding Padding}" RowDefinitions="Auto * Auto">
+                                <ContentPresenter
+                                    Content="{TemplateBinding Header}"
+                                    Grid.Row="0"
+                                    IsVisible="{TemplateBinding Header,
+                                                                Converter={x:Static ObjectConverters.IsNotNull}}"
+                                    Margin="0,0,0,24" />
+                                <ScrollViewer
+                                    Grid.Row="1"
+                                    HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                                    VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
+                                    <ContentPresenter Content="{TemplateBinding Content}" />
+                                </ScrollViewer>
+                                <ContentPresenter
+                                    Content="{TemplateBinding Footer}"
+                                    Grid.Row="2"
+                                    IsVisible="{TemplateBinding Footer,
+                                                                Converter={x:Static ObjectConverters.IsNotNull}}"
+                                    Margin="0,24,0,0" />
+                            </Grid>
+                        </Border>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style Selector="^[HasShadow=True]">
+            <Style Selector="^ /template/ Border#Container">
+                <Setter Property="BoxShadow" Value="{DynamicResource Shadow}" />
+            </Style>
+            <Style Selector="^ /template/ Border#OuterBorder">
+                <Setter Property="Padding" Value="2,0,2,4" />
+            </Style>
+        </Style>
+    </ControlTheme>
+    <ControlTheme
+        BasedOn="{StaticResource CardControlTheme}"
+        TargetType="{x:Type shadui:Card}"
+        x:Key="{x:Type shadui:Card}" />
+</ResourceDictionary>

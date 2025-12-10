@@ -1,0 +1,301 @@
+﻿<ResourceDictionary
+    x:ClassModifier="internal"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shadui="clr-namespace:ShadUI"
+    xmlns:system="clr-namespace:System;assembly=netstandard"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Panel Height="700" Width="500">
+            <StackPanel
+                HorizontalAlignment="Center"
+                Spacing="16"
+                VerticalAlignment="Center">
+                <CalendarDatePicker Width="240" />
+                <CalendarDatePicker IsEnabled="False" Width="240" />
+                <CalendarDatePicker Width="240" shadui:ControlAssist.ReadOnly="True" />
+                <CalendarDatePicker
+                    Width="240"
+                    shadui:ControlAssist.Hint="Your date of birth is used to calculate your age"
+                    shadui:ControlAssist.Label="Date of birth"
+                    shadui:ControlAssist.ReadOnly="True" />
+                <CalendarDatePicker
+                    Width="240"
+                    shadui:ControlAssist.Hint="Your date of birth is used to calculate your age"
+                    shadui:ControlAssist.Label="Date of birth">
+                    <DataValidationErrors.Error>
+                        <system:Exception />
+                    </DataValidationErrors.Error>
+                </CalendarDatePicker>
+            </StackPanel>
+        </Panel>
+    </Design.PreviewWith>
+
+    <ControlTheme TargetType="TextBox" x:Key="InnerTextBoxTheme">
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="LineHeight" Value="20" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="12,4" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="CornerRadius" Value="{DynamicResource LgCornerRadius}" />
+        <Setter Property="SelectionBrush" Value="{DynamicResource PrimaryColor}" />
+        <Setter Property="SelectionForegroundBrush" Value="{DynamicResource PrimaryForegroundColor}" />
+        <Setter Property="CaretBrush" Value="{DynamicResource ForegroundColor}" />
+        <Setter Property="FocusAdorner" Value="{x:Null}" />
+        <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="shadui:ControlAssist.ShowProgress" Value="False" />
+        <Setter Property="shadui:ControlAssist.MinHeight" Value="36" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <StackPanel Background="Transparent" Focusable="False">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Height="{TemplateBinding shadui:ControlAssist.Height}"
+                        MinHeight="{TemplateBinding shadui:ControlAssist.MinHeight}">
+                        <Grid
+                            ColumnDefinitions="Auto * Auto"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <ContentPresenter
+                                Content="{TemplateBinding InnerLeftContent}"
+                                Grid.Column="0"
+                                VerticalAlignment="Center" />
+                            <ScrollViewer
+                                AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}"
+                                BringIntoViewOnFocusChange="{TemplateBinding (ScrollViewer.BringIntoViewOnFocusChange)}"
+                                Grid.Column="1"
+                                HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                                IsScrollChainingEnabled="{TemplateBinding (ScrollViewer.IsScrollChainingEnabled)}"
+                                VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}">
+                                <Panel Name="PART_TextContainer">
+                                    <TextBlock
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        Margin="{TemplateBinding Padding}"
+                                        Name="watermark"
+                                        Opacity="0.5"
+                                        Text="{TemplateBinding Watermark}"
+                                        TextAlignment="{TemplateBinding TextAlignment}"
+                                        TextWrapping="{TemplateBinding TextWrapping}"
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                        <TextBlock.IsVisible>
+                                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                                <CompiledBinding
+                                                    Converter="{x:Static StringConverters.IsNullOrEmpty}"
+                                                    ElementName="PART_TextPresenter"
+                                                    Path="PreeditText" />
+                                                <CompiledBinding
+                                                    Converter="{x:Static StringConverters.IsNullOrEmpty}"
+                                                    Path="Text"
+                                                    RelativeSource="{RelativeSource TemplatedParent}" />
+                                            </MultiBinding>
+                                        </TextBlock.IsVisible>
+                                    </TextBlock>
+                                    <TextPresenter
+                                        CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
+                                        CaretBrush="{TemplateBinding CaretBrush}"
+                                        CaretIndex="{TemplateBinding CaretIndex}"
+                                        LetterSpacing="{TemplateBinding LetterSpacing}"
+                                        LineHeight="{TemplateBinding LineHeight}"
+                                        Margin="{TemplateBinding Padding}"
+                                        Name="PART_TextPresenter"
+                                        PasswordChar="{TemplateBinding PasswordChar}"
+                                        RevealPassword="{TemplateBinding RevealPassword}"
+                                        SelectionBrush="{TemplateBinding SelectionBrush}"
+                                        SelectionEnd="{TemplateBinding SelectionEnd}"
+                                        SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+                                        SelectionStart="{TemplateBinding SelectionStart}"
+                                        Text="{TemplateBinding Text,
+                                                               Mode=TwoWay}"
+                                        TextAlignment="{TemplateBinding TextAlignment}"
+                                        TextWrapping="{TemplateBinding TextWrapping}"
+                                        VerticalAlignment="Center" />
+                                </Panel>
+                                <ScrollViewer.Styles>
+                                    <Style Selector="ScrollContentPresenter#PART_ContentPresenter">
+                                        <Setter Property="Cursor" Value="IBeam" />
+                                    </Style>
+                                </ScrollViewer.Styles>
+                            </ScrollViewer>
+                            <Path
+                                Data="{x:Static shadui:Icons.Calendar}"
+                                Fill="{DynamicResource MutedColor}"
+                                Grid.Column="2"
+                                Height="16"
+                                HorizontalAlignment="Center"
+                                Margin="0,4,16,4"
+                                Name="PART_Icon"
+                                Stretch="Uniform"
+                                VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^:readonly">
+            <Setter Property="CaretBrush" Value="Transparent" />
+        </Style>
+        <Style Selector="^:focus">
+            <Setter Property="BorderBrush" Value="{DynamicResource PrimaryColor}" />
+        </Style>
+        <Style Selector="^:error">
+            <Setter Property="BorderBrush" Value="{DynamicResource ErrorColor}" />
+            <Style Selector="^ /template/ Path#PART_Icon">
+                <Setter Property="Fill" Value="{DynamicResource ErrorColor}" />
+            </Style>
+        </Style>
+    </ControlTheme>
+    <ControlTheme TargetType="ToggleButton" x:Key="DatePickerToggle" />
+    <ControlTheme TargetType="CalendarDatePicker" x:Key="{x:Type CalendarDatePicker}">
+        <Setter Property="BorderThickness" Value="1,1,1,1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource LgCornerRadius}" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+        <Setter Property="Background" Value="{DynamicResource SelectionColor}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Padding" Value="12,4" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="Watermark" Value="Pick a date" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <DataValidationErrors>
+                    <StackPanel Background="Transparent" Spacing="4">
+                        <TextBlock
+                            Classes="Small"
+                            IsVisible="{TemplateBinding shadui:ControlAssist.Label,
+                                                        Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                            Margin="0,0,0,6"
+                            Name="PART_Label"
+                            Text="{TemplateBinding shadui:ControlAssist.Label}" />
+                        <Panel>
+                            <Border
+                                Background="{DynamicResource GhostColor}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{TemplateBinding CornerRadius}"
+                                IsVisible="{TemplateBinding shadui:ControlAssist.ReadOnly}"
+                                Name="PART_Background"
+                                Opacity="0">
+                                <Border.Transitions>
+                                    <Transitions>
+                                        <DoubleTransition Duration="0:0:0.20" Property="Opacity" />
+                                    </Transitions>
+                                </Border.Transitions>
+                            </Border>
+                            <TextBox
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{TemplateBinding CornerRadius}"
+                                DataValidationErrors.Errors="{TemplateBinding DataValidationErrors.Errors}"
+                                IsHitTestVisible="{TemplateBinding shadui:ControlAssist.ReadOnly,
+                                                                   Converter={x:Static BoolConverters.Not}}"
+                                IsReadOnly="{TemplateBinding shadui:ControlAssist.ReadOnly}"
+                                Name="PART_TextBox"
+                                Padding="{TemplateBinding Padding}"
+                                Theme="{StaticResource InnerTextBoxTheme}"
+                                UseFloatingWatermark="False"
+                                Watermark="{TemplateBinding Watermark}" />
+                            <Border
+                                Background="Transparent"
+                                CornerRadius="{TemplateBinding CornerRadius}"
+                                HorizontalAlignment="Right"
+                                IsVisible="{TemplateBinding shadui:ControlAssist.ReadOnly,
+                                                            Converter={x:Static BoolConverters.Not}}"
+                                Width="40" />
+                            <Popup
+                                IsLightDismissEnabled="True"
+                                IsOpen="{TemplateBinding IsDropDownOpen,
+                                                         Mode=TwoWay}"
+                                MinWidth="{CompiledBinding Bounds.Width,
+                                                           RelativeSource={RelativeSource TemplatedParent}}"
+                                Name="PART_Popup"
+                                Placement="BottomEdgeAlignedLeft"
+                                PlacementTarget="{CompiledBinding #PART_TextBox}"
+                                VerticalOffset="5">
+                                <LayoutTransformControl Name="PART_LayoutTransform" RenderTransformOrigin="50%, 0%">
+                                    <Calendar
+                                        CornerRadius="{TemplateBinding CornerRadius}"
+                                        DisplayDate="{TemplateBinding DisplayDate}"
+                                        DisplayDateEnd="{TemplateBinding DisplayDateEnd}"
+                                        DisplayDateStart="{TemplateBinding DisplayDateStart}"
+                                        FirstDayOfWeek="{TemplateBinding FirstDayOfWeek}"
+                                        FontFamily="{TemplateBinding FontFamily}"
+                                        IsTodayHighlighted="{TemplateBinding IsTodayHighlighted}"
+                                        Margin="-2,0,0,0"
+                                        Name="PART_Calendar"
+                                        SelectedDate="{CompiledBinding RelativeSource={RelativeSource TemplatedParent},
+                                                                       Path=SelectedDate,
+                                                                       Mode=TwoWay}"
+                                        shadui:ElementAssist.FocusOnLoad="True"
+                                        shadui:ScrollEventAssist.PreventScrollPropagation="True" />
+                                </LayoutTransformControl>
+                            </Popup>
+                        </Panel>
+                        <TextBlock
+                            Classes="Caption Muted"
+                            IsVisible="{TemplateBinding shadui:ControlAssist.Hint,
+                                                        Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                            Name="PART_Hint"
+                            Text="{TemplateBinding shadui:ControlAssist.Hint}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </DataValidationErrors>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ TextBox#PART_TextBox[IsReadOnly=True]">
+            <Setter Property="CaretBrush" Value="Transparent" />
+        </Style>
+        <Style Selector="^:flyout-open">
+            <Style Selector="^ /template/ LayoutTransformControl#PART_LayoutTransform">
+                <Style.Animations>
+                    <Animation
+                        Duration="0:0:0.15"
+                        Easing="SineEaseInOut"
+                        FillMode="Forward">
+                        <KeyFrame Cue="0%">
+                            <Setter Property="ScaleTransform.ScaleY" Value="0.9" />
+                            <Setter Property="ScaleTransform.ScaleX" Value="0.9" />
+                            <Setter Property="Opacity" Value="0" />
+                        </KeyFrame>
+                        <KeyFrame Cue="100%">
+                            <Setter Property="ScaleTransform.ScaleY" Value="1" />
+                            <Setter Property="ScaleTransform.ScaleX" Value="1" />
+                            <Setter Property="Opacity" Value="1" />
+                        </KeyFrame>
+                    </Animation>
+                </Style.Animations>
+            </Style>
+        </Style>
+        <Style Selector="^:focus">
+            <Setter Property="BorderBrush" Value="{DynamicResource PrimaryColor}" />
+        </Style>
+        <Style Selector="^:pointerover">
+            <Setter Property="Transitions">
+                <Setter.Value>
+                    <Transitions>
+                        <BrushTransition Duration="0:0:0.20" Property="BorderBrush" />
+                    </Transitions>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderBrush" Value="{DynamicResource OutlineColor}" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style Selector="^:pointerover /template/ Border#PART_Background">
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^:disabled">
+            <Setter Property="Opacity" Value="0.50" />
+        </Style>
+        <Style Selector="^:error">
+            <Setter Property="BorderBrush" Value="{DynamicResource ErrorColor}" />
+            <Style Selector="^/template/ TextBlock#PART_Label">
+                <Setter Property="Foreground" Value="{DynamicResource ErrorColor}" />
+            </Style>
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>

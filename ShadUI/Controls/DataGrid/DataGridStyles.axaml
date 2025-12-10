@@ -1,0 +1,34 @@
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shadui="clr-namespace:ShadUI"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style Selector="DataGrid[CanUserReorderColumns=False]">
+        <Style Selector="^[GridLinesVisibility=Horizontal] DataGridColumnHeader">
+            <Setter Property="AreSeparatorsVisible" Value="False" />
+        </Style>
+        <Style Selector="^[GridLinesVisibility=None] DataGridColumnHeader">
+            <Setter Property="AreSeparatorsVisible" Value="False" />
+        </Style>
+    </Style>
+    <Style Selector="DataGrid[GridLinesVisibility=Vertical] DataGridColumnHeader">
+        <Setter Property="AreSeparatorsVisible" Value="True" />
+    </Style>
+    <Style Selector="DataGrid DataGridRow:pointerover Menu &gt; MenuItem">
+        <Setter Property="Background" Value="{DynamicResource GhostHoverColor50}" />
+    </Style>
+    <Style Selector="DataGrid DataGridRow:pointerover shadui|SimpleDropdown">
+        <Setter Property="Background" Value="{DynamicResource GhostHoverColor50}" />
+    </Style>
+    <Style Selector="DataGrid DataGridRow CheckBox">
+        <Setter Property="Opacity" Value="1" />
+    </Style>
+    <Style Selector="DataGrid DataGridColumnHeader &gt; TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource MutedColor}" />
+    </Style>
+    <Style Selector="DataGrid DataGridRow:selected Menu &gt; MenuItem">
+        <Setter Property="Background" Value="{DynamicResource GhostHoverColor}" />
+    </Style>
+    <Style Selector="DataGrid DataGridRow:selected shadui|SimpleDropdown">
+        <Setter Property="Background" Value="{DynamicResource GhostHoverColor}" />
+    </Style>
+</Styles>

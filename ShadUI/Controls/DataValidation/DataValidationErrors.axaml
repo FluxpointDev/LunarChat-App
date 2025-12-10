@@ -1,0 +1,59 @@
+﻿<ResourceDictionary
+    x:ClassModifier="internal"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:sys="using:System"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <StackPanel Spacing="20">
+                <TextBox Text="Error Text" Width="225">
+                    <DataValidationErrors.Error>
+                        <sys:Exception />
+                    </DataValidationErrors.Error>
+                </TextBox>
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+    <ControlTheme TargetType="DataValidationErrors" x:Key="{x:Type DataValidationErrors}">
+        <Setter Property="Template">
+            <ControlTemplate TargetType="DataValidationErrors">
+                <DockPanel LastChildFill="True">
+                    <ContentControl
+                        Content="{CompiledBinding (DataValidationErrors.Errors)}"
+                        ContentTemplate="{TemplateBinding ErrorTemplate}"
+                        DataContext="{TemplateBinding Owner}"
+                        DockPanel.Dock="Bottom"
+                        IsVisible="{CompiledBinding (DataValidationErrors.HasErrors)}"
+                        Margin="0,4,0,0"
+                        x:Name="InlineDataValidationContentControl" />
+                    <ContentPresenter
+                        Background="{TemplateBinding Background}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Content="{TemplateBinding Content}"
+                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Name="PART_ContentPresenter"
+                        Padding="{TemplateBinding Padding}" />
+                </DockPanel>
+            </ControlTemplate>
+        </Setter>
+        <Setter Property="ErrorTemplate">
+            <DataTemplate>
+                <ItemsControl
+                    Foreground="{DynamicResource SystemControlErrorTextForegroundBrush}"
+                    ItemsSource="{CompiledBinding}"
+                    x:DataType="DataValidationErrors">
+                    <ItemsControl.Styles>
+                        <Style Selector="TextBlock">
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                            <Setter Property="FontSize" Value="12.8" />
+                            <Setter Property="FontWeight" Value="Medium" />
+                            <Setter Property="Foreground" Value="{DynamicResource ErrorColor}" />
+                        </Style>
+                    </ItemsControl.Styles>
+                </ItemsControl>
+            </DataTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

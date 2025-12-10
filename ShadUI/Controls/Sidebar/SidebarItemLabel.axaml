@@ -1,0 +1,45 @@
+﻿<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shadui="clr-namespace:ShadUI"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ControlTheme TargetType="{x:Type shadui:SidebarItemLabel}" x:Key="{x:Type shadui:SidebarItemLabel}">
+        <Setter Property="Margin" Value="8" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Foreground" Value="{DynamicResource MutedColor}" />
+        <Setter Property="Background" Value="{DynamicResource BorderColor}" />
+        <Setter Property="FontWeight" Value="DemiBold" />
+        <Setter Property="Expanded" Value="{Binding $parent[shadui:Sidebar].Expanded}" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <TextBlock
+                        FontFamily="{TemplateBinding FontFamily}"
+                        FontSize="{TemplateBinding FontSize}"
+                        FontWeight="{TemplateBinding FontWeight}"
+                        Foreground="{TemplateBinding Foreground}"
+                        Margin="8,0"
+                        Name="Text"
+                        Text="{TemplateBinding Text}" />
+                    <Separator Background="{TemplateBinding Background}" Name="Separator" />
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^[Expanded=True] /template/ Separator#Separator">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="^[Expanded=True] /template/ TextBlock#Text">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^[Expanded=False][AsSeparator=False]">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="^[Expanded=False][AsSeparator=True]">
+            <Style Selector="^ /template/ Separator#Separator">
+                <Setter Property="IsVisible" Value="True" />
+            </Style>
+            <Style Selector="^ /template/ TextBlock#Text">
+                <Setter Property="IsVisible" Value="False" />
+            </Style>
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>

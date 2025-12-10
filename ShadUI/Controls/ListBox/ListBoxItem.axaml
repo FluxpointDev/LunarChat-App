@@ -1,0 +1,122 @@
+﻿<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:shadui="clr-namespace:ShadUI"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Panel>
+            <ListBox
+                Height="300"
+                Margin="24"
+                Width="200">
+                <ListBoxItem>Item 1</ListBoxItem>
+                <ListBoxItem>Item 2</ListBoxItem>
+                <ListBoxItem>Item 3</ListBoxItem>
+                <ListBoxItem>Item 4</ListBoxItem>
+                <ListBoxItem>Item 5</ListBoxItem>
+                <ListBoxItem>Item 6</ListBoxItem>
+                <ListBoxItem>Item 7</ListBoxItem>
+                <ListBoxItem>Item 8</ListBoxItem>
+                <ListBoxItem>Item 9</ListBoxItem>
+                <ListBoxItem>Item 10</ListBoxItem>
+                <ListBoxItem>Item 11</ListBoxItem>
+                <ListBoxItem>Item 12</ListBoxItem>
+                <ListBoxItem>Item 13</ListBoxItem>
+                <ListBoxItem>Item 14</ListBoxItem>
+                <ListBoxItem>Item 15</ListBoxItem>
+                <ListBoxItem>Item 16</ListBoxItem>
+                <ListBoxItem>Item 17</ListBoxItem>
+                <ListBoxItem>Item 18</ListBoxItem>
+                <ListBoxItem>Item 19</ListBoxItem>
+                <ListBoxItem>Item 20</ListBoxItem>
+                <ListBoxItem>Item 21</ListBoxItem>
+                <ListBoxItem>Item 22</ListBoxItem>
+                <ListBoxItem>Item 23</ListBoxItem>
+                <ListBoxItem>Item 24</ListBoxItem>
+                <ListBoxItem>Item 25</ListBoxItem>
+            </ListBox>
+        </Panel>
+    </Design.PreviewWith>
+    <ControlTheme TargetType="ListBoxItem" x:Key="{x:Type ListBoxItem}">
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}" />
+        <Setter Property="Padding" Value="10,8" />
+        <Setter Property="Margin" Value="1" />
+        <Setter Property="CornerRadius" Value="{DynamicResource MdCornerRadius}" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel Margin="{TemplateBinding Margin}" MinHeight="{TemplateBinding MinHeight}">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Name="BaseBackground"
+                        Opacity="1" />
+                    <Border
+                        Background="{DynamicResource GhostHoverColor}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Name="HoverBackground"
+                        Opacity="0" />
+                    <Border
+                        Background="{DynamicResource GhostColor}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Name="SelectionBackground"
+                        Opacity="0" />
+                    <DockPanel LastChildFill="True" Margin="{TemplateBinding Padding}">
+                        <PathIcon
+                            Data="{x:Static shadui:Icons.Check}"
+                            DockPanel.Dock="Right"
+                            Foreground="{DynamicResource ForegroundColor}"
+                            Height="12"
+                            Margin="4,0,0,0"
+                            Name="CheckSelected"
+                            Width="12" />
+                        <ContentPresenter
+                            Background="Transparent"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </DockPanel>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ Border">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Duration="0:0:0.20" Property="Opacity" />
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="^ /template/ PathIcon#CheckSelected">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="^:selected /template/ PathIcon#CheckSelected">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="^:selected:not(:pointerover) /template/ Border#SelectionBackground">
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^:focus /template/ Border#HoverBackground">
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^:pointerover /template/ Border#HoverBackground">
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^:focus:pointerover /template/ Border#HoverBackground">
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="^:not(:focus):not(:pointerover) /template/ Border#HoverBackground">
+            <Setter Property="Opacity" Value="0" />
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>
