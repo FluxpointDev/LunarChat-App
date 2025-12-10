@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.ViewModels.Dialogs;
 using LunarChatApp.Views;
+using LunarChatApp.Views.Discovery;
 using LunarChatSharp;
 using LunarChatSharp.Rest.Servers;
 using System;
@@ -37,11 +38,26 @@ public partial class ServerIconModel : ViewModelBase
         }
 
         if (Id == "0")
-            ShowPlus = true;
+        {
+            isFeature = true;
+            _showPlus = true;
+        }
+        else if (Id == "1")
+        {
+            isFeature = true;
+            showDiscovery = true;
+        }
+
     }
 
     [ObservableProperty]
+    private bool isFeature;
+
+    [ObservableProperty]
     private bool _showPlus;
+
+    [ObservableProperty]
+    private bool showDiscovery;
 
     [ObservableProperty]
     private string _name;
@@ -60,6 +76,13 @@ public partial class ServerIconModel : ViewModelBase
         if (Id == "0")
         {
             services.Dialogs.Create(new JoinServerDialog(), new JoinServerDialogModel(services), "Server").WithSubmit(SubmitServer).Open();
+        }
+        else if (Id == "1")
+        {
+            var model = (services.State.CachedServersPage.DataContext as ServersModel);
+            model.SelectedPage = new DiscoveryPage { DataContext = new DiscoveryPageModel(services) };
+            model.SelectedHeader = new DiscoveryHeader();
+            model.SelectedSidebar = new DiscoverySidebar { DataContext = new DiscoverySidebarModel() };
         }
         else
         {

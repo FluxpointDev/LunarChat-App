@@ -120,4 +120,11 @@ public partial class ServerSettingsModel : ViewModelBase
         SelectedTitle = "Apps";
         SelectedPage = new ServerSettingsApps() { DataContext = new ServerSettingsAppsModel(services) };
     }
+
+    [RelayCommand]
+    public void OpenDiscoverySettings()
+    {
+        SelectedTitle = "Discovery";
+        SelectedPage = new ServerSettingsDiscovery() { DataContext = new ServerSettingsDiscoveryModel(services) };
+    }
 }

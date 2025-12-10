@@ -65,11 +65,23 @@ public partial class ServersModel : ViewModelBase
                 SystemMessages = null!,
                 DefaultPermissions = null!,
             });
+            discoveryModel = new ServerIconModel(services, new RestServer
+            {
+                Id = "1",
+                Name = "o",
+                CreatedAt = DateTime.UtcNow,
+                OwnerId = null!,
+                SystemMessages = null!,
+                DefaultPermissions = null!,
+            });
         }
     }
 
     [ObservableProperty]
     private ServerIconModel addServerModel;
+
+    [ObservableProperty]
+    private ServerIconModel discoveryModel;
 
     private async Task ServerUpdate(RestServer server, ServerUpdateEvent ev)
     {

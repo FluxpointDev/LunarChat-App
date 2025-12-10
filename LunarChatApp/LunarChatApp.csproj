@@ -56,7 +56,6 @@
 
   <ItemGroup>
     <Folder Include="Assets\Fonts\" />
-    <Folder Include="Views\Discovery\" />
   </ItemGroup>
 
   <ItemGroup>

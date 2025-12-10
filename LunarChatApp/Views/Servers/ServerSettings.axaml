@@ -57,6 +57,7 @@
 				</shadui:SidebarItem>
 
 				<shadui:SidebarItemLabel AsSeparator="True" Text="People" />
+
 				<shadui:SidebarItem Content="Members" Command="{Binding OpenMembersSettingsCommand}">
 					<shadui:SidebarItem.Icon>
 						<Viewbox>
@@ -73,6 +74,14 @@
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
 
+				<shadui:SidebarItem Content="Server Discovery" Command="{Binding OpenDiscoverySettingsCommand}">
+					<shadui:SidebarItem.Icon>
+						<Viewbox>
+							<materialIcons:MaterialIcon Kind="Compass" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
+						</Viewbox>
+					</shadui:SidebarItem.Icon>
+				</shadui:SidebarItem>
+
 				<shadui:SidebarItemLabel AsSeparator="True" Text="Moderation" />
 
 				<shadui:SidebarItem Content="Bans" Command="{Binding OpenBansSettingsCommand}">
@@ -84,6 +93,7 @@
 				</shadui:SidebarItem>
 
 				<shadui:SidebarItemLabel AsSeparator="True" Text="Integrations" />
+
 				<shadui:SidebarItem Content="Apps" Command="{Binding OpenAppsSettings}">
 					<shadui:SidebarItem.Icon>
 						<Viewbox>

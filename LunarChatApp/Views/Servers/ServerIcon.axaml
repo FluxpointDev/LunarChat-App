@@ -2,6 +2,7 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:local="using:LunarChatApp"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:shadui="using:ShadUI"
 			 xmlns:viewmodels="using:LunarChatApp.ViewModels"
@@ -10,11 +11,18 @@
 			 x:DataType="viewmodels:ServerIconModel">
 	<Button IsEnabled="true" Command="{Binding SelectedServerCommand}" Margin="2" Padding="4">
 		<StackPanel>
-			<Border IsVisible="{Binding !ShowPlus}" CornerRadius="12" ClipToBounds="True" ToolTip.Tip="{Binding Name}" ToolTip.Placement="Right">
+			<Border IsVisible="{Binding !IsFeature}" CornerRadius="12" ClipToBounds="True" ToolTip.Tip="{Binding Name}" ToolTip.Placement="Right">
 				<shadui:Avatar Fallback="{Binding Fallback}" Source="{Binding Icon}" Width="36" Height="36"></shadui:Avatar>
 			</Border>
 			<Border IsVisible="{Binding ShowPlus}" CornerRadius="12" ClipToBounds="True" ToolTip.Tip="Join or Create server" ToolTip.Placement="Right">
-				<shadui:Avatar Fallback="+" Width="36" Height="36"></shadui:Avatar>
+				<Border Width="36" Height="36" Background="{DynamicResource GhostColor}">
+					<materialIcons:MaterialIcon HorizontalAlignment="Center" VerticalAlignment="Center" Kind="Plus" Width="18" Height="18" Foreground="{DynamicResource PrimaryColor}" />
+				</Border>
+			</Border>
+			<Border IsVisible="{Binding ShowDiscovery}" CornerRadius="12" ClipToBounds="True" ToolTip.Tip="Discovery" ToolTip.Placement="Right">
+				<Border Width="36" Height="36" Background="{DynamicResource GhostColor}">
+					<materialIcons:MaterialIcon HorizontalAlignment="Center" VerticalAlignment="Center" Kind="Compass" Width="24" Height="24" Foreground="{DynamicResource PrimaryColor}" />
+				</Border>
 			</Border>
 		</StackPanel>
 	</Button>
