@@ -2,7 +2,6 @@
 using LunarChatApp.Services;
 using LunarChatApp.ViewModels.Servers;
 using LunarChatApp.Views;
-using LunarChatSharp.Core.Servers;
 using LunarChatSharp.Rest.Channels;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -18,7 +17,7 @@ public partial class ChannelListModel : ViewModelBase
     {
         state = st;
         services = sv;
-        bool CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
+        bool CanManage = services.State.Socket.CurrentServer.CanManageChannel(services.State.Socket.CurrentServer.Member);
         if (ChannelsList == null)
             ChannelsList = new ObservableCollection<ChannelItem>(state.Socket.CurrentServer.Channels.Values.Select(x => new ChannelItem() { ChannelName = x.Name, ChannelType = x.Type, DataContext = new ChannelItemModel(services, state, x, CanManage) }));
         state.Socket.CurrentServer.OnChannelUpdate += ChannelUpdate;
@@ -29,7 +28,7 @@ public partial class ChannelListModel : ViewModelBase
 
     private async Task PermissionUpdate()
     {
-        bool CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
+        bool CanManage = services.State.Socket.CurrentServer.CanManageChannel(services.State.Socket.CurrentServer.Member);
         foreach (var i in ChannelsList)
         {
             (i.DataContext as ChannelItemModel).CanManage = CanManage;
@@ -54,7 +53,7 @@ public partial class ChannelListModel : ViewModelBase
 
     private async Task Server_OnChannelCreate(RestChannel channel)
     {
-        bool CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
+        bool CanManage = services.State.Socket.CurrentServer.CanManageChannel(services.State.Socket.CurrentServer.Member);
         ChannelsList.Add(new ChannelItem { ChannelName = channel.Name, ChannelType = channel.Type, DataContext = new ChannelItemModel(services, state, channel, CanManage) });
     }
 

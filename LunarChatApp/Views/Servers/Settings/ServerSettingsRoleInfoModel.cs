@@ -109,6 +109,7 @@ public partial class RolePermissionsModel : ViewModelBase
         permissions.SetValue(UseModView, ModPermission.UseModView);
 
         permissions.SetValue(CreateInvites, ChannelPermission.CreateInvites);
+        permissions.SetValue(ManageInvites, ChannelPermission.ManageInvites);
         permissions.SetValue(ViewChannels, ChannelPermission.ViewChannel);
         permissions.SetValue(ReadMessageHistory, ChannelPermission.ReadMessageHistory);
         permissions.SetValue(SendMessages, ChannelPermission.SendMessages);
@@ -167,6 +168,7 @@ public partial class RolePermissionsModel : ViewModelBase
 
         #region Channel
         CreateInvites = permissions.ChannelPermissions.HasFlag(ChannelPermission.CreateInvites);
+        ManageInvites = permissions.ChannelPermissions.HasFlag(ChannelPermission.ManageInvites);
         ViewChannels = permissions.ChannelPermissions.HasFlag(ChannelPermission.ViewChannel);
         ReadMessageHistory = permissions.ChannelPermissions.HasFlag(ChannelPermission.ReadMessageHistory);
         SendMessages = permissions.ChannelPermissions.HasFlag(ChannelPermission.SendMessages);
@@ -251,6 +253,9 @@ public partial class RolePermissionsModel : ViewModelBase
 
     [ObservableProperty]
     private bool _createInvites;
+
+    [ObservableProperty]
+    private bool _manageInvites;
 
     [ObservableProperty]
     private bool _viewChannels;

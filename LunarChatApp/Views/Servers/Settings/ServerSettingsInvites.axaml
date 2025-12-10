@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:settings="using:LunarChatApp.Views.Servers.Settings"
              xmlns:shadui="using:ShadUI"
@@ -27,6 +28,9 @@
                             Opacity="0.75" />
                     </TextBox.InnerRightContent>
                 </TextBox>
+                <Button Grid.Column="1" Command="{Binding CreateInvite}"
+						Classes="Primary" IsEnabled="{Binding CanCreate}"
+						Content="Create" />
             </Grid>
             <DataGrid
                 x:Name="DataGrid"
@@ -55,6 +59,30 @@
                         CanUserSort="False"
                         Header="Code"
                         IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Binding="{Binding Channel}"
+                        CanUserSort="False"
+                        Header="Channel"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Binding="{Binding Uses}"
+                        CanUserSort="False"
+                        Header="Uses"
+                        IsReadOnly="True" />
+                    <DataGridTemplateColumn Header="">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
+									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding CopyInviteCommand}">
+										<materialIcons:MaterialIcon Kind="ContentCopy" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
+									</Button>
+									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding DeleteInviteCommand}" IsEnabled="{Binding $parent[settings:ServerSettingsInvitesModel].CanManage}">
+										<materialIcons:MaterialIcon Kind="TrashCan" Width="16" Height="16" Foreground="{DynamicResource ErrorColor}" />
+									</Button>
+								</StackPanel>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
             <Grid ColumnDefinitions="* Auto">

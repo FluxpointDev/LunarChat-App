@@ -19,9 +19,6 @@
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
   
-  <ItemGroup>
-    <AvaloniaXaml Remove="Assets\Styles\Markdown.axaml" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Avalonia" />

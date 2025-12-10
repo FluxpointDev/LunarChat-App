@@ -31,6 +31,9 @@ public partial class ChannelItemModel : ViewModelBase
     [RelayCommand]
     public void SelectChannel()
     {
+        if (services.State.Socket.CurrentChannel?.Id == channel.Id)
+            return;
+
         services.PageManager.SwitchServerChannel(services, channel);
     }
 

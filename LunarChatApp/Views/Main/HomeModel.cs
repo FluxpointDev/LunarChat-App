@@ -53,6 +53,18 @@ public partial class HomeModel(ServiceManager services) : ViewModelBase
             services.PageManager.SwitchServer(services, server.Server);
     }
 
+    [RelayCommand]
+    public void OpenUserDocs()
+    {
+        services.OpenLink(new System.Uri("https://docs.fluxpoint.dev/lunar"));
+    }
+
+    [RelayCommand]
+    public void OpenAPIDocs()
+    {
+        services.OpenLink(new System.Uri("https://docs.fluxpoint.dev/lunar-api"));
+    }
+
     public async Task SubmitServer(UserControl control)
     {
         JoinServerDialogModel? model = control.DataContext as JoinServerDialogModel;

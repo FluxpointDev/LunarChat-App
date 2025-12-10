@@ -12,6 +12,7 @@ using LunarChatSharp.Rest.Channels;
 using LunarChatSharp.Rest.Servers;
 using LunarChatSharp.Rest.Users;
 using LunarChatSharp.Websocket.Events.Account;
+using LunarChatSharp.Websocket.Events.Servers;
 using Material.Icons;
 using System;
 using System.Collections.ObjectModel;
@@ -37,6 +38,7 @@ public partial class ServersModel : ViewModelBase
         services.Client.OnRemoveServer += State_OnRemoveServer;
         services.Client.OnPresenceUpdate += PresenceUpdate;
         services.Client.OnAccountUpdate += AccountUpdate;
+        services.Client.OnServerUpdate += ServerUpdate;
         if (state.Socket.CurrentServer == null)
         {
             _selectedPage = new HomeView() { DataContext = new HomeModel(services) };
@@ -66,6 +68,23 @@ public partial class ServersModel : ViewModelBase
                     DefaultPermissions = null!,
                 })
             });
+        }
+    }
+
+    private async Task ServerUpdate(RestServer server, ServerUpdateEvent ev)
+    {
+        if (string.IsNullOrEmpty(ev.Name))
+            return;
+
+        var item = ServersList.FirstOrDefault(x => (x.DataContext as ServerIconModel)?.Id == ev.ServerId);
+        if (item != null)
+        {
+            ServerIconModel? model = item.DataContext as ServerIconModel;
+            if (model == null)
+                return;
+
+            model.Name = server.Name;
+            model.Fallback = server.GetFallback();
         }
     }
 

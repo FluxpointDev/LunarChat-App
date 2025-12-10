@@ -4,6 +4,10 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using LunarChatApp.Services;
 using LunarChatSharp;
+using LunarChatSharp.Core.Servers;
+using LunarChatSharp.Rest.Dev;
+using LunarChatSharp.Rest.Servers;
+using LunarChatSharp.Websocket.Events.Servers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,13 +23,18 @@ public partial class ServerSettingsAppsModel : ViewModelBase
     public List<AppListItem> _originalItems = new List<AppListItem>();
 
     private readonly Timer? _searchTimer;
-
+    private readonly ServiceManager services;
     public ServerSettingsAppsModel(ServiceManager sv)
     {
+        services = sv;
         _searchTimer = new Timer(500); // 500ms debounce
         _searchTimer.Elapsed += SearchTimerElapsed;
         _searchTimer.AutoReset = false;
-
+        canManage = sv.Socket.State.CurrentServer.HasPermission(sv.Socket.State.CurrentServer.Member, ServerPermission.ManageApps);
+        sv.Socket.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+        sv.Client.OnAppAdd += AppAdd;
+        sv.Client.OnAppUpdate += AppUpdate;
+        sv.Client.OnAppRemove += AppRemove;
         PropertyChanged += OnPropertyChanged;
 
         _ = Task.Run(async () =>
@@ -60,8 +69,57 @@ public partial class ServerSettingsAppsModel : ViewModelBase
 
     }
 
+    private async Task AppRemove(RestServer server, RestApp app)
+    {
+        if (services.State.Socket.CurrentServer?.Server?.Id != server.Id)
+            return;
+
+        var item = _originalItems.FirstOrDefault(x => x.Id == app.Id);
+        if (item == null)
+            return;
+
+        _originalItems.Remove(item);
+        Items = new ObservableCollection<AppListItem>(_originalItems);
+    }
+
+    private async Task AppUpdate(RestServer server, RestApp app, AppUpdatedEvent ev)
+    {
+        if (services.State.Socket.CurrentServer?.Server?.Id != server.Id)
+            return;
+
+        if (string.IsNullOrEmpty(ev.Changed.Name))
+            return;
+
+        var item = _originalItems.FirstOrDefault(x => x.Id == app.Id);
+        if (item == null)
+            return;
+
+        item.Name = ev.Changed.Name;
+    }
+
+    private async Task AppAdd(RestServer server, RestApp app)
+    {
+        if (services.State.Socket.CurrentServer?.Server?.Id != server.Id)
+            return;
+
+        _originalItems.Add(new AppListItem(services, this)
+        {
+            Id = app.Id,
+            Name = app.Name
+        });
+        Items = new ObservableCollection<AppListItem>(_originalItems);
+    }
+
+    private async Task PermissionUpdate()
+    {
+        CanManage = services.Socket.State.CurrentServer.HasPermission(services.Socket.State.CurrentServer.Member, ServerPermission.ManageApps);
+    }
+
     [ObservableProperty]
     private bool _isLoaded;
+
+    [ObservableProperty]
+    private bool canManage;
 
     private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {

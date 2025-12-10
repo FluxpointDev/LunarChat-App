@@ -2,6 +2,7 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:local="using:LunarChatApp"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:settings="using:LunarChatApp.Views.Servers.Settings"
              xmlns:shadui="using:ShadUI"
@@ -47,15 +48,39 @@
                         </DataGridCheckBoxColumn.Header>
                     </DataGridCheckBoxColumn>-->
                     <DataGridTextColumn
-                        Binding="{Binding Name}"
+                        Binding="{Binding TargetName}"
                         CanUserSort="False"
-                        Header="Name"
+                        Header="Banned User"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Binding="{Binding BannedAt}"
+                        CanUserSort="False"
+                        Header="At"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Binding="{Binding ActionName}"
+                        CanUserSort="False"
+                        Header="Banned By"
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Binding="{Binding Reason}"
                         CanUserSort="False"
                         Header="Reason"
-                        IsReadOnly="True" />
+                        IsReadOnly="True" MaxWidth="100" />
+                    <DataGridTemplateColumn Header="">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="2">
+                                    <Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding CopyUserIDCommand}">
+										<materialIcons:MaterialIcon Kind="Identifier" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
+									</Button>
+									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding UnbanUserCommand}" IsEnabled="{Binding $parent[settings:ServerSettingsBansModel].CanBan}">
+										<materialIcons:MaterialIcon Kind="TrashCan" Width="16" Height="16" Foreground="{DynamicResource ErrorColor}" />
+									</Button>
+								</StackPanel>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
             <Grid ColumnDefinitions="* Auto">

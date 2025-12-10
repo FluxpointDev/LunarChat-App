@@ -1,5 +1,4 @@
-﻿using Avalonia.Controls;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LiveMarkdown.Avalonia;
 using LunarChatApp.Services;
@@ -20,7 +19,7 @@ public partial class MessageItemModel : ViewModelBase
         {
             authorId = message.Author.Id;
             IsAuthor = message.Author.Id == sv.Client.CurrentId;
-            Username = message.Author.Username;
+            Username = message.Author.GetCurrentName();
             IsBot = message.Author.IsBot;
             CanDelete = sv.Client.CurrentId == authorId;
         }
@@ -65,8 +64,7 @@ public partial class MessageItemModel : ViewModelBase
     [RelayCommand]
     public void LinkClicked(InlineHyperlinkClickedEventArgs args)
     {
-        var launcher = TopLevel.GetTopLevel(services.MainControl).Launcher;
-        launcher.LaunchUriAsync(args.HRef);
+        services.OpenLink(args.HRef);
     }
 
     [RelayCommand]

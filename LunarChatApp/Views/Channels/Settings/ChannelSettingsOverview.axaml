@@ -13,13 +13,14 @@
 		Classes="Clearable"
 		Watermark=""
 		Width="225"
+		IsReadOnly="{Binding !CanManage}"
 		Text="{Binding ChannelNameEdit}"
 		shadui:ControlAssist.Label="Channel Name" />
 
 			<TextBox
-		Classes="Clearable"
 		Watermark=""
 		Width="225"
+		IsReadOnly="{Binding !CanManage}"
 		Text="{Binding ChannelTopicEdit}"
 		VerticalContentAlignment="Top"
 		shadui:ControlAssist.Height="200"
@@ -31,9 +32,11 @@
 		Spacing="8">
 			<Button Command="{Binding UpdateChannelCommand}"
 			Classes="Primary"
+			IsEnabled="{Binding CanManage}"
 			Content="Update" />
 			<Button Command="{Binding DeleteChannelCommand}"
 					Classes="Destructive"
+					IsEnabled="{Binding CanManage}"
 					Content="Delete Channel" />
 		</StackPanel>
 	</StackPanel>

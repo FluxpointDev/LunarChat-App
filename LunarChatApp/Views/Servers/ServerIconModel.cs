@@ -71,25 +71,33 @@ public partial class ServerIconModel : ViewModelBase
     public async Task SubmitServer(UserControl control)
     {
         JoinServerDialogModel? model = control.DataContext as JoinServerDialogModel;
+
+        if (string.IsNullOrEmpty(model.Textbox))
+            return;
+
         if (model.ShowJoin)
         {
-
+            try
+            {
+                var invite = await services.Rest.UseInviteAsync(model.Textbox);
+                if (services.State.Socket.Servers.TryGetValue(invite.ServerId, out var getServer))
+                    services.PageManager.SwitchServer(services, getServer.Server);
+            }
+            catch { }
         }
         else if (model.ShowCreate)
         {
-            if (string.IsNullOrEmpty(model.Textbox))
-                return;
-
             try
             {
-                await services.Rest.CreateServerAsync(new CreateServerRequest
+                var server = await services.Rest.CreateServerAsync(new CreateServerRequest
                 {
                     Name = model.Textbox
                 });
+                if (services.State.Socket.Servers.TryGetValue(server.Id, out var getServer))
+                    services.PageManager.SwitchServer(services, getServer.Server);
+
             }
             catch { }
-
-
         }
     }
 }

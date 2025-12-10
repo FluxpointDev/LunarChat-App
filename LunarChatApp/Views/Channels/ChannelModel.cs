@@ -33,7 +33,9 @@ public partial class ChannelModel : ViewModelBase
         services.Client.OnMessageRecieved += State_OnMessageRecieved;
         services.Client.OnMessageEdit += MessageEdit;
         services.Client.OnMessageDelete += MessageDelete;
-        canManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
+        canInvite = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.CreateInvites);
+        canManage = services.State.Socket.CurrentServer.CanManageChannel(services.State.Socket.CurrentServer.Member);
+        canDelete = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
         canSend = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.SendMessages);
         services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
 
@@ -58,7 +60,9 @@ public partial class ChannelModel : ViewModelBase
 
     private async Task PermissionUpdate()
     {
-        CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
+        CanInvite = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.CreateInvites);
+        CanDelete = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
+        CanManage = services.State.Socket.CurrentServer.CanManageChannel(services.State.Socket.CurrentServer.Member);
         CanSend = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.SendMessages);
     }
 
@@ -66,7 +70,13 @@ public partial class ChannelModel : ViewModelBase
     private bool canManage;
 
     [ObservableProperty]
+    private bool canDelete;
+
+    [ObservableProperty]
     private bool canSend;
+
+    [ObservableProperty]
+    private bool canInvite;
 
     public bool MessagesFinished = false;
 
@@ -146,6 +156,17 @@ public partial class ChannelModel : ViewModelBase
     public void CopyChannelID()
     {
         services.CopyText(services.State.Socket.CurrentChannel?.Id);
+    }
+
+    [RelayCommand]
+    public async Task CreateInvite()
+    {
+        try
+        {
+            RestInvite invite = await services.Rest.CreateInviteAsync(services.State.Socket.CurrentChannel?.Id);
+            services.CopyText(invite.Code);
+        }
+        catch { }
     }
 
     [RelayCommand]

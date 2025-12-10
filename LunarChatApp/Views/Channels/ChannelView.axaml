@@ -33,14 +33,19 @@
 								<TextBlock Classes="Large" Text="{Binding Name}" VerticalAlignment="Top"></TextBlock>
 							</Button>
 						</MenuItem.Header>
+						<MenuItem Header="Create Invite" Width="150" Command="{Binding CreateInviteCommand}" IsVisible="{Binding CanInvite}">
+							<MenuItem.Icon>
+								<materialIcons:MaterialIcon Kind="Plus" Width="12" Height="12" Foreground="{DynamicResource SuccessColor}" />
+							</MenuItem.Icon>
+						</MenuItem>
 						<MenuItem Header="Edit Channel" Width="150" Command="{Binding ChannelSettingsCommand}" IsVisible="{Binding CanManage}">
 							<MenuItem.Icon>
 								<materialIcons:MaterialIcon Kind="Settings" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
 							</MenuItem.Icon>
 						</MenuItem>
-						<MenuItem Header="Delete Channel" Width="150" Command="{Binding DeleteChannelCommand}" IsVisible="{Binding CanManage}">
+						<MenuItem Header="Delete Channel" Width="150" Command="{Binding DeleteChannelCommand}" IsVisible="{Binding CanDelete}">
 							<MenuItem.Icon>
-								<materialIcons:MaterialIcon Kind="TrashCan" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
+								<materialIcons:MaterialIcon Kind="TrashCan" Width="12" Height="12" Foreground="{DynamicResource ErrorColor}" />
 							</MenuItem.Icon>
 						</MenuItem>
 						<MenuItem Header="Copy Channel ID" Width="150" Command="{Binding CopyChannelID}">

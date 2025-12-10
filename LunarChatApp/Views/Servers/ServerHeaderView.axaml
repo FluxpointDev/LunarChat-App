@@ -51,7 +51,7 @@
 			</MenuItem>
 			<MenuItem Header="Leave Server" Width="140" Command="{Binding LeaveServerCommand}" IsVisible="{Binding !IsOwner}">
 				<MenuItem.Icon>
-					<materialIcons:MaterialIcon Kind="Logout" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
+					<materialIcons:MaterialIcon Kind="Logout" Width="12" Height="12" Foreground="{DynamicResource ErrorColor}" />
 				</MenuItem.Icon>
 			</MenuItem>
 		</MenuItem>

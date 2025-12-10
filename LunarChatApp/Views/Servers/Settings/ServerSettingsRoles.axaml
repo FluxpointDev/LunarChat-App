@@ -30,7 +30,7 @@
 				</TextBox>
 				<Button Grid.Column="1" Command="{Binding CreateRoleCommand}"
 						Classes="Primary" IsEnabled="{Binding CanManage}"
-						Content="Create" />
+						Content="Create Role" />
 			</Grid>
 			<Button HorizontalAlignment="Left" Command="{Binding DefaultMembersRoleCommand}" IsEnabled="{Binding CanManage}">
 				<shadui:Card Padding="20,20,20,20">

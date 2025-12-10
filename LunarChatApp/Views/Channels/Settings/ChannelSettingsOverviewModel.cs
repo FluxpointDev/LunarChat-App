@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.Views;
 using LunarChatSharp;
+using LunarChatSharp.Core.Servers;
 using LunarChatSharp.Rest.Channels;
 using System.Threading.Tasks;
 
@@ -18,6 +19,13 @@ public partial class ChannelSettingsOverviewModel : ViewModelBase
         channel = chan;
         ChannelNameEdit = chan.Name;
         ChannelTopicEdit = chan.Topic;
+        services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+        canManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageServer);
+    }
+
+    private async Task PermissionUpdate()
+    {
+        CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageServer);
     }
 
     [ObservableProperty]
@@ -25,6 +33,9 @@ public partial class ChannelSettingsOverviewModel : ViewModelBase
 
     [ObservableProperty]
     private string? _channelTopicEdit;
+
+    [ObservableProperty]
+    private bool canManage;
 
     [RelayCommand]
     public async Task UpdateChannel()

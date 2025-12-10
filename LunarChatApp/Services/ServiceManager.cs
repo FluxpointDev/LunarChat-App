@@ -5,12 +5,13 @@ using LunarChatSharp;
 using LunarChatSharp.Rest;
 using LunarChatSharp.Websocket;
 using ShadUI;
+using System;
 
 namespace LunarChatApp.Services;
 
 public sealed class ServiceManager
 {
-    public static bool IsDev = true;
+    public static bool IsDev = false;
     public readonly PageManager PageManager;
     public readonly TestState State;
     public readonly LunarClient Client;
@@ -36,5 +37,11 @@ public sealed class ServiceManager
         var topLevel = TopLevel.GetTopLevel(MainControl)!;
         if (topLevel != null && topLevel.Clipboard != null)
             topLevel.Clipboard.SetTextAsync(text);
+    }
+
+    public void OpenLink(Uri url)
+    {
+        var launcher = TopLevel.GetTopLevel(MainControl)!.Launcher;
+        launcher.LaunchUriAsync(url);
     }
 }

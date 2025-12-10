@@ -23,8 +23,17 @@ public partial class ChannelSettingsModel : ViewModelBase
         channel = chan;
         ChannelName = chan.Name;
         sv.State.Socket.CurrentServer.OnChannelUpdate += UpdateChannel;
+        sv.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
         if (SelectedPage == null)
             SelectedPage = new ChannelSettingsOverview { DataContext = new ChannelSettingsOverviewModel(services, chan) };
+    }
+
+    private async Task PermissionUpdate()
+    {
+        bool HasManage = services.Socket.State.CurrentServer.CanManageChannel(services.Socket.State.CurrentServer.Member);
+
+        if (!HasManage)
+            pageManager.OnSwitchPage(state.CachedServersPage);
     }
 
     private async Task UpdateChannel(RestChannel channel)

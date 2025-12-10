@@ -8,6 +8,7 @@ using LunarChatSharp;
 using LunarChatSharp.Core.Servers;
 using LunarChatSharp.Rest.Channels;
 using LunarChatSharp.Rest.Servers;
+using LunarChatSharp.Websocket.Events.Servers;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.ViewModels.Servers;
@@ -21,7 +22,17 @@ public partial class ServerHeaderModel : ViewModelBase
         Name = s.Name;
         isOwner = sv.Client.CurrentId == s.OwnerId;
         UpdatePermissions();
+        services.Client.OnServerUpdate += ServerUpdate;
         services.State.Socket.CurrentServer.OnPermissionUpdate += Update;
+    }
+
+    private async Task ServerUpdate(RestServer server, ServerUpdateEvent ev)
+    {
+        if (server.Id != services.State.Socket.CurrentServer?.Server.Id)
+            return;
+
+        if (!string.IsNullOrEmpty(ev.Name))
+            Name = ev.Name;
     }
 
     public async Task Update()
@@ -35,29 +46,8 @@ public partial class ServerHeaderModel : ViewModelBase
     public void UpdatePermissions()
     {
         CanManageChannels = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
-        bool CanView = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.CreateExpressions);
-        if (!CanView)
-            CanView = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageExpressions);
-        if (!CanView)
-            CanView = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageServer);
-        if (!CanView)
-            CanView = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageApps);
-        if (!CanView)
-            CanView = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.BanMembers);
-        if (!CanView)
-            CanView = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ViewAuditLogs);
-        if (!CanView)
-            CanView = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.AssignRoles);
-        if (!CanView)
-            CanView = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ManageRoles);
-        if (!CanView)
-            CanView = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ManageApprovals);
-        if (!CanView)
-            CanView = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ManageAppeals);
-        if (!CanView)
-            CanView = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageWebhooks);
 
-        CanViewSettings = CanView;
+        CanViewSettings = services.State.Socket.CurrentServer.CanManageServer(services.State.Socket.CurrentServer.Member);
     }
 
     [ObservableProperty]
