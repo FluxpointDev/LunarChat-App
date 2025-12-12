@@ -1,10 +1,34 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:discovery="using:LunarChatApp.Views.Discovery"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="LunarChatApp.DiscoverySidebar"
-             x:DataType="discovery:DiscoverySidebarModel">
-  
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:discovery="using:LunarChatApp.Views.Discovery"
+			 xmlns:materialIcons="using:Material.Icons.Avalonia"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:shadui="using:ShadUI"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.DiscoverySidebar"
+			 x:DataType="discovery:DiscoverySidebarModel">
+	<StackPanel Spacing="4">
+		<shadui:SidebarItem IsChecked="True" Command="{Binding ShowServersCommand}">
+			<shadui:SidebarItem.Content>
+				<TextBlock Text="Servers"></TextBlock>
+			</shadui:SidebarItem.Content>
+			<shadui:SidebarItem.Icon>
+				<Viewbox>
+					<materialIcons:MaterialIcon Kind="House" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
+				</Viewbox>
+			</shadui:SidebarItem.Icon>
+		</shadui:SidebarItem>
+
+		<shadui:SidebarItem Command="{Binding ShowAppsCommand}">
+			<shadui:SidebarItem.Content>
+				<TextBlock Text="Bots"></TextBlock>
+			</shadui:SidebarItem.Content>
+			<shadui:SidebarItem.Icon>
+				<Viewbox>
+					<materialIcons:MaterialIcon Kind="Robot" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
+				</Viewbox>
+			</shadui:SidebarItem.Icon>
+		</shadui:SidebarItem>
+	</StackPanel>
 </UserControl>

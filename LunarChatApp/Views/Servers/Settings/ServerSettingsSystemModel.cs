@@ -76,6 +76,15 @@ public partial class ServerSettingsSystemModel : ViewModelBase
         if (SelectedBanMessage == null)
             SelectedBanMessage = Items.First();
 
+        if (!string.IsNullOrEmpty(server.Server.SystemMessages.MemberUnbanned))
+        {
+            SelectedUnbanMessage = Items.FirstOrDefault(x => x.id == server.Server.SystemMessages.MemberUnbanned);
+            if (SelectedUnbanMessage == null)
+                SelectedUnbanMessage = new ChannelListItem { id = server.Server.SystemMessages.MemberUnbanned, Name = "invalid-channel" };
+        }
+        if (SelectedUnbanMessage == null)
+            SelectedUnbanMessage = Items.First();
+
         if (!string.IsNullOrEmpty(server.Server.SystemMessages.MemberKicked))
         {
             SelectedKickMessage = Items.FirstOrDefault(x => x.id == server.Server.SystemMessages.MemberKicked);
@@ -128,6 +137,9 @@ public partial class ServerSettingsSystemModel : ViewModelBase
     private ChannelListItem? _selectedBanMessage;
 
     [ObservableProperty]
+    private ChannelListItem? _selectedUnbanMessage;
+
+    [ObservableProperty]
     private ChannelListItem? _selectedKickMessage;
 
     [ObservableProperty]
@@ -153,6 +165,7 @@ public partial class ServerSettingsSystemModel : ViewModelBase
                     MemberJoined = SelectedJoinMessage != null ? SelectedJoinMessage.id : "",
                     MemberLeft = SelectedLeftMessage != null ? SelectedLeftMessage.id : "",
                     MemberBanned = SelectedBanMessage != null ? SelectedBanMessage.id : "",
+                    MemberUnbanned = SelectedUnbanMessage != null ? SelectedUnbanMessage.id : "",
                     MemberKicked = SelectedKickMessage != null ? SelectedKickMessage.id : "",
                     MemberTimedout = SelectedTimeoutMessage != null ? SelectedTimeoutMessage.id : "",
                     AppAdded = SelectedAppAdded != null ? SelectedAppAdded.id : "",

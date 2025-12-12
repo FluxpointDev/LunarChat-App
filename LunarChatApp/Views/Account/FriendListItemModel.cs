@@ -6,6 +6,7 @@ using LunarChatApp.Views;
 using LunarChatApp.Views.Dialogs;
 using LunarChatSharp;
 using LunarChatSharp.Rest.Users;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -34,14 +35,62 @@ public partial class FriendListItemModel : ViewModelBase
     private string? _displayName;
 
     [RelayCommand]
-    public void OpenMessages()
+    public void CreateGroup()
     {
-        //services.State.Socket.CurrentChannel = new Channel
-        //{
-        //    Id = user.id,
-        //    Name = user.display_name ?? user.username
-        //};
-        //services.State.Socket.TriggerSelectChannel(services.State.Socket.CurrentChannel, user);
+        services.Dialogs.Create(new CreateNameDialog(), new CreateNameDialogModel(), "Create Group").WithSubmit(SubmitGroup).Open();
+    }
+
+    public async Task SubmitGroup(UserControl control)
+    {
+        CreateNameDialogModel? model = control.DataContext as CreateNameDialogModel;
+        if (model == null || string.IsNullOrEmpty(model.Name))
+            return;
+
+        try
+        {
+            var channel = await services.Rest.CreateChannelAsync(new LunarChatSharp.Rest.Channels.CreateChannelRequest
+            {
+                Name = model.Name,
+                Type = LunarChatSharp.Core.Channels.ChannelType.Group,
+                Users = new string[]
+                {
+                    id
+                }
+            });
+            if (channel == null)
+                return;
+
+            await Task.Delay(new TimeSpan(0, 0, 1));
+            services.State.Socket.CurrentChannel = channel;
+            services.Client.OnSelectChannel?.Invoke(services.State.Socket.CurrentChannel);
+        }
+        catch { }
+    }
+
+    [RelayCommand]
+    public async Task OpenMessages()
+    {
+        if (!services.Socket.State.PrivateChannels.TryGetValue(id, out var channel))
+        {
+            try
+            {
+                channel = await services.Rest.CreateChannelAsync(new LunarChatSharp.Rest.Channels.CreateChannelRequest
+                {
+                    Name = "",
+                    Type = LunarChatSharp.Core.Channels.ChannelType.Direct,
+                    Users = new string[]
+                    {
+                    id
+                    }
+                });
+                await Task.Delay(new TimeSpan(0, 0, 1));
+            }
+            catch { }
+        }
+        if (channel == null)
+            return;
+        services.State.Socket.CurrentChannel = channel;
+        services.Client.OnSelectChannel?.Invoke(services.State.Socket.CurrentChannel);
     }
 
     [RelayCommand]

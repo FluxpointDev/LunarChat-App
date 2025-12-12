@@ -40,7 +40,7 @@
 						<ColumnDefinition />
 					</Grid.ColumnDefinitions>
 					<StackPanel HorizontalAlignment="Left">
-						<ItemsRepeater MinWidth="40"  ItemsSource="{Binding ServersList}">
+						<ItemsRepeater MinWidth="40" ItemsSource="{Binding ServersList}">
 						</ItemsRepeater>
 						<local:ServerIcon DataContext="{Binding DiscoveryModel}"></local:ServerIcon>
 						<local:ServerIcon DataContext="{Binding AddServerModel}"></local:ServerIcon>

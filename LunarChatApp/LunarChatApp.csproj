@@ -13,6 +13,11 @@
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
+ 
+  
+  <ItemGroup>
+    <AvaloniaXaml Remove="Assets\Styles\OverrideResource.axaml" />
+  </ItemGroup>
   
 
   <ItemGroup>
@@ -60,6 +65,9 @@
 
   <ItemGroup>
     <AvaloniaResource Update="Assets\Styles\Markdown.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Styles\OverrideResource.axaml">
       <SubType>Designer</SubType>
     </AvaloniaResource>
   </ItemGroup>

@@ -1,10 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using LunarChatApp.Components;
 using LunarChatApp.Services;
 using LunarChatApp.ViewModels.Main;
 using LunarChatApp.Views;
 using LunarChatApp.Views.Main;
+using LunarChatSharp.Rest.Channels;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace LunarChatApp.ViewModels.User;
 
@@ -15,7 +19,50 @@ public partial class DMsListModel : ViewModelBase
     public DMsListModel(ServiceManager sv)
     {
         services = sv;
-        _crockeryList = new ObservableCollection<DMListItem>();
+        services.Client.OnReady += Ready;
+        services.Client.OnDMCreate += ChannelCreate;
+        services.Client.OnGroupCreate += ChannelCreate;
+        services.Client.OnDMUpdate += ChannelUpdate;
+        services.Client.OnGroupUpdate += ChannelUpdate;
+        services.Client.OnGroupDelete += GroupDelete;
+        _crockeryList = new ObservableCollection<DMListItem>(services.Socket.State.PrivateChannels.Select(x => new DMListItem
+        {
+            DataContext = new DMListItemModel(services, x.Value)
+        }));
+    }
+
+    private async Task GroupDelete(RestChannel channel)
+    {
+        var item = CrockeryList.FirstOrDefault(x => (x.DataContext as DMListItemModel).id == channel.Id);
+        if (item == null)
+            return;
+        CrockeryList.Remove(item);
+    }
+
+    private async Task ChannelUpdate(RestChannel channel, UpdateChannelRequest request)
+    {
+        var item = CrockeryList.FirstOrDefault(x => (x.DataContext as DMListItemModel).id == channel.Id);
+        if (item == null)
+            return;
+
+        if (request.Name != null)
+            item.Name = request.Name;
+    }
+
+    private async Task ChannelCreate(RestChannel channel)
+    {
+        CrockeryList.Add(new DMListItem
+        {
+            DataContext = new DMListItemModel(services, channel)
+        });
+    }
+
+    private async Task Ready()
+    {
+        CrockeryList = new ObservableCollection<DMListItem>(services.Socket.State.PrivateChannels.Select(x => new DMListItem
+        {
+            DataContext = new DMListItemModel(services, x.Value)
+        }));
     }
 
     [ObservableProperty]

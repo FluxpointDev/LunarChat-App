@@ -1,6 +1,14 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:md="using:LiveMarkdown.Avalonia">
+        xmlns:md="using:LiveMarkdown.Avalonia"
+        xmlns:shad="using:ShadUI.Avalonia">
+  <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://LunarChatApp/Assets/Styles/OverrideResource.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Styles.Resources>
   <Style Selector="md|MarkdownTextBlock">
     <Setter Property="Cursor" Value="IBeam"/>
     <Setter Property="FontFamily" Value="Arial, 'Segoe UI', sans-serif"/>

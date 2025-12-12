@@ -22,11 +22,23 @@ public partial class ServerSettingsModel : ViewModelBase
         services = sv;
         pageManager = page;
         state = st;
+        id = st.Socket.CurrentServer.Server.Id;
         ServerName = st.Socket.CurrentServer.Server.Name;
         services.Client.OnServerUpdate += ServerUpdate;
+        services.Client.OnRemoveServer += RemoveServer;
         services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
         if (SelectedPage == null)
             SelectedPage = new ServerSettingsOverview() { DataContext = new ServerSettingsOverviewModel(services) };
+    }
+
+    private string id;
+
+    private async Task RemoveServer(RestServer server)
+    {
+        if (server.Id != id)
+            return;
+
+        services.PageManager.OnSwitchPage(services.State.CachedServersPage);
     }
 
     private async Task PermissionUpdate()
@@ -38,10 +50,10 @@ public partial class ServerSettingsModel : ViewModelBase
 
     private async Task ServerUpdate(RestServer server, ServerUpdateEvent ev)
     {
-        if (string.IsNullOrEmpty(ev.Name) || server.Id != services.Socket.State.CurrentServer.Server.Id)
+        if (string.IsNullOrEmpty(ev.Changed.Name) || server.Id != id)
             return;
 
-        ServerName = ev.Name;
+        ServerName = ev.Changed.Name;
     }
 
     [ObservableProperty]

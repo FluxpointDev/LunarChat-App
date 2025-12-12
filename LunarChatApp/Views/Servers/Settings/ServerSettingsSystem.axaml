@@ -38,6 +38,15 @@
 				</ComboBox.ItemTemplate>
 			</ComboBox>
 			<ComboBox Width="255" SelectedIndex="0" ItemsSource="{Binding Items}" IsEnabled="{Binding CanManage}"
+			 SelectedItem="{Binding SelectedUnbanMessage}"
+					  shadui:ControlAssist.Label="Unban Messages">
+				<ComboBox.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding Name}" />
+					</DataTemplate>
+				</ComboBox.ItemTemplate>
+			</ComboBox>
+			<ComboBox Width="255" SelectedIndex="0" ItemsSource="{Binding Items}" IsEnabled="{Binding CanManage}"
 			 SelectedItem="{Binding SelectedKickMessage}"
 					  shadui:ControlAssist.Label="Kick Messages">
 				<ComboBox.ItemTemplate>

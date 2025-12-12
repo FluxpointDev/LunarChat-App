@@ -100,7 +100,6 @@ public partial class FriendsListModel : ViewModelBase
             await services.Rest.AddFriendAsync(data.Username);
         }
         catch { }
-
     }
 
     [RelayCommand]

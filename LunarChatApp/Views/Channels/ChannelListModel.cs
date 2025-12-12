@@ -42,7 +42,7 @@ public partial class ChannelListModel : ViewModelBase
             ChannelsList.Remove(item);
     }
 
-    private async Task ChannelUpdate(RestChannel channel)
+    private async Task ChannelUpdate(RestChannel channel, UpdateChannelRequest request)
     {
         ChannelItem? item = ChannelsList.FirstOrDefault(x => (x.DataContext as ChannelItemModel).id == channel.Id);
         if (item != null)

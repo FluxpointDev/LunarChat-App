@@ -26,6 +26,9 @@
 				<Button Command="{Binding OpenMessagesCommand}" Padding="10,6,10,6" Background="{DynamicResource BorderColor}">
 					<materialIcons:MaterialIcon Kind="Chat" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 				</Button>
+				<Button Command="{Binding CreateGroupCommand}" Padding="10,6,10,6" Background="{DynamicResource BorderColor}">
+					<materialIcons:MaterialIcon Kind="AccountGroup" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
+				</Button>
 				<Button Command="{Binding RemoveFriendCommand}" Padding="10,6,10,6" Background="{DynamicResource BorderColor}">
 					<materialIcons:MaterialIcon Kind="Close" Width="16" Height="16" Foreground="{DynamicResource ErrorColor}" />
 				</Button>

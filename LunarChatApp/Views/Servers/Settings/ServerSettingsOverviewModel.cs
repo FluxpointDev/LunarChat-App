@@ -16,7 +16,7 @@ public partial class ServerSettingsOverviewModel : ViewModelBase
     {
         services = sv;
         ServerNameEdit = services.State.Socket.CurrentServer.Server.Name;
-        ServerDescriptionEdit = services.State.Socket.CurrentServer.Server.Description;
+
         services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
         canManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageServer);
     }
@@ -30,9 +30,6 @@ public partial class ServerSettingsOverviewModel : ViewModelBase
     private string? _serverNameEdit;
 
     [ObservableProperty]
-    private string? _serverDescriptionEdit;
-
-    [ObservableProperty]
     private bool canManage;
 
     [RelayCommand]
@@ -40,14 +37,11 @@ public partial class ServerSettingsOverviewModel : ViewModelBase
     {
         var data = new EditServerRequest();
         data.Name = ServerNameEdit;
-        data.Description = ServerDescriptionEdit ?? "";
-
         try
         {
             await services.Rest.EditServerAsync(services.State.Socket.CurrentServer.Server.Id, data);
         }
         catch { }
-
     }
 
     [RelayCommand]
@@ -55,7 +49,7 @@ public partial class ServerSettingsOverviewModel : ViewModelBase
     {
         try
         {
-            await services.Rest.LeaveServerAsync(services.State.Socket.CurrentServer.Server.Id);
+            await services.Rest.DeleteServerAsync(services.State.Socket.CurrentServer.Server.Id);
         }
         catch { }
 

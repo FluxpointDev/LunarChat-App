@@ -1,10 +1,40 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:settings="using:LunarChatApp.Views.Servers.Settings"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="LunarChatApp.ServerSettingsDiscovery"
-             x:DataType="settings:ServerSettingsDiscoveryModel">
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:lunarchatsharp="using:LunarChatSharp"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:settings="using:LunarChatApp.Views.Servers.Settings"
+			 xmlns:shadui="using:ShadUI"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.ServerSettingsDiscovery"
+			 x:DataType="settings:ServerSettingsDiscoveryModel">
+	<StackPanel Spacing="20" HorizontalAlignment="Left">
+		<StackPanel HorizontalAlignment="Left" Spacing="10">
+			<TextBox MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxDescriptionLength}}"
+					 Width="225"
+					 shadui:ControlAssist.Height="100"
+					 shadui:ControlAssist.Label="Description"
+					 IsReadOnly="{Binding !CanManage}"
+					 AcceptsReturn="True"
+					 Text="{Binding ServerDescriptionEdit}"
+					 Watermark="Enter a description here..." />
 
+			<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding IsPublic}">
+				<ToggleSwitch.OffContent>
+					<Label Classes="Small" VerticalAlignment="Center">Private Server</Label>
+				</ToggleSwitch.OffContent>
+				<ToggleSwitch.OnContent>
+					<Label Classes="Small" VerticalAlignment="Center">Public Server</Label>
+				</ToggleSwitch.OnContent>
+			</ToggleSwitch>
+		</StackPanel>
+		<StackPanel
+		HorizontalAlignment="Left"
+		Orientation="Horizontal"
+		Spacing="8">
+			<Button Command="{Binding SaveSettingsCommand}" IsEnabled="{Binding CanManage}"
+					Classes="Primary"
+					Content="Update" />
+		</StackPanel>
+	</StackPanel>
 </UserControl>

@@ -3,20 +3,24 @@ using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.Views;
 using LunarChatSharp.Rest.Channels;
-using LunarChatSharp.Rest.Users;
+using System.Linq;
 
 namespace LunarChatApp.Components;
 
 public partial class DMListItemModel : ViewModelBase
 {
     private ServiceManager services;
-    private RestRelation user;
-
-    public DMListItemModel(ServiceManager sv, RestRelation u)
+    private RestChannel channel;
+    public string id;
+    public DMListItemModel(ServiceManager sv, RestChannel chan)
     {
         services = sv;
-        user = u;
-        Name = u.DisplayName ?? u.Username;
+        id = chan.Id;
+        channel = chan;
+        if (chan.Type == LunarChatSharp.Core.Channels.ChannelType.Direct)
+            _name = chan.Users.FirstOrDefault(x => x.Id != services.Client.CurrentId).GetCurrentNameDiscrim();
+        else
+            _name = chan.Name;
     }
 
     [ObservableProperty]
@@ -25,13 +29,8 @@ public partial class DMListItemModel : ViewModelBase
     [RelayCommand]
     public void OpenDM()
     {
-        services.State.Socket.CurrentChannel = new RestChannel
-        {
-            Id = user.UserId,
-            Name = user.DisplayName ?? user.Username,
-            Type = LunarChatSharp.Core.Channels.ChannelType.Direct
-        };
+        services.State.Socket.CurrentChannel = channel;
 
-        services.Client.OnSelectChannel?.Invoke(services.State.Socket.CurrentChannel, user);
+        services.Client.OnSelectChannel?.Invoke(services.State.Socket.CurrentChannel);
     }
 }

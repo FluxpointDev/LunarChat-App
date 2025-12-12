@@ -80,9 +80,10 @@ public partial class ServerIconModel : ViewModelBase
         else if (Id == "1")
         {
             var model = (services.State.CachedServersPage.DataContext as ServersModel);
+            services.State.Socket.CurrentServer = null;
             model.SelectedPage = new DiscoveryPage { DataContext = new DiscoveryPageModel(services) };
             model.SelectedHeader = new DiscoveryHeader();
-            model.SelectedSidebar = new DiscoverySidebar { DataContext = new DiscoverySidebarModel() };
+            model.SelectedSidebar = new DiscoverySidebar { DataContext = new DiscoverySidebarModel(services) };
         }
         else
         {
@@ -103,8 +104,11 @@ public partial class ServerIconModel : ViewModelBase
             try
             {
                 var invite = await services.Rest.UseInviteAsync(model.Textbox);
+                await Task.Delay(new TimeSpan(0, 0, 1));
                 if (services.State.Socket.Servers.TryGetValue(invite.ServerId, out var getServer))
+                {
                     services.PageManager.SwitchServer(services, getServer.Server);
+                }
             }
             catch { }
         }
@@ -116,8 +120,11 @@ public partial class ServerIconModel : ViewModelBase
                 {
                     Name = model.Textbox
                 });
+                await Task.Delay(new TimeSpan(0, 0, 1));
                 if (services.State.Socket.Servers.TryGetValue(server.Id, out var getServer))
+                {
                     services.PageManager.SwitchServer(services, getServer.Server);
+                }
 
             }
             catch { }

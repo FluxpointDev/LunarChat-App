@@ -1,8 +1,47 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="LunarChatApp.DiscoveryPage">
-  
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:discovery="using:LunarChatApp.Views.Discovery"
+			 xmlns:materialIcons="using:Material.Icons.Avalonia"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.DiscoveryPage"
+			 x:DataType="discovery:DiscoveryPageModel">
+	<Grid RowDefinitions="auto, *">
+		<Panel Height="100">
+			<Panel.Background>
+				<LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,50%">
+					<GradientStop Color="{DynamicResource InfoColor60}" Offset="0.0"/>
+					<GradientStop Color="{DynamicResource InfoColor20}" Offset="1.0"/>
+				</LinearGradientBrush>
+			</Panel.Background>
+			<Grid ColumnDefinitions="auto, *" ColumnSpacing="20" HorizontalAlignment="Center">
+				<materialIcons:MaterialIcon Kind="Compass" Width="32" Height="32" Foreground="{DynamicResource PrimaryColor}" />
+				<StackPanel Grid.Column="1" VerticalAlignment="Center">
+					<TextBlock Classes="Large" HorizontalAlignment="Center" Text="Find your Communities and Apps!"></TextBlock>
+					<TextBlock Classes="Muted" FontSize="16" HorizontalAlignment="Center" Text="Join other gamers, anime fans and developers." TextWrapping="WrapWithOverflow"></TextBlock>
+				</StackPanel>
+			</Grid>
+		</Panel>
+		<ScrollViewer Grid.Row="1">
+			<Panel Margin="20" HorizontalAlignment="Center">
+				<ItemsRepeater ItemsSource="{Binding ServersList}" IsVisible="{Binding !ShowApps}">
+					<ItemsRepeater.Layout>
+						<WrapLayout
+						Orientation="Horizontal"
+						VerticalSpacing="15"
+						HorizontalSpacing="15" />
+					</ItemsRepeater.Layout>
+				</ItemsRepeater>
+				<ItemsRepeater ItemsSource="{Binding AppsList}" IsVisible="{Binding ShowApps}">
+					<ItemsRepeater.Layout>
+						<WrapLayout
+						Orientation="Horizontal"
+						VerticalSpacing="15"
+						HorizontalSpacing="15" />
+					</ItemsRepeater.Layout>
+				</ItemsRepeater>
+			</Panel>
+		</ScrollViewer>
+	</Grid>
 </UserControl>

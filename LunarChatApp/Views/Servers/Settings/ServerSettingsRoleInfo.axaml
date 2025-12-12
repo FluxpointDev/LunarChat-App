@@ -302,6 +302,16 @@
 									</ToggleSwitch>
 									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Create invites for others to join."></SelectableTextBlock>
 
+									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.ManageInvites}">
+										<ToggleSwitch.OffContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Invites</Label>
+										</ToggleSwitch.OffContent>
+										<ToggleSwitch.OnContent>
+											<Label Classes="Small" VerticalAlignment="Center">Manage Invites</Label>
+										</ToggleSwitch.OnContent>
+									</ToggleSwitch>
+									<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Manage and delete invites for the channel."></SelectableTextBlock>
+
 									<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding Permissions.SendPolls}">
 										<ToggleSwitch.OffContent>
 											<Label Classes="Small" VerticalAlignment="Center">Send Polls</Label>

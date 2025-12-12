@@ -32,8 +32,8 @@ public partial class ServerHeaderModel : ViewModelBase
         if (server.Id != services.State.Socket.CurrentServer?.Server.Id)
             return;
 
-        if (!string.IsNullOrEmpty(ev.Name))
-            Name = ev.Name;
+        if (!string.IsNullOrEmpty(ev.Changed.Name))
+            Name = ev.Changed.Name;
     }
 
     public async Task Update()
@@ -135,7 +135,7 @@ public partial class ServerHeaderModel : ViewModelBase
     {
         try
         {
-            await services.Rest.RemoveMemberAsync(services.State.Socket.CurrentServer?.Server.Id, services.Client.CurrentId);
+            await services.Rest.LeaveServerAsync(services.State.Socket.CurrentServer?.Server.Id);
             services.Client.OnSelectServer?.Invoke(null);
         }
         catch { }

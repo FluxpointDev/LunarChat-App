@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:discovery="using:LunarChatApp.Views.Discovery"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:shadui="using:ShadUI"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.DiscoverCard"
+			 x:DataType="discovery:DiscoverCardModel">
+	<shadui:Card
+	Width="300"
+	Height="220"
+	HorizontalAlignment="Left"
+	HasShadow="True">
+		<StackPanel Spacing="4">
+			<shadui:CardTitle Content="{Binding Name}"></shadui:CardTitle>
+			<TextBlock Classes="Muted" Height="76" FontSize="14" Text="{Binding Description}" TextWrapping="WrapWithOverflow" MaxLines="4" />
+			<Button
+			Margin="0,20,0,0" Command="{Binding JoinCommand}"
+			Classes="Primary" Content="{Binding JoinText}">
+			</Button>
+		</StackPanel>
+	</shadui:Card>
+</UserControl>

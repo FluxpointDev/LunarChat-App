@@ -57,7 +57,7 @@ public sealed class PageManager(ServiceProvider serviceProvider)
             if (channel != null && services.State.Socket.CurrentChannel?.Id != channel.Id)
             {
                 services.State.Socket.CurrentChannel = channel;
-                services.Client.OnSelectChannel?.Invoke(channel, null);
+                services.Client.OnSelectChannel?.Invoke(channel);
             }
         }
     }
@@ -67,7 +67,12 @@ public sealed class PageManager(ServiceProvider serviceProvider)
         if (channel != null)
         {
             services.State.Socket.CurrentChannel = channel;
-            services.Client.OnSelectChannel?.Invoke(channel, null);
+            services.Client.OnSelectChannel?.Invoke(channel);
+        }
+        else
+        {
+            services.State.Socket.CurrentChannel = null;
+            services.Client.OnSelectChannel?.Invoke(null);
         }
     }
 }

@@ -18,14 +18,7 @@
 			Text="{Binding ServerNameEdit}"
 			shadui:ControlAssist.Label="Server Name" />
 
-			<TextBox MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxDescriptionLength}}"
-			Width="225"
-			shadui:ControlAssist.Height="100"
-			shadui:ControlAssist.Label="Description"
-			IsReadOnly="{Binding !CanManage}"
-			AcceptsReturn="True"
-			Text="{Binding ServerDescriptionEdit}"
-			Watermark="Enter a description here..." />
+			
 		</StackPanel>
 		<StackPanel
 		HorizontalAlignment="Left"

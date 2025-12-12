@@ -1,4 +1,5 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
@@ -6,12 +7,13 @@ using LunarChatApp.Components;
 using LunarChatApp.Services;
 using LunarChatApp.ViewModels.Servers;
 using LunarChatApp.Views;
+using LunarChatApp.Views.Dialogs;
+using LunarChatApp.Views.Main;
 using LunarChatSharp;
 using LunarChatSharp.Core.Servers;
 using LunarChatSharp.Rest.Channels;
 using LunarChatSharp.Rest.Messages;
 using LunarChatSharp.Rest.Servers;
-using LunarChatSharp.Rest.Users;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -23,25 +25,47 @@ public partial class ChannelViewModel : ViewModelBase
 {
     private TestState state;
     public ServiceManager services;
-    private RestRelation? user;
-    public ChannelViewModel(TestState st, ServiceManager sv, RestRelation? u)
+    public ChannelViewModel(TestState st, ServiceManager sv)
     {
         state = st;
         services = sv;
-        user = u;
         Name = st.Socket.CurrentChannel.Name;
         Topic = st.Socket.CurrentChannel.Topic;
-        state.Socket.CurrentServer.OnChannelUpdate += ChannelUpdate;
+        if (state.Socket.CurrentServer != null)
+            state.Socket.CurrentServer.OnChannelUpdate += ChannelUpdate;
+
         services.Client.OnMessageRecieved += State_OnMessageRecieved;
         services.Client.OnMessageEdit += MessageEdit;
         services.Client.OnMessageDelete += MessageDelete;
-        services.Client.OnMemberUpdate += MemberUpdate;
-        inTimeout = (services.State.Socket.CurrentServer.Member.Timeout.HasValue && services.State.Socket.CurrentServer.Member.Timeout.Value < DateTime.UtcNow);
-        canInvite = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.CreateInvites);
-        canManage = services.State.Socket.CurrentServer.CanManageChannel(services.State.Socket.CurrentServer.Member);
-        canDelete = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
-        canSend = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.SendMessages);
-        services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+        if (state.Socket.CurrentServer != null)
+        {
+            services.Client.OnMemberUpdate += MemberUpdate;
+            inTimeout = (services.State.Socket.CurrentServer.Member.Timeout.HasValue && services.State.Socket.CurrentServer.Member.Timeout.Value < DateTime.UtcNow);
+            canInvite = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.CreateInvites);
+            canManage = services.State.Socket.CurrentServer.CanManageChannel(services.State.Socket.CurrentServer.Member);
+            canDelete = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
+            canSend = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.SendMessages);
+            services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+            services.State.Socket.CurrentServer.OnChannelDelete += ChannelDelete;
+        }
+        else
+        {
+            canSend = true;
+            if (st.Socket.CurrentChannel.Type == LunarChatSharp.Core.Channels.ChannelType.Group)
+            {
+                canLeaveGroup = st.Socket.CurrentChannel.GroupSettings?.OwnerId != services.Client.CurrentId;
+                canDelete = st.Socket.CurrentChannel.GroupSettings?.OwnerId == services.Client.CurrentId;
+                canAddFriend = true;
+                canChangeName = st.Socket.CurrentChannel.GroupSettings?.OwnerId == services.Client.CurrentId;
+                services.Client.OnGroupUpdate += ChannelUpdate;
+                services.Client.OnGroupDelete += GroupDelete;
+            }
+            else
+            {
+                _name = st.Socket.CurrentChannel.Users.FirstOrDefault(x => x.Id != services.Client.CurrentId).GetCurrentNameDiscrim();
+                services.Client.OnDMUpdate += ChannelUpdate;
+            }
+        }
 
         CrockeryList = new ObservableCollection<MessageItem>();
         _ = Task.Run(async () =>
@@ -60,6 +84,16 @@ public partial class ChannelViewModel : ViewModelBase
 
             }
         });
+    }
+
+    private async Task ChannelDelete(RestChannel channel)
+    {
+        services.PageManager.SwitchServerChannel(services, null);
+    }
+
+    private async Task GroupDelete(RestChannel channel)
+    {
+        services.State.TriggerPageSelect(new HomeView() { DataContext = new HomeModel(services) });
     }
 
     private async Task MemberUpdate(RestServer server, string arg2, EditMemberRequest request)
@@ -95,6 +129,15 @@ public partial class ChannelViewModel : ViewModelBase
     private bool canDelete;
 
     [ObservableProperty]
+    private bool canChangeName;
+
+    [ObservableProperty]
+    private bool canLeaveGroup;
+
+    [ObservableProperty]
+    private bool canAddFriend;
+
+    [ObservableProperty]
     private bool canSend;
 
     [ObservableProperty]
@@ -106,7 +149,7 @@ public partial class ChannelViewModel : ViewModelBase
     public bool MessagesFinished = false;
 
 
-    private async Task ChannelUpdate(RestChannel channel)
+    private async Task ChannelUpdate(RestChannel channel, UpdateChannelRequest request)
     {
         Name = channel.Name;
         Topic = channel.Topic;
@@ -125,7 +168,9 @@ public partial class ChannelViewModel : ViewModelBase
                 Author = message.Author,
                 Content = message.Content,
                 Id = message.Id,
-                CreatedAt = message.CreatedAt
+                CreatedAt = message.CreatedAt,
+                Source = message.Source,
+                SystemMessage = message.SystemMessage
             })
         });
     }
@@ -195,6 +240,46 @@ public partial class ChannelViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    public void ChangeGroupName()
+    {
+        services.Dialogs.Create(new CreateNameDialog(), new CreateNameDialogModel { Name = Name }, "Change Group Name").WithSubmit(SubmitGroupName).Open();
+    }
+
+    public async Task SubmitGroupName(UserControl control)
+    {
+        CreateNameDialogModel? model = control.DataContext as CreateNameDialogModel;
+        if (model == null || string.IsNullOrEmpty(model.Name))
+            return;
+
+        try
+        {
+            await services.Rest.UpdateChannelAsync(services.State.Socket.CurrentChannel?.Id, new UpdateChannelRequest
+            {
+                Name = model.Name
+            });
+        }
+        catch { }
+    }
+
+    [RelayCommand]
+    public void AddFriend()
+    {
+        services.Dialogs.Create(new AddFriendDialog(), new AddFriendDialogModel(), "Add Friend to Group").WithSubmit(SubmitFriend).Open();
+    }
+
+    public async Task SubmitFriend(UserControl control)
+    {
+        try
+        {
+            AddFriendDialogModel? data = control.DataContext as AddFriendDialogModel;
+            var friend = state.Socket.Relations.Values.FirstOrDefault(x => x.UserId == data.Username || x.Username == data.Username);
+            await services.Rest.PutAsync($"/groups/{services.State.Socket.CurrentChannel?.Id}/users/{friend.UserId}");
+        }
+        catch { }
+
+    }
+
+    [RelayCommand]
     public void ChannelSettings()
     {
         services.PageManager.OnSwitchPage(new ChannelSettings
@@ -204,13 +289,26 @@ public partial class ChannelViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    public async Task LeaveGroup()
+    {
+        try
+        {
+            await services.Rest.DeleteChannelAsync(state.Socket.CurrentChannel?.Id, new DeleteChannelRequest
+            {
+
+            });
+        }
+        catch { }
+    }
+
+    [RelayCommand]
     public async Task DeleteChannel()
     {
         try
         {
             await services.Rest.DeleteChannelAsync(state.Socket.CurrentChannel?.Id, new DeleteChannelRequest
             {
-                ServerId = state.Socket.CurrentServer.Server.Id
+                ServerId = state.Socket.CurrentServer?.Server.Id
             });
         }
         catch { }

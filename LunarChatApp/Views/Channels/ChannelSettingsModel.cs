@@ -36,7 +36,7 @@ public partial class ChannelSettingsModel : ViewModelBase
             pageManager.OnSwitchPage(state.CachedServersPage);
     }
 
-    private async Task UpdateChannel(RestChannel channel)
+    private async Task UpdateChannel(RestChannel channel, UpdateChannelRequest request)
     {
         ChannelName = channel.Name;
         if (SelectedPage is ChannelSettingsOverview overview)

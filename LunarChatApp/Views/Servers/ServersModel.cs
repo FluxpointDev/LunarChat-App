@@ -50,7 +50,7 @@ public partial class ServersModel : ViewModelBase
             _selectedHeader = new ServerHeaderView() { DataContext = new ServerHeaderModel(services, state.Socket.CurrentServer.Server) };
             _selectedSidebar = new ChannelsListView() { DataContext = new ChannelListModel(services, state) };
             if (state.Socket.CurrentChannel != null)
-                _selectedPage = new ChannelView() { DataContext = new ChannelViewModel(state, services, null) };
+                _selectedPage = new ChannelView() { DataContext = new ChannelViewModel(state, services) };
         }
 
         if (ServersList == null)
@@ -85,7 +85,7 @@ public partial class ServersModel : ViewModelBase
 
     private async Task ServerUpdate(RestServer server, ServerUpdateEvent ev)
     {
-        if (string.IsNullOrEmpty(ev.Name))
+        if (string.IsNullOrEmpty(ev.Changed.Name))
             return;
 
         var item = ServersList.FirstOrDefault(x => (x.DataContext as ServerIconModel)?.Id == ev.ServerId);
@@ -149,9 +149,12 @@ public partial class ServersModel : ViewModelBase
         SelectedPage = control;
     }
 
-    private async Task OnSelectChannel(RestChannel channel, RestRelation user)
+    private async Task OnSelectChannel(RestChannel channel)
     {
-        SelectedPage = new ChannelView() { DataContext = new ChannelViewModel(state, services, user) };
+        if (channel == null)
+            SelectedPage = null;
+        else
+            SelectedPage = new ChannelView() { DataContext = new ChannelViewModel(state, services) };
     }
 
     private async Task OnSelectServer(RestServer? server)
