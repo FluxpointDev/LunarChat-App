@@ -19,8 +19,19 @@ public partial class ChannelSettingsOverviewModel : ViewModelBase
         channel = chan;
         ChannelNameEdit = chan.Name;
         ChannelTopicEdit = chan.Topic;
-        services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
-        canManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageServer);
+        if (chan.Type == LunarChatSharp.Core.Channels.ChannelType.Group)
+        {
+            CanManage = services.Client.CurrentId == chan.GroupSettings?.OwnerId;
+        }
+        else
+        {
+            if (services.State.Socket.CurrentServer == null)
+                return;
+
+            services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+            canManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageServer);
+        }
+
     }
 
     private async Task PermissionUpdate()
@@ -40,16 +51,18 @@ public partial class ChannelSettingsOverviewModel : ViewModelBase
     [RelayCommand]
     public async Task UpdateChannel()
     {
+        var req = new UpdateChannelRequest();
+        if (channel.Name != ChannelNameEdit)
+            req.Name = ChannelNameEdit;
+
+        if (channel.Topic != ChannelTopicEdit)
+            req.Topic = ChannelTopicEdit;
+
         try
         {
-            await services.Rest.UpdateChannelAsync(channel.Id, new UpdateChannelRequest
-            {
-                Name = ChannelNameEdit,
-                Topic = ChannelTopicEdit
-            });
+            await services.Rest.UpdateChannelAsync(channel.Id, req);
         }
         catch { }
-
     }
 
     [RelayCommand]

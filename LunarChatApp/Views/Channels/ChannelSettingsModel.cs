@@ -24,8 +24,19 @@ public partial class ChannelSettingsModel : ViewModelBase
         state = sv.State;
         channel = chan;
         ChannelName = chan.Name;
-        sv.State.Socket.CurrentServer.OnChannelUpdate += UpdateChannel;
-        sv.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+        if (chan.Type == LunarChatSharp.Core.Channels.ChannelType.Group)
+        {
+            isServerChannel = true;
+        }
+        else
+        {
+            if (sv.State.Socket.CurrentServer != null)
+            {
+                sv.State.Socket.CurrentServer.OnChannelUpdate += UpdateChannel;
+                sv.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+            }
+        }
+
         if (SelectedPage == null)
             SelectedPage = new ChannelSettingsOverview { DataContext = new ChannelSettingsOverviewModel(services, chan) };
     }
@@ -48,6 +59,9 @@ public partial class ChannelSettingsModel : ViewModelBase
             model.ChannelTopicEdit = channel.Topic;
         }
     }
+
+    [ObservableProperty]
+    private bool isServerChannel;
 
     [ObservableProperty]
     private UserControl? _selectedPage;

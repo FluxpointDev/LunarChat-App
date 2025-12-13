@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using LunarChatApp.Services;
 using LunarChatApp.Views.Dialogs;
+using LunarChatSharp.Core.Channels;
 using LunarChatSharp.Core.Servers;
 using LunarChatSharp.Rest.Channels;
 using LunarChatSharp.Rest.Helpers;
@@ -33,11 +34,24 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
         this.openWebhook = openWebhook;
         this.openInfo = openInfo;
 
-        _canManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageWebhooks);
+        if (services.State.Socket.CurrentChannel.Type == ChannelType.Group)
+        {
+            _canManage = services.Client.CurrentId == services.State.Socket.CurrentChannel.GroupSettings?.OwnerId;
+
+        }
+        else
+        {
+            if (services.State.Socket.CurrentServer != null)
+            {
+                _canManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageWebhooks);
+                services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+            }
+        }
+
         services.Client.OnWebhookCreate += WebhookCreate;
         services.Client.OnWebhookUpdate += WebhookUpdate;
         services.Client.OnWebhookDelete += WebhookDelete;
-        services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+
         _searchTimer = new Timer(500); // 500ms debounce
         _searchTimer.Elapsed += SearchTimerElapsed;
         _searchTimer.AutoReset = false;
@@ -132,7 +146,7 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
             Id = webhook.Id,
             Name = webhook.Name,
             channelId = webhook.ChannelId,
-            CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageWebhooks)
+            CanManage = CanManage
         };
         _originalItems.Add(item);
         item.PropertyChanged += OnItemsChanged;

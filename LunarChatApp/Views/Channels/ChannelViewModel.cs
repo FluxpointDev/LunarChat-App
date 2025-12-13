@@ -37,18 +37,7 @@ public partial class ChannelViewModel : ViewModelBase
         services.Client.OnMessageRecieved += State_OnMessageRecieved;
         services.Client.OnMessageEdit += MessageEdit;
         services.Client.OnMessageDelete += MessageDelete;
-        if (state.Socket.CurrentServer != null)
-        {
-            services.Client.OnMemberUpdate += MemberUpdate;
-            inTimeout = (services.State.Socket.CurrentServer.Member.Timeout.HasValue && services.State.Socket.CurrentServer.Member.Timeout.Value < DateTime.UtcNow);
-            canInvite = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.CreateInvites);
-            canManage = services.State.Socket.CurrentServer.CanManageChannel(services.State.Socket.CurrentServer.Member);
-            canDelete = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
-            canSend = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.SendMessages);
-            services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
-            services.State.Socket.CurrentServer.OnChannelDelete += ChannelDelete;
-        }
-        else
+        if (state.Socket.CurrentChannel.Type == LunarChatSharp.Core.Channels.ChannelType.Group || state.Socket.CurrentChannel.Type == LunarChatSharp.Core.Channels.ChannelType.Direct)
         {
             canSend = true;
             if (st.Socket.CurrentChannel.Type == LunarChatSharp.Core.Channels.ChannelType.Group)
@@ -64,6 +53,20 @@ public partial class ChannelViewModel : ViewModelBase
             {
                 _name = st.Socket.CurrentChannel.Users.FirstOrDefault(x => x.Id != services.Client.CurrentId).GetCurrentNameDiscrim();
                 services.Client.OnDMUpdate += ChannelUpdate;
+            }
+        }
+        else
+        {
+            services.Client.OnMemberUpdate += MemberUpdate;
+            if (services.State.Socket.CurrentServer != null)
+            {
+                inTimeout = (services.State.Socket.CurrentServer.Member.Timeout.HasValue && services.State.Socket.CurrentServer.Member.Timeout.Value < DateTime.UtcNow);
+                canInvite = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.CreateInvites);
+                canManage = services.State.Socket.CurrentServer.CanManageChannel(services.State.Socket.CurrentServer.Member);
+                canDelete = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
+                canSend = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.SendMessages);
+                services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+                services.State.Socket.CurrentServer.OnChannelDelete += ChannelDelete;
             }
         }
 
@@ -281,6 +284,15 @@ public partial class ChannelViewModel : ViewModelBase
 
     [RelayCommand]
     public void ChannelSettings()
+    {
+        services.PageManager.OnSwitchPage(new ChannelSettings
+        {
+            DataContext = new ChannelSettingsModel(services, state.Socket.CurrentChannel)
+        });
+    }
+
+    [RelayCommand]
+    public void GroupSettings()
     {
         services.PageManager.OnSwitchPage(new ChannelSettings
         {
