@@ -1,15 +1,15 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:lunarchatsharp="using:LunarChatSharp"
-			 xmlns:materialIcons="using:Material.Icons.Avalonia"
-			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 xmlns:settings="using:LunarChatApp.Views.Servers.Settings"
-			 xmlns:shadui="using:ShadUI"
-			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-			 x:Class="LunarChatApp.ServerSettingsMembers"
-			 x:DataType="settings:ServerSettingsMembersModel">
-	<ScrollViewer HorizontalScrollBarVisibility="Auto">
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:settings="using:LunarChatApp.Views.Channels.Settings"
+             xmlns:shadui="using:ShadUI"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="LunarChatApp.ChannelSettingsGroupUsers"
+             x:DataType="settings:ChannelSettingsGroupUsersModel">
+  <ScrollViewer HorizontalScrollBarVisibility="Auto">
 		<StackPanel
 		Width="600"
 		HorizontalAlignment="Left"
@@ -21,7 +21,7 @@
 				shadui:ControlAssist.ShowProgress="{Binding IsSearching}"
 				Classes="Clearable"
 				Text="{Binding SearchString, Mode=TwoWay}"
-				Watermark="Search members...">
+				Watermark="Search users...">
 					<TextBox.InnerRightContent>
 						<PathIcon
 						Width="16"
@@ -29,6 +29,9 @@
 						Opacity="0.75" />
 					</TextBox.InnerRightContent>
 				</TextBox>
+				<Button Grid.Column="1" Command="{Binding AddFriendCommand}"
+						Classes="Primary" IsEnabled="{Binding CanManage}"
+						Content="Add Friend" />
 			</Grid>
 			<DataGrid
 			x:Name="DataGrid"
@@ -52,33 +55,6 @@
 					CanUserSort="False"
 					Header="Name"
 					IsReadOnly="True" />
-					<DataGridTextColumn
-					Binding="{Binding JoinedAt}"
-					CanUserSort="False"
-					Header="Joined Server"
-					IsReadOnly="True" />
-					<DataGridTextColumn
-					Binding="{Binding CreatedAt}"
-					CanUserSort="False"
-					Header="Created Account"
-					IsReadOnly="True" />
-					<DataGridTemplateColumn Header="Roles">
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate>
-								<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="2">
-									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" IsVisible="{Binding ShowCurrentRole}">
-										<TextBlock Text="{Binding CurrentRole}"></TextBlock>
-									</Button>
-									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" IsVisible="{Binding ShowRolesCount}">
-										<TextBlock Text="{Binding RolesCount}"></TextBlock>
-									</Button>
-									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding AddRoleCommand}">
-										<materialIcons:MaterialIcon Kind="Plus" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
-									</Button>
-								</StackPanel>
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
 
 					<DataGridTemplateColumn Header="">
 						<DataGridTemplateColumn.CellTemplate>
@@ -99,19 +75,9 @@
 													<materialIcons:MaterialIcon Kind="DotsVertical" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 												</Button>
 											</MenuItem.Header>
-											<MenuItem Width="170" Header="{Binding TimeoutItemText}" Command="{Binding TimeoutUserCommand}" IsVisible="{Binding CanTimeoutUser}">
-												<MenuItem.Icon>
-													<materialIcons:MaterialIcon Kind="Clock" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
-												</MenuItem.Icon>
-											</MenuItem>
-											<MenuItem Width="170" Header="{Binding KickItemText}" Command="{Binding KickUserCommand}" IsVisible="{Binding CanKickUser}">
+											<MenuItem Width="170" Header="{Binding RemoveItemText}" Command="{Binding RemoveUserCommand}" IsVisible="{Binding CanManage}">
 												<MenuItem.Icon>
 													<materialIcons:MaterialIcon Kind="Remove" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
-												</MenuItem.Icon>
-											</MenuItem>
-											<MenuItem Width="170" Header="{Binding BanItemText}" Command="{Binding BanUserCommand}" IsVisible="{Binding CanBanMember}">
-												<MenuItem.Icon>
-													<materialIcons:MaterialIcon Kind="Gavel" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
 												</MenuItem.Icon>
 											</MenuItem>
 											<MenuItem Width="170" Header="Transfer Ownership" Command="{Binding TransferOwnershipCommand}" IsVisible="{Binding CanTransferOwner}">
@@ -133,19 +99,7 @@
 				</DataGrid.Columns>
 			</DataGrid>
 			<Grid ColumnDefinitions="* Auto">
-				<TextBlock VerticalAlignment="Center" Classes="Small Muted">
-					<Run Text="{Binding SelectedCount}" />
-					<Run Text="of" />
-					<Run Text="{Binding TotalCount}" />
-					<Run Text="row(s) selected." />
-				</TextBlock>
-				<StackPanel
-				Grid.Column="1"
-				Orientation="Horizontal"
-				Spacing="8">
-					<Button Classes="Outline" IsEnabled="False">Previous</Button>
-					<Button Classes="Outline" IsEnabled="False">Next</Button>
-				</StackPanel>
+				
 			</Grid>
 		</StackPanel>
 	</ScrollViewer>

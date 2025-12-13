@@ -93,6 +93,13 @@ public partial class ServerSettingsModel : ViewModelBase
     }
 
     [RelayCommand]
+    public void OpenAuditLogSettings()
+    {
+        SelectedTitle = "Audit Logs";
+        SelectedPage = new ServerSettingsAuditLogs() { DataContext = new ServerSettingsAuditLogsModel(services) };
+    }
+
+    [RelayCommand]
     public void OpenRolesSettings()
     {
         SelectedTitle = "Roles";

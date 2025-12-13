@@ -16,7 +16,6 @@ public partial class ServerSettingsOverviewModel : ViewModelBase
     {
         services = sv;
         ServerNameEdit = services.State.Socket.CurrentServer.Server.Name;
-
         services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
         canManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageServer);
     }
@@ -42,6 +41,12 @@ public partial class ServerSettingsOverviewModel : ViewModelBase
             await services.Rest.EditServerAsync(services.State.Socket.CurrentServer.Server.Id, data);
         }
         catch { }
+    }
+
+    [RelayCommand]
+    public void TransferOwnership()
+    {
+
     }
 
     [RelayCommand]

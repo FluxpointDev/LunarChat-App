@@ -23,7 +23,7 @@
 				</StackPanel>
 			</shadui:Sidebar.Header>
 			<StackPanel Spacing="2">
-				<shadui:SidebarItemLabel AsSeparator="True" Text="Server" />
+				<shadui:SidebarItemLabel AsSeparator="True" Text="Server Settings" />
 				<shadui:SidebarItem Content="Overview" IsChecked="true" Command="{Binding OpenTestSettings}">
 					<shadui:SidebarItem.Icon>
 						<Viewbox>
@@ -88,6 +88,14 @@
 					<shadui:SidebarItem.Icon>
 						<Viewbox>
 							<materialIcons:MaterialIcon Kind="Gavel" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
+						</Viewbox>
+					</shadui:SidebarItem.Icon>
+				</shadui:SidebarItem>
+
+				<shadui:SidebarItem Content="Audit Logs" Command="{Binding OpenAuditLogSettingsCommand}">
+					<shadui:SidebarItem.Icon>
+						<Viewbox>
+							<materialIcons:MaterialIcon Kind="FormatListBulletedSquare" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>

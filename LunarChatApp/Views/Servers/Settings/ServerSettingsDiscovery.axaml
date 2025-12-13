@@ -19,6 +19,13 @@
 					 Text="{Binding ServerDescriptionEdit}"
 					 Watermark="Enter a description here..." />
 
+			<TextBox MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxNameLength}}"
+					 Width="225"
+					 shadui:ControlAssist.Label="Vanity Invite"
+					 IsReadOnly="{Binding !CanManage}"
+					 Text="{Binding VanityInvite}"
+					 Watermark="" />
+
 			<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding IsPublic}">
 				<ToggleSwitch.OffContent>
 					<Label Classes="Small" VerticalAlignment="Center">Private Server</Label>

@@ -56,7 +56,7 @@ public partial class ChannelSettingsOverviewModel : ViewModelBase
             req.Name = ChannelNameEdit;
 
         if (channel.Topic != ChannelTopicEdit)
-            req.Topic = ChannelTopicEdit;
+            req.Topic = ChannelTopicEdit ?? "";
 
         try
         {

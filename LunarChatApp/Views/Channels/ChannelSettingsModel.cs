@@ -26,10 +26,12 @@ public partial class ChannelSettingsModel : ViewModelBase
         ChannelName = chan.Name;
         if (chan.Type == LunarChatSharp.Core.Channels.ChannelType.Group)
         {
-            isServerChannel = true;
+            channelType = "Group Channel";
         }
         else
         {
+            channelType = "Server Channel";
+            isServerChannel = true;
             if (sv.State.Socket.CurrentServer != null)
             {
                 sv.State.Socket.CurrentServer.OnChannelUpdate += UpdateChannel;
@@ -61,6 +63,9 @@ public partial class ChannelSettingsModel : ViewModelBase
     }
 
     [ObservableProperty]
+    private string channelType;
+
+    [ObservableProperty]
     private bool isServerChannel;
 
     [ObservableProperty]
@@ -90,6 +95,13 @@ public partial class ChannelSettingsModel : ViewModelBase
     {
         SelectedTitle = "Webhooks";
         SelectedPage = new ChannelSettingsWebhooks { DataContext = new ChannelSettingsWebhooksModel(services, OpenWebhooksSettings, OpenWebhookInfo) };
+    }
+
+    [RelayCommand]
+    public void OpenGroupUsers()
+    {
+        SelectedTitle = "Users";
+        SelectedPage = new ChannelSettingsGroupUsers { DataContext = new ChannelSettingsGroupUsersModel(services) };
     }
 
     public void OpenWebhookInfo(RestWebhook webhook)

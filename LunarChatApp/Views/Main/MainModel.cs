@@ -47,6 +47,9 @@ public partial class MainModel : ViewModelBase
         if (channel.Type != ChannelType.Direct || message.Author.Id == services.Client.CurrentId || channel.Id == services.Socket.State.CurrentChannel?.Id)
             return;
 
+        if (message.Source == LunarChatSharp.Core.Messages.MessageSourceType.System)
+            return;
+
         services.ToastManager.CreateToast(message.Author.DisplayName ?? message.Author.Username)
                  .WithContent(message.Content)
                  .WithAction("View", () =>

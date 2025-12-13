@@ -196,6 +196,7 @@ public partial class MemberListItem : ObservableObject
         JoinedAt = member.JoinedAt.Value.ToLocalTime().ToString("d MMMM yyyy");
 
         bool CanManage = false;
+        CanTransferOwner = services.Socket.State.CurrentServer.Server.OwnerId == services.Client.CurrentId && id != services.Socket.State.CurrentServer.Server.OwnerId;
         if (member.User.Id != services.State.Socket.CurrentServer.Server.OwnerId)
         {
             CanBanMember = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.BanMembers);
@@ -282,6 +283,9 @@ public partial class MemberListItem : ObservableObject
     private bool canBanMember;
 
     [ObservableProperty]
+    private bool canTransferOwner;
+
+    [ObservableProperty]
     private string banItemText;
 
     [ObservableProperty]
@@ -308,6 +312,19 @@ public partial class MemberListItem : ObservableObject
         try
         {
             await services.Rest.BanMemberAsync(services.Socket.State.CurrentServer.Server.Id, id);
+        }
+        catch { }
+    }
+
+    [RelayCommand]
+    public async Task TransferOwnership()
+    {
+        try
+        {
+            await services.Rest.EditServerAsync(services.Socket.State.CurrentServer.Server.Id, new EditServerRequest
+            {
+                OwnerId = id
+            });
         }
         catch { }
     }

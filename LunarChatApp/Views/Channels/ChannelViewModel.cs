@@ -89,6 +89,7 @@ public partial class ChannelViewModel : ViewModelBase
         });
     }
 
+
     private async Task ChannelDelete(RestChannel channel)
     {
         services.PageManager.SwitchServerChannel(services, null);
@@ -276,10 +277,12 @@ public partial class ChannelViewModel : ViewModelBase
         {
             AddFriendDialogModel? data = control.DataContext as AddFriendDialogModel;
             var friend = state.Socket.Relations.Values.FirstOrDefault(x => x.UserId == data.Username || x.Username == data.Username);
-            await services.Rest.PutAsync($"/groups/{services.State.Socket.CurrentChannel?.Id}/users/{friend.UserId}");
+            await services.Rest.PutAsync($"/groups/{services.State.Socket.CurrentChannel?.Id}/users", new GroupAddUserRequest
+            {
+                UserId = friend.UserId
+            });
         }
         catch { }
-
     }
 
     [RelayCommand]

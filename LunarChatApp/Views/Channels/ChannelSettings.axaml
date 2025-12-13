@@ -23,11 +23,19 @@
 				</StackPanel>
 			</shadui:Sidebar.Header>
 			<StackPanel Spacing="2">
-				<shadui:SidebarItemLabel AsSeparator="True" Text="Settings" />
+				<shadui:SidebarItemLabel AsSeparator="True" Text="{Binding ChannelType}" />
 				<shadui:SidebarItem Content="Overview" IsChecked="true" Command="{Binding OpenOverviewSettingsCommand}">
 					<shadui:SidebarItem.Icon>
 						<Viewbox>
 							<materialIcons:MaterialIcon Kind="InfoCircle" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
+						</Viewbox>
+					</shadui:SidebarItem.Icon>
+				</shadui:SidebarItem>
+
+				<shadui:SidebarItem Content="Users" Command="{Binding OpenGroupUsersCommand}" IsVisible="{Binding !IsServerChannel}">
+					<shadui:SidebarItem.Icon>
+						<Viewbox>
+							<materialIcons:MaterialIcon Kind="Accounts" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
@@ -38,6 +46,7 @@
 							<materialIcons:MaterialIcon Kind="Webhook" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
+
 				</shadui:SidebarItem>
 			</StackPanel>
 		</shadui:Sidebar>

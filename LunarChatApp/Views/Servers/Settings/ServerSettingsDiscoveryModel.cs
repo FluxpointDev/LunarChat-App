@@ -14,6 +14,7 @@ public partial class ServerSettingsDiscoveryModel : ViewModelBase
     {
         services = sv;
         ServerDescriptionEdit = services.State.Socket.CurrentServer.Server.Description;
+        vanityInvite = services.State.Socket.CurrentServer.Server.VanityInvite;
         isPublic = services.State.Socket.CurrentServer.Server.Features.HasFlag(ServerFeature.Discoverable);
         services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
         canManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageServer);
@@ -30,6 +31,9 @@ public partial class ServerSettingsDiscoveryModel : ViewModelBase
     private string? _serverDescriptionEdit;
 
     [ObservableProperty]
+    private string vanityInvite;
+
+    [ObservableProperty]
     private bool isPublic;
 
     [ObservableProperty]
@@ -38,9 +42,17 @@ public partial class ServerSettingsDiscoveryModel : ViewModelBase
     [RelayCommand]
     public async Task SaveSettings()
     {
+        var server = services.State.Socket.CurrentServer.Server;
         var data = new EditServerRequest();
-        data.Description = ServerDescriptionEdit;
-        data.IsDiscoverable = isPublic;
+
+        if (server.Description != ServerDescriptionEdit)
+            data.Description = ServerDescriptionEdit ?? "";
+
+        if (server.VanityInvite != VanityInvite)
+            data.VanityInvite = VanityInvite;
+
+        if (server.Features.HasFlag(ServerFeature.Discoverable) != IsPublic)
+            data.IsDiscoverable = IsPublic;
         try
         {
             await services.Rest.EditServerAsync(services.State.Socket.CurrentServer.Server.Id, data);
