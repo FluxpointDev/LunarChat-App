@@ -9,6 +9,7 @@ namespace LunarChatApp.Services;
 [ServiceProvider]
 [Singleton(typeof(LunarClient), Factory = nameof(ClientFactory))]
 [Singleton(typeof(TestState))]
+[Singleton(typeof(ToastManager))]
 [Singleton(typeof(DialogService))]
 [Singleton(typeof(PageManager), Factory = nameof(PageManagerFactory))]
 [Singleton(typeof(ThemeWatcher), Factory = nameof(ThemeWatcherFactory))]
@@ -36,6 +37,6 @@ public partial class ServiceProvider
 
     public ServiceManager ServiceManagerFactory()
     {
-        return new ServiceManager(GetService<PageManager>(), GetService<TestState>(), GetService<LunarClient>(), GetService<ThemeWatcher>(), GetService<DialogService>());
+        return new ServiceManager(GetService<PageManager>(), GetService<TestState>(), GetService<LunarClient>(), GetService<ThemeWatcher>(), GetService<DialogService>(), GetService<ToastManager>());
     }
 }

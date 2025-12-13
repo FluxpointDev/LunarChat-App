@@ -1,0 +1,93 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:settings="using:LunarChatApp.Views.User.Settings"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.SettingsStreamerMode"
+			 x:DataType="settings:SettingsStreamerModeModel">
+	<StackPanel Spacing="20" HorizontalAlignment="Left">
+		<StackPanel HorizontalAlignment="Left" Spacing="10">
+			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding IsEnabled}">
+				<ToggleSwitch.OffContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Enable Streamer Mode</Label>
+				</ToggleSwitch.OffContent>
+				<ToggleSwitch.OnContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Enable Streamer Mode</Label>
+				</ToggleSwitch.OnContent>
+			</ToggleSwitch>
+		</StackPanel>
+		<StackPanel HorizontalAlignment="Left" Spacing="10">
+			<TextBlock Classes="Large" Text="Options"></TextBlock>
+			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding BlockCalls}">
+				<ToggleSwitch.OffContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Block Calls</Label>
+				</ToggleSwitch.OffContent>
+				<ToggleSwitch.OnContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Block Calls</Label>
+				</ToggleSwitch.OnContent>
+			</ToggleSwitch>
+			<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Block users from directly calling you."></SelectableTextBlock>
+
+			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding DisableSounds}">
+				<ToggleSwitch.OffContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Disable Sounds</Label>
+				</ToggleSwitch.OffContent>
+				<ToggleSwitch.OnContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Disable Sounds</Label>
+				</ToggleSwitch.OnContent>
+			</ToggleSwitch>
+			<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="All notification and call sounds will be muted."></SelectableTextBlock>
+
+			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding DisableNotifications}">
+				<ToggleSwitch.OffContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Disable Notifications</Label>
+				</ToggleSwitch.OffContent>
+				<ToggleSwitch.OnContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Disable Notifications</Label>
+				</ToggleSwitch.OnContent>
+			</ToggleSwitch>
+			<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="You will not recieve any notifications."></SelectableTextBlock>
+
+			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding HidePersonalInfo}">
+				<ToggleSwitch.OffContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Hide Personal Info</Label>
+				</ToggleSwitch.OffContent>
+				<ToggleSwitch.OnContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Hide Personal Info</Label>
+				</ToggleSwitch.OnContent>
+			</ToggleSwitch>
+			<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="This will hide your account info, email and other personal stuff."></SelectableTextBlock>
+
+			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding HideInvites}">
+				<ToggleSwitch.OffContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Hide Invites</Label>
+				</ToggleSwitch.OffContent>
+				<ToggleSwitch.OnContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Hide Invites</Label>
+				</ToggleSwitch.OnContent>
+			</ToggleSwitch>
+			<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="This will censor messages and dialogs that have invites."></SelectableTextBlock>
+
+			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding HideAccountName}">
+				<ToggleSwitch.OffContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Hide Account Name</Label>
+				</ToggleSwitch.OffContent>
+				<ToggleSwitch.OnContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Hide Account Name</Label>
+				</ToggleSwitch.OnContent>
+			</ToggleSwitch>
+			<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="This will censor your account username and display name."></SelectableTextBlock>
+
+			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding HidePrivateMessages}">
+				<ToggleSwitch.OffContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Hide Private Messages</Label>
+				</ToggleSwitch.OffContent>
+				<ToggleSwitch.OnContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Hide Private Messages</Label>
+				</ToggleSwitch.OnContent>
+			</ToggleSwitch>
+			<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="This will hide private channels in your home page."></SelectableTextBlock>
+		</StackPanel>
+	</StackPanel>
+</UserControl>

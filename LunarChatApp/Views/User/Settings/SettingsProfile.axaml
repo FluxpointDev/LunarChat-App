@@ -49,34 +49,5 @@
 					Classes="Destructive"
 					Content="Delete Account" IsEnabled="False" />
 		</WrapPanel>
-		<TextBlock Classes="Large" Text="Friend Requests"></TextBlock>
-		<StackPanel Spacing="10">
-			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding RequestsEveryone}" IsEnabled="False">
-				<ToggleSwitch.OffContent>
-					<Label Classes="Small" VerticalAlignment="Center" Width="200">Everyone</Label>
-				</ToggleSwitch.OffContent>
-				<ToggleSwitch.OnContent>
-					<Label Classes="Small" VerticalAlignment="Center" Width="200">Everyone</Label>
-				</ToggleSwitch.OnContent>
-			</ToggleSwitch>
-
-			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding RequestsServerMembers}" IsEnabled="False">
-				<ToggleSwitch.OffContent>
-					<Label Classes="Small" VerticalAlignment="Center" Width="200">Server Members</Label>
-				</ToggleSwitch.OffContent>
-				<ToggleSwitch.OnContent>
-					<Label Classes="Small" VerticalAlignment="Center" Width="200">Server Members</Label>
-				</ToggleSwitch.OnContent>
-			</ToggleSwitch>
-
-			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding RequestsMutualFriends}" IsEnabled="False">
-				<ToggleSwitch.OffContent>
-					<Label Classes="Small" VerticalAlignment="Center" Width="200">Mutual Friends</Label>
-				</ToggleSwitch.OffContent>
-				<ToggleSwitch.OnContent>
-					<Label Classes="Small" VerticalAlignment="Center" Width="200">Mutual Friends</Label>
-				</ToggleSwitch.OnContent>
-			</ToggleSwitch>
-	</StackPanel>
 	</StackPanel>
 </UserControl>

@@ -19,8 +19,9 @@ public sealed class ServiceManager
     public readonly LunarSocketClient Socket;
     public readonly ThemeWatcher ThemeWatcher;
     public readonly DialogService Dialogs;
+    public readonly ToastManager ToastManager;
     public Visual MainControl;
-    public ServiceManager(PageManager page, TestState st, LunarClient client, ThemeWatcher theme, DialogService diag)
+    public ServiceManager(PageManager page, TestState st, LunarClient client, ThemeWatcher theme, DialogService diag, ToastManager toast)
     {
         PageManager = page;
         State = st;
@@ -29,6 +30,7 @@ public sealed class ServiceManager
         Socket = Client.WebSocket!;
         ThemeWatcher = theme;
         Dialogs = diag;
+        ToastManager = toast;
     }
 
     public PopupMaskModel Popup;

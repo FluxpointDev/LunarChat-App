@@ -80,7 +80,7 @@ public partial class FriendListItemModel : ViewModelBase
                     Type = LunarChatSharp.Core.Channels.ChannelType.Direct,
                     Users = new string[]
                     {
-                    id
+                        id
                     }
                 });
                 await Task.Delay(new TimeSpan(0, 0, 1));

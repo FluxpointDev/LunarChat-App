@@ -34,15 +34,6 @@ public partial class SettingsProfileModel : ViewModelBase
 
         if (ev.Email != null)
             Email = ev.Email;
-
-        if (ev.FriendRequestsEveryone.HasValue)
-            RequestsEveryone = ev.FriendRequestsEveryone.Value;
-
-        if (ev.FriendRequestsServerMembers.HasValue)
-            RequestsServerMembers = ev.FriendRequestsServerMembers.Value;
-
-        if (ev.FriendRequestsMutualFriends.HasValue)
-            RequestsMutualFriends = ev.FriendRequestsMutualFriends.Value;
     }
 
     [ObservableProperty]
@@ -53,15 +44,6 @@ public partial class SettingsProfileModel : ViewModelBase
 
     [ObservableProperty]
     private string _email;
-
-    [ObservableProperty]
-    private bool requestsEveryone = true;
-
-    [ObservableProperty]
-    private bool requestsServerMembers = true;
-
-    [ObservableProperty]
-    private bool requestsMutualFriends = true;
 
     [RelayCommand]
     public void EditDisplayName()

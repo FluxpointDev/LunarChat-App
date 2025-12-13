@@ -81,6 +81,12 @@ public partial class SettingsModel : ViewModelBase
     }
 
     [RelayCommand]
+    public void OpenSocial()
+    {
+        SwitchPage(SettingsPageType.Social);
+    }
+
+    [RelayCommand]
     private void OpenNotifications()
     {
         SwitchPage(SettingsPageType.Notifications);
@@ -90,6 +96,12 @@ public partial class SettingsModel : ViewModelBase
     private void OpenDeveloper()
     {
         SwitchPage(SettingsPageType.Developer);
+    }
+
+    [RelayCommand]
+    private void OpenStreamerMode()
+    {
+        SwitchPage(SettingsPageType.StreamerMode);
     }
 
     private void SwitchPage(SettingsPageType pageType)
@@ -110,6 +122,12 @@ public partial class SettingsModel : ViewModelBase
                     DataContext = new SettingsProfileModel(services)
                 };
                 break;
+            case SettingsPageType.Social:
+                SelectedPage = new SettingsSocial
+                {
+                    DataContext = new SettingsSocialModel(services)
+                };
+                break;
             case SettingsPageType.Connections:
                 SelectedPage = new SettingsConnections();
                 break;
@@ -128,10 +146,13 @@ public partial class SettingsModel : ViewModelBase
             case SettingsPageType.Developer:
                 SelectedPage = new SettingsDeveloper() { DataContext = new SettingsDeveloperModel(services) };
                 break;
+            case SettingsPageType.StreamerMode:
+                SelectedPage = new SettingsStreamerMode() { DataContext = new SettingsStreamerModeModel(services) };
+                break;
         }
     }
 }
 public enum SettingsPageType
 {
-    Account, Profile, Connections, Theme, Chat, Notifications, Developer
+    Account, Profile, Connections, Theme, Chat, Notifications, Developer, Social, StreamerMode
 }

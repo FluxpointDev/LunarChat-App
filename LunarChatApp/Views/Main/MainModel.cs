@@ -4,10 +4,17 @@ using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.Utility;
 using LunarChatApp.ViewModels.Dialogs;
+using LunarChatApp.ViewModels.Main;
 using LunarChatApp.Views;
+using LunarChatSharp.Core.Channels;
+using LunarChatSharp.Core.Users;
+using LunarChatSharp.Rest.Channels;
+using LunarChatSharp.Rest.Messages;
+using LunarChatSharp.Rest.Users;
 using ShadUI;
 using System;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace LunarChatApp.ViewModels;
 
@@ -18,7 +25,10 @@ public partial class MainModel : ViewModelBase
     public MainModel(ServiceManager sv)
     {
         services = sv;
+        _toastManager = sv.ToastManager;
         services.PageManager.OnSwitchPage += SwitchPage;
+        services.Client.OnRelationAdd += RelationAdd;
+        services.Client.OnMessageRecieved += MessageRecieve;
         if (SelectedPage == null)
         {
             SelectedPage = new LoginPage
@@ -32,6 +42,45 @@ public partial class MainModel : ViewModelBase
 
     }
 
+    private async Task MessageRecieve(RestChannel channel, RestMessage message)
+    {
+        if (channel.Type != ChannelType.Direct || message.Author.Id == services.Client.CurrentId || channel.Id == services.Socket.State.CurrentChannel?.Id)
+            return;
+
+        services.ToastManager.CreateToast(message.Author.DisplayName ?? message.Author.Username)
+                 .WithContent(message.Content)
+                 .WithAction("View", () =>
+                 {
+                     services.State.Socket.CurrentChannel = channel;
+                     services.Client.OnSelectChannel?.Invoke(services.State.Socket.CurrentChannel);
+                 })
+                 .Show();
+    }
+
+    private async Task RelationAdd(RestRelation relation)
+    {
+        if (relation.Type == UserRelationType.FriendRequest)
+        {
+            if (relation.RequestBy == services.Client.CurrentId)
+                return;
+
+            services.ToastManager.CreateToast("Friend Request")
+               .WithContent($"{relation.DisplayName ?? relation.Username} would like to add you.")
+               .WithAction("View", () => { services.State.TriggerPageSelect(new FriendsList() { DataContext = new FriendsListModel(services) }); })
+               .Show();
+        }
+        else if (relation.Type == UserRelationType.Friend)
+        {
+            if (relation.RequestBy != services.Client.CurrentId)
+                return;
+
+            services.ToastManager.CreateToast("Friend Added")
+                 .WithContent($"{relation.DisplayName ?? relation.Username} accepted your request.")
+                 .WithAction("View", () => { services.State.TriggerPageSelect(new FriendsList() { DataContext = new FriendsListModel(services) }); })
+                 .Show();
+        }
+    }
+
     [ObservableProperty]
     private object? _selectedPage;
 
@@ -40,6 +89,9 @@ public partial class MainModel : ViewModelBase
 
     [ObservableProperty]
     private string _currentRoute = "login";
+
+    [ObservableProperty]
+    private ToastManager _toastManager;
 
     public void OpenDialog(DialogMenu menu)
     {

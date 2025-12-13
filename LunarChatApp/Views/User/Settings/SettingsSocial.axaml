@@ -1,0 +1,70 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:settings="using:LunarChatApp.Views.User.Settings"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.SettingsSocial"
+			 x:DataType="settings:SettingsSocialModel">
+	<StackPanel Spacing="20" HorizontalAlignment="Left">
+		<StackPanel HorizontalAlignment="Left" Spacing="10">
+			<TextBlock Classes="Large" Text="Friend Requests"></TextBlock>
+			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding FriendsEveryone}">
+				<ToggleSwitch.OffContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Everyone</Label>
+				</ToggleSwitch.OffContent>
+				<ToggleSwitch.OnContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Everyone</Label>
+				</ToggleSwitch.OnContent>
+			</ToggleSwitch>
+
+			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding FriendsMutualServers}">
+				<ToggleSwitch.OffContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Mutual Servers</Label>
+				</ToggleSwitch.OffContent>
+				<ToggleSwitch.OnContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Mutual Servers</Label>
+				</ToggleSwitch.OnContent>
+			</ToggleSwitch>
+
+			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding FriendsMutualFriends}">
+				<ToggleSwitch.OffContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Mutual Friends</Label>
+				</ToggleSwitch.OffContent>
+				<ToggleSwitch.OnContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Mutual Friends</Label>
+				</ToggleSwitch.OnContent>
+			</ToggleSwitch>
+		</StackPanel>
+		<StackPanel HorizontalAlignment="Left" Spacing="10">
+			<TextBlock Classes="Large" Text="Direct Messages"></TextBlock>
+			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding MessagesEveryone}">
+				<ToggleSwitch.OffContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Everyone</Label>
+				</ToggleSwitch.OffContent>
+				<ToggleSwitch.OnContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Everyone</Label>
+				</ToggleSwitch.OnContent>
+			</ToggleSwitch>
+
+			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding MessagesMutualServers}">
+				<ToggleSwitch.OffContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Mutual Servers</Label>
+				</ToggleSwitch.OffContent>
+				<ToggleSwitch.OnContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Mutual Servers</Label>
+				</ToggleSwitch.OnContent>
+			</ToggleSwitch>
+
+			<ToggleSwitch Margin="12,0,0,0" IsChecked="{Binding MessagesMutualFriends}">
+				<ToggleSwitch.OffContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Mutual Friends</Label>
+				</ToggleSwitch.OffContent>
+				<ToggleSwitch.OnContent>
+					<Label Classes="Small" VerticalAlignment="Center" Width="200">Mutual Friends</Label>
+				</ToggleSwitch.OnContent>
+			</ToggleSwitch>
+			<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Friends can always send you direct messages."></SelectableTextBlock>
+		</StackPanel>
+	</StackPanel>
+</UserControl>

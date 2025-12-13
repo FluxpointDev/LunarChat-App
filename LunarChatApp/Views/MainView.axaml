@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:toasts="using:ShadUI"
              xmlns:vm="clr-namespace:LunarChatApp.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="LunarChatApp.Views.MainView"
@@ -16,5 +17,6 @@
     <Grid>
         <ContentControl Name="MainContent" Content="{Binding SelectedPage}" />
         <ContentControl Name="DialogContent" Content="{Binding CurrentDialog}" />
+        <toasts:ToastHost Manager="{Binding ToastManager}" />
     </Grid>
 </UserControl>

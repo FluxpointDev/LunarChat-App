@@ -40,6 +40,13 @@
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
+				<shadui:SidebarItem Content="Social" Command="{Binding OpenSocialCommand}">
+					<shadui:SidebarItem.Icon>
+						<Viewbox>
+							<materialIcons:MaterialIcon Kind="ShieldAccount" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
+						</Viewbox>
+					</shadui:SidebarItem.Icon>
+				</shadui:SidebarItem>
 				<shadui:SidebarItem Content="Connections" Command="{Binding OpenConnectionsCommand}">
 					<shadui:SidebarItem.Icon>
 						<Viewbox>
@@ -47,6 +54,7 @@
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
+
 				<shadui:SidebarItemLabel AsSeparator="True" Text="Appearance" />
 				<shadui:SidebarItem Content="Theme" Command="{Binding OpenThemeCommand}">
 					<shadui:SidebarItem.Icon>
@@ -74,6 +82,13 @@
 					<shadui:SidebarItem.Icon>
 						<Viewbox>
 							<materialIcons:MaterialIcon Kind="Code" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
+						</Viewbox>
+					</shadui:SidebarItem.Icon>
+				</shadui:SidebarItem>
+				<shadui:SidebarItem Content="Streamer Mode" Command="{Binding OpenStreamerModeCommand}">
+					<shadui:SidebarItem.Icon>
+						<Viewbox>
+							<materialIcons:MaterialIcon Kind="TelevisionPlay" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
