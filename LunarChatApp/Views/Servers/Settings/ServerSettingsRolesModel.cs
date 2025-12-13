@@ -99,7 +99,8 @@ public partial class ServerSettingsRolesModel : ViewModelBase
             Color = role.Color ?? "#99AAB5",
             Id = role.Id,
             Name = role.Name,
-            Position = role.Position
+            Position = role.Position,
+            CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ManageRoles)
         };
         _originalItems.Add(item);
         item.PropertyChanged += OnItemsChanged;

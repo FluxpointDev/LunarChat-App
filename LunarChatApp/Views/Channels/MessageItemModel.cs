@@ -4,6 +4,7 @@ using LiveMarkdown.Avalonia;
 using LunarChatApp.Services;
 using LunarChatApp.Views;
 using LunarChatSharp;
+using LunarChatSharp.Core.Messages;
 using LunarChatSharp.Rest.Messages;
 using System.Threading.Tasks;
 
@@ -20,12 +21,17 @@ public partial class MessageItemModel : ViewModelBase
             authorId = message.Author.Id;
             IsAuthor = message.Author.Id == sv.Client.CurrentId;
             Username = message.Author.GetCurrentName();
-            IsBot = message.Author.IsBot;
+            _isBot = message.Author.IsBot;
             CanDelete = sv.Client.CurrentId == authorId;
         }
         if (!CanDelete.GetValueOrDefault() && sv.State.Socket.CurrentServer != null)
             CanDelete = sv.State.Socket.CurrentServer.Server.OwnerId == sv.Client.CurrentId;
 
+        if (message.Source == MessageSourceType.Webhook)
+        {
+            isWebhook = true;
+            _isBot = false;
+        }
         IsSystem = message.SystemMessage != null;
         Message = new ObservableStringBuilder();
         Message.Append(message.Content);
@@ -42,6 +48,9 @@ public partial class MessageItemModel : ViewModelBase
 
     [ObservableProperty]
     private bool _isBot;
+
+    [ObservableProperty]
+    private bool isWebhook;
 
     [ObservableProperty]
     private bool _isSystem;

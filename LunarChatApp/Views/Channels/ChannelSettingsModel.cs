@@ -4,7 +4,9 @@ using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.ViewModels.Channels.Settings;
 using LunarChatApp.Views;
+using LunarChatApp.Views.Channels.Settings;
 using LunarChatSharp.Rest.Channels;
+using LunarChatSharp.Rest.Webhooks;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.ViewModels.Servers;
@@ -65,6 +67,20 @@ public partial class ChannelSettingsModel : ViewModelBase
     [RelayCommand]
     public void OpenOverviewSettings()
     {
+        SelectedTitle = "Overview";
         SelectedPage = new ChannelSettingsOverview { DataContext = new ChannelSettingsOverviewModel(services, channel) };
+    }
+
+    [RelayCommand]
+    public void OpenWebhooksSettings()
+    {
+        SelectedTitle = "Webhooks";
+        SelectedPage = new ChannelSettingsWebhooks { DataContext = new ChannelSettingsWebhooksModel(services, OpenWebhooksSettings, OpenWebhookInfo) };
+    }
+
+    public void OpenWebhookInfo(RestWebhook webhook)
+    {
+        SelectedTitle = "Edit Webook - " + webhook.Name;
+        //SelectedPage = new ServerSettingsRoleInfo { DataContext = new ServerSettingsRoleInfoModel(services, role, OpenRolesSettings) };
     }
 }

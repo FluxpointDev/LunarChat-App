@@ -32,6 +32,9 @@
 					<Border VerticalAlignment="Center" CornerRadius="8" ClipToBounds="True">
 						<SelectableTextBlock Padding="10,2,10,2" Background="{DynamicResource InfoColor60}" FontWeight="Bold" Text="APP" IsVisible="{Binding IsBot}"></SelectableTextBlock>
 					</Border>
+					<Border VerticalAlignment="Center" CornerRadius="8" ClipToBounds="True">
+						<SelectableTextBlock Padding="10,2,10,2" Background="{DynamicResource InfoColor60}" FontWeight="Bold" Text="WEBHOOK" IsVisible="{Binding IsWebhook}"></SelectableTextBlock>
+					</Border>
 				</StackPanel>
 				<md:MarkdownRenderer MarkdownBuilder="{Binding Message}" InlineHyperlinkCommand="{Binding LinkClicked}" />
 			</StackPanel>

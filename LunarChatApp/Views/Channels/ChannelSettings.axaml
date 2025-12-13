@@ -31,6 +31,14 @@
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
+
+				<shadui:SidebarItem Content="Webhooks" Command="{Binding OpenWebhooksSettingsCommand}">
+					<shadui:SidebarItem.Icon>
+						<Viewbox>
+							<materialIcons:MaterialIcon Kind="Webhook" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
+						</Viewbox>
+					</shadui:SidebarItem.Icon>
+				</shadui:SidebarItem>
 			</StackPanel>
 		</shadui:Sidebar>
 		<StackPanel Grid.Column="1" Margin="6" MaxWidth="800">

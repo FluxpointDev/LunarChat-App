@@ -1,0 +1,83 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:lunarchatsharp="using:LunarChatSharp"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:settings="using:LunarChatApp.Views.Channels.Settings"
+             xmlns:shadui="using:ShadUI"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="LunarChatApp.ChannelSettingsWebhooks"
+             x:DataType="settings:ChannelSettingsWebhooksModel">
+    <ScrollViewer HorizontalScrollBarVisibility="Auto">
+		<StackPanel
+		Width="600"
+		HorizontalAlignment="Left"
+		Spacing="16">
+			<Grid ColumnDefinitions="* Auto">
+				<TextBox MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxLinkLength}}"
+				Width="225"
+				HorizontalAlignment="Left"
+				shadui:ControlAssist.ShowProgress="{Binding IsSearching}"
+				Classes="Clearable"
+				Text="{Binding SearchString, Mode=TwoWay}"
+				Watermark="Search webhooks...">
+					<TextBox.InnerRightContent>
+						<PathIcon
+						Width="16"
+						Data="{x:Static shadui:Icons.Search}"
+						Opacity="0.75" />
+					</TextBox.InnerRightContent>
+				</TextBox>
+				<Button Grid.Column="1" Command="{Binding CreateWebhookCommand}"
+						Classes="Primary" IsEnabled="{Binding CanManage}"
+						Content="Create Webhook" />
+			</Grid>
+			<DataGrid
+			x:Name="DataGrid"
+			CanUserReorderColumns="False"
+			CanUserSortColumns="False"
+			GridLinesVisibility="Horizontal"
+			ItemsSource="{Binding Items}"
+			SelectionMode="Single">
+				<DataGrid.Columns>
+					<!--<DataGridCheckBoxColumn Binding="{Binding IsSelected}" CanUserSort="False">
+					<DataGridCheckBoxColumn.Header>
+					<CheckBox
+					x:Name="SelectToggler"
+					Command="{Binding ToggleSelectionCommand}"
+					CommandParameter="{Binding #SelectToggler.IsChecked}"
+					IsChecked="{Binding SelectAll}" />
+					</DataGridCheckBoxColumn.Header>
+					</DataGridCheckBoxColumn>-->
+
+					<DataGridTextColumn
+					Binding="{Binding Name}"
+					CanUserSort="False"
+					Header="Name"
+					IsReadOnly="True" />
+					<DataGridTemplateColumn Header="">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
+									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding OpenWebhookCommand}" IsEnabled="{Binding CanManage}">
+										<materialIcons:MaterialIcon Kind="Pencil" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
+									</Button>
+									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding CopyIdCommand}">
+										<materialIcons:MaterialIcon Kind="Identifier" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
+									</Button>
+									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding DeleteWebhookCommand}" IsEnabled="{Binding CanManage}">
+										<materialIcons:MaterialIcon Kind="TrashCan" Width="16" Height="16" Foreground="{DynamicResource ErrorColor}" />
+									</Button>
+								</StackPanel>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+				</DataGrid.Columns>
+			</DataGrid>
+			<Grid ColumnDefinitions="* Auto">
+				
+			</Grid>
+		</StackPanel>
+	</ScrollViewer>
+</UserControl>
