@@ -6,6 +6,7 @@ using LunarChatApp.Views.Dialogs;
 using LunarChatSharp;
 using LunarChatSharp.Rest.Dev;
 using LunarChatSharp.Rest.Servers;
+using ShadUI;
 using System;
 using System.Threading.Tasks;
 
@@ -55,15 +56,28 @@ public partial class DiscoverCardModel : ViewModelBase
         }
         else
         {
-            try
+            if (services.Socket.State.Servers.TryGetValue(id, out var server))
             {
-                await services.Rest.AddMemberAsync(id, services.Client.CurrentId);
-                await Task.Delay(new TimeSpan(0, 0, 1));
-                if (services.State.Socket.Servers.TryGetValue(id, out var getServer))
-                    services.PageManager.SwitchServer(services, getServer.Server);
+                services.ToastManager.CreateToast("Already Joined")
+                 .WithContent("Click to view the server.")
+                 .DismissOnClick()
+                 .WithAction("View", () =>
+                 {
+                     services.PageManager.SwitchServer(services, server.Server);
+                 })
+                 .Show();
             }
-            catch { }
-
+            else
+            {
+                try
+                {
+                    await services.Rest.AddMemberAsync(id, services.Client.CurrentId);
+                    await Task.Delay(new TimeSpan(0, 0, 1));
+                    if (services.State.Socket.Servers.TryGetValue(id, out var getServer))
+                        services.PageManager.SwitchServer(services, getServer.Server);
+                }
+                catch { }
+            }
         }
     }
 

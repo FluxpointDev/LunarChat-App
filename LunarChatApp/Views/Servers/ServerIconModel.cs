@@ -87,6 +87,7 @@ public partial class ServerIconModel : ViewModelBase
         }
         else
         {
+            services.Socket.State.CurrentChannel = null;
             if (services.State.Socket.Servers.TryGetValue(Id, out var server))
                 services.PageManager.SwitchServer(services, server.Server);
         }

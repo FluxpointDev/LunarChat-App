@@ -2,10 +2,12 @@
 			 xmlns:components="using:LunarChatApp.Components"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:local="using:LunarChatApp"
 			 xmlns:materialIcons="using:Material.Icons.Avalonia"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:md="using:LiveMarkdown.Avalonia"
 			 xmlns:shadui="using:ShadUI"
+			 xmlns:views="using:LunarChatApp.Views"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="LunarChatApp.MessageItem"
 			 x:DataType="components:MessageItemModel">
@@ -22,12 +24,23 @@
 				<ColumnDefinition Width="auto" />
 				<ColumnDefinition />
 			</Grid.ColumnDefinitions>
-			<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True" IsVisible="{Binding !IsSystem}">
+			<Border VerticalAlignment="Top" Cursor="Hand" CornerRadius="90" ClipToBounds="True" IsVisible="{Binding !IsSystem}" PointerPressed="Border_PointerPressed">
+				<FlyoutBase.AttachedFlyout>
+					<Flyout Placement="RightEdgeAlignedTop" HorizontalOffset="10">
+						<ContentControl Content="{Binding $parent[views:MainView].UserPopup}"></ContentControl>
+					</Flyout>
+				</FlyoutBase.AttachedFlyout>
 				<Image Source="/Assets/avatar.png" Width="32" Height="32"></Image>
 			</Border>
-			<StackPanel Grid.Column="1" Margin="4">
+			<StackPanel Grid.Column="1" Spacing="4">
 				<StackPanel Orientation="Horizontal" Spacing="6" IsVisible="{Binding !IsSystem}">
-					<SelectableTextBlock Classes="Large" Text="{Binding Username}"></SelectableTextBlock>
+					<TextBlock Margin="0,-4,0,0" Cursor="Hand" Classes="Large" Text="{Binding Username}" PointerPressed="Border_PointerPressed">
+						<FlyoutBase.AttachedFlyout>
+							<Flyout Placement="RightEdgeAlignedTop" HorizontalOffset="10">
+								<ContentControl Content="{Binding $parent[views:MainView].UserPopup}"></ContentControl>
+							</Flyout>
+						</FlyoutBase.AttachedFlyout>
+					</TextBlock>
 					<SelectableTextBlock Classes="Muted" VerticalAlignment="Center" Text="{Binding Time}"></SelectableTextBlock>
 					<Border VerticalAlignment="Center" CornerRadius="8" ClipToBounds="True">
 						<SelectableTextBlock Padding="10,2,10,2" Background="{DynamicResource InfoColor60}" FontWeight="Bold" Text="APP" IsVisible="{Binding IsBot}"></SelectableTextBlock>

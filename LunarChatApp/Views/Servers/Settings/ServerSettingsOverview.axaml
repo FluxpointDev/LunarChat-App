@@ -17,8 +17,6 @@
 			IsReadOnly="{Binding !CanManage}"
 			Text="{Binding ServerNameEdit}"
 			shadui:ControlAssist.Label="Server Name" />
-
-			
 		</StackPanel>
 		<StackPanel
 		HorizontalAlignment="Left"

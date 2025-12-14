@@ -9,10 +9,8 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="LunarChatApp.ServerSettingsEmojis"
              x:DataType="settings:ServerSettingsEmojisModel">
-    <ScrollViewer HorizontalScrollBarVisibility="Auto">
         <StackPanel
-            Width="600"
-            HorizontalAlignment="Left"
+            HorizontalAlignment="Stretch"
             Spacing="16">
             <Grid ColumnDefinitions="* Auto">
                 <TextBox MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxLinkLength}}"
@@ -31,7 +29,7 @@
                 </TextBox>
                 <Button Grid.Column="1" Command="{Binding CreateEmoteCommand}" IsEnabled="{Binding CanCreate}"
 		Classes="Primary"
-		Content="Create" />
+		Content="Create Emoji" />
             </Grid>
             <DataGrid
                 x:Name="DataGrid"
@@ -95,5 +93,4 @@
                 </StackPanel>
             </Grid>
         </StackPanel>
-    </ScrollViewer>
 </UserControl>

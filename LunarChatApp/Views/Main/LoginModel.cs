@@ -83,6 +83,7 @@ public partial class LoginModel(ServiceManager services, MainModel main) : ViewM
             services.State.Socket = services.Socket.State;
             services.State.CurrentDisplayName = Json.DisplayName ?? Json.Username;
             services.State.DisplayName = Json.DisplayName;
+            services.State.AboutMe = Json.AboutMe;
             services.State.Username = Json.Username;
             services.State.CachedServersPage = new ServersPage
             {

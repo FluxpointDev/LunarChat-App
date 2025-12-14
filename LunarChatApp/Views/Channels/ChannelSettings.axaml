@@ -1,14 +1,14 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:materialIcons="using:Material.Icons.Avalonia"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:servers="using:LunarChatApp.ViewModels.Servers"
-             xmlns:shadui="using:ShadUI"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="LunarChatApp.ChannelSettings"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:materialIcons="using:Material.Icons.Avalonia"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:servers="using:LunarChatApp.ViewModels.Servers"
+			 xmlns:shadui="using:ShadUI"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.ChannelSettings"
 			 x:DataType="servers:ChannelSettingsModel">
-  <Grid ColumnDefinitions="Auto *">
+	<Grid ColumnDefinitions="Auto *">
 		<shadui:Sidebar
 		BorderBrush="{DynamicResource BorderColor30}"
 		BorderThickness="0,0,1,0"
@@ -57,7 +57,8 @@
 					<materialIcons:MaterialIcon Kind="CancelCircleOutline" Width="30" Height="30" Foreground="{DynamicResource PrimaryColor}" />
 				</Button>
 			</Grid>
-			<ContentControl Content="{Binding SelectedPage}" />
+			<ScrollViewer Grid.Row="1" Content="{Binding SelectedPage}" Margin="0,20,0,0" Padding="6,0,20,0">
+			</ScrollViewer>
 		</StackPanel>
 	</Grid>
 </UserControl>

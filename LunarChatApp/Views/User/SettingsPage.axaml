@@ -101,7 +101,8 @@
 					<materialIcons:MaterialIcon Kind="CancelCircleOutline" Width="30" Height="30" Foreground="{DynamicResource PrimaryColor}" />
 				</Button>
 			</Grid>
-			<ContentControl Content="{Binding SelectedPage}" />
+			<ScrollViewer Grid.Row="1" Content="{Binding SelectedPage}" Margin="0,20,0,0" Padding="6,0,20,0">
+			</ScrollViewer>
 		</StackPanel>
 	</Grid>
 </UserControl>

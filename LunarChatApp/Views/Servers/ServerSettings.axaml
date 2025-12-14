@@ -111,11 +111,11 @@
 				</shadui:SidebarItem>
 
 				<!--<shadui:SidebarItem Content="Webhooks">
-					<shadui:SidebarItem.Icon>
-						<Viewbox>
-							<materialIcons:MaterialIcon Kind="Webhook" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
-						</Viewbox>
-					</shadui:SidebarItem.Icon>
+				<shadui:SidebarItem.Icon>
+				<Viewbox>
+				<materialIcons:MaterialIcon Kind="Webhook" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
+				</Viewbox>
+				</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>-->
 			</StackPanel>
 		</shadui:Sidebar>
@@ -126,7 +126,8 @@
 					<materialIcons:MaterialIcon Kind="CancelCircleOutline" Width="30" Height="30" Foreground="{DynamicResource PrimaryColor}" />
 				</Button>
 			</Grid>
-			<ContentControl Grid.Row="1" Content="{Binding SelectedPage}" />
+			<ScrollViewer Grid.Row="1" Content="{Binding SelectedPage}" Margin="0,20,0,0" Padding="6,0,20,0">
+			</ScrollViewer>
 		</Grid>
 	</Grid>
 </UserControl>

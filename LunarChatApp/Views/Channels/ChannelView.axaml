@@ -76,7 +76,7 @@
 						</MenuItem>
 					</MenuItem>
 				</Menu>
-				<Button Grid.Column="1" HorizontalContentAlignment="Left" Padding="10,2,10,2" VerticalAlignment="Center" Height="32">
+				<Button Grid.Column="1" HorizontalContentAlignment="Left" Padding="10,2,10,2" VerticalAlignment="Center" Height="32" Command="{Binding OpenTopicCommand}">
 					<TextBlock Classes="p" Foreground="{DynamicResource MutedColor}" Text="{Binding Topic}"></TextBlock>
 				</Button>
 				<!--<Button Grid.Column="2" Width="32" Height="32" VerticalAlignment="Center" ToolTip.Tip="Copy Channel ID">

@@ -1,0 +1,66 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:components="using:LunarChatApp.Components"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:materialIcons="using:Material.Icons.Avalonia"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:md="using:LiveMarkdown.Avalonia"
+			 xmlns:shadui="using:ShadUI"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.UserPopup"
+			 x:DataType="components:UserPopupModel">
+	<Border Padding="12,20,12,20" Width="200">
+		<Grid RowSpacing="10" RowDefinitions="auto, auto, auto">
+			<Grid HorizontalAlignment="Left">
+				<shadui:Skeleton Width="60" Height="60"
+								 CornerRadius="90" IsVisible="{Binding IsLoading}" />
+				<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True" IsVisible="{Binding !IsLoading}">
+					<Image Source="/Assets/avatar.png" Width="60" Height="60"></Image>
+				</Border>
+				<Border Width="23" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" CornerRadius="90" ClipToBounds="True" Background="{DynamicResource BorderColor}" IsVisible="{Binding !IsLoading}">
+					<materialIcons:MaterialIcon ClipToBounds="True" Margin="0,0,1,1" Padding="3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Kind="{Binding StatusIcon}" Width="20" Height="20" Foreground="{Binding StatusColor}" />
+				</Border>
+			</Grid>
+			<Menu Classes="Single" ClipToBounds="False" Margin="0,-16,-10,0">
+				<MenuItem IsEnabled="{Binding !IsLoading}"
+				Classes="NoPressedAnimation"
+				CornerRadius="{DynamicResource LgCornerRadius}"
+				HorizontalAlignment="Right" VerticalAlignment="Top"
+				Width="32" Height="32"
+				Cursor="Hand"
+				shadui:MenuItemAssist.PopupHorizontalOffset="2"
+				shadui:MenuItemAssist.PopupPlacement="RightEdgeAlignedTop"
+				shadui:MenuItemAssist.PopupVerticalOffset="0">
+					<MenuItem.Header>
+						<Button Width="32" IsHitTestVisible="False" Height="32" HorizontalAlignment="Center" VerticalAlignment="Center" CornerRadius="90" Padding="6" Background="{DynamicResource BorderColor60}">
+							<materialIcons:MaterialIcon Kind="Menu" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
+						</Button>
+					</MenuItem.Header>
+					<MenuItem Width="160" Header="Copy User ID" Command="{Binding CopyIdCommand}">
+						<MenuItem.Icon>
+							<materialIcons:MaterialIcon Kind="ContentCopy" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
+						</MenuItem.Icon>
+					</MenuItem>
+				</MenuItem>
+			</Menu>
+			<StackPanel Spacing="2" Grid.Row="1">
+				<shadui:Skeleton Width="100" Height="14" HorizontalAlignment="Left" IsVisible="{Binding IsLoading}" />
+				<shadui:Skeleton Width="100" Height="14" HorizontalAlignment="Left" IsVisible="{Binding IsLoading}" Margin="0,6,0,0" />
+				<SelectableTextBlock Text="{Binding Name}" FontSize="14" FontWeight="DemiBold" IsVisible="{Binding !IsLoading}"></SelectableTextBlock>
+				<SelectableTextBlock Classes="Muted" Text="{Binding Username}" FontSize="14" FontWeight="DemiBold" IsVisible="{Binding !IsLoading}"></SelectableTextBlock>
+			</StackPanel>
+			<shadui:Skeleton Grid.Row="2" Width="160" Height="14" HorizontalAlignment="Left" IsVisible="{Binding IsLoading}" Margin="0,1,0,0" />
+			<md:MarkdownRenderer Grid.Row="2" MarkdownBuilder="{Binding AboutMe}" MaxHeight="100" InlineHyperlinkCommand="{Binding LinkClicked}" IsVisible="{Binding !IsLoading}" />
+			<!--<StackPanel Orientation="Horizontal" Spacing="4">
+			<WrapPanel>
+			</WrapPanel>
+			<Button Padding="10,6,10,6" IsHitTestVisible="False" Background="{DynamicResource BorderColor}" CornerRadius="12" BorderThickness="0.5" BorderBrush="{DynamicResource PrimaryColor50}">
+			<TextBlock FontSize="12" Text="Test Role"></TextBlock>
+			</Button>
+			<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" CornerRadius="12" BorderThickness="0.5" BorderBrush="{DynamicResource PrimaryColor50}" Command="{Binding ToggleLoadingCommand}">
+			<materialIcons:MaterialIcon Kind="Plus" Width="10" Height="10" Foreground="{DynamicResource PrimaryColor}" />
+			</Button>
+			</StackPanel>-->
+		</Grid>
+	</Border>
+</UserControl>

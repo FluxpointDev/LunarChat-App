@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.Views.Dialogs;
 using LunarChatSharp;
+using LunarChatSharp.Rest.Accounts;
 using LunarChatSharp.Websocket.Events.Account;
 using System.Threading.Tasks;
 
@@ -19,9 +20,10 @@ public partial class SettingsProfileModel : ViewModelBase
         services = sv;
         state = sv.State;
         sv.Client.OnAccountUpdate += AccountUpdate;
-        DisplayName = state.DisplayName;
-        Username = state.Username;
-        Email = state.Socket.Account.Email;
+        _displayName = state.DisplayName;
+        _username = state.Username;
+        _email = state.Socket.Account.Email;
+        aboutMe = state.AboutMe;
     }
 
     public async Task AccountUpdate(AccountUpdateEvent ev)
@@ -44,6 +46,23 @@ public partial class SettingsProfileModel : ViewModelBase
 
     [ObservableProperty]
     private string _email;
+
+    [ObservableProperty]
+    private string? aboutMe;
+
+    [RelayCommand]
+    public async Task UpdateAboutMe()
+    {
+        try
+        {
+            await services.Rest.AccountEdit(new EditAccountRequest
+            {
+                AboutMe = AboutMe
+            });
+            state.AboutMe = AboutMe.ToNullOrString();
+        }
+        catch { }
+    }
 
     [RelayCommand]
     public void EditDisplayName()

@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:lunarchatsharp="using:LunarChatSharp"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:settings="using:LunarChatApp.Views.User.Settings"
 			 xmlns:shadui="using:ShadUI"
@@ -49,5 +50,11 @@
 					Classes="Destructive"
 					Content="Delete Account" IsEnabled="False" />
 		</WrapPanel>
+		<StackPanel Spacing="10">
+			<Label Classes="Small">About Me</Label>
+			<TextBox AcceptsReturn="True" MaxHeight="100" Height="100" MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxDescriptionLength}}" MaxLines="5" Text="{Binding AboutMe}"></TextBox>
+			<Button
+			Classes="Primary" Content="Update" Command="{Binding UpdateAboutMeCommand}" />
+		</StackPanel>
 	</StackPanel>
 </UserControl>

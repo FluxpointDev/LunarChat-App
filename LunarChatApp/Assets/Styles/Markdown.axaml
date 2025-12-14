@@ -9,6 +9,14 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Styles.Resources>
+
+<Style Selector="FlyoutPresenter">
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="6" />
+    <Setter Property="BorderBrush" Value="{DynamicResource BorderColor60}" />
+    <Setter Property="Background" Value="{DynamicResource BorderColor}" />
+</Style>
+
   <Style Selector="md|MarkdownTextBlock">
     <Setter Property="Cursor" Value="IBeam"/>
     <Setter Property="FontFamily" Value="Arial, 'Segoe UI', sans-serif"/>

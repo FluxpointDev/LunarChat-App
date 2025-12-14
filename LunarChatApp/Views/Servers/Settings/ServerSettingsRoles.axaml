@@ -9,10 +9,8 @@
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="LunarChatApp.ServerSettingsRoles"
 			 x:DataType="settings:ServerSettingsRolesModel">
-	<ScrollViewer HorizontalScrollBarVisibility="Auto">
 		<StackPanel
-		Width="600"
-		HorizontalAlignment="Left"
+		HorizontalAlignment="Stretch"
 		Spacing="16">
 			<Grid ColumnDefinitions="* Auto">
 				<TextBox MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxLinkLength}}"
@@ -108,5 +106,4 @@
 				</StackPanel>
 			</Grid>
 		</StackPanel>
-	</ScrollViewer>
 </UserControl>

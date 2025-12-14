@@ -8,7 +8,6 @@
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="LunarChatApp.ServerSettingsAuditLogs"
 			 x:DataType="settings:ServerSettingsAuditLogsModel">
-	<ScrollViewer HorizontalScrollBarVisibility="Auto">
 		<StackPanel
 		HorizontalAlignment="Stretch"
 		Spacing="16">
@@ -34,7 +33,6 @@
 			CanUserSortColumns="False"
 			GridLinesVisibility="Horizontal"
 			ItemsSource="{Binding Items}"
-			HorizontalAlignment="Stretch"
 			SelectionMode="Single">
 				<DataGrid.Columns>
 					<!--<DataGridCheckBoxColumn Binding="{Binding IsSelected}" CanUserSort="False">
@@ -100,5 +98,4 @@
 
 			</Grid>
 		</StackPanel>
-	</ScrollViewer>
 </UserControl>

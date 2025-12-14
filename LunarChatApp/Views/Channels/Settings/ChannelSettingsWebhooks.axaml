@@ -11,8 +11,7 @@
              x:DataType="settings:ChannelSettingsWebhooksModel">
     <ScrollViewer HorizontalScrollBarVisibility="Auto">
 		<StackPanel
-		Width="600"
-		HorizontalAlignment="Left"
+		HorizontalAlignment="Stretch"
 		Spacing="16">
 			<Grid ColumnDefinitions="* Auto">
 				<TextBox MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxLinkLength}}"
@@ -62,6 +61,9 @@
 								<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
 									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding OpenWebhookCommand}" IsEnabled="{Binding CanManage}">
 										<materialIcons:MaterialIcon Kind="Pencil" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
+									</Button>
+									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding CopyLinkCommand}">
+										<materialIcons:MaterialIcon Kind="LinkVariant" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 									</Button>
 									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding CopyIdCommand}">
 										<materialIcons:MaterialIcon Kind="Identifier" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />

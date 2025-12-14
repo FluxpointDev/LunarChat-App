@@ -11,7 +11,7 @@ namespace LunarChatApp.Services;
 
 public sealed class ServiceManager
 {
-    public static bool IsDev = false;
+    public static bool IsDev = true;
     public readonly PageManager PageManager;
     public readonly TestState State;
     public readonly LunarClient Client;
@@ -39,7 +39,14 @@ public sealed class ServiceManager
     {
         var topLevel = TopLevel.GetTopLevel(MainControl)!;
         if (topLevel != null && topLevel.Clipboard != null)
+        {
             topLevel.Clipboard.SetTextAsync(text);
+
+            ToastManager.CreateToast("Copied Text")
+                .DismissOnClick()
+                .WithDelay(3)
+                .Show();
+        }
     }
 
     public void OpenLink(Uri url)

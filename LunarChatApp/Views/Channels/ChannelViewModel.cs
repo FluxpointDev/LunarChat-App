@@ -155,8 +155,11 @@ public partial class ChannelViewModel : ViewModelBase
 
     private async Task ChannelUpdate(RestChannel channel, UpdateChannelRequest request)
     {
-        Name = channel.Name;
-        Topic = channel.Topic;
+        if (channel.Name != null)
+            Name = channel.Name;
+
+        if (channel.Topic != null)
+            Topic = channel.Topic.ToNullOrString();
     }
 
     private async Task State_OnMessageRecieved(RestChannel channel, RestMessage message)
@@ -327,6 +330,12 @@ public partial class ChannelViewModel : ViewModelBase
             });
         }
         catch { }
+    }
+
+    [RelayCommand]
+    public void OpenTopic()
+    {
+        services.Dialogs.Create(new ChannelTopicDialog(), new ChannelTopicDialogModel(services, Topic), $"{Name} topic").Open();
     }
 
     [RelayCommand]

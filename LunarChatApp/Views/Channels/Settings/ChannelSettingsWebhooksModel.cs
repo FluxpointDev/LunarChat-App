@@ -76,6 +76,7 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
                     Id = x.Id,
                     CanManage = _canManage,
                     channelId = x.ChannelId,
+                    token = x.Token
                 }).ToList();
 
                 Items = new ObservableCollection<WebhookListItem>(_originalItems);
@@ -146,7 +147,8 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
             Id = webhook.Id,
             Name = webhook.Name,
             channelId = webhook.ChannelId,
-            CanManage = CanManage
+            CanManage = CanManage,
+            token = webhook.Token
         };
         _originalItems.Add(item);
         item.PropertyChanged += OnItemsChanged;
@@ -287,6 +289,8 @@ public partial class WebhookListItem(ServiceManager services, Action<RestWebhook
     [ObservableProperty]
     private string _id;
 
+    public string token;
+
     public string channelId;
 
     [ObservableProperty]
@@ -327,6 +331,13 @@ public partial class WebhookListItem(ServiceManager services, Action<RestWebhook
     public void CopyId()
     {
         services.CopyText(Id);
+    }
+
+    [RelayCommand]
+    public void CopyLink()
+    {
+        string Url = ServiceManager.IsDev ? "https://localhost:7216/" : "https://lunar.fluxpoint.dev/api/";
+        services.CopyText($"{Url}webhooks/{Id}/{token}");
     }
 
     [RelayCommand]

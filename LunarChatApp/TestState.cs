@@ -41,6 +41,8 @@ public partial class TestState : ObservableObject
     [ObservableProperty]
     private string? _displayName;
 
+    public string? AboutMe { get; set; }
+
     public delegate void PageEventHandler(UserControl control);
     public event PageEventHandler? OnPageSelect;
 
