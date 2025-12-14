@@ -43,9 +43,11 @@ public partial class ServerSettingsMembersModel : ViewModelBase
             if (Members == null)
                 return;
 
+            _originalItems.AddRange(Members.Select(x => new MemberListItem(services, x)));
+
             Dispatcher.UIThread.Post(() =>
             {
-                _originalItems.AddRange(Members.Select(x => new MemberListItem(services, x)));
+
                 Items = new ObservableCollection<MemberListItem>(_originalItems);
                 Loaded = true;
             });

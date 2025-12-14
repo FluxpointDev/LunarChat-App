@@ -27,7 +27,7 @@
 			</Border>
 			<StackPanel Grid.Column="1" Margin="4">
 				<StackPanel Orientation="Horizontal" Spacing="6" IsVisible="{Binding !IsSystem}">
-					<SelectableTextBlock x:Name="MessageUsername" Classes="Large" Text="{Binding Username}"></SelectableTextBlock>
+					<SelectableTextBlock Classes="Large" Text="{Binding Username}"></SelectableTextBlock>
 					<SelectableTextBlock Classes="Muted" VerticalAlignment="Center" Text="{Binding Time}"></SelectableTextBlock>
 					<Border VerticalAlignment="Center" CornerRadius="8" ClipToBounds="True">
 						<SelectableTextBlock Padding="10,2,10,2" Background="{DynamicResource InfoColor60}" FontWeight="Bold" Text="APP" IsVisible="{Binding IsBot}"></SelectableTextBlock>

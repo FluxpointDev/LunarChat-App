@@ -1,8 +1,104 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="LunarChatApp.ServerSettingsAuditLogs">
-  
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:materialIcons="using:Material.Icons.Avalonia"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:settings="using:LunarChatApp.Views.Servers.Settings"
+			 xmlns:shadui="using:ShadUI"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.ServerSettingsAuditLogs"
+			 x:DataType="settings:ServerSettingsAuditLogsModel">
+	<ScrollViewer HorizontalScrollBarVisibility="Auto">
+		<StackPanel
+		HorizontalAlignment="Stretch"
+		Spacing="16">
+			<Grid ColumnDefinitions="* Auto">
+				<!--<TextBox MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxLinkLength}}"
+				Width="225"
+				HorizontalAlignment="Left"
+				shadui:ControlAssist.ShowProgress="{Binding IsSearching}"
+				Classes="Clearable"
+				Text="{Binding SearchString, Mode=TwoWay}"
+				Watermark="Search roles...">
+				<TextBox.InnerRightContent>
+				<PathIcon
+				Width="16"
+				Data="{x:Static shadui:Icons.Search}"
+				Opacity="0.75" />
+				</TextBox.InnerRightContent>
+				</TextBox>-->
+			</Grid>
+			<DataGrid
+			x:Name="DataGrid"
+			CanUserReorderColumns="False"
+			CanUserSortColumns="False"
+			GridLinesVisibility="Horizontal"
+			ItemsSource="{Binding Items}"
+			HorizontalAlignment="Stretch"
+			SelectionMode="Single">
+				<DataGrid.Columns>
+					<!--<DataGridCheckBoxColumn Binding="{Binding IsSelected}" CanUserSort="False">
+					<DataGridCheckBoxColumn.Header>
+					<CheckBox
+					x:Name="SelectToggler"
+					Command="{Binding ToggleSelectionCommand}"
+					CommandParameter="{Binding #SelectToggler.IsChecked}"
+					IsChecked="{Binding SelectAll}" />
+					</DataGridCheckBoxColumn.Header>
+					</DataGridCheckBoxColumn>-->
+					<DataGridTemplateColumn Header="">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<SelectableTextBlock Classes="Muted" Text="{Binding Date}"></SelectableTextBlock>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+					<DataGridTemplateColumn Header="User">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<StackPanel Spacing="10" Orientation="Horizontal">
+									<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
+										<Image Source="/Assets/avatar.png" Width="32" Height="32"></Image>
+									</Border>
+									<SelectableTextBlock VerticalAlignment="Center" FontSize="16" Text="Builderb"></SelectableTextBlock>
+								</StackPanel>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+					<DataGridTemplateColumn Header="Action">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<StackPanel Spacing="10">
+									<Button HorizontalContentAlignment="Left" Command="{Binding ToggleChanges}">
+										<StackPanel Orientation="Horizontal" Spacing="10">
+											<materialIcons:MaterialIcon Kind="{Binding Icon}" Width="24" Height="24" Foreground="{DynamicResource WarningColor}" />
+											<StackPanel>
+												<SelectableTextBlock Text="{Binding Text}"></SelectableTextBlock>
+												<SelectableTextBlock Classes="Muted" Text="Lunar Community 2"></SelectableTextBlock>
+											</StackPanel>
+											<materialIcons:MaterialIcon Kind="{Binding Arrow}" Width="24" Height="24" Foreground="{DynamicResource PrimaryColor}" />
+										</StackPanel>
+									</Button>
+									<ItemsControl IsVisible="{Binding ShowChanges}" CornerRadius="8" Padding="10,10,10,10" ItemsSource="{Binding Changes}" Background="{DynamicResource BorderColor60}">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<StackPanel Orientation="Horizontal" Spacing="6">
+													<materialIcons:MaterialIcon VerticalAlignment="Center" Kind="CircleSmall" Width="8" Height="8" Foreground="{DynamicResource PrimaryColor}" />
+													<SelectableTextBlock VerticalAlignment="Center" Text="{Binding Text}" TextWrapping="WrapWithOverflow"></SelectableTextBlock>
+												</StackPanel>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+								</StackPanel>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+
+				</DataGrid.Columns>
+			</DataGrid>
+			<Grid ColumnDefinitions="* Auto">
+
+			</Grid>
+		</StackPanel>
+	</ScrollViewer>
 </UserControl>
