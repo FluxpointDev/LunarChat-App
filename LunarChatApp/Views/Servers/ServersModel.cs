@@ -31,6 +31,12 @@ public partial class ServersModel : ViewModelBase
         services = sv;
         state = services.State;
         main = mainModel;
+
+        if (OperatingSystem.IsAndroid() || OperatingSystem.IsIOS())
+            isExpanded = false;
+        else
+            isExpanded = true;
+
         services.State.OnPageSelect += State_OnPageSelect;
         services.Client.OnSelectServer += OnSelectServer;
         services.Client.OnSelectChannel += OnSelectChannel;
@@ -76,6 +82,9 @@ public partial class ServersModel : ViewModelBase
             });
         }
     }
+
+    [ObservableProperty]
+    private bool isExpanded;
 
     [ObservableProperty]
     private ServerIconModel addServerModel;

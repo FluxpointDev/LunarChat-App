@@ -11,11 +11,11 @@
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:DataType="viewmodels:ServersModel"
 			 x:Class="LunarChatApp.ServersPage">
-	<Grid ColumnDefinitions="Auto *">
+	<Grid x:Name="ServerPage" ColumnDefinitions="Auto *">
 		<shadui:Sidebar
 		BorderBrush="{DynamicResource BorderColor30}"
 		BorderThickness="0,0,1,0"
-		Expanded="true"
+		Expanded="{Binding IsExpanded}"
 		Grid.Column="0"
 		MinWidth="60"
 		Padding="4"
@@ -108,6 +108,10 @@
 				</Grid>
 			</Grid>
 		</shadui:Sidebar>
+		<Grid.GestureRecognizers>
+			<PullGestureRecognizer PullDirection="LeftToRight" />
+			<PullGestureRecognizer PullDirection="RightToLeft" />
+		</Grid.GestureRecognizers>
 		<ContentControl Grid.Column="1" Content="{Binding SelectedPage}"></ContentControl>
 	</Grid>
 </UserControl>
