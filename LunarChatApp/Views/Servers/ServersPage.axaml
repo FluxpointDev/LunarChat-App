@@ -11,7 +11,7 @@
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:DataType="viewmodels:ServersModel"
 			 x:Class="LunarChatApp.ServersPage">
-	<Grid x:Name="ServerPage" ColumnDefinitions="Auto *">
+	<Grid x:Name="ServerPage" ColumnDefinitions="Auto *, auto">
 		<shadui:Sidebar
 		BorderBrush="{DynamicResource BorderColor30}"
 		BorderThickness="0,0,1,0"
@@ -45,7 +45,7 @@
 						<local:ServerIcon DataContext="{Binding DiscoveryModel}"></local:ServerIcon>
 						<local:ServerIcon DataContext="{Binding AddServerModel}"></local:ServerIcon>
 					</StackPanel>
-					<ContentControl Grid.Column="1" Content="{Binding SelectedSidebar}"></ContentControl>
+					<ContentControl IsVisible="{Binding IsExpanded}" Grid.Column="1" Content="{Binding SelectedSidebar}"></ContentControl>
 				</Grid>
 				<Grid Grid.Row="1">
 					<Grid.ColumnDefinitions>

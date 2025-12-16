@@ -35,6 +35,7 @@ public partial class ChannelViewModel : ViewModelBase
         if (state.Socket.CurrentServer != null)
             state.Socket.CurrentServer.OnChannelUpdate += ChannelUpdate;
 
+        services.State.OnExpandChannels += ExpandChannels;
         services.Client.OnMessageRecieved += State_OnMessageRecieved;
         services.Client.OnMessageEdit += MessageEdit;
         services.Client.OnMessageDelete += MessageDelete;
@@ -88,6 +89,14 @@ public partial class ChannelViewModel : ViewModelBase
 
             }
         });
+    }
+
+    private async Task ExpandChannels(bool? value)
+    {
+        if (value.HasValue)
+            IsChannelsExpanded = value.Value;
+        else
+            IsChannelsExpanded = !IsChannelsExpanded;
     }
 
     private async Task ChannelDelete(RestChannel channel)
@@ -330,6 +339,24 @@ public partial class ChannelViewModel : ViewModelBase
             });
         }
         catch { }
+    }
+
+    [RelayCommand]
+    public void ToggleExpandMembers()
+    {
+        ExpandMembers = !ExpandMembers;
+    }
+
+    [ObservableProperty]
+    private bool expandMembers = true;
+
+    [ObservableProperty]
+    private bool isChannelsExpanded = true;
+
+    [RelayCommand]
+    public void ExpandChannels()
+    {
+        services.State.OnExpandChannels?.Invoke(null);
     }
 
     [RelayCommand]

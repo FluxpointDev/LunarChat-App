@@ -2,7 +2,9 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using LunarChatSharp.Core.Users;
 using LunarChatSharp.Websocket;
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace LunarChatApp;
 
@@ -45,6 +47,7 @@ public partial class TestState : ObservableObject
 
     public delegate void PageEventHandler(UserControl control);
     public event PageEventHandler? OnPageSelect;
+    public Func<bool?, Task>? OnExpandChannels;
 
     public void TriggerPageSelect(UserControl control)
     {

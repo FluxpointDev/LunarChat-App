@@ -37,6 +37,7 @@ public partial class ServersModel : ViewModelBase
         else
             isExpanded = true;
 
+        services.State.OnExpandChannels += ExpandChannels;
         services.State.OnPageSelect += State_OnPageSelect;
         services.Client.OnSelectServer += OnSelectServer;
         services.Client.OnSelectChannel += OnSelectChannel;
@@ -81,6 +82,14 @@ public partial class ServersModel : ViewModelBase
                 DefaultPermissions = null!,
             });
         }
+    }
+
+    private async Task ExpandChannels(bool? value)
+    {
+        if (value.HasValue)
+            IsExpanded = value.Value;
+        else
+            IsExpanded = !IsExpanded;
     }
 
     [ObservableProperty]
@@ -168,6 +177,8 @@ public partial class ServersModel : ViewModelBase
 
     private async Task OnSelectServer(RestServer? server)
     {
+        if (!IsExpanded)
+            IsExpanded = true;
         if (server == null)
         {
             state.Socket.CurrentServer = null;
@@ -200,6 +211,9 @@ public partial class ServersModel : ViewModelBase
     {
         if (SelectedPage?.GetType() == typeof(HomeView))
             return;
+
+        if (!IsExpanded)
+            IsExpanded = true;
 
         SelectedHeader = null;
         //SelectedHeader = new HomeHeader() { DataContext = new HomeHeaderModel() };

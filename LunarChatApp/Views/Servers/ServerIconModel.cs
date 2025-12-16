@@ -79,6 +79,7 @@ public partial class ServerIconModel : ViewModelBase
         }
         else if (Id == "1")
         {
+            services.State.OnExpandChannels?.Invoke(true);
             var model = (services.State.CachedServersPage.DataContext as ServersModel);
             services.State.Socket.CurrentServer = null;
             model.SelectedPage = new DiscoveryPage { DataContext = new DiscoveryPageModel(services) };
