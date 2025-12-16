@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:avalonia="using:LiveMarkdown.Avalonia"
+			 xmlns:channels="using:LunarChatApp.Views.Channels"
+			 xmlns:controls="using:Avalonia.Labs.Controls"
+			 xmlns:md="using:LiveMarkdown.Avalonia"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.EmbedItem"
+			 x:DataType="channels:EmbedItemModel">
+	<Border MaxWidth="600" Width="600" Background="{DynamicResource BorderColor}" BorderThickness="4,0,0,0" BorderBrush="{Binding Color}" HorizontalAlignment="Left" Padding="16,10,16,10" CornerRadius="6">
+		<Grid ColumnSpacing="10" ColumnDefinitions="*, auto">
+			<StackPanel Spacing="10">
+				<SelectableTextBlock Text="{Binding Title}" FontSize="16" FontWeight="ExtraBold"></SelectableTextBlock>
+				<StackPanel Spacing="10" Orientation="Horizontal" IsVisible="{Binding AuthorName, Converter={x:Static ObjectConverters.IsNotNull}}">
+					<!--<controls:AsyncImage Name="AuthorTest" Source="{Binding AuthorIcon}" CornerRadius="90" Width="24" Height="24" IsVisible="{Binding AuthorIcon, Converter={x:Static ObjectConverters.IsNotNull}}"></controls:AsyncImage>-->
+					<SelectableTextBlock FontSize="15" Text="{Binding AuthorName}"></SelectableTextBlock>
+				</StackPanel>
+				<md:MarkdownRenderer Margin="0,4,0,0" MinHeight="15" MarkdownBuilder="{Binding Description}" InlineHyperlinkCommand="{Binding LinkClicked}"
+									 IsVisible="{Binding Description, Converter={x:Static ObjectConverters.IsNotNull}}"></md:MarkdownRenderer>
+				<ItemsRepeater Margin="0,10,0,10" ItemsSource="{Binding Fields}" IsVisible="{Binding Fields, Converter={x:Static ObjectConverters.IsNotNull}}">
+					<ItemsRepeater.Layout>
+						<UniformGridLayout MinColumnSpacing="16" MinRowSpacing="16" MaximumRowsOrColumns="4" Orientation="{Binding InlineFields}" />
+					</ItemsRepeater.Layout>
+					<ItemsRepeater.ItemTemplate>
+						<DataTemplate>
+							<StackPanel Spacing="6">
+								<SelectableTextBlock Text="{Binding Name}" FontSize="14" FontWeight="Bold"></SelectableTextBlock>
+								<SelectableTextBlock Text="{Binding Value}" FontSize="15"></SelectableTextBlock>
+							</StackPanel>
+						</DataTemplate>
+					</ItemsRepeater.ItemTemplate>
+				</ItemsRepeater>
+				<!--<controls:AsyncImage HorizontalAlignment="Left" Source="{Binding Image}" CornerRadius="6" MaxHeight="200" IsVisible="{Binding Image, Converter={x:Static ObjectConverters.IsNotNull}}"></controls:AsyncImage>-->
+				<StackPanel Spacing="10" Orientation="Horizontal" IsVisible="{Binding FooterText, Converter={x:Static ObjectConverters.IsNotNull}}">
+					<!--<controls:AsyncImage Source="{Binding FooterIcon}" CornerRadius="90" Width="20" Height="20" IsVisible="{Binding FooterIcon, Converter={x:Static ObjectConverters.IsNotNull}}"></controls:AsyncImage>-->
+					<SelectableTextBlock Classes="Muted" FontSize="14" Text="{Binding FooterText}"></SelectableTextBlock>
+				</StackPanel>
+			</StackPanel>
+			<!--<controls:AsyncImage Grid.Column="1" VerticalAlignment="Top" Source="{Binding Thumbnail}" CornerRadius="6" MaxWidth="100" IsVisible="{Binding Thumbnail, Converter={x:Static ObjectConverters.IsNotNull}}"></controls:AsyncImage>-->
+		</Grid>
+	</Border>
+</UserControl>

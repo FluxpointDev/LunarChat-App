@@ -1,15 +1,16 @@
-﻿using Avalonia.Controls;
-using Avalonia.Controls.Metadata;
-using Avalonia.Controls.Primitives;
-using Avalonia.Media;
-using Avalonia.Media.Imaging;
-using Avalonia.Platform;
-using Avalonia.Threading;
-using System;
+﻿using System;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Controls;
+using Avalonia.Controls.Metadata;
+using Avalonia.Controls.Primitives;
+using Avalonia.Labs.Controls.Cache;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
+using Avalonia.Threading;
 
 namespace Avalonia.Labs.Controls
 {
@@ -81,12 +82,12 @@ namespace Avalonia.Labs.Controls
             if (source is Uri sourceUri)
             {
                 uri = sourceUri;
-            }
+            } 
             else if (Source is string sourceString)
             {
                 uri = new Uri(sourceString);
             }
-
+            
             if (uri != null && uri.IsAbsoluteUri)
             {
                 if (uri.Scheme == "http" || uri.Scheme == "https")
@@ -104,8 +105,7 @@ namespace Avalonia.Labs.Controls
                             }
                             catch (Exception ex)
                             {
-                                await Dispatcher.UIThread.InvokeAsync(() =>
-                                {
+                                await Dispatcher.UIThread.InvokeAsync(() => {
                                     State = AsyncImageState.Failed;
 
                                     RaiseEvent(new AsyncImageFailedEventArgs(ex));
@@ -122,8 +122,7 @@ namespace Avalonia.Labs.Controls
                         }
                         catch (Exception ex)
                         {
-                            await Dispatcher.UIThread.InvokeAsync(() =>
-                            {
+                            await Dispatcher.UIThread.InvokeAsync(() => {
                                 State = AsyncImageState.Failed;
 
                                 RaiseEvent(new AsyncImageFailedEventArgs(ex));
@@ -189,7 +188,7 @@ namespace Avalonia.Labs.Controls
 
         private async Task<Bitmap> LoadImageAsync(Uri? url, CancellationToken token)
         {
-            if (await ProvideCachedResourceAsync(url, token) is { } bitmap)
+            if(await ProvideCachedResourceAsync(url, token) is { } bitmap)
             {
                 return bitmap;
             }
@@ -224,9 +223,9 @@ namespace Avalonia.Labs.Controls
 
         protected virtual async Task<Bitmap?> ProvideCachedResourceAsync(Uri? imageUri, CancellationToken token)
         {
-            if (IsCacheEnabled && imageUri != null)
+            if(IsCacheEnabled && imageUri != null)
             {
-                //return await ImageCache.Instance.GetFromCacheAsync(imageUri, cancellationToken: token).ConfigureAwait(false);
+                return await ImageCache.Instance.GetFromCacheAsync(imageUri, cancellationToken: token).ConfigureAwait(false);
             }
             return null;
         }

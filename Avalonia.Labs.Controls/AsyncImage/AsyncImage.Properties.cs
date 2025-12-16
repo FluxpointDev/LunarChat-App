@@ -1,6 +1,6 @@
-﻿using Avalonia.Animation;
+﻿using System;
+using Avalonia.Animation;
 using Avalonia.Media;
-using System;
 
 namespace Avalonia.Labs.Controls
 {
@@ -47,7 +47,7 @@ namespace Avalonia.Labs.Controls
         /// <summary>
         /// Defines the <see cref="IsCacheEnabled"/> property.
         /// </summary>
-        public static readonly DirectProperty<AsyncImage, bool> IsCacheEnabledProperty =
+        public static readonly DirectProperty<AsyncImage,bool> IsCacheEnabledProperty =
             AvaloniaProperty.RegisterDirect<AsyncImage, bool>(nameof(IsCacheEnabled), o => o.IsCacheEnabled, (o, v) => o.IsCacheEnabled = v);
         private bool _isCacheEnabled;
 

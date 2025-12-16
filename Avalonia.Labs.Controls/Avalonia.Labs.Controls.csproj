@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Avalonia" />
+		<PackageReference Include="Avalonia.Skia" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<AvaloniaXaml Include="**/*.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AvaloniaXaml Update="Themes\Controls\AsyncImage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </AvaloniaXaml>
+	  <AvaloniaXaml Update="Themes\Controls\Controls.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </AvaloniaXaml>
+	  <AvaloniaXaml Update="Themes\ControlThemes.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </AvaloniaXaml>
+	</ItemGroup>
+
+</Project>

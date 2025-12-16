@@ -1,4 +1,6 @@
-﻿namespace LiveMarkdown.Avalonia;
+﻿using System.Diagnostics;
+
+namespace LiveMarkdown.Avalonia;
 
 /// <summary>
 /// A factory for creating MarkdownNode instances for a specific MarkdownObject type.
@@ -15,6 +17,7 @@ public class MarkdownNodeFactory<TNode> : IMarkdownNodeFactory<TNode>, IComparab
 
     public int CompareTo(object? other)
     {
+        Debug.WriteLine("Markdown - Node Factory Compare: " + other?.ToString());
         if (other is not IMarkdownNodeFactory otherFactory) return 1;
         if (ReferenceEquals(this, other)) return 0;
         if (MarkdownType == otherFactory.MarkdownType) return 0;

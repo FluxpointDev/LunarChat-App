@@ -3,6 +3,7 @@
     <File Path="Directory.Packages.props" />
   </Folder>
   <Project Path="Avalonia.Controls.DataGrid/Avalonia.Controls.DataGrid.csproj" />
+  <Project Path="Avalonia.Labs.Controls/Avalonia.Labs.Controls.csproj" Id="b362c388-fce5-487f-ad7c-491edee61b4d" />
   <Project Path="ext/LunarChatSharp/LunarChatSharp/LunarChatSharp.csproj" />
   <Project Path="LiveMarkdown.Avalonia/LiveMarkdown.Avalonia.csproj" Id="6a1fa0d2-42ec-4267-8d30-fd7a700187f1" />
   <Project Path="LunarChatApp.Android/LunarChatApp.Android.csproj">

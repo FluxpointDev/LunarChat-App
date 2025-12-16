@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Markdig.Syntax;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace LiveMarkdown.Avalonia;
@@ -15,7 +16,7 @@ public abstract class BlockNode : MarkdownNode
         CancellationToken cancellationToken)
     {
         var type = block.GetType();
-
+        Debug.WriteLine("Markdown - Create Block Node: " + type?.Name);
         // First try to find an exact match, then try to find a compatible type
         var node = NodeFactories
                 .OfType<IMarkdownNodeFactory<BlockNode>>()

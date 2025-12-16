@@ -26,7 +26,7 @@ public partial class ServiceProvider
         return new LunarChatSharp.LunarClient(ClientMode.WebSocket, new LunarChatSharp.ClientConfig
         {
             ApiUrl = ServiceManager.IsDev ? "https://localhost:7216/" : "https://lunar.fluxpoint.dev/api/",
-            RestProxy = ServiceManager.IsDev ? new WebProxy("http://localhost:8888") : null
+            RestProxy = ServiceManager.IsDev && ServiceManager.UseProxy ? new WebProxy("http://localhost:8888") : null
         });
     }
 

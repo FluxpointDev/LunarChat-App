@@ -1,5 +1,5 @@
-﻿using Avalonia.Interactivity;
-using System;
+﻿using System;
+using Avalonia.Interactivity;
 
 namespace Avalonia.Labs.Controls
 {

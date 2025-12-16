@@ -3,6 +3,7 @@
 			 xmlns:components="using:LunarChatApp.Components"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="using:LunarChatApp"
              xmlns:lunarchatsharp="using:LunarChatSharp"
 			 xmlns:materialIcons="using:Material.Icons.Avalonia"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -89,6 +90,9 @@
 				<components:ScrollToEndBehavior />
 			</Interaction.Behaviors>
 			<ItemsRepeater ItemsSource="{Binding CrockeryList}">
+				<ItemsRepeater.Layout>
+					<StackLayout Spacing="20" />
+			   </ItemsRepeater.Layout>
 			</ItemsRepeater>
 		</ScrollViewer>
 		<Border Grid.Row="2" CornerRadius="8" Margin="6" Background="{DynamicResource BorderColor}">
@@ -101,7 +105,7 @@
 				<Button VerticalAlignment="Center" Margin="4,0,0,0" Padding="4">
 					<materialIcons:MaterialIcon Kind="Add" Width="22" Height="22" Foreground="{DynamicResource PrimaryColor}" />
 				</Button>
-				<TextBox Grid.Column="1" Classes="" AcceptsReturn="True" IsEnabled="{Binding CanSend}"
+				<TextBox Name="ChatBox" Grid.Column="1" Classes="" AcceptsReturn="True" IsEnabled="{Binding CanSend}"
 						 MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxMessageContentLength}}"
 						 shadui:ControlAssist.MaxHeight="100" IsVisible="{Binding !InTimeout}"
 						 Text="{Binding Textbox}">
@@ -116,6 +120,10 @@
 				</TextBox>
 				<!--<avrichtextbox:RichTextBox Grid.Column="1" x:Name="RichBox" Background="#393A41" BorderBrush="Transparent"></avrichtextbox:RichTextBox>-->
 				<Button Grid.Column="2" Margin="0, 0, 4, 0" VerticalAlignment="Center" Padding="4">
+					<!--<Button.Flyout>
+						<Flyout Placement="TopEdgeAlignedRight" VerticalOffset="-16"
+						><local:EmojisMenu></local:EmojisMenu></Flyout>
+					</Button.Flyout>-->
 					<materialIcons:MaterialIcon Kind="Smiley" Width="22" Height="22" Foreground="{DynamicResource PrimaryColor}" />
 				</Button>
 			</Grid>

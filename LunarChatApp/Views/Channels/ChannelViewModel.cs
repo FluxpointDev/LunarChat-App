@@ -14,6 +14,7 @@ using LunarChatSharp.Core.Servers;
 using LunarChatSharp.Rest.Channels;
 using LunarChatSharp.Rest.Messages;
 using LunarChatSharp.Rest.Servers;
+using LunarChatSharp.Websocket.Events.Messages;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -88,7 +89,6 @@ public partial class ChannelViewModel : ViewModelBase
             }
         });
     }
-
 
     private async Task ChannelDelete(RestChannel channel)
     {
@@ -182,14 +182,14 @@ public partial class ChannelViewModel : ViewModelBase
         });
     }
 
-    private async Task MessageEdit(RestChannel channel, RestMessage message)
+    private async Task MessageEdit(RestChannel channel, MessageUpdateEvent ev, EditMessageRequest message)
     {
-        if (message.ChannelId != state.Socket.CurrentChannel?.Id)
+        if (channel.Id != state.Socket.CurrentChannel?.Id)
             return;
 
-        var messageItem = CrockeryList.FirstOrDefault(x => (x.DataContext as MessageItemModel).messageId == message.Id);
+        var messageItem = CrockeryList.FirstOrDefault(x => (x.DataContext as MessageItemModel).messageId == ev.MessageId);
         if (messageItem != null)
-            (messageItem.DataContext as MessageItemModel).Update(message.Content);
+            (messageItem.DataContext as MessageItemModel).Update(ev, message);
     }
 
     private async Task MessageDelete(RestChannel channel, RestMessage message)

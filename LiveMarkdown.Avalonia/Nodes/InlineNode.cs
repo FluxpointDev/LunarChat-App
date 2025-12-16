@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls.Documents;
 using Markdig.Syntax;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace LiveMarkdown.Avalonia;
@@ -15,6 +16,8 @@ public abstract class InlineNode : MarkdownNode
         CancellationToken cancellationToken)
     {
         var type = inline.GetType();
+
+        Debug.WriteLine("Markdown - Create Inline Node:" + type?.Name);
 
         // First try to find an exact match, then try to find a compatible type
         var node = NodeFactories

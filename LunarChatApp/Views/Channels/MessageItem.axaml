@@ -41,17 +41,25 @@
 							</Flyout>
 						</FlyoutBase.AttachedFlyout>
 					</TextBlock>
-					<SelectableTextBlock Classes="Muted" VerticalAlignment="Center" Text="{Binding Time}"></SelectableTextBlock>
-					<Border VerticalAlignment="Center" CornerRadius="8" ClipToBounds="True">
-						<SelectableTextBlock Padding="10,2,10,2" Background="{DynamicResource InfoColor60}" FontWeight="Bold" Text="APP" IsVisible="{Binding IsBot}"></SelectableTextBlock>
+					<Border VerticalAlignment="Center" CornerRadius="8" ClipToBounds="True" IsVisible="{Binding IsBot}">
+						<SelectableTextBlock Padding="10,2,10,2" Background="{DynamicResource InfoColor60}" FontWeight="Bold" Text="APP"></SelectableTextBlock>
 					</Border>
-					<Border VerticalAlignment="Center" CornerRadius="8" ClipToBounds="True">
-						<SelectableTextBlock Padding="10,2,10,2" Background="{DynamicResource InfoColor60}" FontWeight="Bold" Text="WEBHOOK" IsVisible="{Binding IsWebhook}"></SelectableTextBlock>
+					<Border VerticalAlignment="Center" CornerRadius="8" ClipToBounds="True" IsVisible="{Binding IsWebhook}">
+						<SelectableTextBlock Padding="10,2,10,2" Background="{DynamicResource InfoColor60}" FontWeight="Bold" Text="WEBHOOK"></SelectableTextBlock>
 					</Border>
+					<SelectableTextBlock Margin="4,0,0,0" Classes="Muted" FontSize="13" VerticalAlignment="Center" Text="{Binding Time}"></SelectableTextBlock>
+					<SelectableTextBlock Classes="Muted" VerticalAlignment="Center" Text="(edited)" IsVisible="{Binding EditedTime, Converter={x:Static ObjectConverters.IsNotNull}}"
+						  ToolTip.Placement="Top" ToolTip.Tip="{Binding EditedTime}" ToolTip.VerticalOffset="-4"></SelectableTextBlock>
 				</StackPanel>
-				<md:MarkdownRenderer MarkdownBuilder="{Binding Message}" InlineHyperlinkCommand="{Binding LinkClicked}" />
+				<md:MarkdownRenderer Name="MarkdownView" MarkdownBuilder="{Binding Message}" InlineHyperlinkCommand="{Binding LinkClicked}" />
+				<StackPanel>
+					<ItemsRepeater ItemsSource="{Binding EmbedsList}">
+						<ItemsRepeater.Layout>
+							<StackLayout Spacing="10" />
+						</ItemsRepeater.Layout>
+					</ItemsRepeater>
+				</StackPanel>
 			</StackPanel>
-
 		</Grid>
 	</Border>
 </UserControl>

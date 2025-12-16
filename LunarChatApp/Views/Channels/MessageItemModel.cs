@@ -3,9 +3,13 @@ using CommunityToolkit.Mvvm.Input;
 using LiveMarkdown.Avalonia;
 using LunarChatApp.Services;
 using LunarChatApp.Views;
+using LunarChatApp.Views.Channels;
 using LunarChatSharp;
 using LunarChatSharp.Core.Messages;
 using LunarChatSharp.Rest.Messages;
+using LunarChatSharp.Websocket.Events.Messages;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.Components;
@@ -37,6 +41,10 @@ public partial class MessageItemModel : ViewModelBase
         Message.Append(message.Content);
         //NameColor = services.State.Socket.Roles.First().Value.Color;
         Time = message.CreatedAt.ToLocalTime().ToString("hh:mm tt");
+        if (message.UpdatedAt.HasValue)
+            editedTime = message.UpdatedAt.Value.ToLocalTime().ToString("hh:mm tt");
+        if (message.Embeds != null && message.Embeds.Any())
+            embedsList = new ObservableCollection<EmbedItem>(message.Embeds.Select(x => new EmbedItem { DataContext = new EmbedItemModel(services, x) }));
     }
 
     private ServiceManager services;
@@ -65,10 +73,16 @@ public partial class MessageItemModel : ViewModelBase
     private string _time;
 
     [ObservableProperty]
+    private string? editedTime;
+
+    [ObservableProperty]
     private string? _nameColor;
 
     [ObservableProperty]
     private bool? _canDelete;
+
+    [ObservableProperty]
+    private ObservableCollection<EmbedItem>? embedsList;
 
     [RelayCommand]
     public void LinkClicked(InlineHyperlinkClickedEventArgs args)
@@ -99,10 +113,22 @@ public partial class MessageItemModel : ViewModelBase
         services.CopyText(messageId);
     }
 
-    public void Update(string content)
+    public void Update(MessageUpdateEvent ev, EditMessageRequest message)
     {
-        var markdownBuilder = new ObservableStringBuilder();
-        markdownBuilder.Append(content);
-        Message = markdownBuilder;
+        EditedTime = ev.UpdatedAt.Value.ToLocalTime().ToString("hh:mm tt");
+        if (message.Content != null)
+        {
+            var markdownBuilder = new ObservableStringBuilder();
+            markdownBuilder.Append(message.Content);
+            Message = markdownBuilder;
+        }
+
+        if (message.Embeds != null)
+        {
+            if (message.Embeds != null && message.Embeds.Any())
+                EmbedsList = new ObservableCollection<EmbedItem>(message.Embeds.Select(x => new EmbedItem { DataContext = new EmbedItemModel(services, x) }));
+            else
+                EmbedsList = null;
+        }
     }
 }

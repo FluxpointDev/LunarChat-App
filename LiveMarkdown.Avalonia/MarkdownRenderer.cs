@@ -8,6 +8,8 @@ using Avalonia.Interactivity;
 using Avalonia.Logging;
 using Avalonia.Threading;
 using Markdig;
+using Markdig.Syntax;
+using System.Diagnostics;
 using System.Windows.Input;
 
 namespace LiveMarkdown.Avalonia;
@@ -85,17 +87,12 @@ public partial class MarkdownRenderer : Control
     private ObservableStringBuilderChangedEventArgs? pendingChange;
 
     private readonly DocumentNode documentNode;
-    private readonly MarkdownPipeline pipeline = new MarkdownPipelineBuilder()
-        .UseAdvancedExtensions()
-        .UseCodeBlockSpanFixer()
-        .Build();
 
     internal static readonly ParametrizedLogger? VerboseLogger;
 
     static MarkdownRenderer()
     {
         VerboseLogger = Logger.TryGet(LogEventLevel.Verbose, nameof(MarkdownRenderer));
-
         InlineHyperlink.ClickEvent.AddClassHandler<MarkdownRenderer>(HandleInlineHyperlinkClick);
         RequestBringIntoViewEvent.AddClassHandler<MarkdownRenderer>(BringIntoViewRequested);
     }
@@ -137,16 +134,22 @@ public partial class MarkdownRenderer : Control
             {
                 var markdown = e.NewString;
                 var time = DateTimeOffset.UtcNow;
-                var document = await Task.Run(() => Markdown.Parse(markdown, pipeline));
+                MarkdownDocument? document = await Task.Run(() =>
+                {
+                    return Markdown.Parse(markdown, MarkdownPipe.pipeline);
+                }, new CancellationTokenSource(new TimeSpan(0, 0, 3)).Token);
+                Debug.WriteLine("Parse markdown in {TotalMicroseconds} ms. " + (DateTimeOffset.UtcNow - time).TotalMilliseconds);
                 VerboseLogger?.Log(this, "Parse markdown in {TotalMicroseconds} ms.", (DateTimeOffset.UtcNow - time).TotalMilliseconds);
 
                 time = DateTimeOffset.UtcNow;
                 documentNode.Update(documentNode, document, e, CancellationToken.None);
+                Debug.WriteLine("Render markdown in {TotalMicroseconds} ms. " + (DateTimeOffset.UtcNow - time).TotalMilliseconds);
                 VerboseLogger?.Log(this, "Render markdown in {TotalMicroseconds} ms.", (DateTimeOffset.UtcNow - time).TotalMilliseconds);
             }
             catch (OperationCanceledException) { }
             catch (Exception ex)
             {
+                Debug.WriteLine(ex);
                 await Console.Error.WriteAsync($"Error while rendering markdown: {ex.Message}");
             }
         }
