@@ -55,12 +55,16 @@ public partial class ServerSettingsEmojisModel : ViewModelBase
 
     private async Task PermissionUpdate()
     {
-        CanCreate = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.CreateExpressions);
-        bool CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageExpressions);
-        foreach (var i in _originalItems)
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            i.CanManage = i.Creator == services.Client.CurrentId || CanManage;
-        }
+            CanCreate = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.CreateExpressions);
+            bool CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageExpressions);
+            foreach (var i in _originalItems)
+            {
+                i.CanManage = i.Creator == services.Client.CurrentId || CanManage;
+            }
+        });
+
     }
 
     [ObservableProperty]
@@ -72,9 +76,13 @@ public partial class ServerSettingsEmojisModel : ViewModelBase
         if (item == null)
             return;
 
-        item.PropertyChanged -= OnItemsChanged;
-        _originalItems.Remove(item);
-        UpdateList();
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            item.PropertyChanged -= OnItemsChanged;
+            _originalItems.Remove(item);
+            UpdateList();
+        });
+
     }
 
     private async Task EmojiUpdated(RestServer server, RestEmoji emoji, EmojiUpdateEvent ev)
@@ -83,8 +91,13 @@ public partial class ServerSettingsEmojisModel : ViewModelBase
         if (item == null)
             return;
 
-        item.Name = ev.Name!;
-        UpdateList();
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            if (ev.Name != null)
+                item.Name = ev.Name!;
+            UpdateList();
+        });
+
     }
 
     private async Task EmojiCreated(RestServer server, RestEmoji emoji)
@@ -97,9 +110,13 @@ public partial class ServerSettingsEmojisModel : ViewModelBase
             Name = emoji.Name,
             CanManage = emoji.CreatedBy == services.Client.CurrentId || CanManage
         };
-        _originalItems.Add(item);
-        item.PropertyChanged += OnItemsChanged;
-        UpdateList();
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            _originalItems.Add(item);
+            item.PropertyChanged += OnItemsChanged;
+            UpdateList();
+        });
+
     }
 
     [RelayCommand]

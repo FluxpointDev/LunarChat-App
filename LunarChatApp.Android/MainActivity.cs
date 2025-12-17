@@ -1,8 +1,12 @@
 ﻿using Android.App;
 using Android.Content.PM;
-using Avalonia;
+using Android.OS;
 using Avalonia.Android;
+using static Android.Content.Intent;
 
+// leanback and touchscreen are required for the Android TV.
+[assembly: UsesFeature("android.software.leanback", Required = false)]
+[assembly: UsesFeature("android.hardware.touchscreen", Required = false)]
 namespace LunarChatApp.Android;
 
 [Activity(
@@ -10,12 +14,24 @@ namespace LunarChatApp.Android;
     Theme = "@style/MyTheme.NoActionBar",
     Icon = "@drawable/icon",
     MainLauncher = true,
+    LaunchMode = LaunchMode.SingleTop,
     ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize | ConfigChanges.UiMode)]
-public class MainActivity : AvaloniaMainActivity<App>
+[IntentFilter(new[] { ActionView }, Categories = new[] { CategoryDefault, CategoryLeanbackLauncher })]
+public class MainActivity : AvaloniaMainActivity
 {
-    protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
+}
+
+/// <summary>
+/// Special activity to handle OpenUri activation.
+/// `AvaloniaActivity` internally will redirect parameters to the Avalonia Application.
+/// </summary>
+[Activity(NoHistory = true, LaunchMode = LaunchMode.SingleTop, Exported = true, Theme = "@android:style/Theme.NoDisplay")]
+[IntentFilter(new[] { ActionView }, Categories = new[] { CategoryDefault, CategoryBrowsable }, DataScheme = "avln")]
+public class DataSchemeActivity : AvaloniaActivity
+{
+    protected override void OnCreate(Bundle? savedInstanceState)
     {
-        return base.CustomizeAppBuilder(builder)
-            .WithInterFont();
+        base.OnCreate(savedInstanceState);
+        Finish();
     }
 }

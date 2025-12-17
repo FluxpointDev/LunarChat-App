@@ -32,13 +32,21 @@ public partial class ServerHeaderModel : ViewModelBase
         if (server.Id != services.State.Socket.CurrentServer?.Server.Id)
             return;
 
-        if (!string.IsNullOrEmpty(ev.Changed.Name))
-            Name = ev.Changed.Name;
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            if (!string.IsNullOrEmpty(ev.Changed.Name))
+                Name = ev.Changed.Name;
+        });
+
     }
 
     public async Task Update()
     {
-        UpdatePermissions();
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            UpdatePermissions();
+        });
+
     }
 
     [ObservableProperty]

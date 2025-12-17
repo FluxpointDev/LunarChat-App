@@ -50,40 +50,48 @@ public partial class FriendsListModel : ViewModelBase
 
     private async Task OnRelationAdd(RestRelation user)
     {
-        switch (user.Type)
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            case UserRelationType.Friend:
-                FriendsList.Add(new FriendListItem() { DataContext = new FriendListItemModel(services, user) });
-                break;
-            case UserRelationType.FriendRequest:
-                RequestList.Add(new FriendRequestListItem() { DataContext = new FriendRequestListItemModel(services, user) });
-                break;
-            case UserRelationType.Ignored:
-                IgnoreList.Add(new IgnoreListItem() { DataContext = new IgnoreListItemModel(services, user) });
-                break;
-            case UserRelationType.Blocked:
-                BlocksList.Add(new BlockListItem() { DataContext = new BlockListItemModel(services, user) });
-                break;
-        }
+            switch (user.Type)
+            {
+                case UserRelationType.Friend:
+                    FriendsList.Add(new FriendListItem() { DataContext = new FriendListItemModel(services, user) });
+                    break;
+                case UserRelationType.FriendRequest:
+                    RequestList.Add(new FriendRequestListItem() { DataContext = new FriendRequestListItemModel(services, user) });
+                    break;
+                case UserRelationType.Ignored:
+                    IgnoreList.Add(new IgnoreListItem() { DataContext = new IgnoreListItemModel(services, user) });
+                    break;
+                case UserRelationType.Blocked:
+                    BlocksList.Add(new BlockListItem() { DataContext = new BlockListItemModel(services, user) });
+                    break;
+            }
+        });
+
     }
 
     private async Task OnRelationRemove(RestRelation user)
     {
-        var item1 = FriendsList.FirstOrDefault(x => ((FriendListItemModel)x.DataContext!).id == user.UserId);
-        if (item1 != null)
-            FriendsList.Remove(item1);
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            var item1 = FriendsList.FirstOrDefault(x => ((FriendListItemModel)x.DataContext!).id == user.UserId);
+            if (item1 != null)
+                FriendsList.Remove(item1);
 
-        var item2 = RequestList.FirstOrDefault(x => ((FriendRequestListItemModel)x.DataContext!).id == user.UserId);
-        if (item2 != null)
-            RequestList.Remove(item2);
+            var item2 = RequestList.FirstOrDefault(x => ((FriendRequestListItemModel)x.DataContext!).id == user.UserId);
+            if (item2 != null)
+                RequestList.Remove(item2);
 
-        var item3 = IgnoreList.FirstOrDefault(x => ((IgnoreListItemModel)x.DataContext!).id == user.UserId);
-        if (item3 != null)
-            IgnoreList.Remove(item3);
+            var item3 = IgnoreList.FirstOrDefault(x => ((IgnoreListItemModel)x.DataContext!).id == user.UserId);
+            if (item3 != null)
+                IgnoreList.Remove(item3);
 
-        var item4 = BlocksList.FirstOrDefault(x => ((BlockListItemModel)x.DataContext!).id == user.UserId);
-        if (item4 != null)
-            BlocksList.Remove(item4);
+            var item4 = BlocksList.FirstOrDefault(x => ((BlockListItemModel)x.DataContext!).id == user.UserId);
+            if (item4 != null)
+                BlocksList.Remove(item4);
+        });
+
     }
 
     [RelayCommand]

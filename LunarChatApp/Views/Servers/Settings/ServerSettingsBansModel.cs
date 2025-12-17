@@ -55,7 +55,11 @@ public partial class ServerSettingsBansModel : ViewModelBase
 
     private async Task PermissionUpdate()
     {
-        CanBan = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.BanMembers);
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            CanBan = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.BanMembers);
+        });
+
     }
 
     private async Task MemberUnban(RestServer server, RestUser user)
@@ -67,8 +71,12 @@ public partial class ServerSettingsBansModel : ViewModelBase
         if (item == null)
             return;
 
-        _originalItems.Remove(item);
-        Items = new ObservableCollection<BanListItem>(_originalItems);
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            _originalItems.Remove(item);
+            Items = new ObservableCollection<BanListItem>(_originalItems);
+        });
+
     }
 
     private async Task MemberBan(RestServer server, RestMember member, RestBan ban)
@@ -77,8 +85,12 @@ public partial class ServerSettingsBansModel : ViewModelBase
             return;
 
         var banItem = new BanListItem(services, ban);
-        _originalItems.Add(banItem);
-        Items.Add(banItem);
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            _originalItems.Add(banItem);
+            Items.Add(banItem);
+        });
+
     }
 
     [ObservableProperty]

@@ -78,8 +78,13 @@ public partial class ServerSettingsAppsModel : ViewModelBase
         if (item == null)
             return;
 
-        _originalItems.Remove(item);
-        Items = new ObservableCollection<AppListItem>(_originalItems);
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            _originalItems.Remove(item);
+            Items = new ObservableCollection<AppListItem>(_originalItems);
+        });
+
+
     }
 
     private async Task AppUpdate(RestServer server, RestApp app, AppUpdatedEvent ev)
@@ -94,7 +99,12 @@ public partial class ServerSettingsAppsModel : ViewModelBase
         if (item == null)
             return;
 
-        item.Name = ev.Changed.Name;
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            if (ev.Changed.Name != null)
+                item.Name = ev.Changed.Name;
+        });
+
     }
 
     private async Task AppAdd(RestServer server, RestApp app)
@@ -102,17 +112,25 @@ public partial class ServerSettingsAppsModel : ViewModelBase
         if (services.State.Socket.CurrentServer?.Server?.Id != server.Id)
             return;
 
-        _originalItems.Add(new AppListItem(services, this)
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            Id = app.Id,
-            Name = app.Name
+            _originalItems.Add(new AppListItem(services, this)
+            {
+                Id = app.Id,
+                Name = app.Name
+            });
+            Items = new ObservableCollection<AppListItem>(_originalItems);
         });
-        Items = new ObservableCollection<AppListItem>(_originalItems);
+
     }
 
     private async Task PermissionUpdate()
     {
-        CanManage = services.Socket.State.CurrentServer.HasPermission(services.Socket.State.CurrentServer.Member, ServerPermission.ManageApps);
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            CanManage = services.Socket.State.CurrentServer.HasPermission(services.Socket.State.CurrentServer.Member, ServerPermission.ManageApps);
+        });
+
     }
 
     [ObservableProperty]

@@ -56,10 +56,14 @@ public partial class ServerSettingsMembersModel : ViewModelBase
 
     private async Task PermissionUpdate()
     {
-        foreach (var i in _originalItems)
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            i.Update(services.State.Socket.CurrentServer.Member);
-        }
+            foreach (var i in _originalItems)
+            {
+                i.Update(services.State.Socket.CurrentServer.Member);
+            }
+        });
+
     }
 
     private async Task MemberLeft(RestServer server, RestMember member)
@@ -71,8 +75,12 @@ public partial class ServerSettingsMembersModel : ViewModelBase
         if (item == null)
             return;
 
-        _originalItems.Remove(item);
-        Items = new ObservableCollection<MemberListItem>(_originalItems);
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            _originalItems.Remove(item);
+            Items = new ObservableCollection<MemberListItem>(_originalItems);
+        });
+
     }
 
     private async Task MemberJoin(RestServer server, RestMember member)
@@ -80,8 +88,12 @@ public partial class ServerSettingsMembersModel : ViewModelBase
         if (services.State.Socket.CurrentServer?.Server?.Id != server.Id)
             return;
 
-        _originalItems.Add(new MemberListItem(services, member));
-        Items = new ObservableCollection<MemberListItem>();
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            _originalItems.Add(new MemberListItem(services, member));
+            Items = new ObservableCollection<MemberListItem>();
+        });
+
     }
 
     [ObservableProperty]

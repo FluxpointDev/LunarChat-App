@@ -31,7 +31,8 @@
 
     <Application.Styles>
         <themes:ShadTheme />
-        <labs:ControlThemes />
+        <!--Breaks web :(-->
+        <!--<labs:ControlThemes />-->
         <materialIcons:MaterialIconStyles />
         <StyleInclude Source="/Assets/Styles/Markdown.axaml"/>
     </Application.Styles>

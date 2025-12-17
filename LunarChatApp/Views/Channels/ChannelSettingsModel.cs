@@ -46,20 +46,31 @@ public partial class ChannelSettingsModel : ViewModelBase
     private async Task PermissionUpdate()
     {
         bool HasManage = services.Socket.State.CurrentServer.CanManageChannel(services.Socket.State.CurrentServer.Member);
+        if (HasManage)
+            return;
 
-        if (!HasManage)
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
             pageManager.OnSwitchPage(state.CachedServersPage);
+        });
     }
 
     private async Task UpdateChannel(RestChannel channel, UpdateChannelRequest request)
     {
-        ChannelName = channel.Name;
-        if (SelectedPage is ChannelSettingsOverview overview)
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            ChannelSettingsOverviewModel model = (overview.DataContext as ChannelSettingsOverviewModel);
-            model.ChannelNameEdit = channel.Name;
-            model.ChannelTopicEdit = channel.Topic;
-        }
+            ChannelName = channel.Name;
+            if (SelectedPage is ChannelSettingsOverview overview)
+            {
+                ChannelSettingsOverviewModel model = (overview.DataContext as ChannelSettingsOverviewModel);
+
+                if (channel.Name != null)
+                    model.ChannelNameEdit = channel.Name;
+
+                if (channel.Topic != null)
+                    model.ChannelTopicEdit = channel.Topic;
+            }
+        });
     }
 
     [ObservableProperty]

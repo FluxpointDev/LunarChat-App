@@ -66,8 +66,12 @@ public partial class ChannelSettingsGroupUsersModel : ViewModelBase
         if (item == null)
             return;
 
-        _originalItems.Remove(item);
-        Items = new ObservableCollection<GroupUserListItem>(_originalItems);
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            _originalItems.Remove(item);
+            Items = new ObservableCollection<GroupUserListItem>(_originalItems);
+        });
+
     }
 
     private async Task AddUser(RestChannel channel, RestUser user)
@@ -75,8 +79,12 @@ public partial class ChannelSettingsGroupUsersModel : ViewModelBase
         if (channel.Id != services.Socket.State.CurrentChannel?.Id)
             return;
 
-        _originalItems.Add(new GroupUserListItem(services, user));
-        Items = new ObservableCollection<GroupUserListItem>(_originalItems);
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            _originalItems.Add(new GroupUserListItem(services, user));
+            Items = new ObservableCollection<GroupUserListItem>(_originalItems);
+        });
+
     }
 
     private async Task GroupUpdate(RestChannel channel, UpdateChannelRequest request)
@@ -84,13 +92,17 @@ public partial class ChannelSettingsGroupUsersModel : ViewModelBase
         if (channel.Id != services.Socket.State.CurrentChannel?.Id)
             return;
 
-        CanManage = services.Client.CurrentId == services.Socket.State.CurrentChannel?.GroupSettings?.OwnerId;
-
-
-        foreach (var i in _originalItems)
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            i.Update(i.user);
-        }
+            CanManage = services.Client.CurrentId == services.Socket.State.CurrentChannel?.GroupSettings?.OwnerId;
+
+
+            foreach (var i in _originalItems)
+            {
+                i.Update(i.user);
+            }
+        });
+
     }
 
     [ObservableProperty]

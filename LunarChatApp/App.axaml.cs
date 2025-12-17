@@ -51,6 +51,10 @@ public partial class App : Application
             services.MainControl = desktop.MainWindow;
             this.RegisterTrayIconsEvents(desktop.MainWindow as MainWindow, desktop.MainWindow.DataContext as MainModel);
         }
+        else if (ApplicationLifetime is IActivityApplicationLifetime singleViewFactoryApplicationLifetime)
+        {
+            singleViewFactoryApplicationLifetime.MainViewFactory = () => new MainView { DataContext = new MainModel(services) };
+        }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
             singleViewPlatform.MainView = new MainView()

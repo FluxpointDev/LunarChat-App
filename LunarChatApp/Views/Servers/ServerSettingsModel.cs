@@ -38,14 +38,22 @@ public partial class ServerSettingsModel : ViewModelBase
         if (server.Id != id)
             return;
 
-        services.PageManager.OnSwitchPage(services.State.CachedServersPage);
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            services.PageManager.OnSwitchPage.Invoke(services.State.CachedServersPage);
+        });
     }
 
     private async Task PermissionUpdate()
     {
         bool CanView = services.State.Socket.CurrentServer.CanManageServer(services.State.Socket.CurrentServer.Member);
-        if (!CanView)
-            pageManager.OnSwitchPage(state.CachedServersPage);
+        if (CanView)
+            return;
+
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            pageManager.OnSwitchPage.Invoke(state.CachedServersPage);
+        });
     }
 
     private async Task ServerUpdate(RestServer server, ServerUpdateEvent ev)
@@ -53,7 +61,12 @@ public partial class ServerSettingsModel : ViewModelBase
         if (string.IsNullOrEmpty(ev.Changed.Name) || server.Id != id)
             return;
 
-        ServerName = ev.Changed.Name;
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            if (ev.Changed.Name != null)
+                ServerName = ev.Changed.Name;
+        });
+
     }
 
     [ObservableProperty]

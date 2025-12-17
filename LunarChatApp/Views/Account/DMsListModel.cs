@@ -36,7 +36,10 @@ public partial class DMsListModel : ViewModelBase
         var item = CrockeryList.FirstOrDefault(x => (x.DataContext as DMListItemModel).id == channel.Id);
         if (item == null)
             return;
-        CrockeryList.Remove(item);
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            CrockeryList.Remove(item);
+        });
     }
 
     private async Task ChannelUpdate(RestChannel channel, UpdateChannelRequest request)
@@ -45,24 +48,35 @@ public partial class DMsListModel : ViewModelBase
         if (item == null)
             return;
 
-        if (request.Name != null)
-            item.Name = request.Name;
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            if (request.Name != null)
+                item.Name = request.Name;
+        });
+
     }
 
     private async Task ChannelCreate(RestChannel channel)
     {
-        CrockeryList.Add(new DMListItem
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            DataContext = new DMListItemModel(services, channel)
+            CrockeryList.Add(new DMListItem
+            {
+                DataContext = new DMListItemModel(services, channel)
+            });
         });
+
     }
 
     private async Task Ready()
     {
-        CrockeryList = new ObservableCollection<DMListItem>(services.Socket.State.PrivateChannels.Select(x => new DMListItem
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            DataContext = new DMListItemModel(services, x.Value)
-        }));
+            CrockeryList = new ObservableCollection<DMListItem>(services.Socket.State.PrivateChannels.Select(x => new DMListItem
+            {
+                DataContext = new DMListItemModel(services, x.Value)
+            }));
+        });
     }
 
     [ObservableProperty]

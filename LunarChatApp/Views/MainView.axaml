@@ -1,22 +1,56 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:avrichtextbox="using:AvRichTextBox"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:toasts="using:ShadUI"
-             xmlns:vm="clr-namespace:LunarChatApp.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="LunarChatApp.Views.MainView"
-             Background="{DynamicResource PrimaryForegroundColor}"
-             x:DataType="vm:MainModel">
-  <Design.DataContext>
-    <!-- This only sets the DataContext for the previewer in an IDE,
-         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-    <vm:MainModel />
-  </Design.DataContext>
-    <Grid>
-        <ContentControl Name="MainContent" Content="{Binding SelectedPage}" />
-        <ContentControl Name="DialogContent" Content="{Binding CurrentDialog}" />
-        <toasts:ToastHost Manager="{Binding ToastManager}" />
-    </Grid>
+			 xmlns:avrichtextbox="using:AvRichTextBox"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:materialIcons="using:Material.Icons.Avalonia"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:toasts="using:ShadUI"
+			 xmlns:vm="clr-namespace:LunarChatApp.ViewModels"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.Views.MainView"
+			 Background="{DynamicResource PrimaryForegroundColor}"
+			 x:DataType="vm:MainModel">
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
+		to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+		<vm:MainModel />
+	</Design.DataContext>
+	<Grid Grid.RowDefinitions="*, auto">
+		<ContentControl Name="MainContent" Content="{Binding SelectedPage}" />
+		<ContentControl Name="DialogContent" Content="{Binding CurrentDialog}" />
+		<toasts:ToastHost Manager="{Binding ToastManager}" />
+		<UniformGrid IsVisible="{Binding NavBarVisible}" Grid.Row="1" Columns="4" ColumnSpacing="2" Background="{DynamicResource PrimaryColor10}">
+			<Button Padding="0,8,0,8" Command="{Binding OpenServersCommand}">
+				<StackPanel Spacing="2">
+					<materialIcons:MaterialIcon Kind="House" Width="20" Height="20" Foreground="{DynamicResource PrimaryColor}" />
+					<TextBlock Classes="Muted" FontWeight="Medium" Text="Servers"></TextBlock>
+				</StackPanel>
+			</Button>
+			<Button Padding="0,8,0,8" Command="{Binding OpenDiscoverCommand}">
+				<StackPanel Spacing="2">
+					<materialIcons:MaterialIcon Kind="Compass" Width="20" Height="20" Foreground="{DynamicResource PrimaryColor}" />
+					<TextBlock Classes="Muted" FontWeight="Medium" Text="Discover"></TextBlock>
+				</StackPanel>
+			</Button>
+			<Button Padding="0,8,0,8" Command="{Binding OpenMessagesCommand}">
+				<StackPanel Spacing="2">
+					<materialIcons:MaterialIcon Kind="Message" Width="20" Height="20" Foreground="{DynamicResource PrimaryColor}" />
+					<TextBlock Classes="Muted" FontWeight="Medium" Text="Messages"></TextBlock>
+				</StackPanel>
+			</Button>
+			<Button Padding="0,8,0,8" Command="{Binding OpenSettingsCommand}">
+				<StackPanel Spacing="2">
+					<Grid>
+						<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
+							<Image Source="/Assets/avatar.png" Width="22" Height="22"></Image>
+						</Border>
+						<Border Width="12" Height="12" VerticalAlignment="Bottom" HorizontalAlignment="Right" CornerRadius="90" ClipToBounds="True" Background="{DynamicResource PrimaryForegroundColor}">
+							<materialIcons:MaterialIcon Margin="0,0,0,0" ClipToBounds="True" Padding="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Kind="Circle" Width="11" Height="11" Foreground="green" />
+						</Border>
+					</Grid>
+					<TextBlock Classes="Muted" FontWeight="Medium" Text="You"></TextBlock>
+				</StackPanel>
+			</Button>
+		</UniformGrid>
+	</Grid>
 </UserControl>

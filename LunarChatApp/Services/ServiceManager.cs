@@ -11,7 +11,7 @@ namespace LunarChatApp.Services;
 
 public sealed class ServiceManager
 {
-    public static bool IsDev = true;
+    public static bool IsDev = false;
     public static bool UseProxy = false;
     public readonly PageManager PageManager;
     public readonly TestState State;

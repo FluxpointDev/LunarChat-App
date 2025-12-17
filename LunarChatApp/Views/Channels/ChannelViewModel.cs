@@ -30,6 +30,10 @@ public partial class ChannelViewModel : ViewModelBase
     {
         state = st;
         services = sv;
+
+        if (OperatingSystem.IsAndroid() || OperatingSystem.IsIOS())
+            expandMembers = false;
+
         Name = st.Socket.CurrentChannel.Name;
         Topic = st.Socket.CurrentChannel.Topic;
         if (state.Socket.CurrentServer != null)
@@ -101,12 +105,20 @@ public partial class ChannelViewModel : ViewModelBase
 
     private async Task ChannelDelete(RestChannel channel)
     {
-        services.PageManager.SwitchServerChannel(services, null);
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            services.PageManager.SwitchServerChannel(services, null);
+        });
+
     }
 
     private async Task GroupDelete(RestChannel channel)
     {
-        services.State.TriggerPageSelect(new HomeView() { DataContext = new HomeModel(services) });
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            services.State.TriggerPageSelect(new HomeView() { DataContext = new HomeModel(services) });
+        });
+
     }
 
     private async Task MemberUpdate(RestServer server, string arg2, EditMemberRequest request)
@@ -117,22 +129,29 @@ public partial class ChannelViewModel : ViewModelBase
         if (arg2 != services.State.Socket.CurrentServer.Member.Id)
             return;
 
-        if (request.TimeoutRemove)
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            InTimeout = false;
-        }
-        else if (request.Timeout.HasValue)
-        {
-            InTimeout = true;
-        }
+            if (request.TimeoutRemove)
+            {
+                InTimeout = false;
+            }
+            else if (request.Timeout.HasValue)
+            {
+                InTimeout = true;
+            }
+        });
+
     }
 
     private async Task PermissionUpdate()
     {
-        CanInvite = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.CreateInvites);
-        CanDelete = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
-        CanManage = services.State.Socket.CurrentServer.CanManageChannel(services.State.Socket.CurrentServer.Member);
-        CanSend = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.SendMessages);
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            CanInvite = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.CreateInvites);
+            CanDelete = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
+            CanManage = services.State.Socket.CurrentServer.CanManageChannel(services.State.Socket.CurrentServer.Member);
+            CanSend = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.SendMessages);
+        });
     }
 
     [ObservableProperty]
@@ -164,11 +183,14 @@ public partial class ChannelViewModel : ViewModelBase
 
     private async Task ChannelUpdate(RestChannel channel, UpdateChannelRequest request)
     {
-        if (channel.Name != null)
-            Name = channel.Name;
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            if (channel.Name != null)
+                Name = channel.Name;
 
-        if (channel.Topic != null)
-            Topic = channel.Topic.ToNullOrString();
+            if (channel.Topic != null)
+                Topic = channel.Topic.ToNullOrString();
+        });
     }
 
     private async Task State_OnMessageRecieved(RestChannel channel, RestMessage message)
@@ -176,19 +198,23 @@ public partial class ChannelViewModel : ViewModelBase
         if (message.ChannelId != state.Socket.CurrentChannel?.Id)
             return;
 
-        CrockeryList.Add(new MessageItem()
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            DataContext = new MessageItemModel(services, new RestMessage
+            CrockeryList.Add(new MessageItem()
             {
-                ChannelId = message.ChannelId,
-                Author = message.Author,
-                Content = message.Content,
-                Id = message.Id,
-                CreatedAt = message.CreatedAt,
-                Source = message.Source,
-                SystemMessage = message.SystemMessage
-            })
+                DataContext = new MessageItemModel(services, new RestMessage
+                {
+                    ChannelId = message.ChannelId,
+                    Author = message.Author,
+                    Content = message.Content,
+                    Id = message.Id,
+                    CreatedAt = message.CreatedAt,
+                    Source = message.Source,
+                    SystemMessage = message.SystemMessage
+                })
+            });
         });
+
     }
 
     private async Task MessageEdit(RestChannel channel, MessageUpdateEvent ev, EditMessageRequest message)
@@ -197,8 +223,13 @@ public partial class ChannelViewModel : ViewModelBase
             return;
 
         var messageItem = CrockeryList.FirstOrDefault(x => (x.DataContext as MessageItemModel).messageId == ev.MessageId);
-        if (messageItem != null)
+        if (messageItem == null)
+            return;
+
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
             (messageItem.DataContext as MessageItemModel).Update(ev, message);
+        });
     }
 
     private async Task MessageDelete(RestChannel channel, RestMessage message)
@@ -207,8 +238,14 @@ public partial class ChannelViewModel : ViewModelBase
             return;
 
         var messageItem = CrockeryList.FirstOrDefault(x => (x.DataContext as MessageItemModel).messageId == message.Id);
-        if (messageItem != null)
+        if (messageItem == null)
+            return;
+
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
             CrockeryList.Remove(messageItem);
+        });
+
     }
 
     [ObservableProperty]
@@ -226,6 +263,9 @@ public partial class ChannelViewModel : ViewModelBase
     [RelayCommand]
     public async Task Enter()
     {
+        if (string.IsNullOrEmpty(Textbox))
+            return;
+
         try
         {
             await services.Rest.SendMesssageAsync(state.Socket.CurrentChannel.Id, new CreateMessageRequest

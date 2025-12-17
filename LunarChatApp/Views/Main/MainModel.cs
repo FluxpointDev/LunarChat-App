@@ -6,6 +6,7 @@ using LunarChatApp.Utility;
 using LunarChatApp.ViewModels.Dialogs;
 using LunarChatApp.ViewModels.Main;
 using LunarChatApp.Views;
+using LunarChatApp.Views.Discovery;
 using LunarChatSharp.Core.Channels;
 using LunarChatSharp.Core.Users;
 using LunarChatSharp.Rest.Channels;
@@ -96,6 +97,9 @@ public partial class MainModel : ViewModelBase
     [ObservableProperty]
     private ToastManager _toastManager;
 
+    [ObservableProperty]
+    private bool navBarVisible;
+
     public void OpenDialog(DialogMenu menu)
     {
         (CurrentDialog.DataContext as PopupMaskModel).SetMenu(menu);
@@ -160,8 +164,36 @@ public partial class MainModel : ViewModelBase
     {
         if (SelectedPage != null && (SelectedPage is IEscapeHotKey))
         {
-            services.PageManager.OnSwitchPage(services.State.CachedServersPage);
+            services.PageManager.OnSwitchPage.Invoke(services.State.CachedServersPage);
         }
+    }
+
+    [RelayCommand]
+    public void OpenServers()
+    {
+        if ((services.State.CachedServersPage.DataContext as ServersModel).SelectedPage is HomeView)
+            (services.State.CachedServersPage.DataContext as ServersModel).SelectedPage = null;
+
+        (services.State.CachedServersPage.DataContext as ServersModel).IsExpanded = true;
+        services.PageManager.OnSwitchPage.Invoke(services.State.CachedServersPage);
+    }
+
+    [RelayCommand]
+    public void OpenDiscover()
+    {
+        services.PageManager.OnSwitchPage.Invoke(new DiscoveryPage { DataContext = new DiscoveryPageModel(services) });
+    }
+
+    [RelayCommand]
+    public void OpenSettings()
+    {
+        services.PageManager.OnSwitchPage.Invoke(new SettingsPage { DataContext = new SettingsModel(services, this) });
+    }
+
+    [RelayCommand]
+    public void OpenMessages()
+    {
+
     }
 
     public override void Dispose()

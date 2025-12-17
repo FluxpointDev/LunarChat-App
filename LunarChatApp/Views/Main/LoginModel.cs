@@ -6,6 +6,7 @@ using LunarChatApp.Views;
 using LunarChatSharp;
 using LunarChatSharp.Rest.Accounts;
 using LunarChatSharp.Rest.Users;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -91,7 +92,13 @@ public partial class LoginModel(ServiceManager services, MainModel main) : ViewM
             };
             services.PageManager.OnSwitchPage(services.State.CachedServersPage);
 
-            _ = services.Socket.SetupWebsocket();
+            if (OperatingSystem.IsAndroid() || OperatingSystem.IsIOS())
+                main.NavBarVisible = true;
+
+            _ = Task.Run(async () =>
+            {
+                _ = services.Socket.SetupWebsocket();
+            });
         }
         catch { }
     }

@@ -74,8 +74,12 @@ public partial class ServerSettingsInvitesModel : ViewModelBase
         if (item == null)
             return;
 
-        _originalItems.Remove(item);
-        Items = new ObservableCollection<InviteListItem>(_originalItems);
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            _originalItems.Remove(item);
+            Items = new ObservableCollection<InviteListItem>(_originalItems);
+        });
+
     }
 
     private async Task InviteCreate(RestServer server, RestInvite invite)
@@ -83,24 +87,32 @@ public partial class ServerSettingsInvitesModel : ViewModelBase
         if (server.Id != services.Socket.State.CurrentServer.Server.Id)
             return;
 
-        _originalItems.Add(new InviteListItem
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            services = services,
-            Inviter = invite.Inviter.GetCurrentNameDiscrim(),
-            Code = invite.Code,
-            Uses = invite.Uses,
-            channelId = invite.ChannelId,
-            Channel = services.Socket.State.Channels.TryGetValue(invite.ChannelId, out var channel) ? "#" + channel.Name : "#invalid-channel"
+            _originalItems.Add(new InviteListItem
+            {
+                services = services,
+                Inviter = invite.Inviter.GetCurrentNameDiscrim(),
+                Code = invite.Code,
+                Uses = invite.Uses,
+                channelId = invite.ChannelId,
+                Channel = services.Socket.State.Channels.TryGetValue(invite.ChannelId, out var channel) ? "#" + channel.Name : "#invalid-channel"
+            });
+            Items = new ObservableCollection<InviteListItem>(_originalItems);
         });
-        Items = new ObservableCollection<InviteListItem>(_originalItems);
+
     }
 
     public async Task PermissionUpdate()
     {
-        if (CanCreate.HasValue)
-            CanCreate = services.Socket.State.CurrentServer.HasPermission(services.Socket.State.CurrentServer.Member, ChannelPermission.CreateInvites);
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            if (CanCreate.HasValue)
+                CanCreate = services.Socket.State.CurrentServer.HasPermission(services.Socket.State.CurrentServer.Member, ChannelPermission.CreateInvites);
 
-        CanManage = services.Socket.State.CurrentServer.HasPermission(services.Socket.State.CurrentServer.Member, ChannelPermission.ManageInvites);
+            CanManage = services.Socket.State.CurrentServer.HasPermission(services.Socket.State.CurrentServer.Member, ChannelPermission.ManageInvites);
+        });
+
     }
 
     [ObservableProperty]

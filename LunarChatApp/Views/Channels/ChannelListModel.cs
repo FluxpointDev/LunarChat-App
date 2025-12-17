@@ -29,32 +29,48 @@ public partial class ChannelListModel : ViewModelBase
     private async Task PermissionUpdate()
     {
         bool CanManage = services.State.Socket.CurrentServer.CanManageChannel(services.State.Socket.CurrentServer.Member);
-        foreach (var i in ChannelsList)
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            (i.DataContext as ChannelItemModel).CanManage = CanManage;
-        }
+            foreach (var i in ChannelsList)
+            {
+                (i.DataContext as ChannelItemModel).CanManage = CanManage;
+            }
+        });
     }
 
     private async Task ChannelDelete(RestChannel channel)
     {
         ChannelItem? item = ChannelsList.FirstOrDefault(x => (x.DataContext as ChannelItemModel).id == channel.Id);
-        if (item != null)
+        if (item == null)
+            return;
+
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
             ChannelsList.Remove(item);
+        });
+
     }
 
     private async Task ChannelUpdate(RestChannel channel, UpdateChannelRequest request)
     {
         ChannelItem? item = ChannelsList.FirstOrDefault(x => (x.DataContext as ChannelItemModel).id == channel.Id);
-        if (item != null)
+        if (item == null)
+            return;
+
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             (item.DataContext as ChannelItemModel).Name = channel.Name;
-        }
+        });
     }
 
     private async Task Server_OnChannelCreate(RestChannel channel)
     {
         bool CanManage = services.State.Socket.CurrentServer.CanManageChannel(services.State.Socket.CurrentServer.Member);
-        ChannelsList.Add(new ChannelItem { ChannelName = channel.Name, ChannelType = channel.Type, DataContext = new ChannelItemModel(services, state, channel, CanManage) });
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            ChannelsList.Add(new ChannelItem { ChannelName = channel.Name, ChannelType = channel.Type, DataContext = new ChannelItemModel(services, state, channel, CanManage) });
+        });
+
     }
 
     [ObservableProperty]

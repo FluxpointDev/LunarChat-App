@@ -58,7 +58,7 @@
 									<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
 										<Image Source="/Assets/avatar.png" Width="32" Height="32"></Image>
 									</Border>
-									<SelectableTextBlock VerticalAlignment="Center" FontSize="16" Text="Builderb"></SelectableTextBlock>
+									<SelectableTextBlock VerticalAlignment="Center" FontSize="16" Text="{Binding ActionUser}"></SelectableTextBlock>
 								</StackPanel>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
@@ -72,7 +72,7 @@
 											<materialIcons:MaterialIcon Kind="{Binding Icon}" Width="24" Height="24" Foreground="{DynamicResource WarningColor}" />
 											<StackPanel>
 												<SelectableTextBlock Text="{Binding Text}"></SelectableTextBlock>
-												<SelectableTextBlock Classes="Muted" Text="Lunar Community 2"></SelectableTextBlock>
+												<SelectableTextBlock Classes="Muted" Text="{Binding TargetName}"></SelectableTextBlock>
 											</StackPanel>
 											<materialIcons:MaterialIcon Kind="{Binding Arrow}" Width="24" Height="24" Foreground="{DynamicResource PrimaryColor}" />
 										</StackPanel>

@@ -60,11 +60,15 @@ public partial class ServerSettingsRolesModel : ViewModelBase
 
     private async Task PermissionUpdate()
     {
-        CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ManageRoles);
-        foreach (var i in _originalItems)
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            i.CanManage = CanManage;
-        }
+            CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ManageRoles);
+            foreach (var i in _originalItems)
+            {
+                i.CanManage = CanManage;
+            }
+        });
+
     }
 
     [ObservableProperty]
@@ -76,9 +80,13 @@ public partial class ServerSettingsRolesModel : ViewModelBase
         if (item == null)
             return;
 
-        item.PropertyChanged -= OnItemsChanged;
-        _originalItems.Remove(item);
-        UpdateList();
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            item.PropertyChanged -= OnItemsChanged;
+            _originalItems.Remove(item);
+            UpdateList();
+        });
+
     }
 
     private async Task RoleUpdated(RestServer server, RestRole role, RoleUpdateEvent ev)
@@ -87,9 +95,16 @@ public partial class ServerSettingsRolesModel : ViewModelBase
         if (item == null)
             return;
 
-        item.Name = ev.Name!;
-        item.Color = ev.Color ?? "#99AAB5";
-        UpdateList();
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            if (ev.Name != null)
+                item.Name = ev.Name!;
+
+            if (ev.Color != null)
+                item.Color = ev.Color ?? "#99AAB5";
+            UpdateList();
+        });
+
     }
 
     private async Task RoleCreated(RestServer server, RestRole role)
@@ -102,9 +117,13 @@ public partial class ServerSettingsRolesModel : ViewModelBase
             Position = role.Position,
             CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ManageRoles)
         };
-        _originalItems.Add(item);
-        item.PropertyChanged += OnItemsChanged;
-        UpdateList();
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            _originalItems.Add(item);
+            item.PropertyChanged += OnItemsChanged;
+            UpdateList();
+        });
+
     }
 
     public void UpdateList()

@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.Views;
 using LunarChatSharp.Rest.Channels;
+using System;
 
 namespace LunarChatApp.ViewModels.Servers;
 
@@ -35,6 +36,9 @@ public partial class ChannelItemModel : ViewModelBase
             return;
 
         services.PageManager.SwitchServerChannel(services, channel);
+
+        if (OperatingSystem.IsAndroid() || OperatingSystem.IsIOS())
+            services.State.OnExpandChannels?.Invoke(false);
     }
 
     [RelayCommand]

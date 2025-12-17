@@ -93,7 +93,7 @@ public partial class ServersModel : ViewModelBase
     }
 
     [ObservableProperty]
-    private bool isExpanded;
+    private bool isExpanded = true;
 
     [ObservableProperty]
     private ServerIconModel addServerModel;
@@ -113,24 +113,35 @@ public partial class ServersModel : ViewModelBase
             if (model == null)
                 return;
 
-            model.Name = server.Name;
-            model.Fallback = server.GetFallback();
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                if (server.Name != null)
+                {
+                    model.Name = server.Name;
+                    model.Fallback = server.GetFallback();
+                }
+            });
+
         }
     }
 
     private async Task AccountUpdate(AccountUpdateEvent ev)
     {
-        if (ev.DisplayName != null)
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            state.DisplayName = ev.DisplayName;
-            state.CurrentDisplayName = ev.DisplayName;
-        }
+            if (ev.DisplayName != null)
+            {
+                state.DisplayName = ev.DisplayName;
+                state.CurrentDisplayName = ev.DisplayName;
+            }
 
-        if (ev.Username != null)
-            state.Username = ev.Username;
+            if (ev.Username != null)
+                state.Username = ev.Username;
 
-        if (string.IsNullOrEmpty(state.CurrentDisplayName))
-            state.CurrentDisplayName = state.Username;
+            if (string.IsNullOrEmpty(state.CurrentDisplayName))
+                state.CurrentDisplayName = state.Username;
+        });
+
     }
 
     private async Task PresenceUpdate(RestUserPresence presence)
@@ -140,14 +151,18 @@ public partial class ServersModel : ViewModelBase
 
     private async Task State_OnRemoveServer(RestServer server)
     {
-        ServersList.Remove(ServersList.FirstOrDefault(x => (x.DataContext as ServerIconModel).Id == server.Id));
-        if (server.Id == state.Socket.CurrentServer?.Server.Id)
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            SelectedHeader = null;
-            SelectedSidebar = null;
-            SelectedPage = null;
-            state.Socket.CurrentServer = null;
-        }
+            ServersList.Remove(ServersList.FirstOrDefault(x => (x.DataContext as ServerIconModel).Id == server.Id));
+            if (server.Id == state.Socket.CurrentServer?.Server.Id)
+            {
+                SelectedHeader = null;
+                SelectedSidebar = null;
+                SelectedPage = null;
+                state.Socket.CurrentServer = null;
+            }
+        });
+
     }
 
     private async Task State_OnAddServer(RestServer server)
@@ -156,9 +171,12 @@ public partial class ServersModel : ViewModelBase
         if (serverItem != null)
             return;
 
-        ServersList.Add(new ServerIcon()
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            DataContext = new ServerIconModel(services, server)
+            ServersList.Add(new ServerIcon()
+            {
+                DataContext = new ServerIconModel(services, server)
+            });
         });
     }
 

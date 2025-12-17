@@ -97,12 +97,12 @@
 						<materialIcons:MaterialIcon Kind="KeyboardArrowLeft" IsVisible="{Binding !ExpandMembers}" Width="10" Height="10" Foreground="{DynamicResource MutedColor}" />
 					</StackPanel>
 				</Button>
-				<Panel MinWidth="240" Grid.Column="5"></Panel>
+				<Panel IsVisible="{OnPlatform Default=true, Android=false, iOS=false}" MinWidth="240" Grid.Column="5"></Panel>
 			</Grid>
 		</Border>
 		<Grid Grid.Row="1" Grid.ColumnDefinitions="*, auto">
 			<Grid Grid.RowDefinitions="*, auto">
-				<ScrollViewer Grid.Row="1" Margin="10,10,10,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
+				<ScrollViewer Margin="10,10,10,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
 					<Interaction.Behaviors>
 						<components:ScrollToEndBehavior />
 					</Interaction.Behaviors>
@@ -112,7 +112,7 @@
 						</ItemsRepeater.Layout>
 					</ItemsRepeater>
 				</ScrollViewer>
-				<Border Grid.Row="2" CornerRadius="8" Margin="6" Background="{DynamicResource BorderColor}">
+				<Border Grid.Row="1" CornerRadius="8" Margin="6" Background="{DynamicResource BorderColor}">
 					<Grid Margin="2, 8, 2, 8" ColumnSpacing="6">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="auto" />

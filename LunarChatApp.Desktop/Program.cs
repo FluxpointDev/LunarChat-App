@@ -1,5 +1,4 @@
 ﻿using Avalonia;
-using HotAvalonia;
 using System;
 
 namespace LunarChatApp.Desktop;
@@ -21,6 +20,5 @@ sealed class Program
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .WithInterFont()
-            .UseHotReload()
             .LogToTrace();
 }

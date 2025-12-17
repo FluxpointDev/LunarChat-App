@@ -119,9 +119,13 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
         if (item == null)
             return;
 
-        item.PropertyChanged -= OnItemsChanged;
-        _originalItems.Remove(item);
-        UpdateList();
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            item.PropertyChanged -= OnItemsChanged;
+            _originalItems.Remove(item);
+            UpdateList();
+        });
+
     }
 
     private async Task WebhookUpdate(RestChannel server, string webhookId, EditWebhookRequest ev)
@@ -133,8 +137,12 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
         if (item == null)
             return;
 
-        item.Name = ev.Name;
-        UpdateList();
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            item.Name = ev.Name;
+            UpdateList();
+        });
+
     }
 
     private async Task WebhookCreate(RestChannel server, RestWebhook webhook)
@@ -150,18 +158,26 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
             CanManage = CanManage,
             token = webhook.Token
         };
-        _originalItems.Add(item);
-        item.PropertyChanged += OnItemsChanged;
-        UpdateList();
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            _originalItems.Add(item);
+            item.PropertyChanged += OnItemsChanged;
+            UpdateList();
+        });
+
     }
 
     private async Task PermissionUpdate()
     {
-        CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageWebhooks);
-        foreach (var i in _originalItems)
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            i.CanManage = CanManage;
-        }
+            CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageWebhooks);
+            foreach (var i in _originalItems)
+            {
+                i.CanManage = CanManage;
+            }
+        });
+
     }
 
     [ObservableProperty]

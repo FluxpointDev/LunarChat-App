@@ -6,18 +6,18 @@
   <ItemGroup>
     <!-- Avalonia packages -->
     <!-- Important: keep version in sync! -->
-    <PackageVersion Include="Avalonia" Version="12.0.999-cibuild0060659-alpha" />
-	<PackageVersion Include="Avalonia.Skia" Version="12.0.999-cibuild0060659-alpha" />
-    <PackageVersion Include="Avalonia.Controls.ColorPicker" Version="12.0.999-cibuild0060659-alpha" />
+    <PackageVersion Include="Avalonia" Version="12.0.999-cibuild0060677-alpha" />
+	<PackageVersion Include="Avalonia.Skia" Version="12.0.999-cibuild0060677-alpha" />
+    <PackageVersion Include="Avalonia.Controls.ColorPicker" Version="12.0.999-cibuild0060677-alpha" />
     <PackageVersion Include="Avalonia.Controls.ItemsRepeater" Version="11.2.999-cibuild0046261-alpha" />
-    <PackageVersion Include="Avalonia.Fonts.Inter" Version="12.0.999-cibuild0060659-alpha" />
-    <PackageVersion Include="Avalonia.Diagnostics" Version="12.0.999-cibuild0060659-alpha" />
-    <PackageVersion Include="Avalonia.Desktop" Version="12.0.999-cibuild0060659-alpha" />
-    <PackageVersion Include="Avalonia.iOS" Version="12.0.999-cibuild0060659-alpha" />
+    <PackageVersion Include="Avalonia.Fonts.Inter" Version="12.0.999-cibuild0060677-alpha" />
+    <PackageVersion Include="Avalonia.Diagnostics" Version="12.0.999-cibuild0060677-alpha" />
+    <PackageVersion Include="Avalonia.Desktop" Version="12.0.999-cibuild0060677-alpha" />
+    <PackageVersion Include="Avalonia.iOS" Version="12.0.999-cibuild0060677-alpha" />
     <PackageVersion Include="Avalonia.Browser" Version="12.0.999-cibuild0060655-alpha" />
-    <PackageVersion Include="Avalonia.Android" Version="12.0.999-cibuild0060659-alpha" />
-    <PackageVersion Include="Avalonia.Markup.Xaml.Loader" Version="12.0.999-cibuild0060659-alpha" />
-    <PackageVersion Include="Avalonia.Themes.Simple" Version="12.0.999-cibuild0060659-alpha" />
+    <PackageVersion Include="Avalonia.Android" Version="12.0.999-cibuild0060677-alpha" />
+    <PackageVersion Include="Avalonia.Markup.Xaml.Loader" Version="12.0.999-cibuild0060677-alpha" />
+    <PackageVersion Include="Avalonia.Themes.Simple" Version="12.0.999-cibuild0060677-alpha" />
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageVersion Include="DynamicData" Version="9.4.1" />
     <PackageVersion Include="HotAvalonia" Version="3.0.1" />

@@ -37,7 +37,11 @@ public partial class ServerSettingsSystemModel : ViewModelBase
 
     private async Task PermissionUpdate()
     {
-        CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
+        });
+
     }
 
     [ObservableProperty]

@@ -64,7 +64,11 @@ public partial class ServerSettingsAuditLogsModel : ViewModelBase
 
     private async Task PermissionUpdate()
     {
-        CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ViewAuditLogs);
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ViewAuditLogs);
+
+        });
 
     }
 
@@ -139,6 +143,8 @@ public partial class AuditListItem : ObservableObject
     {
         try
         {
+            actionUser = audit.UserName;
+            targetName = audit.TargetName;
             date = audit.ActionAt.Value.ToLocalTime().ToString("hh:mm tt");
             switch (audit.ActionType)
             {
@@ -164,6 +170,12 @@ public partial class AuditListItem : ObservableObject
 
     [ObservableProperty]
     public MaterialIconKind icon;
+
+    [ObservableProperty]
+    private string actionUser;
+
+    [ObservableProperty]
+    private string targetName;
 
     [ObservableProperty]
     public string text;

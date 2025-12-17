@@ -42,8 +42,13 @@ public class ScrollToEndBehavior : Behavior<ScrollViewer>
         if (_shouldScrollToEnd || message.Author.Id == services.Client.CurrentId)
         {
             Debug.WriteLine("New Message Scroll: " + _scrolling);
-            if (AssociatedObject != null)
-                AssociatedObject.ScrollToEnd();
+
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                if (AssociatedObject != null)
+                    AssociatedObject.ScrollToEnd();
+            });
+
         }
     }
 

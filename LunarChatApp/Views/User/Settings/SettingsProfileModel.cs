@@ -28,14 +28,18 @@ public partial class SettingsProfileModel : ViewModelBase
 
     public async Task AccountUpdate(AccountUpdateEvent ev)
     {
-        if (ev.Username != null)
-            Username = ev.Username;
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            if (ev.Username != null)
+                Username = ev.Username;
 
-        if (ev.DisplayName != null)
-            DisplayName = ev.DisplayName;
+            if (ev.DisplayName != null)
+                DisplayName = ev.DisplayName;
 
-        if (ev.Email != null)
-            Email = ev.Email;
+            if (ev.Email != null)
+                Email = ev.Email;
+        });
+
     }
 
     [ObservableProperty]
