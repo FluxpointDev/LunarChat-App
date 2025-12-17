@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:dialogs="using:LunarChatApp.Views.Dialogs"
+             xmlns:lunarchatsharp="using:LunarChatSharp"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:shadui="using:ShadUI"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.CreateInviteDialog"
+			 x:DataType="dialogs:CreateInviteDialogModel">
+	<StackPanel Spacing="10" HorizontalAlignment="Left" Margin="10">
+		<ComboBox Width="255" SelectedIndex="{Binding SelectedExpireIndex}" shadui:ControlAssist.Label="Expires">
+			<ComboBoxItem>Never</ComboBoxItem>
+			<ComboBoxItem>30 Days</ComboBoxItem>
+			<ComboBoxItem>7 Days</ComboBoxItem>
+			<ComboBoxItem>1 Days</ComboBoxItem>
+		</ComboBox>
+
+		<ComboBox Width="255" SelectedIndex="{Binding SelectedUsesIndex}" shadui:ControlAssist.Label="Max Uses">
+			<ComboBoxItem>Custom</ComboBoxItem>
+			<ComboBoxItem>Unlimited</ComboBoxItem>
+			<ComboBoxItem>1000 uses</ComboBoxItem>
+			<ComboBoxItem>100 uses</ComboBoxItem>
+			<ComboBoxItem>50 uses</ComboBoxItem>
+			<ComboBoxItem>25 uses</ComboBoxItem>
+			<ComboBoxItem>10 uses</ComboBoxItem>
+			<ComboBoxItem>1 use</ComboBoxItem>
+		</ComboBox>
+
+		<NumericUpDown IsVisible="{Binding !SelectedUsesIndex}" Width="255" NumberFormat="{Binding Format}" Value="{Binding MaxUses}" Maximum="{Binding Source={x:Static lunarchatsharp:Static.MaxInviteUses}}" Minimum="1"
+				 shadui:ControlAssist.Label="Custom Uses" shadui:ControlAssist.Hint="1000 uses maximum"/>
+	</StackPanel>
+</UserControl>

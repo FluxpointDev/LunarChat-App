@@ -1,8 +1,10 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using LunarChatApp.Services;
+using LunarChatApp.Views.Dialogs;
 using LunarChatSharp;
 using LunarChatSharp.Core.Servers;
 using LunarChatSharp.Rest.Channels;
@@ -214,16 +216,26 @@ public partial class ServerSettingsInvitesModel : ViewModelBase
     private ObservableCollection<InviteListItem> _items;
 
     [RelayCommand]
-    public async Task CreateInvite()
+    public void CreateInvite()
     {
         if (!services.Socket.State.CurrentServer.Channels.Any())
             return;
 
+        services.Dialogs.Create(new CreateInviteDialog(), new CreateInviteDialogModel(), "Create Invite").WithSubmit(SubmitInvite).Open();
+    }
+
+    public async Task SubmitInvite(UserControl control)
+    {
+        CreateInviteDialogModel? model = control.DataContext as CreateInviteDialogModel;
+        if (model == null)
+            return;
+
+        CreateInviteRequest req = model.CreateRequest();
         try
         {
-            RestInvite invite = await services.Rest.CreateInviteAsync(services.Socket.State.CurrentServer.Channels.Values.First().Id);
+            var Channel = services.Socket.State.CurrentServer.Channels.Values.First().Id;
+            RestInvite invite = await services.Rest.CreateInviteAsync(Channel, req);
             services.CopyText(invite.Code);
-            CanCreate = null;
         }
         catch { }
     }

@@ -285,11 +285,21 @@ public partial class ChannelViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    public async Task CreateInvite()
+    public void CreateInvite()
     {
+        services.Dialogs.Create(new CreateInviteDialog(), new CreateInviteDialogModel(), "Create Invite").WithSubmit(SubmitInvite).Open();
+    }
+
+    public async Task SubmitInvite(UserControl control)
+    {
+        CreateInviteDialogModel? model = control.DataContext as CreateInviteDialogModel;
+        if (model == null)
+            return;
+
+        CreateInviteRequest req = model.CreateRequest();
         try
         {
-            RestInvite invite = await services.Rest.CreateInviteAsync(services.State.Socket.CurrentChannel?.Id);
+            RestInvite invite = await services.Rest.CreateInviteAsync(services.State.Socket.CurrentChannel?.Id, req);
             services.CopyText(invite.Code);
         }
         catch { }

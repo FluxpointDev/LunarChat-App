@@ -5,6 +5,7 @@ using LunarChatApp.Services;
 using LunarChatApp.ViewModels.Channels.Settings;
 using LunarChatApp.Views;
 using LunarChatApp.Views.Channels.Settings;
+using LunarChatApp.Views.Servers.Settings;
 using LunarChatSharp.Rest.Channels;
 using LunarChatSharp.Rest.Webhooks;
 using System.Threading.Tasks;
@@ -113,6 +114,13 @@ public partial class ChannelSettingsModel : ViewModelBase
     {
         SelectedTitle = "Users";
         SelectedPage = new ChannelSettingsGroupUsers { DataContext = new ChannelSettingsGroupUsersModel(services) };
+    }
+
+    [RelayCommand]
+    public void OpenApps()
+    {
+        SelectedTitle = "Apps";
+        SelectedPage = new ServerSettingsApps() { DataContext = new ServerSettingsAppsModel(services, true) };
     }
 
     public void OpenWebhookInfo(RestWebhook webhook)

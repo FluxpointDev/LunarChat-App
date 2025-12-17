@@ -70,12 +70,28 @@ public partial class DeveloperAppInfoModel : ViewModelBase
 
     public async Task InviteApp(UserControl control)
     {
-        try
+        InviteAppDialogModel? model = control.DataContext as InviteAppDialogModel;
+        if (model == null)
+            return;
+
+        if (model.SelectedServer != null)
         {
-            InviteAppDialogModel? model = control.DataContext as InviteAppDialogModel;
-            await services.Rest.AddServerAppAsync(model.SelectedServer.id, app.Id);
+            try
+            {
+
+                await services.Rest.AddServerAppAsync(model.SelectedServer.id, app.Id);
+            }
+            catch { }
         }
-        catch { }
+        if (model.SelectedGroup != null)
+        {
+            try
+            {
+
+                await services.Rest.AddGroupAppAsync(model.SelectedGroup.id, app.Id);
+            }
+            catch { }
+        }
     }
 
     public async Task SubmitApp(UserControl control)

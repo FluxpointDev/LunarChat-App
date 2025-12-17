@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:dialogs="using:LunarChatApp.Views.Dialogs"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:shadui="using:ShadUI"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.InviteAppDialog"
+			 x:DataType="dialogs:InviteAppDialogModel">
+	<StackPanel Spacing="10" HorizontalAlignment="Left" Margin="10">
+		<ComboBox Width="255" SelectedIndex="0" ItemsSource="{Binding ServerItems}"
+				  SelectedItem="{Binding SelectedServer}"
+				  shadui:ControlAssist.Label="Server">
+			<ComboBox.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding Name}" />
+				</DataTemplate>
+			</ComboBox.ItemTemplate>
+		</ComboBox>
+
+		<ComboBox Width="255" SelectedIndex="0" ItemsSource="{Binding GroupItems}"
+				  SelectedItem="{Binding SelectedGroup}"
+				  shadui:ControlAssist.Label="Group">
+			<ComboBox.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding Name}" />
+				</DataTemplate>
+			</ComboBox.ItemTemplate>
+		</ComboBox>
+	</StackPanel>
+</UserControl>

@@ -52,7 +52,7 @@
     <Compile Update="Views\Channels\ChannelItem.axaml.cs">
       <DependentUpon>ChannelItem.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Dialogs\ReportServerDialog.axaml.cs">
+    <Compile Update="Views\Dialogs\Servers\ReportServerDialog.axaml.cs">
       <DependentUpon>ReportServerDialog.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Servers\Settings\AuditLogChangeItem.axaml.cs">

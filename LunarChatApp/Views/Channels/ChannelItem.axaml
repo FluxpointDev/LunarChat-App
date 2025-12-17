@@ -20,7 +20,7 @@
 		</shadui:SidebarItem.Content>
 		<shadui:SidebarItem.Icon>
 			<Viewbox>
-				<materialIcons:MaterialIcon x:Name="Test" Kind="{Binding $parent[local:ChannelItem].ChannelIcon}" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
+				<materialIcons:MaterialIcon Kind="{Binding Icon}" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 			</Viewbox>
 		</shadui:SidebarItem.Icon>
 	</shadui:SidebarItem>

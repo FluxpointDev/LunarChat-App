@@ -19,7 +19,7 @@ public partial class ChannelListModel : ViewModelBase
         services = sv;
         bool CanManage = services.State.Socket.CurrentServer.CanManageChannel(services.State.Socket.CurrentServer.Member);
         if (ChannelsList == null)
-            ChannelsList = new ObservableCollection<ChannelItem>(state.Socket.CurrentServer.Channels.Values.Select(x => new ChannelItem() { ChannelName = x.Name, ChannelType = x.Type, DataContext = new ChannelItemModel(services, state, x, CanManage) }));
+            ChannelsList = new ObservableCollection<ChannelItem>(state.Socket.CurrentServer.Channels.Values.Select(x => new ChannelItem() { DataContext = new ChannelItemModel(services, state, x, CanManage) }));
         state.Socket.CurrentServer.OnChannelUpdate += ChannelUpdate;
         state.Socket.CurrentServer.OnChannelDelete += ChannelDelete;
         state.Socket.CurrentServer.OnChannelCreate += Server_OnChannelCreate;
@@ -68,7 +68,7 @@ public partial class ChannelListModel : ViewModelBase
         bool CanManage = services.State.Socket.CurrentServer.CanManageChannel(services.State.Socket.CurrentServer.Member);
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            ChannelsList.Add(new ChannelItem { ChannelName = channel.Name, ChannelType = channel.Type, DataContext = new ChannelItemModel(services, state, channel, CanManage) });
+            ChannelsList.Add(new ChannelItem { DataContext = new ChannelItemModel(services, state, channel, CanManage) });
         });
 
     }

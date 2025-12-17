@@ -1,0 +1,19 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:lunarchatsharp="using:LunarChatSharp"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:servers="using:LunarChatApp.Views.Dialogs.Servers"
+             xmlns:shadui="using:ShadUI"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="LunarChatApp.KickMemberDialog"
+             x:DataType="servers:KickMemberDialogModel">
+  <StackPanel Spacing="10" HorizontalAlignment="Left" Margin="10">
+      <TextBox MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxDescriptionLength}}"
+		Width="255" AcceptsReturn="True"
+		shadui:ControlAssist.Height="100"
+		shadui:ControlAssist.Label="Reason"
+		Text="{Binding Reason}"
+		Watermark="" />
+	</StackPanel>
+</UserControl>

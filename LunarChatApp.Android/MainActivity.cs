@@ -14,7 +14,6 @@ namespace LunarChatApp.Android;
     Theme = "@style/MyTheme.NoActionBar",
     Icon = "@drawable/icon",
     MainLauncher = true,
-    LaunchMode = LaunchMode.SingleTop,
     ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize | ConfigChanges.UiMode)]
 [IntentFilter(new[] { ActionView }, Categories = new[] { CategoryDefault, CategoryLeanbackLauncher })]
 public class MainActivity : AvaloniaMainActivity

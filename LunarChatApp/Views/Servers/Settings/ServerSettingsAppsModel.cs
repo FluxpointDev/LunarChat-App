@@ -5,9 +5,9 @@ using DynamicData;
 using LunarChatApp.Services;
 using LunarChatSharp;
 using LunarChatSharp.Core.Servers;
+using LunarChatSharp.Rest.Channels;
 using LunarChatSharp.Rest.Dev;
 using LunarChatSharp.Rest.Servers;
-using LunarChatSharp.Websocket.Events.Servers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,14 +24,22 @@ public partial class ServerSettingsAppsModel : ViewModelBase
 
     private readonly Timer? _searchTimer;
     private readonly ServiceManager services;
-    public ServerSettingsAppsModel(ServiceManager sv)
+    public ServerSettingsAppsModel(ServiceManager sv, bool isGroup)
     {
         services = sv;
+        IsGroup = isGroup;
         _searchTimer = new Timer(500); // 500ms debounce
         _searchTimer.Elapsed += SearchTimerElapsed;
         _searchTimer.AutoReset = false;
-        canManage = sv.Socket.State.CurrentServer.HasPermission(sv.Socket.State.CurrentServer.Member, ServerPermission.ManageApps);
-        sv.Socket.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+        if (IsGroup)
+        {
+            canManage = sv.Socket.State.CurrentChannel?.GroupSettings?.OwnerId == services.Client.CurrentId;
+        }
+        else
+        {
+            canManage = sv.Socket.State.CurrentServer.HasPermission(sv.Socket.State.CurrentServer.Member, ServerPermission.ManageApps);
+            sv.Socket.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+        }
         sv.Client.OnAppAdd += AppAdd;
         sv.Client.OnAppUpdate += AppUpdate;
         sv.Client.OnAppRemove += AppRemove;
@@ -39,7 +47,8 @@ public partial class ServerSettingsAppsModel : ViewModelBase
 
         _ = Task.Run(async () =>
         {
-            var apps = await sv.Rest.GetServerAppsAsync(sv.State.Socket.CurrentServer?.Server.Id);
+            var apps = IsGroup ? await sv.Rest.GetGroupAppsAsync(sv.Socket.State.CurrentChannel?.Id) :
+            await sv.Rest.GetServerAppsAsync(sv.State.Socket.CurrentServer?.Server.Id);
             if (apps != null)
             {
                 foreach (var i in apps)
@@ -69,10 +78,20 @@ public partial class ServerSettingsAppsModel : ViewModelBase
 
     }
 
-    private async Task AppRemove(RestServer server, RestApp app)
+    public bool IsGroup;
+
+    private async Task AppRemove(RestServer? server, RestChannel? channel, RestApp app)
     {
-        if (services.State.Socket.CurrentServer?.Server?.Id != server.Id)
-            return;
+        if (IsGroup)
+        {
+            if (services.State.Socket.CurrentChannel?.Id != channel?.Id)
+                return;
+        }
+        else
+        {
+            if (services.State.Socket.CurrentServer?.Server?.Id != server?.Id)
+                return;
+        }
 
         var item = _originalItems.FirstOrDefault(x => x.Id == app.Id);
         if (item == null)
@@ -87,12 +106,20 @@ public partial class ServerSettingsAppsModel : ViewModelBase
 
     }
 
-    private async Task AppUpdate(RestServer server, RestApp app, AppUpdatedEvent ev)
+    private async Task AppUpdate(RestServer? server, RestChannel? channel, RestApp app, CreateAppRequest changed)
     {
-        if (services.State.Socket.CurrentServer?.Server?.Id != server.Id)
-            return;
+        if (IsGroup)
+        {
+            if (services.State.Socket.CurrentChannel?.Id != channel?.Id)
+                return;
+        }
+        else
+        {
+            if (services.State.Socket.CurrentServer?.Server?.Id != server?.Id)
+                return;
+        }
 
-        if (string.IsNullOrEmpty(ev.Changed.Name))
+        if (string.IsNullOrEmpty(changed.Name))
             return;
 
         var item = _originalItems.FirstOrDefault(x => x.Id == app.Id);
@@ -101,16 +128,24 @@ public partial class ServerSettingsAppsModel : ViewModelBase
 
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            if (ev.Changed.Name != null)
-                item.Name = ev.Changed.Name;
+            if (changed.Name != null)
+                item.Name = changed.Name;
         });
 
     }
 
-    private async Task AppAdd(RestServer server, RestApp app)
+    private async Task AppAdd(RestServer? server, RestChannel? channel, RestApp app)
     {
-        if (services.State.Socket.CurrentServer?.Server?.Id != server.Id)
-            return;
+        if (IsGroup)
+        {
+            if (services.State.Socket.CurrentChannel?.Id != channel?.Id)
+                return;
+        }
+        else
+        {
+            if (services.State.Socket.CurrentServer?.Server?.Id != server?.Id)
+                return;
+        }
 
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
@@ -252,14 +287,21 @@ public partial class AppListItem(ServiceManager services, ServerSettingsAppsMode
     {
         try
         {
-            await services.Rest.RemoveServerAppAsync(services.State.Socket.CurrentServer?.Server.Id, Id);
+            if (apps.IsGroup)
+            {
+                await services.Rest.RemoveGroupAppAsync(services.State.Socket.CurrentChannel?.Id, Id);
+            }
+            else
+            {
+                await services.Rest.RemoveServerAppAsync(services.State.Socket.CurrentServer?.Server.Id, Id);
+            }
+
             var app = apps._originalItems.FirstOrDefault(x => x.Id == Id);
             if (app != null)
             {
                 apps._originalItems.Remove(app);
                 apps.Items.Remove(app);
             }
-
         }
         catch { }
 

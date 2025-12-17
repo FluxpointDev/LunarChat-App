@@ -2,22 +2,24 @@
   <!-- https://learn.microsoft.com/en-us/nuget/consume-packages/central-package-management -->
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+	  <!-- Switch to 655 for browser and 677 everything else -->
+	  <AvaVersion>12.0.999-cibuild0060655-alpha</AvaVersion>
   </PropertyGroup>
   <ItemGroup>
     <!-- Avalonia packages -->
     <!-- Important: keep version in sync! -->
-    <PackageVersion Include="Avalonia" Version="12.0.999-cibuild0060677-alpha" />
-	<PackageVersion Include="Avalonia.Skia" Version="12.0.999-cibuild0060677-alpha" />
-    <PackageVersion Include="Avalonia.Controls.ColorPicker" Version="12.0.999-cibuild0060677-alpha" />
+    <PackageVersion Include="Avalonia" Version="$(AvaVersion)" />
+	<PackageVersion Include="Avalonia.Skia" Version="$(AvaVersion)" />
+    <PackageVersion Include="Avalonia.Controls.ColorPicker" Version="$(AvaVersion)" />
     <PackageVersion Include="Avalonia.Controls.ItemsRepeater" Version="11.2.999-cibuild0046261-alpha" />
-    <PackageVersion Include="Avalonia.Fonts.Inter" Version="12.0.999-cibuild0060677-alpha" />
-    <PackageVersion Include="Avalonia.Diagnostics" Version="12.0.999-cibuild0060677-alpha" />
-    <PackageVersion Include="Avalonia.Desktop" Version="12.0.999-cibuild0060677-alpha" />
-    <PackageVersion Include="Avalonia.iOS" Version="12.0.999-cibuild0060677-alpha" />
-    <PackageVersion Include="Avalonia.Browser" Version="12.0.999-cibuild0060655-alpha" />
-    <PackageVersion Include="Avalonia.Android" Version="12.0.999-cibuild0060677-alpha" />
-    <PackageVersion Include="Avalonia.Markup.Xaml.Loader" Version="12.0.999-cibuild0060677-alpha" />
-    <PackageVersion Include="Avalonia.Themes.Simple" Version="12.0.999-cibuild0060677-alpha" />
+    <PackageVersion Include="Avalonia.Fonts.Inter" Version="$(AvaVersion)" />
+    <PackageVersion Include="Avalonia.Diagnostics" Version="$(AvaVersion)" />
+    <PackageVersion Include="Avalonia.Desktop" Version="$(AvaVersion)" />
+    <PackageVersion Include="Avalonia.iOS" Version="$(AvaVersion)" />
+    <PackageVersion Include="Avalonia.Browser" Version="$(AvaVersion)" />
+    <PackageVersion Include="Avalonia.Android" Version="$(AvaVersion)" />
+    <PackageVersion Include="Avalonia.Markup.Xaml.Loader" Version="$(AvaVersion)" />
+    <PackageVersion Include="Avalonia.Themes.Simple" Version="$(AvaVersion)" />
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageVersion Include="DynamicData" Version="9.4.1" />
     <PackageVersion Include="HotAvalonia" Version="3.0.1" />

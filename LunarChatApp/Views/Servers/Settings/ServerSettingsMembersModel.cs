@@ -1,12 +1,15 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using LunarChatApp.Services;
+using LunarChatApp.Views.Dialogs.Servers;
 using LunarChatSharp;
 using LunarChatSharp.Core.Servers;
 using LunarChatSharp.Rest.Roles;
 using LunarChatSharp.Rest.Servers;
+using ShadUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -210,7 +213,7 @@ public partial class MemberListItem : ObservableObject
         JoinedAt = member.JoinedAt.Value.ToLocalTime().ToString("d MMMM yyyy");
 
         bool CanManage = false;
-        CanTransferOwner = services.Socket.State.CurrentServer.Server.OwnerId == services.Client.CurrentId && id != services.Socket.State.CurrentServer.Server.OwnerId;
+        CanTransferOwner = !member.User.IsBot && services.Socket.State.CurrentServer.Server.OwnerId == services.Client.CurrentId && id != services.Socket.State.CurrentServer.Server.OwnerId;
         if (member.User.Id != services.State.Socket.CurrentServer.Server.OwnerId)
         {
             CanBanMember = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.BanMembers);
@@ -323,9 +326,19 @@ public partial class MemberListItem : ObservableObject
     [RelayCommand]
     public async Task BanUser()
     {
+        services.Dialogs.Create(new BanMemberDialog(), new BanMemberDialogModel(), "Ban " + Name).WithSubmit(SubmitBan).Open();
+    }
+
+    public async Task SubmitBan(UserControl control)
+    {
+        BanMemberDialogModel? model = control.DataContext as BanMemberDialogModel;
+        if (model == null)
+            return;
+        CreateBanRequest req = model.CreateRequest();
         try
         {
-            await services.Rest.BanMemberAsync(services.Socket.State.CurrentServer.Server.Id, id);
+            await services.Rest.BanMemberAsync(services.Socket.State.CurrentServer.Server.Id, id, req);
+            services.ToastManager.CreateToast("Member Banned").DismissOnClick().WithDelay(3).Show();
         }
         catch { }
     }
@@ -346,9 +359,22 @@ public partial class MemberListItem : ObservableObject
     [RelayCommand]
     public async Task KickUser()
     {
+        services.Dialogs.Create(new KickMemberDialog(), new KickMemberDialogModel(), "Kick " + Name).WithSubmit(SubmitKick).Open();
+    }
+
+    public async Task SubmitKick(UserControl control)
+    {
+        KickMemberDialogModel? model = control.DataContext as KickMemberDialogModel;
+        if (model == null)
+            return;
+
         try
         {
-            await services.Rest.KickMemberAsync(services.Socket.State.CurrentServer.Server.Id, id);
+            await services.Rest.KickMemberAsync(services.Socket.State.CurrentServer.Server.Id, id, new LunarChatSharp.Rest.ReasonRequest
+            {
+                Reason = model.Reason
+            });
+            services.ToastManager.CreateToast("Member Kicked").DismissOnClick().WithDelay(3).Show();
         }
         catch { }
     }
@@ -359,9 +385,28 @@ public partial class MemberListItem : ObservableObject
         try
         {
             if (timeoutItemText.StartsWith("Remove"))
-                await services.Rest.TimeoutMemberAsync(services.Socket.State.CurrentServer.Server.Id, id, null);
+            {
+                await services.Rest.TimeoutMemberAsync(services.Socket.State.CurrentServer.Server.Id, id, null, null);
+                services.ToastManager.CreateToast("Timeout Removed").DismissOnClick().WithDelay(3).Show();
+            }
             else
-                await services.Rest.TimeoutMemberAsync(services.Socket.State.CurrentServer.Server.Id, id, DateTime.UtcNow.AddSeconds(60));
+                services.Dialogs.Create(new TimeoutMemberDialog(), new TimeoutMemberDialogModel(), "Timeout " + Name).WithSubmit(SubmitTimeout).Open();
+        }
+        catch { }
+        {
+
+        }
+    }
+
+    public async Task SubmitTimeout(UserControl control)
+    {
+        TimeoutMemberDialogModel? model = control.DataContext as TimeoutMemberDialogModel;
+        if (model == null)
+            return;
+        try
+        {
+            await services.Rest.TimeoutMemberAsync(services.Socket.State.CurrentServer.Server.Id, id, model.GetTimeout(), model.Reason);
+            services.ToastManager.CreateToast("Member Timed-out").DismissOnClick().WithDelay(3).Show();
         }
         catch { }
     }

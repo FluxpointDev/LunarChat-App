@@ -2,7 +2,9 @@
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.Views;
+using LunarChatSharp.Core.Channels;
 using LunarChatSharp.Rest.Channels;
+using Material.Icons;
 using System;
 
 namespace LunarChatApp.ViewModels.Servers;
@@ -21,6 +23,23 @@ public partial class ChannelItemModel : ViewModelBase
         services = sv;
         Name = chan.Name;
         canManage = manage;
+        icon = GetIcon(chan.Type);
+    }
+
+    private MaterialIconKind GetIcon(ChannelType type)
+    {
+        switch (type)
+        {
+            case ChannelType.Voice:
+                return MaterialIconKind.VolumeHigh;
+                //case ChannelType.Media:
+                //    return MaterialIconKind.Image;
+                //case ChannelType.Schedule:
+                //    return MaterialIconKind.Calendar;
+                //case ChannelType.Rules:
+                //    return MaterialIconKind.BookCheck;
+        }
+        return MaterialIconKind.Hashtag;
     }
 
     [ObservableProperty]
@@ -28,6 +47,9 @@ public partial class ChannelItemModel : ViewModelBase
 
     [ObservableProperty]
     private bool canManage;
+
+    [ObservableProperty]
+    private MaterialIconKind icon;
 
     [RelayCommand]
     public void SelectChannel()

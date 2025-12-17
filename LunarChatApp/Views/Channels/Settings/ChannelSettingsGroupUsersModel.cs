@@ -231,6 +231,7 @@ public partial class GroupUserListItem : ObservableObject
     {
         services = sv;
         user = u;
+        isBot = u.IsBot;
         id = user.Id;
         Update(user);
     }
@@ -240,7 +241,7 @@ public partial class GroupUserListItem : ObservableObject
         Name = user.GetCurrentNameDiscrim();
         RemoveItemText = "Remove " + Name;
         CanManage = services.Client.CurrentId == services.Socket.State.CurrentChannel?.GroupSettings?.OwnerId && id != services.Socket.State.CurrentChannel?.GroupSettings?.OwnerId;
-        CanTransferOwner = CanManage;
+        CanTransferOwner = CanManage && !isBot;
     }
 
     [ObservableProperty]
@@ -250,6 +251,8 @@ public partial class GroupUserListItem : ObservableObject
 
     [ObservableProperty]
     private string _name;
+
+    private bool isBot;
 
     [ObservableProperty]
     private string removeItemText;
@@ -269,6 +272,9 @@ public partial class GroupUserListItem : ObservableObject
     [RelayCommand]
     public async Task TransferOwnership()
     {
+        if (isBot)
+            return;
+
         try
         {
             await services.Rest.UpdateChannelAsync(services.Socket.State.CurrentChannel.Id, new UpdateChannelRequest
@@ -284,7 +290,10 @@ public partial class GroupUserListItem : ObservableObject
     {
         try
         {
-            await services.Rest.DeleteAsync($"/groups/{services.Socket.State.CurrentChannel.Id}/users/{id}");
+            if (isBot)
+                await services.Rest.RemoveGroupAppAsync(services.Socket.State.CurrentChannel.Id, id);
+            else
+                await services.Rest.DeleteAsync($"/groups/{services.Socket.State.CurrentChannel.Id}/users/{id}");
         }
         catch { }
     }

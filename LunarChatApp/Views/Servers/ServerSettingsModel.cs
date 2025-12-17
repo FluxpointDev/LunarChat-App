@@ -150,7 +150,7 @@ public partial class ServerSettingsModel : ViewModelBase
     public void OpenAppsSettings()
     {
         SelectedTitle = "Apps";
-        SelectedPage = new ServerSettingsApps() { DataContext = new ServerSettingsAppsModel(services) };
+        SelectedPage = new ServerSettingsApps() { DataContext = new ServerSettingsAppsModel(services, false) };
     }
 
     [RelayCommand]
