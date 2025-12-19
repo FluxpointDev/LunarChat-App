@@ -35,7 +35,12 @@ public partial class SettingsModel : ViewModelBase
         main = mainModel;
         if (SelectedPage == null)
             SelectedPage = new SettingsAccount();
+
+        devMode = ServiceManager.IsDev;
     }
+
+    [ObservableProperty]
+    private bool devMode;
 
     [ObservableProperty]
     private UserControl? _selectedPage;
@@ -99,6 +104,12 @@ public partial class SettingsModel : ViewModelBase
     }
 
     [RelayCommand]
+    private void OpenDebug()
+    {
+        SwitchPage(SettingsPageType.Debug);
+    }
+
+    [RelayCommand]
     private void OpenStreamerMode()
     {
         SwitchPage(SettingsPageType.StreamerMode);
@@ -146,6 +157,9 @@ public partial class SettingsModel : ViewModelBase
             case SettingsPageType.Developer:
                 SelectedPage = new SettingsDeveloper() { DataContext = new SettingsDeveloperModel(services) };
                 break;
+            case SettingsPageType.Debug:
+                SelectedPage = new SettingsDebug() { DataContext = new SettingsDebugModel(services) };
+                break;
             case SettingsPageType.StreamerMode:
                 SelectedPage = new SettingsStreamerMode() { DataContext = new SettingsStreamerModeModel(services) };
                 break;
@@ -154,5 +168,5 @@ public partial class SettingsModel : ViewModelBase
 }
 public enum SettingsPageType
 {
-    Account, Profile, Connections, Theme, Chat, Notifications, Developer, Social, StreamerMode
+    Account, Profile, Connections, Theme, Chat, Notifications, Developer, Social, StreamerMode, Debug
 }

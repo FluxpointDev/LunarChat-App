@@ -4,6 +4,7 @@ using LiveMarkdown.Avalonia;
 using LunarChatApp.Services;
 using LunarChatApp.Views;
 using LunarChatApp.Views.Channels;
+using LunarChatApp.Views.Messages;
 using LunarChatSharp;
 using LunarChatSharp.Core.Messages;
 using LunarChatSharp.Rest.Messages;
@@ -45,6 +46,11 @@ public partial class MessageItemModel : ViewModelBase
             editedTime = message.UpdatedAt.Value.ToLocalTime().ToString("hh:mm tt");
         if (message.Embeds != null && message.Embeds.Any())
             embedsList = new ObservableCollection<EmbedItem>(message.Embeds.Select(x => new EmbedItem { DataContext = new EmbedItemModel(services, x) }));
+        if (message.Attachments != null && message.Attachments.Any())
+            imagesList = new ObservableCollection<ImageItem>(message.Attachments.Select(x => new ImageItem
+            {
+                DataContext = new ImageItemModel(services, x)
+            }));
     }
 
     private ServiceManager services;
@@ -83,6 +89,9 @@ public partial class MessageItemModel : ViewModelBase
 
     [ObservableProperty]
     private ObservableCollection<EmbedItem>? embedsList;
+
+    [ObservableProperty]
+    private ObservableCollection<ImageItem>? imagesList;
 
     [RelayCommand]
     public void LinkClicked(InlineHyperlinkClickedEventArgs args)

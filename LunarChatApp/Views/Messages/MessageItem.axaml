@@ -59,6 +59,13 @@
 						</ItemsRepeater.Layout>
 					</ItemsRepeater>
 				</StackPanel>
+				<StackPanel>
+					<ItemsRepeater ItemsSource="{Binding ImagesList}">
+						<ItemsRepeater.Layout>
+							<UniformGridLayout MinColumnSpacing="2" MinRowSpacing="2"  />
+						</ItemsRepeater.Layout>
+					</ItemsRepeater>
+				</StackPanel>
 			</StackPanel>
 		</Grid>
 	</Border>

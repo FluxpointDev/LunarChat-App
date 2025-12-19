@@ -1,0 +1,11 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:controls="using:Avalonia.Labs.Controls"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:messages="using:LunarChatApp.Views.Messages"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="LunarChatApp.ImageItem" MaxWidth="400" MaxHeight="250"
+             x:DataType="messages:ImageItemModel">
+    <controls:AsyncImage Stretch="Uniform" Source="{Binding Source}" Opened="AsyncImage_Opened" Failed="AsyncImage_Failed"></controls:AsyncImage>
+</UserControl>

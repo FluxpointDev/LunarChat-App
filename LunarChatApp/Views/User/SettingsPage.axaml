@@ -85,6 +85,13 @@
 						</Viewbox>
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
+				<shadui:SidebarItem Content="Debug" Command="{Binding OpenDebugCommand}" IsVisible="{Binding DevMode}">
+					<shadui:SidebarItem.Icon>
+						<Viewbox>
+							<materialIcons:MaterialIcon Kind="Bug" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
+						</Viewbox>
+					</shadui:SidebarItem.Icon>
+				</shadui:SidebarItem>
 				<shadui:SidebarItem Content="Streamer Mode" Command="{Binding OpenStreamerModeCommand}">
 					<shadui:SidebarItem.Icon>
 						<Viewbox>

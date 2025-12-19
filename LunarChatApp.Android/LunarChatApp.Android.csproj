@@ -23,6 +23,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Avalonia.Android" />
+		<PackageReference Include="VideoLAN.LibVLC.Android" />
 		<PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" />
 		<!--<PackageReference Include="HotAvalonia">
 			<IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>

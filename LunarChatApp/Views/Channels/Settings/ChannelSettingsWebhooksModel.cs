@@ -352,7 +352,7 @@ public partial class WebhookListItem(ServiceManager services, Action<RestWebhook
     [RelayCommand]
     public void CopyLink()
     {
-        string Url = ServiceManager.IsDev ? "https://localhost:7216/" : "https://lunar.fluxpoint.dev/api/";
+        string Url = ServiceManager.IsDev && ServiceManager.UseDevAPI ? "https://localhost:7216/" : "https://lunar.fluxpoint.dev/api/";
         services.CopyText($"{Url}webhooks/{Id}/{token}");
     }
 

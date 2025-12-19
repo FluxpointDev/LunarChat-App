@@ -16,7 +16,23 @@
  
   
   <ItemGroup>
+    <AvaloniaResource Remove="Assets\Sounds\notification.mp3" />
+    <AvaloniaResource Remove="Assets\Sounds\test.mp4" />
+  </ItemGroup>
+ 
+  
+  <ItemGroup>
     <AvaloniaXaml Remove="Assets\Styles\OverrideResource.axaml" />
+  </ItemGroup>
+ 
+  
+  <ItemGroup>
+    <Content Include="Assets\Sounds\notification.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sounds\test.mp4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   
 
@@ -32,6 +48,7 @@
     <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="DynamicData" />
     <PackageReference Include="Jab" />
+    <PackageReference Include="LibVLCSharp.Avalonia" />
     <PackageReference Include="Material.Icons.Avalonia" />
     <PackageReference Include="WebView.Avalonia" />
     <PackageReference Include="Xaml.Behaviors.Avalonia" />

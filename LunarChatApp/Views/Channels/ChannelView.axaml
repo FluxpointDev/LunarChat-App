@@ -119,9 +119,27 @@
 							<ColumnDefinition Width="*" />
 							<ColumnDefinition Width="auto" />
 						</Grid.ColumnDefinitions>
-						<Button VerticalAlignment="Center" Margin="4,0,0,0" Padding="4">
-							<materialIcons:MaterialIcon Kind="Add" Width="22" Height="22" Foreground="{DynamicResource PrimaryColor}" />
-						</Button>
+						<Button Command="{Binding PasteImageCommand}" IsVisible="False" HotKey="Ctrl+v" />
+						<Menu Classes="Single">
+							<MenuItem
+							Classes="NoPressedAnimation"
+							CornerRadius="{DynamicResource LgCornerRadius}"
+							HorizontalAlignment="Left" Margin="4,0,0,0" Padding="4"
+							Cursor="Hand" Height="32" VerticalAlignment="Center"
+							shadui:MenuItemAssist.PopupPlacement="TopEdgeAlignedLeft"
+							shadui:MenuItemAssist.PopupVerticalOffset="0">
+								<MenuItem.Header>
+									<Button VerticalAlignment="Center" IsHitTestVisible="False">
+										<materialIcons:MaterialIcon Kind="Add" Width="22" Height="22" Foreground="{DynamicResource PrimaryColor}" />
+									</Button>
+								</MenuItem.Header>
+								<MenuItem Header="Upload Image" Width="160" Command="{Binding OpenFilePickerCommand}" IsVisible="{Binding CanSend}">
+									<MenuItem.Icon>
+										<materialIcons:MaterialIcon Kind="Upload" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
+									</MenuItem.Icon>
+								</MenuItem>
+							</MenuItem>
+						</Menu>
 						<TextBox Name="ChatBox" Grid.Column="1" Classes="" AcceptsReturn="True" IsEnabled="{Binding CanSend}"
 								 MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxMessageContentLength}}"
 								 shadui:ControlAssist.MaxHeight="100" IsVisible="{Binding !InTimeout}"
@@ -155,7 +173,7 @@
 							Width="240">
 				<shadui:Sidebar.Header>
 					<StackPanel Orientation="Horizontal">
-						
+
 					</StackPanel>
 				</shadui:Sidebar.Header>
 				<Grid>

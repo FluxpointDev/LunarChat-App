@@ -29,5 +29,10 @@
 					Classes="Destructive"
 					Content="Delete Server" />
 		</StackPanel>
+		<StackPanel Spacing="10">
+			<Button Command="{Binding SaveSettingsCommand}" IsEnabled="{Binding CanManage}"
+			Classes="Primary"
+			Content="Clear" />
+		</StackPanel>
 	</StackPanel>
 </UserControl>

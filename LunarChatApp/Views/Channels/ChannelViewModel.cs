@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -17,6 +18,8 @@ using LunarChatSharp.Rest.Servers;
 using LunarChatSharp.Websocket.Events.Messages;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -30,7 +33,6 @@ public partial class ChannelViewModel : ViewModelBase
     {
         state = st;
         services = sv;
-
         if (OperatingSystem.IsAndroid() || OperatingSystem.IsIOS())
             expandMembers = false;
 
@@ -93,6 +95,48 @@ public partial class ChannelViewModel : ViewModelBase
 
             }
         });
+    }
+
+    [RelayCommand]
+    public async Task PasteImage()
+    {
+        var topLevel = TopLevel.GetTopLevel(services.MainControl)!;
+
+        var data = await topLevel?.Clipboard?.TryGetDataAsync();
+        if (data == null)
+            return;
+
+        try
+        {
+            var item = data.Items.FirstOrDefault();
+            if (item == null)
+                return;
+
+            var file = await item.TryGetBitmapAsync();
+            if (file == null)
+                return;
+
+            using (Stream stream = new MemoryStream())
+            {
+                file.Save(stream);
+                await services.Rest.SendMesssageAsync(services.State.Socket.CurrentChannel?.Id, new CreateMessageRequest
+                {
+                    Attachments = new CreateAttachmentRequest[]
+                    {
+                        new CreateAttachmentRequest(stream, "image.png")
+                    }
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
+        finally
+        {
+            data.Dispose();
+        }
+
     }
 
     private async Task ExpandChannels(bool? value)
@@ -210,7 +254,8 @@ public partial class ChannelViewModel : ViewModelBase
                     Id = message.Id,
                     CreatedAt = message.CreatedAt,
                     Source = message.Source,
-                    SystemMessage = message.SystemMessage
+                    SystemMessage = message.SystemMessage,
+                    Attachments = message.Attachments
                 })
             });
         });
@@ -389,6 +434,28 @@ public partial class ChannelViewModel : ViewModelBase
             });
         }
         catch { }
+    }
+
+    [RelayCommand]
+    public async Task OpenFilePicker()
+    {
+        var files = await services.FilePicker();
+        if (!files.Any())
+            return;
+
+        _ = Task.Run(async () =>
+        {
+            using (Stream stream = await files.First().OpenReadAsync())
+            {
+                await services.Rest.SendMesssageAsync(services.State.Socket.CurrentChannel?.Id, new CreateMessageRequest
+                {
+                    Attachments = new CreateAttachmentRequest[]
+                    {
+                        new CreateAttachmentRequest(stream, files.First().Name)
+                    }
+                });
+            }
+        });
     }
 
     [RelayCommand]

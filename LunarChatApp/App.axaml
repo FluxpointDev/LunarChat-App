@@ -32,7 +32,7 @@
     <Application.Styles>
         <themes:ShadTheme />
         <!--Breaks web :(-->
-        <!--<labs:ControlThemes />-->
+        <labs:ControlThemes />
         <materialIcons:MaterialIconStyles />
         <StyleInclude Source="/Assets/Styles/Markdown.axaml"/>
     </Application.Styles>

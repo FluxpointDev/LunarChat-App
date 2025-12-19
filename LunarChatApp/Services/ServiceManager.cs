@@ -1,18 +1,22 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Platform.Storage;
 using LunarChatApp.ViewModels.Dialogs;
 using LunarChatSharp;
 using LunarChatSharp.Rest;
 using LunarChatSharp.Websocket;
 using ShadUI;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LunarChatApp.Services;
 
 public sealed class ServiceManager
 {
-    public static bool IsDev = false;
-    public static bool UseProxy = false;
+    public static bool IsDev = true;
+    public static bool UseDevAPI = true;
+    public static bool UseProxy = true;
     public readonly PageManager PageManager;
     public readonly TestState State;
     public readonly LunarClient Client;
@@ -21,6 +25,7 @@ public sealed class ServiceManager
     public readonly ThemeWatcher ThemeWatcher;
     public readonly DialogService Dialogs;
     public readonly ToastManager ToastManager;
+    public readonly MediaService MediaService;
     public Visual MainControl;
     public ServiceManager(PageManager page, TestState st, LunarClient client, ThemeWatcher theme, DialogService diag, ToastManager toast)
     {
@@ -32,6 +37,7 @@ public sealed class ServiceManager
         ThemeWatcher = theme;
         Dialogs = diag;
         ToastManager = toast;
+        MediaService = new MediaService();
     }
 
     public PopupMaskModel Popup;
@@ -48,6 +54,20 @@ public sealed class ServiceManager
                 .WithDelay(3)
                 .Show();
         }
+    }
+
+    public async Task<IReadOnlyList<IStorageFile>> FilePicker()
+    {
+        var topLevel = TopLevel.GetTopLevel(MainControl)!;
+        if (topLevel != null && topLevel.Clipboard != null)
+        {
+            return await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
+            {
+                FileTypeFilter = new[] { FilePickerFileTypes.ImagePng, FilePickerFileTypes.ImageJpg }
+            });
+        }
+
+        return Array.Empty<IStorageFile>();
     }
 
     public void OpenLink(Uri url)
