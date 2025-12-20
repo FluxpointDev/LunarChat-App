@@ -31,11 +31,11 @@ public partial class ServerSettingsInvitesModel : ViewModelBase
         _searchTimer = new Timer(500); // 500ms debounce
         _searchTimer.Elapsed += SearchTimerElapsed;
         _searchTimer.AutoReset = false;
-        services.Socket.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+        services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
         services.Client.OnInviteCreate += InviteCreate;
         services.Client.OnInviteDelete += InviteDelete;
-        canCreate = services.Socket.State.CurrentServer.HasPermission(services.Socket.State.CurrentServer.Member, ChannelPermission.CreateInvites);
-        canManage = services.Socket.State.CurrentServer.HasPermission(services.Socket.State.CurrentServer.Member, ChannelPermission.ManageInvites);
+        canCreate = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ChannelPermission.CreateInvites);
+        canManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ChannelPermission.ManageInvites);
         PropertyChanged += OnPropertyChanged;
 
         foreach (var i in _originalItems) i.PropertyChanged += OnItemsChanged;
@@ -43,7 +43,7 @@ public partial class ServerSettingsInvitesModel : ViewModelBase
 
         _ = Task.Run(async () =>
         {
-            var Invites = await services.Rest.GetServerInvitesAsync(services.Socket.State.CurrentServer.Server.Id);
+            var Invites = await services.Rest.GetServerInvitesAsync(services.State.CurrentServer.Server.Id);
             if (Invites == null)
                 return;
 
@@ -54,7 +54,8 @@ public partial class ServerSettingsInvitesModel : ViewModelBase
                     services = services,
                     Code = x.Code,
                     Inviter = x.Inviter.GetCurrentNameDiscrim(),
-                    Uses = x.Uses,
+                    Uses = x.MaxUses != 0 ? $"{x.Uses}/{x.MaxUses}" : x.Uses.ToString(),
+                    Expires = x.ExpiresAt.HasValue ? x.ExpiresAt.Value.ToLocalTime().ToString("dd/MM/yyyy (hh:mm tt)") : null,
                     channelId = x.ChannelId,
                     Channel = services.Socket.State.Channels.TryGetValue(x.ChannelId, out var channel) ? "#" + channel.Name : "#invalid-channel"
                 }));
@@ -69,7 +70,7 @@ public partial class ServerSettingsInvitesModel : ViewModelBase
 
     private async Task InviteDelete(RestServer server, string arg2)
     {
-        if (server.Id != services.Socket.State.CurrentServer.Server.Id)
+        if (server.Id != services.State.CurrentServer.Server.Id)
             return;
 
         var item = _originalItems.FirstOrDefault(x => x.Code == arg2);
@@ -86,7 +87,7 @@ public partial class ServerSettingsInvitesModel : ViewModelBase
 
     private async Task InviteCreate(RestServer server, RestInvite invite)
     {
-        if (server.Id != services.Socket.State.CurrentServer.Server.Id)
+        if (server.Id != services.State.CurrentServer.Server.Id)
             return;
 
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
@@ -96,7 +97,8 @@ public partial class ServerSettingsInvitesModel : ViewModelBase
                 services = services,
                 Inviter = invite.Inviter.GetCurrentNameDiscrim(),
                 Code = invite.Code,
-                Uses = invite.Uses,
+                Expires = invite.ExpiresAt.HasValue ? invite.ExpiresAt.Value.ToLocalTime().ToString("dd/MM/yyyy (hh:mm tt)") : null,
+                Uses = invite.MaxUses != 0 ? $"{invite.Uses}/{invite.MaxUses}" : invite.Uses.ToString(),
                 channelId = invite.ChannelId,
                 Channel = services.Socket.State.Channels.TryGetValue(invite.ChannelId, out var channel) ? "#" + channel.Name : "#invalid-channel"
             });
@@ -105,14 +107,14 @@ public partial class ServerSettingsInvitesModel : ViewModelBase
 
     }
 
-    public async Task PermissionUpdate()
+    public async Task PermissionUpdate(RestServer server)
     {
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             if (CanCreate.HasValue)
-                CanCreate = services.Socket.State.CurrentServer.HasPermission(services.Socket.State.CurrentServer.Member, ChannelPermission.CreateInvites);
+                CanCreate = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ChannelPermission.CreateInvites);
 
-            CanManage = services.Socket.State.CurrentServer.HasPermission(services.Socket.State.CurrentServer.Member, ChannelPermission.ManageInvites);
+            CanManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ChannelPermission.ManageInvites);
         });
 
     }
@@ -218,7 +220,7 @@ public partial class ServerSettingsInvitesModel : ViewModelBase
     [RelayCommand]
     public void CreateInvite()
     {
-        if (!services.Socket.State.CurrentServer.Channels.Any())
+        if (!services.State.CurrentServer.Channels.Any())
             return;
 
         services.Dialogs.Create(new CreateInviteDialog(), new CreateInviteDialogModel(), "Create Invite").WithSubmit(SubmitInvite).Open();
@@ -233,7 +235,7 @@ public partial class ServerSettingsInvitesModel : ViewModelBase
         CreateInviteRequest req = model.CreateRequest();
         try
         {
-            var Channel = services.Socket.State.CurrentServer.Channels.Values.First().Id;
+            var Channel = services.State.CurrentServer.Channels.Values.First().Id;
             RestInvite invite = await services.Rest.CreateInviteAsync(Channel, req);
             services.CopyText(invite.Code);
         }
@@ -259,7 +261,10 @@ public partial class InviteListItem : ObservableObject
     public string channelId;
 
     [ObservableProperty]
-    private ulong uses;
+    private string uses;
+
+    [ObservableProperty]
+    private string expires;
 
     [RelayCommand]
     public void CopyInvite()

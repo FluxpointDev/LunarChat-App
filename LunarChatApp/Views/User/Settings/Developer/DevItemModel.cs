@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
+using LunarChatSharp.Rest.Dev;
 using System;
 using System.Threading.Tasks;
 
@@ -8,13 +9,28 @@ namespace LunarChatApp.Views.User.Settings.Developer;
 
 public partial class DevItemModel : ViewModelBase
 {
-    public DevItemModel(ServiceManager sv, string id, string name, bool isTeam, Func<DevItemModel, Task> ac)
+    public DevItemModel(ServiceManager sv, RestTeam team, Func<DevItemModel, Task> ac)
     {
         services = sv;
-        Id = id;
-        Name = name;
-        Fallback = GetFallback(name);
-        IsTeam = isTeam;
+        IsTeam = true;
+        Id = team.Id;
+        Name = team.Name;
+        Fallback = GetFallback(team.Name);
+        if (!string.IsNullOrEmpty(team.IconId))
+            Icon = new Uri(team.GetIconUrl());
+
+        action = ac;
+    }
+
+    public DevItemModel(ServiceManager sv, RestApp app, Func<DevItemModel, Task> ac)
+    {
+        services = sv;
+        Id = app.Id;
+        Name = app.Name;
+        Fallback = GetFallback(app.Name);
+        if (!string.IsNullOrEmpty(app.AvatarId))
+            Icon = new Uri(app.GetAvatarUrl());
+
         action = ac;
     }
 
@@ -38,6 +54,9 @@ public partial class DevItemModel : ViewModelBase
 
     [ObservableProperty]
     private string _fallback;
+
+    [ObservableProperty]
+    private Uri? icon;
 
     [RelayCommand]
     public void Select()

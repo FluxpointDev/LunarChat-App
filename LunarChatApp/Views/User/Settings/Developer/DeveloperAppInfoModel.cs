@@ -6,6 +6,8 @@ using LunarChatApp.Views.Dialogs;
 using LunarChatSharp;
 using LunarChatSharp.Rest.Dev;
 using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.Views.User.Settings.Developer;
@@ -27,6 +29,8 @@ public partial class DeveloperAppInfoModel : ViewModelBase
         _website = app.Website;
         _terms = app.Terms;
         _privacy = app.Privacy;
+        if (!string.IsNullOrEmpty(app.AvatarId))
+            Icon = new Uri(app.GetAvatarUrl());
     }
 
     [ObservableProperty]
@@ -50,6 +54,9 @@ public partial class DeveloperAppInfoModel : ViewModelBase
     [ObservableProperty]
     private string? _privacy;
 
+    [ObservableProperty]
+    private Uri? icon;
+
     [RelayCommand]
     public void Back()
     {
@@ -66,6 +73,44 @@ public partial class DeveloperAppInfoModel : ViewModelBase
     public void InviteApp()
     {
         services.Dialogs.Create(new InviteAppDialog(), new InviteAppDialogModel(services, app.Id), "Invite " + app.Name).WithSubmit(InviteApp).Open();
+    }
+
+    [RelayCommand]
+    public async Task UploadIcon()
+    {
+        var files = await services.FilePicker();
+        if (!files.Any())
+            return;
+
+        try
+        {
+            RestApp? getApp = null;
+            using (Stream stream = await files.First().OpenReadAsync())
+            {
+                getApp = await services.Rest.EditAppAsync(Id, new EditAppRequest
+                {
+                    Avatar = Utils.GetImageBase64(stream)
+                });
+            }
+            app?.AvatarId = getApp.AvatarId;
+            Icon = new Uri(getApp.GetAvatarUrl());
+        }
+        catch { }
+    }
+
+    [RelayCommand]
+    public async Task ClearIcon()
+    {
+        try
+        {
+            await services.Rest.EditAppAsync(Id, new EditAppRequest
+            {
+                Avatar = ""
+            });
+            app?.AvatarId = null;
+            Icon = null;
+        }
+        catch { }
     }
 
     public async Task InviteApp(UserControl control)
@@ -100,7 +145,7 @@ public partial class DeveloperAppInfoModel : ViewModelBase
         try
         {
             UpdateAppDialogModel? model = control.DataContext as UpdateAppDialogModel;
-            var getApp = await services.Rest.EditAppAsync(Id, new CreateAppRequest
+            var getApp = await services.Rest.EditAppAsync(Id, new EditAppRequest
             {
                 Name = model.Name,
                 Description = model.Description ?? "",

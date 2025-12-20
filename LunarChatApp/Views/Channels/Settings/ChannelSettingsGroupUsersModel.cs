@@ -37,13 +37,13 @@ public partial class ChannelSettingsGroupUsersModel : ViewModelBase
         services.Client.OnGroupUpdate += GroupUpdate;
         services.Client.OnGroupAddUser += AddUser;
         services.Client.OnGroupRemoveUser += RemoveUser;
-        canManage = services.Client.CurrentId == services.Socket.State.CurrentChannel?.GroupSettings?.OwnerId;
+        canManage = services.Client.CurrentId == services.State.CurrentChannel?.GroupSettings?.OwnerId;
         foreach (var i in _originalItems) i.PropertyChanged += OnItemsChanged;
         Items = new ObservableCollection<GroupUserListItem>(_originalItems);
 
         _ = Task.Run(async () =>
         {
-            var Users = await services.Rest.GetAsync<RestUser[]>($"/groups/{services.Socket.State.CurrentChannel?.Id}/users");
+            var Users = await services.Rest.GetAsync<RestUser[]>($"/groups/{services.State.CurrentChannel?.Id}/users");
             if (Users == null)
                 return;
 
@@ -59,7 +59,7 @@ public partial class ChannelSettingsGroupUsersModel : ViewModelBase
 
     private async Task RemoveUser(RestChannel channel, string arg2)
     {
-        if (channel.Id != services.Socket.State.CurrentChannel?.Id)
+        if (channel.Id != services.State.CurrentChannel?.Id)
             return;
 
         var item = _originalItems.FirstOrDefault(x => x.id == arg2);
@@ -76,7 +76,7 @@ public partial class ChannelSettingsGroupUsersModel : ViewModelBase
 
     private async Task AddUser(RestChannel channel, RestUser user)
     {
-        if (channel.Id != services.Socket.State.CurrentChannel?.Id)
+        if (channel.Id != services.State.CurrentChannel?.Id)
             return;
 
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
@@ -89,12 +89,12 @@ public partial class ChannelSettingsGroupUsersModel : ViewModelBase
 
     private async Task GroupUpdate(RestChannel channel, UpdateChannelRequest request)
     {
-        if (channel.Id != services.Socket.State.CurrentChannel?.Id)
+        if (channel.Id != services.State.CurrentChannel?.Id)
             return;
 
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            CanManage = services.Client.CurrentId == services.Socket.State.CurrentChannel?.GroupSettings?.OwnerId;
+            CanManage = services.Client.CurrentId == services.State.CurrentChannel?.GroupSettings?.OwnerId;
 
 
             foreach (var i in _originalItems)
@@ -206,7 +206,7 @@ public partial class ChannelSettingsGroupUsersModel : ViewModelBase
         {
             AddFriendDialogModel? data = control.DataContext as AddFriendDialogModel;
             var friend = services.State.Socket.Relations.Values.FirstOrDefault(x => x.UserId == data.Username || x.Username == data.Username);
-            await services.Rest.PutAsync($"/groups/{services.State.Socket.CurrentChannel?.Id}/users", new GroupAddUserRequest
+            await services.Rest.PutAsync($"/groups/{services.State.CurrentChannel?.Id}/users", new GroupAddUserRequest
             {
                 UserId = friend.UserId
             });
@@ -240,7 +240,7 @@ public partial class GroupUserListItem : ObservableObject
     {
         Name = user.GetCurrentNameDiscrim();
         RemoveItemText = "Remove " + Name;
-        CanManage = services.Client.CurrentId == services.Socket.State.CurrentChannel?.GroupSettings?.OwnerId && id != services.Socket.State.CurrentChannel?.GroupSettings?.OwnerId;
+        CanManage = services.Client.CurrentId == services.State.CurrentChannel?.GroupSettings?.OwnerId && id != services.State.CurrentChannel?.GroupSettings?.OwnerId;
         CanTransferOwner = CanManage && !isBot;
     }
 
@@ -277,7 +277,7 @@ public partial class GroupUserListItem : ObservableObject
 
         try
         {
-            await services.Rest.UpdateChannelAsync(services.Socket.State.CurrentChannel.Id, new UpdateChannelRequest
+            await services.Rest.UpdateChannelAsync(services.State.CurrentChannel.Id, new UpdateChannelRequest
             {
                 OwnerId = id
             });
@@ -291,9 +291,9 @@ public partial class GroupUserListItem : ObservableObject
         try
         {
             if (isBot)
-                await services.Rest.RemoveGroupAppAsync(services.Socket.State.CurrentChannel.Id, id);
+                await services.Rest.RemoveGroupAppAsync(services.State.CurrentChannel.Id, id);
             else
-                await services.Rest.DeleteAsync($"/groups/{services.Socket.State.CurrentChannel.Id}/users/{id}");
+                await services.Rest.DeleteAsync($"/groups/{services.State.CurrentChannel.Id}/users/{id}");
         }
         catch { }
     }

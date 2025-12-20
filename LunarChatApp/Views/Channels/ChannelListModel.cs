@@ -3,6 +3,7 @@ using LunarChatApp.Services;
 using LunarChatApp.ViewModels.Servers;
 using LunarChatApp.Views;
 using LunarChatSharp.Rest.Channels;
+using LunarChatSharp.Rest.Servers;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,18 +18,18 @@ public partial class ChannelListModel : ViewModelBase
     {
         state = st;
         services = sv;
-        bool CanManage = services.State.Socket.CurrentServer.CanManageChannel(services.State.Socket.CurrentServer.Member);
+        bool CanManage = services.State.CurrentServer.CanManageChannel(services.State.CurrentServer.Member);
         if (ChannelsList == null)
-            ChannelsList = new ObservableCollection<ChannelItem>(state.Socket.CurrentServer.Channels.Values.Select(x => new ChannelItem() { DataContext = new ChannelItemModel(services, state, x, CanManage) }));
-        state.Socket.CurrentServer.OnChannelUpdate += ChannelUpdate;
-        state.Socket.CurrentServer.OnChannelDelete += ChannelDelete;
-        state.Socket.CurrentServer.OnChannelCreate += Server_OnChannelCreate;
-        services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+            ChannelsList = new ObservableCollection<ChannelItem>(state.CurrentServer.Channels.Values.Select(x => new ChannelItem() { DataContext = new ChannelItemModel(services, state, x, CanManage) }));
+        services.Client.OnChannelUpdate += ChannelUpdate;
+        services.Client.OnChannelDelete += ChannelDelete;
+        services.Client.OnChannelCreate += Server_OnChannelCreate;
+        services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
     }
 
-    private async Task PermissionUpdate()
+    private async Task PermissionUpdate(RestServer server)
     {
-        bool CanManage = services.State.Socket.CurrentServer.CanManageChannel(services.State.Socket.CurrentServer.Member);
+        bool CanManage = services.State.CurrentServer.CanManageChannel(services.State.CurrentServer.Member);
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             foreach (var i in ChannelsList)
@@ -40,12 +41,15 @@ public partial class ChannelListModel : ViewModelBase
 
     private async Task ChannelDelete(RestChannel channel)
     {
-        ChannelItem? item = ChannelsList.FirstOrDefault(x => (x.DataContext as ChannelItemModel).id == channel.Id);
-        if (item == null)
+        if (state.CurrentServer == null || state.CurrentServer.Server?.Id != channel.ServerId)
             return;
 
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
+            ChannelItem? item = ChannelsList.FirstOrDefault(x => (x.DataContext as ChannelItemModel).id == channel.Id);
+            if (item == null)
+                return;
+
             ChannelsList.Remove(item);
         });
 
@@ -53,19 +57,25 @@ public partial class ChannelListModel : ViewModelBase
 
     private async Task ChannelUpdate(RestChannel channel, UpdateChannelRequest request)
     {
-        ChannelItem? item = ChannelsList.FirstOrDefault(x => (x.DataContext as ChannelItemModel).id == channel.Id);
-        if (item == null)
+        if (state.CurrentServer == null || state.CurrentServer.Server?.Id != channel.ServerId)
             return;
 
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
+            ChannelItem? item = ChannelsList.FirstOrDefault(x => (x.DataContext as ChannelItemModel).id == channel.Id);
+            if (item == null)
+                return;
+
             (item.DataContext as ChannelItemModel).Name = channel.Name;
         });
     }
 
     private async Task Server_OnChannelCreate(RestChannel channel)
     {
-        bool CanManage = services.State.Socket.CurrentServer.CanManageChannel(services.State.Socket.CurrentServer.Member);
+        if (state.CurrentServer == null || state.CurrentServer.Server?.Id != channel.ServerId)
+            return;
+
+        bool CanManage = services.State.CurrentServer.CanManageChannel(services.State.CurrentServer.Member);
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             ChannelsList.Add(new ChannelItem { DataContext = new ChannelItemModel(services, state, channel, CanManage) });

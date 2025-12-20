@@ -44,11 +44,11 @@ public partial class DeveloperListModel : ViewModelBase
                     if (dev.Teams.Any())
                     {
                         Items.AddRange(dev.Teams.Select(x => new TeamListItem { Id = x.Id, Name = x.Name }));
-                        TeamsList.AddRange(dev.Teams.Select(x => new DevItem { DataContext = new DevItemModel(services, x.Id, x.Name, true, ac) }));
+                        TeamsList.AddRange(dev.Teams.Select(x => new DevItem { DataContext = new DevItemModel(services, x, ac) }));
                     }
 
                     if (dev.Apps.Any())
-                        AppsList.AddRange(dev.Apps.Select(x => new DevItem { DataContext = new DevItemModel(services, x.Id, x.Name, false, ac) }));
+                        AppsList.AddRange(dev.Apps.Select(x => new DevItem { DataContext = new DevItemModel(services, x, ac) }));
                     Loaded = true;
                 });
             }
@@ -103,7 +103,7 @@ public partial class DeveloperListModel : ViewModelBase
             {
                 Name = model.Name
             });
-            AppsList.Add(new DevItem { DataContext = new DevItemModel(services, app.Id, app.Name, false, actionSelect) });
+            AppsList.Add(new DevItem { DataContext = new DevItemModel(services, app, actionSelect) });
 
         }
         catch { }
@@ -119,7 +119,7 @@ public partial class DeveloperListModel : ViewModelBase
                 Name = model.Name
             });
             Items.Add(new TeamListItem { Id = team.Id, Name = team.Name });
-            TeamsList.Add(new DevItem { DataContext = new DevItemModel(services, team.Id, team.Name, true, actionSelect) });
+            TeamsList.Add(new DevItem { DataContext = new DevItemModel(services, team, actionSelect) });
 
         }
         catch { }

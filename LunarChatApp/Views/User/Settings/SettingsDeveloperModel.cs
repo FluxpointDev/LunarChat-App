@@ -31,6 +31,8 @@ public partial class SettingsDeveloperModel : ViewModelBase
             try
             {
                 var Team = await services.Rest.GetTeamAsync(item.Id);
+                if (Team == null)
+                    return;
                 SelectedPage = new DeveloperTeamInfo()
                 {
                     DataContext = new DeveloperTeamInfoModel(services, Team, BackAction)
@@ -43,6 +45,8 @@ public partial class SettingsDeveloperModel : ViewModelBase
             try
             {
                 var App = await services.Rest.GetAppAsync(item.Id);
+                if (App == null)
+                    return;
                 SelectedPage = new DeveloperAppInfo()
                 {
                     DataContext = new DeveloperAppInfoModel(services, App, BackAction)

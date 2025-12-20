@@ -1,4 +1,5 @@
 <UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:controls="using:Avalonia.Labs.Controls"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:developer="using:LunarChatApp.Views.User.Settings.Developer"
@@ -10,7 +11,10 @@
 	<Button Width="150" Height="130" Margin="0" Padding="0" HorizontalAlignment="Left" Command="{Binding SelectCommand}">
 		<shadui:Card Width="150" Height="130" Margin="0" Padding="4" HorizontalAlignment="Center" HasShadow="False">
 			<shadui:Card.Header>
-				<shadui:Avatar Height="60" Width="60" Fallback="{Binding Fallback}"></shadui:Avatar>
+				<StackPanel>
+					<controls:AsyncImage Height="60" Width="60" Source="{Binding Icon}" IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"></controls:AsyncImage>
+					<shadui:Avatar Height="60" Width="60" Fallback="{Binding Fallback}" IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNull}}"></shadui:Avatar>
+				</StackPanel>
 			</shadui:Card.Header>
 			<TextBlock Margin="4,0,4,0" HorizontalAlignment="Center" Text="{Binding Name}"></TextBlock>
 		</shadui:Card>

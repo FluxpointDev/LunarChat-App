@@ -18,8 +18,8 @@ public partial class ServerSettingsSystemModel : ViewModelBase
     public ServerSettingsSystemModel(ServiceManager sv)
     {
         services = sv;
-        canManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
-        services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+        canManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ChannelPermission.ManageChannel);
+        services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
         Items = new ObservableCollection<ChannelListItem>
         {
             new ChannelListItem
@@ -27,7 +27,7 @@ public partial class ServerSettingsSystemModel : ViewModelBase
                 id = ""
             }
         };
-        Items.AddRange(services.State.Socket.CurrentServer.Channels.Values.Select(x => new ChannelListItem
+        Items.AddRange(services.State.CurrentServer.Channels.Values.Select(x => new ChannelListItem
         {
             id = x.Id,
             Name = x.Name
@@ -35,11 +35,11 @@ public partial class ServerSettingsSystemModel : ViewModelBase
         UpdateSystemMessages();
     }
 
-    private async Task PermissionUpdate()
+    private async Task PermissionUpdate(RestServer server)
     {
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
+            CanManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ChannelPermission.ManageChannel);
         });
 
     }
@@ -49,7 +49,7 @@ public partial class ServerSettingsSystemModel : ViewModelBase
 
     public void UpdateSystemMessages()
     {
-        var server = services.State.Socket.CurrentServer;
+        var server = services.State.CurrentServer;
         if (server == null)
             return;
 
@@ -162,7 +162,7 @@ public partial class ServerSettingsSystemModel : ViewModelBase
     {
         try
         {
-            await services.Rest.EditServerAsync(services.State.Socket.CurrentServer?.Server.Id!, new LunarChatSharp.Rest.Servers.EditServerRequest
+            await services.Rest.EditServerAsync(services.State.CurrentServer?.Server.Id!, new LunarChatSharp.Rest.Servers.EditServerRequest
             {
                 SystemMessages = new RestServerSystemMessages
                 {

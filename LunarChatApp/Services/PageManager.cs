@@ -43,20 +43,20 @@ public sealed class PageManager(ServiceProvider serviceProvider)
         if (server == null)
             return;
 
-        if (server.Id != services.State.Socket.CurrentServer?.Server.Id)
+        if (server.Id != services.State.CurrentServer?.Server.Id)
         {
-            services.State.Socket.CurrentServer = services.State.Socket.Servers[server.Id];
+            services.State.CurrentServer = services.State.Socket.Servers[server.Id];
             services.Client.OnSelectServer?.Invoke(server);
         }
 
-        if (services.State.Socket.CurrentServer != null)
+        if (services.State.CurrentServer != null)
         {
-            if (channel == null && services.State.Socket.CurrentServer.Channels.Any())
-                channel = services.State.Socket.CurrentServer.Channels.FirstOrDefault().Value;
+            if (channel == null && services.State.CurrentServer.Channels.Any())
+                channel = services.State.CurrentServer.Channels.FirstOrDefault().Value;
 
-            if (channel != null && services.State.Socket.CurrentChannel?.Id != channel.Id)
+            if (channel != null && services.State.CurrentChannel?.Id != channel.Id)
             {
-                services.State.Socket.CurrentChannel = channel;
+                services.State.CurrentChannel = channel;
                 services.Client.OnSelectChannel?.Invoke(channel);
             }
         }
@@ -66,12 +66,12 @@ public sealed class PageManager(ServiceProvider serviceProvider)
     {
         if (channel != null)
         {
-            services.State.Socket.CurrentChannel = channel;
+            services.State.CurrentChannel = channel;
             services.Client.OnSelectChannel?.Invoke(channel);
         }
         else
         {
-            services.State.Socket.CurrentChannel = null;
+            services.State.CurrentChannel = null;
             services.Client.OnSelectChannel?.Invoke(null);
         }
     }

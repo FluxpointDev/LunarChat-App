@@ -68,6 +68,11 @@
                         CanUserSort="False"
                         Header="Uses"
                         IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Binding="{Binding Expires}"
+                        CanUserSort="False"
+                        Header="Expires"
+                        IsReadOnly="True" />
                     <DataGridTemplateColumn Header="">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>

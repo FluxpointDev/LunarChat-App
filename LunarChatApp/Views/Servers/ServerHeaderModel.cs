@@ -24,12 +24,12 @@ public partial class ServerHeaderModel : ViewModelBase
         isOwner = sv.Client.CurrentId == s.OwnerId;
         UpdatePermissions();
         services.Client.OnServerUpdate += ServerUpdate;
-        services.State.Socket.CurrentServer.OnPermissionUpdate += Update;
+        services.State.CurrentServer.OnPermissionUpdate += Update;
     }
 
     private async Task ServerUpdate(RestServer server, ServerUpdateEvent ev)
     {
-        if (server.Id != services.State.Socket.CurrentServer?.Server.Id)
+        if (server.Id != services.State.CurrentServer?.Server.Id)
             return;
 
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
@@ -40,7 +40,7 @@ public partial class ServerHeaderModel : ViewModelBase
 
     }
 
-    public async Task Update()
+    public async Task Update(RestServer server)
     {
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
@@ -54,9 +54,9 @@ public partial class ServerHeaderModel : ViewModelBase
 
     public void UpdatePermissions()
     {
-        CanManageChannels = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
-        CanChangeNickname = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ChangeNickname) || services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ManageNicknames);
-        CanViewSettings = services.State.Socket.CurrentServer.CanManageServer(services.State.Socket.CurrentServer.Member);
+        CanManageChannels = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ChannelPermission.ManageChannel);
+        CanChangeNickname = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.ChangeNickname) || services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.ManageNicknames);
+        CanViewSettings = services.State.CurrentServer.CanManageServer(services.State.CurrentServer.Member);
     }
 
     [ObservableProperty]
@@ -86,7 +86,7 @@ public partial class ServerHeaderModel : ViewModelBase
             {
                 Name = model.Name,
                 Topic = model.Topic,
-                ServerId = services.State.Socket.CurrentServer.Server.Id,
+                ServerId = services.State.CurrentServer.Server.Id,
                 Type = model.Type,
             });
         }
@@ -97,13 +97,13 @@ public partial class ServerHeaderModel : ViewModelBase
     [RelayCommand]
     public void CopyServerID()
     {
-        services.CopyText(services.State.Socket.CurrentServer?.Server.Id);
+        services.CopyText(services.State.CurrentServer?.Server.Id);
     }
 
     [RelayCommand]
     public void ChangeNickname()
     {
-        services.Dialogs.Create(new CreateNameDialog(), new CreateNameDialogModel { Name = services.State.Socket.CurrentServer?.Member.Nickname }, "Change Nickname").WithSubmit(SubmitNickname).Open();
+        services.Dialogs.Create(new CreateNameDialog(), new CreateNameDialogModel { Name = services.State.CurrentServer?.Member.Nickname }, "Change Nickname").WithSubmit(SubmitNickname).Open();
     }
 
     public async Task SubmitNickname(UserControl control)
@@ -114,7 +114,7 @@ public partial class ServerHeaderModel : ViewModelBase
 
         try
         {
-            await services.Rest.EditMemberAsync(services.State.Socket.CurrentServer.Server.Id, services.State.Socket.CurrentServer.Member.Id, new EditMemberRequest
+            await services.Rest.EditMemberAsync(services.State.CurrentServer.Server.Id, services.State.CurrentServer.Member.Id, new EditMemberRequest
             {
                 Nickname = model.Name ?? ""
             });
@@ -134,7 +134,7 @@ public partial class ServerHeaderModel : ViewModelBase
     [RelayCommand]
     public void OpenReportServer()
     {
-        services.Dialogs.Create(new ReportServerDialog(), new ReportServerDialogModel(), "Report Server: " + services.State.Socket.CurrentServer.Server.Name).Open();
+        services.Dialogs.Create(new ReportServerDialog(), new ReportServerDialogModel(), "Report Server: " + services.State.CurrentServer.Server.Name).Open();
     }
 
 
@@ -143,7 +143,7 @@ public partial class ServerHeaderModel : ViewModelBase
     {
         try
         {
-            await services.Rest.LeaveServerAsync(services.State.Socket.CurrentServer?.Server.Id);
+            await services.Rest.LeaveServerAsync(services.State.CurrentServer?.Server.Id);
             services.Client.OnSelectServer?.Invoke(null);
         }
         catch { }

@@ -1,4 +1,5 @@
 <UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:controls="using:Avalonia.Labs.Controls"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:local="using:LunarChatApp"
@@ -12,7 +13,10 @@
 	<Button IsEnabled="true" Command="{Binding SelectedServerCommand}" Margin="2" Padding="4">
 		<StackPanel>
 			<Border IsVisible="{Binding !IsFeature}" CornerRadius="12" ClipToBounds="True" ToolTip.Tip="{Binding Name}" ToolTip.Placement="Right">
-				<shadui:Avatar Fallback="{Binding Fallback}" Source="{Binding Icon}" Width="36" Height="36"></shadui:Avatar>
+				<StackPanel>
+					<controls:AsyncImage Source="{Binding Icon}" Width="36" Height="36" IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"></controls:AsyncImage>
+					<shadui:Avatar Fallback="{Binding Fallback}" IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNull}}"></shadui:Avatar>
+				</StackPanel>
 			</Border>
 			<Border IsVisible="{Binding ShowPlus}" CornerRadius="12" ClipToBounds="True" ToolTip.Tip="Join or Create server" ToolTip.Placement="Right">
 				<Border Width="36" Height="36" Background="{DynamicResource GhostColor}">

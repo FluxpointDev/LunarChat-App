@@ -1,0 +1,32 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:lunarchatsharp="using:LunarChatSharp"
+			 xmlns:materialIcons="using:Material.Icons.Avalonia"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:servers="using:LunarChatApp.Views.Dialogs.Servers"
+			 xmlns:shadui="using:ShadUI"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.CreateEmojiDialog"
+			 x:DataType="servers:CreateEmojiDialogModel">
+	<StackPanel Spacing="10" HorizontalAlignment="Left" Margin="10">
+		<TextBox MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxNameLength}}"
+				 Width="225"
+				 shadui:ControlAssist.Label="Name"
+				 Classes="Clearable"
+				 Text="{Binding Name}"
+				 Watermark="" />
+
+		<Label Classes="Small">Icon</Label>
+		<Border HorizontalAlignment="Left" CornerRadius="4" ClipToBounds="True" Width="90" Height="90"
+				BorderBrush="{DynamicResource BorderColor}" BorderThickness="2">
+			<Grid>
+				<Button Command="{Binding ClipboardIconCommand}" IsVisible="False" HotKey="Ctrl+v" />
+				<shadui:Avatar Width="80" Height="80" Source="{Binding Icon}" CornerRadius="4" IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"></shadui:Avatar>
+				<Button Opacity="0.6" Command="{Binding SetIconCommand}" CornerRadius="4" />
+				<materialIcons:MaterialIcon VerticalAlignment="Center" HorizontalAlignment="Center" Kind="Plus" Width="14" Height="14" IsHitTestVisible="False" Foreground="{DynamicResource PrimaryColor}" IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNull}}" />
+			</Grid>
+		</Border>
+
+	</StackPanel>
+</UserControl>

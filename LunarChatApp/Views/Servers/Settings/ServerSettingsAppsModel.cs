@@ -33,12 +33,12 @@ public partial class ServerSettingsAppsModel : ViewModelBase
         _searchTimer.AutoReset = false;
         if (IsGroup)
         {
-            canManage = sv.Socket.State.CurrentChannel?.GroupSettings?.OwnerId == services.Client.CurrentId;
+            canManage = sv.State.CurrentChannel?.GroupSettings?.OwnerId == services.Client.CurrentId;
         }
         else
         {
-            canManage = sv.Socket.State.CurrentServer.HasPermission(sv.Socket.State.CurrentServer.Member, ServerPermission.ManageApps);
-            sv.Socket.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+            canManage = sv.State.CurrentServer.HasPermission(sv.State.CurrentServer.Member, ServerPermission.ManageApps);
+            sv.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
         }
         sv.Client.OnAppAdd += AppAdd;
         sv.Client.OnAppUpdate += AppUpdate;
@@ -47,8 +47,8 @@ public partial class ServerSettingsAppsModel : ViewModelBase
 
         _ = Task.Run(async () =>
         {
-            var apps = IsGroup ? await sv.Rest.GetGroupAppsAsync(sv.Socket.State.CurrentChannel?.Id) :
-            await sv.Rest.GetServerAppsAsync(sv.State.Socket.CurrentServer?.Server.Id);
+            var apps = IsGroup ? await sv.Rest.GetGroupAppsAsync(sv.State.CurrentChannel?.Id) :
+            await sv.Rest.GetServerAppsAsync(sv.State.CurrentServer?.Server.Id);
             if (apps != null)
             {
                 foreach (var i in apps)
@@ -84,12 +84,12 @@ public partial class ServerSettingsAppsModel : ViewModelBase
     {
         if (IsGroup)
         {
-            if (services.State.Socket.CurrentChannel?.Id != channel?.Id)
+            if (services.State.CurrentChannel?.Id != channel?.Id)
                 return;
         }
         else
         {
-            if (services.State.Socket.CurrentServer?.Server?.Id != server?.Id)
+            if (services.State.CurrentServer?.Server?.Id != server?.Id)
                 return;
         }
 
@@ -106,16 +106,16 @@ public partial class ServerSettingsAppsModel : ViewModelBase
 
     }
 
-    private async Task AppUpdate(RestServer? server, RestChannel? channel, RestApp app, CreateAppRequest changed)
+    private async Task AppUpdate(RestServer? server, RestChannel? channel, RestApp app, EditAppRequest changed)
     {
         if (IsGroup)
         {
-            if (services.State.Socket.CurrentChannel?.Id != channel?.Id)
+            if (services.State.CurrentChannel?.Id != channel?.Id)
                 return;
         }
         else
         {
-            if (services.State.Socket.CurrentServer?.Server?.Id != server?.Id)
+            if (services.State.CurrentServer?.Server?.Id != server?.Id)
                 return;
         }
 
@@ -138,12 +138,12 @@ public partial class ServerSettingsAppsModel : ViewModelBase
     {
         if (IsGroup)
         {
-            if (services.State.Socket.CurrentChannel?.Id != channel?.Id)
+            if (services.State.CurrentChannel?.Id != channel?.Id)
                 return;
         }
         else
         {
-            if (services.State.Socket.CurrentServer?.Server?.Id != server?.Id)
+            if (services.State.CurrentServer?.Server?.Id != server?.Id)
                 return;
         }
 
@@ -159,11 +159,11 @@ public partial class ServerSettingsAppsModel : ViewModelBase
 
     }
 
-    private async Task PermissionUpdate()
+    private async Task PermissionUpdate(RestServer server)
     {
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            CanManage = services.Socket.State.CurrentServer.HasPermission(services.Socket.State.CurrentServer.Member, ServerPermission.ManageApps);
+            CanManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.ManageApps);
         });
 
     }
@@ -289,11 +289,11 @@ public partial class AppListItem(ServiceManager services, ServerSettingsAppsMode
         {
             if (apps.IsGroup)
             {
-                await services.Rest.RemoveGroupAppAsync(services.State.Socket.CurrentChannel?.Id, Id);
+                await services.Rest.RemoveGroupAppAsync(services.State.CurrentChannel?.Id, Id);
             }
             else
             {
-                await services.Rest.RemoveServerAppAsync(services.State.Socket.CurrentServer?.Server.Id, Id);
+                await services.Rest.RemoveServerAppAsync(services.State.CurrentServer?.Server.Id, Id);
             }
 
             var app = apps._originalItems.FirstOrDefault(x => x.Id == Id);

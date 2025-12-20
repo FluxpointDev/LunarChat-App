@@ -1,4 +1,5 @@
 ﻿using LibVLCSharp.Shared;
+using System;
 using System.Diagnostics;
 
 namespace LunarChatApp.Services;
@@ -9,11 +10,14 @@ public class MediaService
 
     public MediaService()
     {
-        Core.Initialize();
-        VLC = new LibVLC(enableDebugLogs: ServiceManager.IsDev);
-        if (ServiceManager.IsDev)
+        if (!OperatingSystem.IsBrowser())
         {
-            VLC.Log += VLC_Log;
+            Core.Initialize();
+            VLC = new LibVLC(enableDebugLogs: ServiceManager.IsDev);
+            if (ServiceManager.IsDev)
+            {
+                VLC.Log += VLC_Log;
+            }
         }
     }
 

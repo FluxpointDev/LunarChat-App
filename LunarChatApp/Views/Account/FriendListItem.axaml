@@ -12,9 +12,9 @@
 		<Grid Grid.ColumnDefinitions="*, auto" ColumnSpacing="20">
 			<StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
 				<StackPanel Orientation="Horizontal" Spacing="6">
-					<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
+					<!--<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
 						<Image Source="/Assets/avatar.png" Width="40" Height="40"></Image>
-					</Border>
+					</Border>-->
 					<StackPanel>
 						<TextBlock Text="{Binding DisplayName}"></TextBlock>
 						<TextBlock Classes="Muted" Text="{Binding Username}"></TextBlock>

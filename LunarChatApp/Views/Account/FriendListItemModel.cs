@@ -61,8 +61,8 @@ public partial class FriendListItemModel : ViewModelBase
                 return;
 
             await Task.Delay(new TimeSpan(0, 0, 1));
-            services.State.Socket.CurrentChannel = channel;
-            services.Client.OnSelectChannel?.Invoke(services.State.Socket.CurrentChannel);
+            services.State.CurrentChannel = channel;
+            services.Client.OnSelectChannel?.Invoke(services.State.CurrentChannel);
         }
         catch { }
     }
@@ -89,8 +89,8 @@ public partial class FriendListItemModel : ViewModelBase
         }
         if (channel == null)
             return;
-        services.State.Socket.CurrentChannel = channel;
-        services.Client.OnSelectChannel?.Invoke(services.State.Socket.CurrentChannel);
+        services.State.CurrentChannel = channel;
+        services.Client.OnSelectChannel?.Invoke(services.State.CurrentChannel);
     }
 
     [RelayCommand]

@@ -5,6 +5,10 @@ using LunarChatApp.Views;
 using LunarChatSharp;
 using LunarChatSharp.Core.Servers;
 using LunarChatSharp.Rest.Channels;
+using LunarChatSharp.Rest.Servers;
+using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.ViewModels.Channels.Settings;
@@ -19,26 +23,48 @@ public partial class ChannelSettingsOverviewModel : ViewModelBase
         channel = chan;
         ChannelNameEdit = chan.Name;
         ChannelTopicEdit = chan.Topic;
+        services.Client.OnGroupUpdate += GroupUpdate;
         if (chan.Type == LunarChatSharp.Core.Channels.ChannelType.Group)
         {
+            isGroup = true;
             CanManage = services.Client.CurrentId == chan.GroupSettings?.OwnerId;
+            if (!string.IsNullOrEmpty(chan.GroupSettings.IconId))
+                GroupIcon = new Uri(chan.GroupSettings.GetIconUrl());
         }
         else
         {
-            if (services.State.Socket.CurrentServer == null)
+            if (services.State.CurrentServer == null)
                 return;
 
-            services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
-            canManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageServer);
+            services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+            canManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.ManageServer);
         }
 
     }
 
-    private async Task PermissionUpdate()
+    private async Task GroupUpdate(RestChannel channel, UpdateChannelRequest req)
+    {
+        if (channel.Id != services.State.CurrentChannel?.Id || req.Icon == null)
+            return;
+
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            if (req.Icon == "")
+            {
+                GroupIcon = null;
+            }
+            else
+            {
+                GroupIcon = new Uri(channel.GroupSettings.GetIconUrl());
+            }
+        });
+    }
+
+    private async Task PermissionUpdate(RestServer server)
     {
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageServer);
+            CanManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.ManageServer);
         });
 
     }
@@ -47,10 +73,16 @@ public partial class ChannelSettingsOverviewModel : ViewModelBase
     private string? _channelNameEdit;
 
     [ObservableProperty]
+    private bool isGroup;
+
+    [ObservableProperty]
     private string? _channelTopicEdit;
 
     [ObservableProperty]
     private bool canManage;
+
+    [ObservableProperty]
+    private Uri groupIcon;
 
     [RelayCommand]
     public async Task UpdateChannel()
@@ -81,5 +113,37 @@ public partial class ChannelSettingsOverviewModel : ViewModelBase
         }
         catch { }
 
+    }
+
+    [RelayCommand]
+    public async Task UploadIcon()
+    {
+        var files = await services.FilePicker();
+        if (!files.Any())
+            return;
+
+        _ = Task.Run(async () =>
+        {
+            using (Stream stream = await files.First().OpenReadAsync())
+            {
+                await services.Rest.UpdateChannelAsync(channel.Id, new UpdateChannelRequest
+                {
+                    Icon = Utils.GetImageBase64(stream)
+                });
+            }
+        });
+    }
+
+    [RelayCommand]
+    public async Task ClearIcon()
+    {
+        try
+        {
+            await services.Rest.UpdateChannelAsync(channel.Id, new UpdateChannelRequest
+            {
+                Icon = ""
+            });
+        }
+        catch { }
     }
 }

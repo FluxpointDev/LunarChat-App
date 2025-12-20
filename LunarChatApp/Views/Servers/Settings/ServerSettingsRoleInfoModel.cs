@@ -4,7 +4,10 @@ using LunarChatApp.Services;
 using LunarChatSharp;
 using LunarChatSharp.Core.Servers;
 using LunarChatSharp.Rest.Roles;
+using LunarChatSharp.Rest.Servers;
 using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.Views.Servers.Settings;
@@ -22,7 +25,19 @@ public partial class ServerSettingsRoleInfoModel : ViewModelBase
         _roleName = role.Name;
         _color = role.Color;
         _allowEdit = role.Id != "0";
+        services.Client.OnRoleUpdate += RoleUpdate;
         Permissions = new RolePermissionsModel(role);
+        if (!string.IsNullOrEmpty(role.IconId))
+            Icon = new Uri(role.GetIconUrl());
+    }
+
+    private async Task RoleUpdate(RestServer server, RestRole role, EditRoleRequest ev)
+    {
+        if (role.Id != this.role.Id)
+            return;
+
+        if (ev.Icon != null)
+            Icon = string.IsNullOrEmpty(ev.Icon) ? null : new Uri(ev.GetIconUrl());
     }
 
     [ObservableProperty]
@@ -33,6 +48,9 @@ public partial class ServerSettingsRoleInfoModel : ViewModelBase
 
     [ObservableProperty]
     private string? _color;
+
+    [ObservableProperty]
+    private Uri icon;
 
     public RolePermissionsModel Permissions { get; set; }
 
@@ -63,19 +81,51 @@ public partial class ServerSettingsRoleInfoModel : ViewModelBase
         try
         {
             if (role.Id == "0")
-                await services.Rest.EditServerAsync(services.State.Socket.CurrentServer?.Server.Id, new LunarChatSharp.Rest.Servers.EditServerRequest
+                await services.Rest.EditServerAsync(services.State.CurrentServer?.Server.Id, new LunarChatSharp.Rest.Servers.EditServerRequest
                 {
                     DefaultPermissions = req.Permissions,
                 });
             else
             {
-                RestRole getRole = await services.Rest.EditRoleAsync(services.State.Socket.CurrentServer?.Server.Id, role.Id, req);
+                RestRole getRole = await services.Rest.EditRoleAsync(services.State.CurrentServer?.Server.Id, role.Id, req);
                 RoleName = getRole.Name;
                 role.Name = getRole.Name;
             }
         }
         catch { }
 
+    }
+
+    [RelayCommand]
+    public async Task UploadIcon()
+    {
+        var files = await services.FilePicker();
+        if (!files.Any())
+            return;
+
+        _ = Task.Run(async () =>
+        {
+            using (Stream stream = await files.First().OpenReadAsync())
+            {
+                await services.Rest.EditRoleAsync(services.State.CurrentServer?.Server?.Id, role.Id, new EditRoleRequest
+                {
+                    Icon = Utils.GetImageBase64(stream)
+                });
+            }
+        });
+    }
+
+    [RelayCommand]
+    public async Task ClearIcon()
+    {
+        try
+        {
+            await services.Rest.EditRoleAsync(services.State.CurrentServer?.Server?.Id, role.Id, new EditRoleRequest
+            {
+                Icon = ""
+            });
+        }
+        catch { }
     }
 }
 

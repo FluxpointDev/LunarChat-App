@@ -1,6 +1,8 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using LunarChatSharp.Core.Users;
+using LunarChatSharp.Rest.Channels;
 using LunarChatSharp.Websocket;
 using System;
 using System.Linq;
@@ -32,6 +34,8 @@ public partial class TestState : ObservableObject
     public UserStatusType StatusType;
     public string? StatusText;
     public ServersPage? CachedServersPage;
+    public SocketServerState? CurrentServer;
+    public RestChannel? CurrentChannel;
     public SocketState Socket;
 
     [ObservableProperty]
@@ -42,8 +46,10 @@ public partial class TestState : ObservableObject
 
     [ObservableProperty]
     private string? _displayName;
-
     public string? AboutMe { get; set; }
+
+    [ObservableProperty]
+    private Bitmap? avatar;
 
     public delegate void PageEventHandler(UserControl control);
     public event PageEventHandler? OnPageSelect;

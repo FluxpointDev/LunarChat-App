@@ -6,6 +6,7 @@ using LunarChatApp.ViewModels.Main;
 using LunarChatApp.Views;
 using LunarChatApp.Views.Main;
 using LunarChatSharp.Rest.Channels;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,25 +34,39 @@ public partial class DMsListModel : ViewModelBase
 
     private async Task GroupDelete(RestChannel channel)
     {
-        var item = CrockeryList.FirstOrDefault(x => (x.DataContext as DMListItemModel).id == channel.Id);
-        if (item == null)
-            return;
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
+            var item = CrockeryList.FirstOrDefault(x => (x.DataContext as DMListItemModel).id == channel.Id);
+            if (item == null)
+                return;
+
             CrockeryList.Remove(item);
         });
     }
 
     private async Task ChannelUpdate(RestChannel channel, UpdateChannelRequest request)
     {
-        var item = CrockeryList.FirstOrDefault(x => (x.DataContext as DMListItemModel).id == channel.Id);
-        if (item == null)
-            return;
-
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
+            var item = CrockeryList.FirstOrDefault(x => (x.DataContext as DMListItemModel).id == channel.Id);
+            if (item == null)
+                return;
+
+            var model = item.DataContext as DMListItemModel;
+
             if (request.Name != null)
-                item.Name = request.Name;
+                model.Name = request.Name;
+
+            if (request.Icon != null)
+            {
+                if (!string.IsNullOrEmpty(request.Icon))
+                    model.Avatar = new Uri(channel.GroupSettings.GetIconUrl());
+                else
+                {
+                    model.Fallback = channel.GetFallback();
+                    model.Avatar = null;
+                }
+            }
         });
 
     }

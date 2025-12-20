@@ -7,6 +7,7 @@ using LunarChatApp.Views;
 using LunarChatSharp;
 using LunarChatSharp.Rest.Users;
 using Material.Icons;
+using System;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.Components;
@@ -40,6 +41,10 @@ public partial class UserPopupModel : ViewModelBase
         Username = user.Username;
         AboutMe = new ObservableStringBuilder();
         AboutMe.Append(user.AboutMe);
+        if (!string.IsNullOrEmpty(user.AvatarId))
+            Avatar = new Uri(user.GetAvatarUrl());
+        else
+            fallback = user.GetFallback();
     }
 
     [RelayCommand]
@@ -58,6 +63,12 @@ public partial class UserPopupModel : ViewModelBase
 
     [ObservableProperty]
     private string username;
+
+    [ObservableProperty]
+    private Uri? avatar;
+
+    [ObservableProperty]
+    private string fallback;
 
     [ObservableProperty]
     private ObservableStringBuilder aboutMe;

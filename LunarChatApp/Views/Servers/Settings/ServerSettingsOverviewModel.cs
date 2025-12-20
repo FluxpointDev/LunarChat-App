@@ -5,6 +5,9 @@ using LunarChatApp.Views;
 using LunarChatSharp;
 using LunarChatSharp.Core.Servers;
 using LunarChatSharp.Rest.Servers;
+using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.ViewModels.Servers.Settings;
@@ -15,22 +18,59 @@ public partial class ServerSettingsOverviewModel : ViewModelBase
     public ServerSettingsOverviewModel(ServiceManager sv)
     {
         services = sv;
-        ServerNameEdit = services.State.Socket.CurrentServer.Server.Name;
-        services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
-        canManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageServer);
+        ServerNameEdit = services.State.CurrentServer.Server.Name;
+        services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+        canManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.ManageServer);
+        if (!string.IsNullOrEmpty(services.State.CurrentServer.Server.IconId))
+            ServerIcon = new Uri(services.State.CurrentServer.Server.GetIconUrl());
     }
 
-    private async Task PermissionUpdate()
+    private async Task PermissionUpdate(RestServer server)
     {
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageServer);
+            CanManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.ManageServer);
         });
 
     }
 
     [ObservableProperty]
     private string? _serverNameEdit;
+
+    [ObservableProperty]
+    private Uri serverIcon;
+
+    [RelayCommand]
+    public async Task UploadIcon()
+    {
+        var files = await services.FilePicker();
+        if (!files.Any())
+            return;
+
+        _ = Task.Run(async () =>
+        {
+            using (Stream stream = await files.First().OpenReadAsync())
+            {
+                await services.Rest.EditServerAsync(services.State.CurrentServer?.Server?.Id, new EditServerRequest
+                {
+                    Icon = Utils.GetImageBase64(stream)
+                });
+            }
+        });
+    }
+
+    [RelayCommand]
+    public async Task ClearIcon()
+    {
+        try
+        {
+            await services.Rest.EditServerAsync(services.State.CurrentServer?.Server?.Id, new EditServerRequest
+            {
+                Icon = ""
+            });
+        }
+        catch { }
+    }
 
     [ObservableProperty]
     private bool canManage;
@@ -42,7 +82,7 @@ public partial class ServerSettingsOverviewModel : ViewModelBase
         data.Name = ServerNameEdit;
         try
         {
-            await services.Rest.EditServerAsync(services.State.Socket.CurrentServer.Server.Id, data);
+            await services.Rest.EditServerAsync(services.State.CurrentServer.Server.Id, data);
         }
         catch { }
     }
@@ -58,7 +98,7 @@ public partial class ServerSettingsOverviewModel : ViewModelBase
     {
         try
         {
-            await services.Rest.DeleteServerAsync(services.State.Socket.CurrentServer.Server.Id);
+            await services.Rest.DeleteServerAsync(services.State.CurrentServer.Server.Id);
         }
         catch { }
 

@@ -13,18 +13,18 @@ public partial class ServerSettingsDiscoveryModel : ViewModelBase
     public ServerSettingsDiscoveryModel(ServiceManager sv)
     {
         services = sv;
-        ServerDescriptionEdit = services.State.Socket.CurrentServer.Server.Description;
-        vanityInvite = services.State.Socket.CurrentServer.Server.VanityInvite;
-        isPublic = services.State.Socket.CurrentServer.Server.Features.HasFlag(ServerFeature.Discoverable);
-        services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
-        canManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageServer);
+        ServerDescriptionEdit = services.State.CurrentServer.Server.Description;
+        vanityInvite = services.State.CurrentServer.Server.VanityInvite;
+        isPublic = services.State.CurrentServer.Server.Features.HasFlag(ServerFeature.Discoverable);
+        services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+        canManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.ManageServer);
     }
 
-    private async Task PermissionUpdate()
+    private async Task PermissionUpdate(RestServer server)
     {
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageServer);
+            CanManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.ManageServer);
         });
 
     }
@@ -46,7 +46,7 @@ public partial class ServerSettingsDiscoveryModel : ViewModelBase
     [RelayCommand]
     public async Task SaveSettings()
     {
-        var server = services.State.Socket.CurrentServer.Server;
+        var server = services.State.CurrentServer.Server;
         var data = new EditServerRequest();
 
         if (server.Description != ServerDescriptionEdit)
@@ -59,7 +59,7 @@ public partial class ServerSettingsDiscoveryModel : ViewModelBase
             data.IsDiscoverable = IsPublic;
         try
         {
-            await services.Rest.EditServerAsync(services.State.Socket.CurrentServer.Server.Id, data);
+            await services.Rest.EditServerAsync(services.State.CurrentServer.Server.Id, data);
         }
         catch { }
     }

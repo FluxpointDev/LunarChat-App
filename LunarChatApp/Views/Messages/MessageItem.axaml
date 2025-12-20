@@ -1,5 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
 			 xmlns:components="using:LunarChatApp.Components"
+             xmlns:controls="using:Avalonia.Labs.Controls"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:local="using:LunarChatApp"
@@ -30,7 +31,10 @@
 						<ContentControl Content="{Binding $parent[views:MainView].UserPopup}"></ContentControl>
 					</Flyout>
 				</FlyoutBase.AttachedFlyout>
-				<Image Source="/Assets/avatar.png" Width="32" Height="32"></Image>
+				<StackPanel>
+					<controls:AsyncImage Source="{Binding Avatar}" Width="32" Height="32" IsVisible="{Binding Avatar, Converter={x:Static ObjectConverters.IsNotNull}}"></controls:AsyncImage>
+					<shadui:Avatar Fallback="{Binding Fallback}" Width="32" Height="32" IsVisible="{Binding Avatar, Converter={x:Static ObjectConverters.IsNull}}"></shadui:Avatar>
+				</StackPanel>
 			</Border>
 			<StackPanel Grid.Column="1" Spacing="4">
 				<StackPanel Orientation="Horizontal" Spacing="6" IsVisible="{Binding !IsSystem}">
@@ -62,7 +66,7 @@
 				<StackPanel>
 					<ItemsRepeater ItemsSource="{Binding ImagesList}">
 						<ItemsRepeater.Layout>
-							<UniformGridLayout MinColumnSpacing="2" MinRowSpacing="2"  />
+							<UniformGridLayout />
 						</ItemsRepeater.Layout>
 					</ItemsRepeater>
 				</StackPanel>

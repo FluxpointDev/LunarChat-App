@@ -55,9 +55,9 @@
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<StackPanel Spacing="10" Orientation="Horizontal">
-									<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
+									<!--<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
 										<Image Source="/Assets/avatar.png" Width="32" Height="32"></Image>
-									</Border>
+									</Border>-->
 									<SelectableTextBlock VerticalAlignment="Center" FontSize="16" Text="{Binding ActionUser}"></SelectableTextBlock>
 								</StackPanel>
 							</DataTemplate>
@@ -71,7 +71,7 @@
 										<StackPanel Orientation="Horizontal" Spacing="10">
 											<materialIcons:MaterialIcon Kind="{Binding Icon}" Width="24" Height="24" Foreground="{DynamicResource WarningColor}" />
 											<StackPanel>
-												<SelectableTextBlock Text="{Binding Text}"></SelectableTextBlock>
+												<TextBlock Text="{Binding Text}"></TextBlock>
 												<SelectableTextBlock Classes="Muted" Text="{Binding TargetName}"></SelectableTextBlock>
 											</StackPanel>
 											<materialIcons:MaterialIcon Kind="{Binding Arrow}" Width="24" Height="24" Foreground="{DynamicResource PrimaryColor}" />

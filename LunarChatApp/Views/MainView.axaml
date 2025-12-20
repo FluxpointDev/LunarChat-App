@@ -1,5 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
 			 xmlns:avrichtextbox="using:AvRichTextBox"
+             xmlns:controls="using:Avalonia.Labs.Controls"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:materialIcons="using:Material.Icons.Avalonia"
@@ -42,7 +43,7 @@
 				<StackPanel Spacing="2">
 					<Grid>
 						<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
-							<Image Source="/Assets/avatar.png" Width="22" Height="22"></Image>
+							<controls:AsyncImage Source="{Binding state.Avatar}" Width="22" Height="22"></controls:AsyncImage>
 						</Border>
 						<Border Width="12" Height="12" VerticalAlignment="Bottom" HorizontalAlignment="Right" CornerRadius="90" ClipToBounds="True" Background="{DynamicResource PrimaryForegroundColor}">
 							<materialIcons:MaterialIcon Margin="0,0,0,0" ClipToBounds="True" Padding="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Kind="Circle" Width="11" Height="11" Foreground="green" />

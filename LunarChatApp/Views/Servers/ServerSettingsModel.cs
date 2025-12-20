@@ -22,11 +22,11 @@ public partial class ServerSettingsModel : ViewModelBase
         services = sv;
         pageManager = page;
         state = st;
-        id = st.Socket.CurrentServer.Server.Id;
-        ServerName = st.Socket.CurrentServer.Server.Name;
+        id = st.CurrentServer.Server.Id;
+        ServerName = st.CurrentServer.Server.Name;
         services.Client.OnServerUpdate += ServerUpdate;
         services.Client.OnRemoveServer += RemoveServer;
-        services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+        services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
         if (SelectedPage == null)
             SelectedPage = new ServerSettingsOverview() { DataContext = new ServerSettingsOverviewModel(services) };
     }
@@ -44,9 +44,9 @@ public partial class ServerSettingsModel : ViewModelBase
         });
     }
 
-    private async Task PermissionUpdate()
+    private async Task PermissionUpdate(RestServer server)
     {
-        bool CanView = services.State.Socket.CurrentServer.CanManageServer(services.State.Socket.CurrentServer.Member);
+        bool CanView = services.State.CurrentServer.CanManageServer(services.State.CurrentServer.Member);
         if (CanView)
             return;
 
@@ -58,13 +58,17 @@ public partial class ServerSettingsModel : ViewModelBase
 
     private async Task ServerUpdate(RestServer server, ServerUpdateEvent ev)
     {
-        if (string.IsNullOrEmpty(ev.Changed.Name) || server.Id != id)
+        if (server.Id != id)
             return;
 
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             if (ev.Changed.Name != null)
                 ServerName = ev.Changed.Name;
+
+            if (ev.Changed.Icon != null && SelectedPage is ServerSettingsOverview page)
+                (page.DataContext as ServerSettingsOverviewModel).ServerIcon = string.IsNullOrEmpty(ev.Changed.Icon) ? null : new System.Uri(ev.Changed.GetIconUrl());
+
         });
 
     }

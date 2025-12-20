@@ -16,7 +16,7 @@ public sealed class ServiceManager
 {
     public static bool IsDev = true;
     public static bool UseDevAPI = true;
-    public static bool UseProxy = true;
+    public static bool UseProxy = false;
     public readonly PageManager PageManager;
     public readonly TestState State;
     public readonly LunarClient Client;
@@ -38,6 +38,8 @@ public sealed class ServiceManager
         Dialogs = diag;
         ToastManager = toast;
         MediaService = new MediaService();
+        if (ServiceManager.IsDev && ServiceManager.UseDevAPI)
+            Static.AttachmentUrl = "https://localhost:7216/attachments/";
     }
 
     public PopupMaskModel Popup;

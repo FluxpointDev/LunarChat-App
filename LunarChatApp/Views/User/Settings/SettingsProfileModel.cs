@@ -6,6 +6,9 @@ using LunarChatApp.Views.Dialogs;
 using LunarChatSharp;
 using LunarChatSharp.Rest.Accounts;
 using LunarChatSharp.Websocket.Events.Account;
+using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.Views.User.Settings;
@@ -54,6 +57,9 @@ public partial class SettingsProfileModel : ViewModelBase
     [ObservableProperty]
     private string? aboutMe;
 
+    [ObservableProperty]
+    private Uri? avatar;
+
     [RelayCommand]
     public async Task UpdateAboutMe()
     {
@@ -64,6 +70,38 @@ public partial class SettingsProfileModel : ViewModelBase
                 AboutMe = AboutMe
             });
             state.AboutMe = AboutMe.ToNullOrString();
+        }
+        catch { }
+    }
+
+    [RelayCommand]
+    public async Task UploadAvatar()
+    {
+        var files = await services.FilePicker();
+        if (!files.Any())
+            return;
+
+        _ = Task.Run(async () =>
+        {
+            using (Stream stream = await files.First().OpenReadAsync())
+            {
+                await services.Rest.AccountEdit(new EditAccountRequest
+                {
+                    Avatar = Utils.GetImageBase64(stream)
+                });
+            }
+        });
+    }
+
+    [RelayCommand]
+    public async Task ClearAvatar()
+    {
+        try
+        {
+            await services.Rest.AccountEdit(new EditAccountRequest
+            {
+                Avatar = ""
+            });
         }
         catch { }
     }

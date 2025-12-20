@@ -1,8 +1,10 @@
 <UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:controls="using:Avalonia.Labs.Controls"
 			 xmlns:converters="using:LunarChatApp.Utility.Converters"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:lunarchatsharp="using:LunarChatSharp"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:settings="using:LunarChatApp.Views.Servers.Settings"
 			 xmlns:shadui="using:ShadUI"
@@ -35,6 +37,27 @@
 								</ColorPicker.Content>
 							</ColorPicker>
 							<Button Classes="Secondary" Content="Clear Color" Command="{Binding ClearColorCommand}" IsEnabled="{Binding AllowEdit}" />
+
+							<StackPanel Spacing="10" HorizontalAlignment="Left">
+			<Label Classes="Small">Server Icon</Label>
+			<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True" Width="90" Height="90"
+					BorderBrush="{DynamicResource BorderColor}" BorderThickness="2">
+				<Grid>
+					<controls:AsyncImage CornerRadius="90" Source="{Binding Icon}" IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"></controls:AsyncImage>
+					<Button IsEnabled="{Binding AllowEdit}" Opacity="0.6" Command="{Binding UploadIconCommand}" CornerRadius="90" />
+					<materialIcons:MaterialIcon VerticalAlignment="Center" HorizontalAlignment="Center" Kind="Plus" Width="14" Height="14" IsHitTestVisible="False" Foreground="{DynamicResource PrimaryColor}" IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNull}}" />
+				</Grid>
+			</Border>
+
+			<StackPanel
+			HorizontalAlignment="Left"
+			Orientation="Horizontal"
+			Spacing="8">
+				<Button Command="{Binding ClearIconCommand}" IsEnabled="{Binding AllowEdit}"
+						Classes="Primary"
+						Content="Clear" />
+			</StackPanel>
+		</StackPanel>
 						</StackPanel>
 				</TabItem>
 				<TabItem Header="Permissions">

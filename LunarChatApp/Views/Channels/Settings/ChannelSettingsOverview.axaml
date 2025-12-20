@@ -1,7 +1,9 @@
 <UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:controls="using:Avalonia.Labs.Controls"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:lunarchatsharp="using:LunarChatSharp"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:settings="using:LunarChatApp.ViewModels.Channels.Settings"
              xmlns:shadui="using:ShadUI"
@@ -39,6 +41,27 @@
 					Classes="Destructive"
 					IsEnabled="{Binding CanManage}"
 					Content="Delete Channel" />
+		</StackPanel>
+
+		<StackPanel Spacing="10" HorizontalAlignment="Left" IsVisible="{Binding IsGroup}">
+			<Label Classes="Small">Server Icon</Label>
+			<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True" Width="90" Height="90"
+					BorderBrush="{DynamicResource BorderColor}" BorderThickness="2">
+				<Grid>
+					<controls:AsyncImage CornerRadius="90" Source="{Binding GroupIcon}" IsVisible="{Binding GroupIcon, Converter={x:Static ObjectConverters.IsNotNull}}"></controls:AsyncImage>
+					<Button Opacity="0.6" Command="{Binding UploadIconCommand}" IsEnabled="{Binding CanManage}" CornerRadius="90" />
+					<materialIcons:MaterialIcon VerticalAlignment="Center" HorizontalAlignment="Center" Kind="Plus" Width="14" Height="14" IsHitTestVisible="False" Foreground="{DynamicResource PrimaryColor}" IsVisible="{Binding GroupIcon, Converter={x:Static ObjectConverters.IsNull}}" />
+				</Grid>
+			</Border>
+
+			<StackPanel
+			HorizontalAlignment="Left"
+			Orientation="Horizontal"
+			Spacing="8">
+				<Button Command="{Binding ClearIconCommand}" IsEnabled="{Binding CanManage}"
+						Classes="Primary"
+						Content="Clear" />
+			</StackPanel>
 		</StackPanel>
 	</StackPanel>
 </UserControl>

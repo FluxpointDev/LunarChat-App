@@ -1,5 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
 			 xmlns:components="using:LunarChatApp.Components"
+             xmlns:controls="using:Avalonia.Labs.Controls"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -11,7 +12,10 @@
 	<shadui:SidebarItem Padding="8" Command="{Binding OpenDMCommand}">
 		<StackPanel Orientation="Horizontal" Spacing="6">
 			<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
-				<Image Source="/Assets/avatar.png" Width="28" Height="28"></Image>
+				<StackPanel>
+						<controls:AsyncImage Source="{Binding Avatar}" Width="28" Height="28" IsVisible="{Binding Avatar, Converter={x:Static ObjectConverters.IsNotNull}}"></controls:AsyncImage>
+						<shadui:Avatar Fallback="{Binding Fallback}" Width="28" Height="28" IsVisible="{Binding Avatar, Converter={x:Static ObjectConverters.IsNull}}"></shadui:Avatar>
+					</StackPanel>
 			</Border>
 			<StackPanel>
 				<TextBlock Text="{Binding Name}"></TextBlock>

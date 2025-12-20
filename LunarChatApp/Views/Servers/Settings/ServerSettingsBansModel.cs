@@ -31,8 +31,8 @@ public partial class ServerSettingsBansModel : ViewModelBase
         _searchTimer.AutoReset = false;
         services.Client.OnMemberBan += MemberBan;
         services.Client.OnMemberUnban += MemberUnban;
-        services.Socket.State.CurrentServer!.OnPermissionUpdate += PermissionUpdate;
-        canBan = services.State.Socket.CurrentServer!.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.BanMembers);
+        services.State.CurrentServer!.OnPermissionUpdate += PermissionUpdate;
+        canBan = services.State.CurrentServer!.HasPermission(services.State.CurrentServer.Member, ModPermission.BanMembers);
         PropertyChanged += OnPropertyChanged;
 
         foreach (var i in _originalItems) i.PropertyChanged += OnItemsChanged;
@@ -40,7 +40,7 @@ public partial class ServerSettingsBansModel : ViewModelBase
 
         _ = Task.Run(async () =>
         {
-            var Bans = await services.Rest.GetBansAsync(services.Socket.State.CurrentServer.Server.Id);
+            var Bans = await services.Rest.GetBansAsync(services.State.CurrentServer.Server.Id);
             if (Bans == null)
                 return;
 
@@ -53,18 +53,18 @@ public partial class ServerSettingsBansModel : ViewModelBase
         });
     }
 
-    private async Task PermissionUpdate()
+    private async Task PermissionUpdate(RestServer server)
     {
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            CanBan = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.BanMembers);
+            CanBan = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.BanMembers);
         });
 
     }
 
     private async Task MemberUnban(RestServer server, RestUser user)
     {
-        if (services.State.Socket.CurrentServer?.Server?.Id != server.Id)
+        if (services.State.CurrentServer?.Server?.Id != server.Id)
             return;
 
         var item = _originalItems.FirstOrDefault(x => x.id == user.Id);
@@ -81,7 +81,7 @@ public partial class ServerSettingsBansModel : ViewModelBase
 
     private async Task MemberBan(RestServer server, RestMember member, RestBan ban)
     {
-        if (services.State.Socket.CurrentServer?.Server?.Id != server.Id)
+        if (services.State.CurrentServer?.Server?.Id != server.Id)
             return;
 
         var banItem = new BanListItem(services, ban);
@@ -233,7 +233,7 @@ public partial class BanListItem : ObservableObject
     {
         try
         {
-            await services.Rest.UnbanMemberAsync(services.Socket.State.CurrentServer.Server.Id, id);
+            await services.Rest.UnbanMemberAsync(services.State.CurrentServer.Server.Id, id);
         }
         catch { }
     }

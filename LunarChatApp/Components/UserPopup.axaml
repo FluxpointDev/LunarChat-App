@@ -1,5 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
 			 xmlns:components="using:LunarChatApp.Components"
+             xmlns:controls="using:Avalonia.Labs.Controls"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:materialIcons="using:Material.Icons.Avalonia"
@@ -15,7 +16,10 @@
 				<shadui:Skeleton Width="60" Height="60"
 								 CornerRadius="90" IsVisible="{Binding IsLoading}" />
 				<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True" IsVisible="{Binding !IsLoading}">
-					<Image Source="/Assets/avatar.png" Width="60" Height="60"></Image>
+					<StackPanel>
+						<controls:AsyncImage Source="{Binding Avatar}" Width="60" Height="60" IsVisible="{Binding Avatar, Converter={x:Static ObjectConverters.IsNotNull}}"></controls:AsyncImage>
+						<shadui:Avatar Fallback="{Binding Fallback}" Width="60" Height="60" IsVisible="{Binding Avatar, Converter={x:Static ObjectConverters.IsNull}}"></shadui:Avatar>
+					</StackPanel>
 				</Border>
 				<Border Width="23" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Right" CornerRadius="90" ClipToBounds="True" Background="{DynamicResource BorderColor}" IsVisible="{Binding !IsLoading}">
 					<materialIcons:MaterialIcon ClipToBounds="True" Margin="0,0,1,1" Padding="3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Kind="{Binding StatusIcon}" Width="20" Height="20" Foreground="{Binding StatusColor}" />

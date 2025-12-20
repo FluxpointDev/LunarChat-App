@@ -28,14 +28,14 @@ public partial class ServerSettingsAuditLogsModel : ViewModelBase
     public ServerSettingsAuditLogsModel(ServiceManager sv)
     {
         services = sv;
-        _canManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ManageRoles);
+        _canManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.ManageRoles);
 
-        services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+        services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
         _searchTimer = new Timer(500); // 500ms debounce
         _searchTimer.Elapsed += SearchTimerElapsed;
         _searchTimer.AutoReset = false;
 
-        _canManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ViewAuditLogs);
+        _canManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.ViewAuditLogs);
 
         PropertyChanged += OnPropertyChanged;
 
@@ -44,7 +44,7 @@ public partial class ServerSettingsAuditLogsModel : ViewModelBase
         {
             try
             {
-                var AuditLogs = await services.Rest.GetAuditLogsAsync(services.Socket.State.CurrentServer.Server.Id);
+                var AuditLogs = await services.Rest.GetAuditLogsAsync(services.State.CurrentServer.Server.Id);
                 if (AuditLogs == null)
                     return;
 
@@ -62,11 +62,11 @@ public partial class ServerSettingsAuditLogsModel : ViewModelBase
         });
     }
 
-    private async Task PermissionUpdate()
+    private async Task PermissionUpdate(RestServer server)
     {
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ViewAuditLogs);
+            CanManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.ViewAuditLogs);
 
         });
 
@@ -197,7 +197,7 @@ public partial class AuditListItem : ObservableObject
     }
 
     [ObservableProperty]
-    private MaterialIconKind arrow;
+    private MaterialIconKind arrow = MaterialIconKind.KeyboardArrowDown;
 
     [ObservableProperty]
     public ObservableCollection<AuditLogChangeItemModel> changes;

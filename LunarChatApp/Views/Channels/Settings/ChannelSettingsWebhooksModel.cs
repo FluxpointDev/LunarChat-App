@@ -3,17 +3,21 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using ExCSS;
 using LunarChatApp.Services;
 using LunarChatApp.Views.Dialogs;
+using LunarChatSharp;
 using LunarChatSharp.Core.Channels;
 using LunarChatSharp.Core.Servers;
 using LunarChatSharp.Rest.Channels;
 using LunarChatSharp.Rest.Helpers;
+using LunarChatSharp.Rest.Servers;
 using LunarChatSharp.Rest.Webhooks;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
@@ -34,17 +38,17 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
         this.openWebhook = openWebhook;
         this.openInfo = openInfo;
 
-        if (services.State.Socket.CurrentChannel.Type == ChannelType.Group)
+        if (services.State.CurrentChannel.Type == ChannelType.Group)
         {
-            _canManage = services.Client.CurrentId == services.State.Socket.CurrentChannel.GroupSettings?.OwnerId;
+            _canManage = services.Client.CurrentId == services.State.CurrentChannel.GroupSettings?.OwnerId;
 
         }
         else
         {
-            if (services.State.Socket.CurrentServer != null)
+            if (services.State.CurrentServer != null)
             {
-                _canManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageWebhooks);
-                services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+                _canManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ChannelPermission.ManageWebhooks);
+                services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
             }
         }
 
@@ -64,7 +68,7 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
 
         _ = Task.Run(async () =>
         {
-            var webhooks = await services.Rest.GetWebhooksAsync(services.State.Socket.CurrentChannel?.Id);
+            var webhooks = await services.Rest.GetWebhooksAsync(services.State.CurrentChannel?.Id);
             if (webhooks == null)
                 return;
 
@@ -76,7 +80,8 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
                     Id = x.Id,
                     CanManage = _canManage,
                     channelId = x.ChannelId,
-                    token = x.Token
+                    token = x.Token,
+                    Avatar = string.IsNullOrEmpty(x.AvatarId) ? null : new Uri(x.GetAvatarUrl())
                 }).ToList();
 
                 Items = new ObservableCollection<WebhookListItem>(_originalItems);
@@ -90,21 +95,27 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
     [RelayCommand]
     public void CreateWebhook()
     {
-        services.Dialogs.Create(new CreateNameDialog(), new CreateNameDialogModel(), "Create Webhook").WithSubmit(SubmitWebhook).Open();
+        services.Dialogs.Create(new CreateWebhookDialog(), new CreateWebhookDialogModel(services), "Create Webhook").WithSubmit(SubmitWebhook).Open();
     }
 
     public async Task SubmitWebhook(UserControl control)
     {
-        CreateNameDialogModel? model = control.DataContext as CreateNameDialogModel;
-        if (model.Name == null)
-            model.Name = "";
+        CreateWebhookDialogModel? model = control.DataContext as CreateWebhookDialogModel;
+        if (model == null || string.IsNullOrEmpty(model.Name) || model.Icon == null)
+            return;
 
         try
         {
-            await services.Rest.CreateWebhookAsync(services.State.Socket.CurrentChannel?.Id, new CreateWebhookRequest
+            using (var str = new MemoryStream())
             {
-                Name = model.Name
-            });
+                model.Icon.Save(str);
+                str.Position = 0;
+                await services.Rest.CreateWebhookAsync(services.State.CurrentChannel?.Id, new CreateWebhookRequest
+                {
+                    Name = model.Name,
+                    Icon = Utils.GetImageBase64(str)
+                });
+            }
         }
         catch { }
     }
@@ -112,7 +123,7 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
 
     private async Task WebhookDelete(RestChannel server, string webhookId)
     {
-        if (services.State.Socket.CurrentChannel?.Id != server.Id)
+        if (services.State.CurrentChannel?.Id != server.Id)
             return;
 
         WebhookListItem? item = _originalItems.FirstOrDefault(x => x.Id == webhookId);
@@ -130,7 +141,7 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
 
     private async Task WebhookUpdate(RestChannel server, string webhookId, EditWebhookRequest ev)
     {
-        if (services.State.Socket.CurrentChannel?.Id != server.Id)
+        if (services.State.CurrentChannel?.Id != server.Id)
             return;
 
         WebhookListItem? item = _originalItems.FirstOrDefault(x => x.Id == webhookId);
@@ -147,7 +158,7 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
 
     private async Task WebhookCreate(RestChannel server, RestWebhook webhook)
     {
-        if (services.State.Socket.CurrentChannel?.Id != server.Id)
+        if (services.State.CurrentChannel?.Id != server.Id)
             return;
 
         WebhookListItem item = new WebhookListItem(services, openInfo)
@@ -156,7 +167,8 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
             Name = webhook.Name,
             channelId = webhook.ChannelId,
             CanManage = CanManage,
-            token = webhook.Token
+            token = webhook.Token,
+            Avatar = string.IsNullOrEmpty(webhook.AvatarId) ? null : new Uri(webhook.GetAvatarUrl())
         };
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
@@ -167,11 +179,11 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
 
     }
 
-    private async Task PermissionUpdate()
+    private async Task PermissionUpdate(RestServer server)
     {
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageWebhooks);
+            CanManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ChannelPermission.ManageWebhooks);
             foreach (var i in _originalItems)
             {
                 i.CanManage = CanManage;
@@ -312,6 +324,9 @@ public partial class WebhookListItem(ServiceManager services, Action<RestWebhook
     [ObservableProperty]
     private bool _canManage;
 
+    [ObservableProperty]
+    private Uri? avatar;
+
     [RelayCommand]
     public async Task OpenWebhook()
     {
@@ -335,7 +350,7 @@ public partial class WebhookListItem(ServiceManager services, Action<RestWebhook
 
         try
         {
-            await services.Rest.EditWebhookAsync(services.State.Socket.CurrentChannel?.Id, Id, new EditWebhookRequest
+            await services.Rest.EditWebhookAsync(services.State.CurrentChannel?.Id, Id, new EditWebhookRequest
             {
                 Name = model.Name ?? "",
             });
@@ -361,7 +376,7 @@ public partial class WebhookListItem(ServiceManager services, Action<RestWebhook
     {
         try
         {
-            await services.Rest.DeleteWebhookAsync(services.State.Socket.CurrentChannel?.Id, Id);
+            await services.Rest.DeleteWebhookAsync(services.State.CurrentChannel?.Id, Id);
         }
         catch { }
     }

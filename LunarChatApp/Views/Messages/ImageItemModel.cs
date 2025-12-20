@@ -15,7 +15,7 @@ public partial class ImageItemModel : ViewModelBase
     public ImageItemModel(ServiceManager sv, RestAttachment attachment)
     {
         services = sv;
-        source = new Uri(ServiceManager.IsDev ? $"https://localhost:7216/attachments/{attachment.Id}/{attachment.FileName}" :
+        Source = new Uri(ServiceManager.IsDev ? $"https://localhost:7216/attachments/{attachment.Id}/{attachment.FileName}" :
             $"https://lunar.fluxpoint.dev/api/attachments/{attachment.Id}/{attachment.FileName}");
     }
 }

@@ -9,7 +9,6 @@ using LunarChatSharp;
 using LunarChatSharp.Core.Servers;
 using LunarChatSharp.Rest.Roles;
 using LunarChatSharp.Rest.Servers;
-using LunarChatSharp.Websocket.Events.Roles;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -33,21 +32,22 @@ public partial class ServerSettingsRolesModel : ViewModelBase
         services = sv;
         this.openRoles = openRole;
         this.openInfo = openInfo;
-        _canManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ManageRoles);
+        _canManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.ManageRoles);
         services.Client.OnRoleCreate += RoleCreated;
         services.Client.OnRoleUpdate += RoleUpdated;
         services.Client.OnRoleDelete += RoleDeleted;
-        services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+        services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
         _searchTimer = new Timer(500); // 500ms debounce
         _searchTimer.Elapsed += SearchTimerElapsed;
         _searchTimer.AutoReset = false;
 
-        _originalItems = services.State.Socket.CurrentServer.Roles.Values.OrderByDescending(x => x.Position).Select(x => new RoleListItem(services, openInfo)
+        _originalItems = services.State.CurrentServer.Roles.Values.OrderByDescending(x => x.Position).Select(x => new RoleListItem(services, openInfo)
         {
             Color = x.Color ?? "#99AAB5",
             Name = x.Name,
             Id = x.Id,
             Position = x.Position,
+            Icon = string.IsNullOrEmpty(x.IconId) ? null : new Uri(x.GetIconUrl()),
             CanManage = _canManage
         }).ToList();
 
@@ -58,11 +58,11 @@ public partial class ServerSettingsRolesModel : ViewModelBase
         Items = new ObservableCollection<RoleListItem>(_originalItems);
     }
 
-    private async Task PermissionUpdate()
+    private async Task PermissionUpdate(RestServer server)
     {
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ManageRoles);
+            CanManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.ManageRoles);
             foreach (var i in _originalItems)
             {
                 i.CanManage = CanManage;
@@ -89,7 +89,7 @@ public partial class ServerSettingsRolesModel : ViewModelBase
 
     }
 
-    private async Task RoleUpdated(RestServer server, RestRole role, RoleUpdateEvent ev)
+    private async Task RoleUpdated(RestServer server, RestRole role, EditRoleRequest ev)
     {
         RoleListItem? item = _originalItems.FirstOrDefault(x => x.Id == role.Id);
         if (item == null)
@@ -102,6 +102,9 @@ public partial class ServerSettingsRolesModel : ViewModelBase
 
             if (ev.Color != null)
                 item.Color = ev.Color ?? "#99AAB5";
+
+            if (ev.Icon != null)
+                item.Icon = string.IsNullOrEmpty(ev.Icon) ? null : new Uri(ev.GetIconUrl());
             UpdateList();
         });
 
@@ -115,7 +118,8 @@ public partial class ServerSettingsRolesModel : ViewModelBase
             Id = role.Id,
             Name = role.Name,
             Position = role.Position,
-            CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.ManageRoles)
+            Icon = string.IsNullOrEmpty(role.IconId) ? null : new Uri(role.GetIconUrl()),
+            CanManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.ManageRoles)
         };
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
@@ -159,7 +163,7 @@ public partial class ServerSettingsRolesModel : ViewModelBase
 
         try
         {
-            await services.Rest.CreateRoleAsync(services.State.Socket.CurrentServer?.Server.Id, new CreateRoleRequest
+            await services.Rest.CreateRoleAsync(services.State.CurrentServer?.Server.Id, new CreateRoleRequest
             {
                 Name = model.Name
             });
@@ -258,7 +262,7 @@ public partial class ServerSettingsRolesModel : ViewModelBase
             Id = "0",
             CreatedAt = DateTime.Now,
             Name = "Default Members Role",
-            Permissions = services.State.Socket.CurrentServer.Server.DefaultPermissions
+            Permissions = services.State.CurrentServer.Server.DefaultPermissions
         });
     }
 
@@ -288,6 +292,9 @@ public partial class RoleListItem(ServiceManager services, Action<RestRole> open
     private string _id;
 
     [ObservableProperty]
+    private Uri? icon;
+
+    [ObservableProperty]
     private bool _canManage;
 
     [RelayCommand]
@@ -308,7 +315,7 @@ public partial class RoleListItem(ServiceManager services, Action<RestRole> open
     {
         try
         {
-            await services.Rest.DeleteRoleAsync(services.State.Socket.CurrentServer?.Server.Id, Id);
+            await services.Rest.DeleteRoleAsync(services.State.CurrentServer?.Server.Id, Id);
         }
         catch { }
     }

@@ -1,4 +1,5 @@
 <UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:controls="using:Avalonia.Labs.Controls"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:lunarchatsharp="using:LunarChatSharp"
@@ -56,13 +57,15 @@
 					IsChecked="{Binding SelectAll}" />
 					</DataGridCheckBoxColumn.Header>
 					</DataGridCheckBoxColumn>-->
-
 					<DataGridTemplateColumn Header="">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
-								<Border Width="20" Height="20"
+								<StackPanel>
+									<controls:AsyncImage Height="20" Width="20" Source="{Binding Icon}" IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" />
+									<Border Width="20" Height="20"
 										Background="{Binding Color}"
-										CornerRadius="90" />
+										CornerRadius="90" IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNull}}" />
+								</StackPanel>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>

@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.Views;
 using LunarChatSharp.Rest.Channels;
+using System;
 using System.Linq;
 
 namespace LunarChatApp.Components;
@@ -18,19 +19,41 @@ public partial class DMListItemModel : ViewModelBase
         id = chan.Id;
         channel = chan;
         if (chan.Type == LunarChatSharp.Core.Channels.ChannelType.Direct)
-            _name = chan.Users.FirstOrDefault(x => x.Id != services.Client.CurrentId).GetCurrentNameDiscrim();
+        {
+            var OtherUser = chan.Users.FirstOrDefault(x => x.Id != services.Client.CurrentId);
+            _name = OtherUser.GetCurrentNameDiscrim();
+
+            if (!string.IsNullOrEmpty(OtherUser.AvatarId))
+                Avatar = new Uri(OtherUser.GetAvatarUrl());
+            else
+                fallback = OtherUser.GetFallback();
+        }
         else
+        {
             _name = chan.Name;
+
+
+            if (!string.IsNullOrEmpty(chan.GroupSettings.IconId))
+                Avatar = new Uri(chan.GroupSettings.GetIconUrl());
+            else
+                fallback = chan.GetFallback();
+        }
     }
 
     [ObservableProperty]
     private string? _name;
 
+    [ObservableProperty]
+    private Uri? avatar;
+
+    [ObservableProperty]
+    private string fallback;
+
     [RelayCommand]
     public void OpenDM()
     {
-        services.State.Socket.CurrentChannel = channel;
+        services.State.CurrentChannel = channel;
 
-        services.Client.OnSelectChannel?.Invoke(services.State.Socket.CurrentChannel);
+        services.Client.OnSelectChannel?.Invoke(services.State.CurrentChannel);
     }
 }

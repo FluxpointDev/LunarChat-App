@@ -1,7 +1,4 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Media;
-using Avalonia.Media.Imaging;
-using Avalonia.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
@@ -22,18 +19,23 @@ public partial class ServerIconModel : ViewModelBase
     {
         services = sv;
         Name = server.Name;
-        Fallback = server.GetFallback();
         Id = server.Id;
+
+        Fallback = server.GetFallback();
         switch (Name)
         {
             case "Fluxpoint Community":
-                Icon = new Bitmap(AssetLoader.Open(new Uri("avares://LunarChatApp/Assets/fluxpoint.ico")));
+                Icon = new Uri("avares://LunarChatApp/Assets/fluxpoint.ico");
                 break;
             case "Lunar Community":
-                Icon = new Bitmap(AssetLoader.Open(new Uri("avares://LunarChatApp/Assets/lunar-icon.png")));
+                Icon = new Uri("avares://LunarChatApp/Assets/lunar-icon.png");
                 break;
             case "Lunar Developers":
-                Icon = new Bitmap(AssetLoader.Open(new Uri("avares://LunarChatApp/Assets/lunar-dev-icon.png")));
+                Icon = new Uri("avares://LunarChatApp/Assets/lunar-dev-icon.png");
+                break;
+            default:
+                if (!string.IsNullOrEmpty(server.IconId))
+                    Icon = new Uri(server.GetIconUrl());
                 break;
         }
 
@@ -66,7 +68,7 @@ public partial class ServerIconModel : ViewModelBase
     private string _fallback;
 
     [ObservableProperty]
-    private IImage? _icon;
+    private Uri? _icon;
 
     public string Id;
 
@@ -81,14 +83,14 @@ public partial class ServerIconModel : ViewModelBase
         {
             services.State.OnExpandChannels?.Invoke(true);
             var model = (services.State.CachedServersPage.DataContext as ServersModel);
-            services.State.Socket.CurrentServer = null;
+            services.State.CurrentServer = null;
             model.SelectedPage = new DiscoveryPage { DataContext = new DiscoveryPageModel(services) };
             model.SelectedHeader = new DiscoveryHeader();
             model.SelectedSidebar = new DiscoverySidebar { DataContext = new DiscoverySidebarModel(services) };
         }
         else
         {
-            services.Socket.State.CurrentChannel = null;
+            services.State.CurrentChannel = null;
             if (services.State.Socket.Servers.TryGetValue(Id, out var server))
                 services.PageManager.SwitchServer(services, server.Server);
         }

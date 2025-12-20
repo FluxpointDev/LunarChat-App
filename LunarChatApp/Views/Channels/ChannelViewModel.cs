@@ -36,52 +36,52 @@ public partial class ChannelViewModel : ViewModelBase
         if (OperatingSystem.IsAndroid() || OperatingSystem.IsIOS())
             expandMembers = false;
 
-        Name = st.Socket.CurrentChannel.Name;
-        Topic = st.Socket.CurrentChannel.Topic;
-        if (state.Socket.CurrentServer != null)
-            state.Socket.CurrentServer.OnChannelUpdate += ChannelUpdate;
+        Name = st.CurrentChannel.Name;
+        Topic = st.CurrentChannel.Topic;
+        if (state.CurrentServer != null)
+            services.Client.OnChannelUpdate += ChannelUpdate;
 
         services.State.OnExpandChannels += ExpandChannels;
         services.Client.OnMessageRecieved += State_OnMessageRecieved;
         services.Client.OnMessageEdit += MessageEdit;
         services.Client.OnMessageDelete += MessageDelete;
-        if (state.Socket.CurrentChannel.Type == LunarChatSharp.Core.Channels.ChannelType.Group || state.Socket.CurrentChannel.Type == LunarChatSharp.Core.Channels.ChannelType.Direct)
+        if (state.CurrentChannel.Type == LunarChatSharp.Core.Channels.ChannelType.Group || state.CurrentChannel.Type == LunarChatSharp.Core.Channels.ChannelType.Direct)
         {
             canSend = true;
-            if (st.Socket.CurrentChannel.Type == LunarChatSharp.Core.Channels.ChannelType.Group)
+            if (st.CurrentChannel.Type == LunarChatSharp.Core.Channels.ChannelType.Group)
             {
-                canLeaveGroup = st.Socket.CurrentChannel.GroupSettings?.OwnerId != services.Client.CurrentId;
-                canDelete = st.Socket.CurrentChannel.GroupSettings?.OwnerId == services.Client.CurrentId;
+                canLeaveGroup = st.CurrentChannel.GroupSettings?.OwnerId != services.Client.CurrentId;
+                canDelete = st.CurrentChannel.GroupSettings?.OwnerId == services.Client.CurrentId;
                 canAddFriend = true;
-                canChangeName = st.Socket.CurrentChannel.GroupSettings?.OwnerId == services.Client.CurrentId;
+                canChangeName = st.CurrentChannel.GroupSettings?.OwnerId == services.Client.CurrentId;
                 services.Client.OnGroupUpdate += ChannelUpdate;
                 services.Client.OnGroupDelete += GroupDelete;
             }
             else
             {
-                _name = st.Socket.CurrentChannel.Users.FirstOrDefault(x => x.Id != services.Client.CurrentId).GetCurrentNameDiscrim();
+                _name = st.CurrentChannel.Users.FirstOrDefault(x => x.Id != services.Client.CurrentId).GetCurrentNameDiscrim();
                 services.Client.OnDMUpdate += ChannelUpdate;
             }
         }
         else
         {
             services.Client.OnMemberUpdate += MemberUpdate;
-            if (services.State.Socket.CurrentServer != null)
+            if (services.State.CurrentServer != null)
             {
-                inTimeout = (services.State.Socket.CurrentServer.Member.Timeout.HasValue && services.State.Socket.CurrentServer.Member.Timeout.Value < DateTime.UtcNow);
-                canInvite = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.CreateInvites);
-                canManage = services.State.Socket.CurrentServer.CanManageChannel(services.State.Socket.CurrentServer.Member);
-                canDelete = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
-                canSend = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.SendMessages);
-                services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
-                services.State.Socket.CurrentServer.OnChannelDelete += ChannelDelete;
+                inTimeout = (services.State.CurrentServer.Member.Timeout.HasValue && services.State.CurrentServer.Member.Timeout.Value < DateTime.UtcNow);
+                canInvite = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ChannelPermission.CreateInvites);
+                canManage = services.State.CurrentServer.CanManageChannel(services.State.CurrentServer.Member);
+                canDelete = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ChannelPermission.ManageChannel);
+                canSend = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ChannelPermission.SendMessages);
+                services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+                services.Client.OnChannelDelete += ChannelDelete;
             }
         }
 
         CrockeryList = new ObservableCollection<MessageItem>();
         _ = Task.Run(async () =>
         {
-            RestMessage[]? messages = await services.Rest.GetMessagesAsync(state.Socket.CurrentChannel.Id);
+            RestMessage[]? messages = await services.Rest.GetMessagesAsync(state.CurrentChannel.Id);
             if (messages != null)
             {
                 Dispatcher.UIThread.Post(() => { CrockeryList.AddRange(messages.Select(x => new MessageItem() { DataContext = new MessageItemModel(services, x) })); MessagesFinished = true; });
@@ -119,11 +119,13 @@ public partial class ChannelViewModel : ViewModelBase
             using (Stream stream = new MemoryStream())
             {
                 file.Save(stream);
-                await services.Rest.SendMesssageAsync(services.State.Socket.CurrentChannel?.Id, new CreateMessageRequest
+
+                CreateAttachmentRequest attach = await CreateAttachmentRequest.CreateFromStream(stream, "image.png");
+                await services.Rest.SendMesssageAsync(services.State.CurrentChannel?.Id, new CreateMessageRequest
                 {
                     Attachments = new CreateAttachmentRequest[]
                     {
-                        new CreateAttachmentRequest(stream, "image.png")
+                        attach
                     }
                 });
             }
@@ -136,7 +138,6 @@ public partial class ChannelViewModel : ViewModelBase
         {
             data.Dispose();
         }
-
     }
 
     private async Task ExpandChannels(bool? value)
@@ -149,6 +150,9 @@ public partial class ChannelViewModel : ViewModelBase
 
     private async Task ChannelDelete(RestChannel channel)
     {
+        if (services.State.CurrentChannel?.Id != channel.Id)
+            return;
+
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             services.PageManager.SwitchServerChannel(services, null);
@@ -158,6 +162,9 @@ public partial class ChannelViewModel : ViewModelBase
 
     private async Task GroupDelete(RestChannel channel)
     {
+        if (services.State.CurrentChannel?.Id != channel.Id)
+            return;
+
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             services.State.TriggerPageSelect(new HomeView() { DataContext = new HomeModel(services) });
@@ -167,10 +174,10 @@ public partial class ChannelViewModel : ViewModelBase
 
     private async Task MemberUpdate(RestServer server, string arg2, EditMemberRequest request)
     {
-        if (services.State.Socket.CurrentServer.Server.Id != server.Id)
+        if (services.State.CurrentServer.Server.Id != server.Id)
             return;
 
-        if (arg2 != services.State.Socket.CurrentServer.Member.Id)
+        if (arg2 != services.State.CurrentServer.Member.Id)
             return;
 
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
@@ -187,14 +194,14 @@ public partial class ChannelViewModel : ViewModelBase
 
     }
 
-    private async Task PermissionUpdate()
+    private async Task PermissionUpdate(RestServer server)
     {
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            CanInvite = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.CreateInvites);
-            CanDelete = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.ManageChannel);
-            CanManage = services.State.Socket.CurrentServer.CanManageChannel(services.State.Socket.CurrentServer.Member);
-            CanSend = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ChannelPermission.SendMessages);
+            CanInvite = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ChannelPermission.CreateInvites);
+            CanDelete = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ChannelPermission.ManageChannel);
+            CanManage = services.State.CurrentServer.CanManageChannel(services.State.CurrentServer.Member);
+            CanSend = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ChannelPermission.SendMessages);
         });
     }
 
@@ -227,6 +234,9 @@ public partial class ChannelViewModel : ViewModelBase
 
     private async Task ChannelUpdate(RestChannel channel, UpdateChannelRequest request)
     {
+        if (services.State.CurrentChannel?.Id != channel.Id)
+            return;
+
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             if (channel.Name != null)
@@ -239,7 +249,7 @@ public partial class ChannelViewModel : ViewModelBase
 
     private async Task State_OnMessageRecieved(RestChannel channel, RestMessage message)
     {
-        if (message.ChannelId != state.Socket.CurrentChannel?.Id)
+        if (message.ChannelId != state.CurrentChannel?.Id)
             return;
 
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
@@ -264,30 +274,30 @@ public partial class ChannelViewModel : ViewModelBase
 
     private async Task MessageEdit(RestChannel channel, MessageUpdateEvent ev, EditMessageRequest message)
     {
-        if (channel.Id != state.Socket.CurrentChannel?.Id)
-            return;
-
-        var messageItem = CrockeryList.FirstOrDefault(x => (x.DataContext as MessageItemModel).messageId == ev.MessageId);
-        if (messageItem == null)
+        if (channel.Id != state.CurrentChannel?.Id)
             return;
 
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
+            var messageItem = CrockeryList.FirstOrDefault(x => (x.DataContext as MessageItemModel).messageId == ev.MessageId);
+            if (messageItem == null)
+                return;
+
             (messageItem.DataContext as MessageItemModel).Update(ev, message);
         });
     }
 
     private async Task MessageDelete(RestChannel channel, RestMessage message)
     {
-        if (message.ChannelId != state.Socket.CurrentChannel?.Id)
-            return;
-
-        var messageItem = CrockeryList.FirstOrDefault(x => (x.DataContext as MessageItemModel).messageId == message.Id);
-        if (messageItem == null)
+        if (message.ChannelId != state.CurrentChannel?.Id)
             return;
 
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
+            var messageItem = CrockeryList.FirstOrDefault(x => (x.DataContext as MessageItemModel).messageId == message.Id);
+            if (messageItem == null)
+                return;
+
             CrockeryList.Remove(messageItem);
         });
 
@@ -313,7 +323,7 @@ public partial class ChannelViewModel : ViewModelBase
 
         try
         {
-            await services.Rest.SendMesssageAsync(state.Socket.CurrentChannel.Id, new CreateMessageRequest
+            await services.Rest.SendMesssageAsync(state.CurrentChannel.Id, new CreateMessageRequest
             {
                 Content = Textbox
             });
@@ -326,7 +336,7 @@ public partial class ChannelViewModel : ViewModelBase
     [RelayCommand]
     public void CopyChannelID()
     {
-        services.CopyText(services.State.Socket.CurrentChannel?.Id);
+        services.CopyText(services.State.CurrentChannel?.Id);
     }
 
     [RelayCommand]
@@ -344,7 +354,7 @@ public partial class ChannelViewModel : ViewModelBase
         CreateInviteRequest req = model.CreateRequest();
         try
         {
-            RestInvite invite = await services.Rest.CreateInviteAsync(services.State.Socket.CurrentChannel?.Id, req);
+            RestInvite invite = await services.Rest.CreateInviteAsync(services.State.CurrentChannel?.Id, req);
             services.CopyText(invite.Code);
         }
         catch { }
@@ -364,7 +374,7 @@ public partial class ChannelViewModel : ViewModelBase
 
         try
         {
-            await services.Rest.UpdateChannelAsync(services.State.Socket.CurrentChannel?.Id, new UpdateChannelRequest
+            await services.Rest.UpdateChannelAsync(services.State.CurrentChannel?.Id, new UpdateChannelRequest
             {
                 Name = model.Name
             });
@@ -384,7 +394,7 @@ public partial class ChannelViewModel : ViewModelBase
         {
             AddFriendDialogModel? data = control.DataContext as AddFriendDialogModel;
             var friend = state.Socket.Relations.Values.FirstOrDefault(x => x.UserId == data.Username || x.Username == data.Username);
-            await services.Rest.PutAsync($"/groups/{services.State.Socket.CurrentChannel?.Id}/users", new GroupAddUserRequest
+            await services.Rest.PutAsync($"/groups/{services.State.CurrentChannel?.Id}/users", new GroupAddUserRequest
             {
                 UserId = friend.UserId
             });
@@ -397,7 +407,7 @@ public partial class ChannelViewModel : ViewModelBase
     {
         services.PageManager.OnSwitchPage(new ChannelSettings
         {
-            DataContext = new ChannelSettingsModel(services, state.Socket.CurrentChannel)
+            DataContext = new ChannelSettingsModel(services, state.CurrentChannel)
         });
     }
 
@@ -406,7 +416,7 @@ public partial class ChannelViewModel : ViewModelBase
     {
         services.PageManager.OnSwitchPage(new ChannelSettings
         {
-            DataContext = new ChannelSettingsModel(services, state.Socket.CurrentChannel)
+            DataContext = new ChannelSettingsModel(services, state.CurrentChannel)
         });
     }
 
@@ -415,7 +425,7 @@ public partial class ChannelViewModel : ViewModelBase
     {
         try
         {
-            await services.Rest.DeleteChannelAsync(state.Socket.CurrentChannel?.Id, new DeleteChannelRequest
+            await services.Rest.DeleteChannelAsync(state.CurrentChannel?.Id, new DeleteChannelRequest
             {
 
             });
@@ -428,9 +438,9 @@ public partial class ChannelViewModel : ViewModelBase
     {
         try
         {
-            await services.Rest.DeleteChannelAsync(state.Socket.CurrentChannel?.Id, new DeleteChannelRequest
+            await services.Rest.DeleteChannelAsync(state.CurrentChannel?.Id, new DeleteChannelRequest
             {
-                ServerId = state.Socket.CurrentServer?.Server.Id
+                ServerId = state.CurrentServer?.Server.Id
             });
         }
         catch { }
@@ -439,23 +449,44 @@ public partial class ChannelViewModel : ViewModelBase
     [RelayCommand]
     public async Task OpenFilePicker()
     {
-        var files = await services.FilePicker();
-        if (!files.Any())
-            return;
-
-        _ = Task.Run(async () =>
+        Console.WriteLine("Picked file");
+        try
         {
-            using (Stream stream = await files.First().OpenReadAsync())
+            var files = await services.FilePicker();
+            if (!files.Any())
+                return;
+
+            Console.WriteLine("Got file");
+
+            _ = Task.Run(async () =>
             {
-                await services.Rest.SendMesssageAsync(services.State.Socket.CurrentChannel?.Id, new CreateMessageRequest
+                Console.WriteLine("Read stream");
+                Console.WriteLine("Name: " + files.First().Name);
+                try
                 {
-                    Attachments = new CreateAttachmentRequest[]
+                    using (Stream stream = await files.First().OpenReadAsync())
                     {
-                        new CreateAttachmentRequest(stream, files.First().Name)
+                        CreateAttachmentRequest attach = await CreateAttachmentRequest.CreateFromStream(stream, files.First().Name);
+
+                        await services.Rest.SendMesssageAsync(services.State.CurrentChannel?.Id, new CreateMessageRequest
+                        {
+                            Attachments = new CreateAttachmentRequest[]
+                            {
+                                attach
+                            }
+                        });
                     }
-                });
-            }
-        });
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+        }
     }
 
     [RelayCommand]

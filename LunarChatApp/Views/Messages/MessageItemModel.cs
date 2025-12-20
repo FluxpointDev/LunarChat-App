@@ -9,6 +9,7 @@ using LunarChatSharp;
 using LunarChatSharp.Core.Messages;
 using LunarChatSharp.Rest.Messages;
 using LunarChatSharp.Websocket.Events.Messages;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,9 +29,13 @@ public partial class MessageItemModel : ViewModelBase
             Username = message.Author.GetCurrentName();
             _isBot = message.Author.IsBot;
             CanDelete = sv.Client.CurrentId == authorId;
+            if (!string.IsNullOrEmpty(message.Author.AvatarId))
+                Avatar = new Uri(message.Author.GetAvatarUrl());
+            else
+                fallback = message.Author.GetFallback();
         }
-        if (!CanDelete.GetValueOrDefault() && sv.State.Socket.CurrentServer != null)
-            CanDelete = sv.State.Socket.CurrentServer.Server.OwnerId == sv.Client.CurrentId;
+        if (!CanDelete.GetValueOrDefault() && sv.State.CurrentServer != null)
+            CanDelete = sv.State.CurrentServer.Server.OwnerId == sv.Client.CurrentId;
 
         if (message.Source == MessageSourceType.Webhook)
         {
@@ -73,6 +78,12 @@ public partial class MessageItemModel : ViewModelBase
     private string _username;
 
     [ObservableProperty]
+    private Uri? avatar;
+
+    [ObservableProperty]
+    private string fallback;
+
+    [ObservableProperty]
     private ObservableStringBuilder _message;
 
     [ObservableProperty]
@@ -104,7 +115,7 @@ public partial class MessageItemModel : ViewModelBase
     {
         try
         {
-            await services.Rest.DeleteMessageAsync(services.State.Socket.CurrentChannel!.Id, messageId);
+            await services.Rest.DeleteMessageAsync(services.State.CurrentChannel!.Id, messageId);
         }
         catch { }
     }

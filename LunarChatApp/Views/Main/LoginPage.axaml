@@ -34,6 +34,11 @@
 							</TextBox.KeyBindings>
 						</TextBox>
 						<TextBlock TextWrapping="Wrap">Max 32 characters, use lowercase letters, numbers, underscores _ or full stops.</TextBlock>
+						<StackPanel Spacing="4">
+							<Label Classes="Small" Content="Avatar Type"></Label>
+						<ListBox Height="90"
+							ItemsSource="{Binding Items}" SelectedIndex="{Binding SelectedAvatarType}" />
+						</StackPanel>
 					</StackPanel>
 					<shadui:Card.Footer>
 						<Button Classes="Primary" Command="{Binding SubmitDemoCommand}">Submit</Button>

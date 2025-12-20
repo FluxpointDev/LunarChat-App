@@ -6,6 +6,8 @@ using LunarChatApp.Views.Dialogs;
 using LunarChatSharp;
 using LunarChatSharp.Rest.Dev;
 using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.Views.User.Settings.Developer;
@@ -22,6 +24,8 @@ public partial class DeveloperTeamInfoModel : ViewModelBase
         backAction = back;
         _id = team.Id;
         Name = team.Name;
+        if (!string.IsNullOrEmpty(team.IconId))
+            Icon = new Uri(team.GetIconUrl());
     }
 
     [ObservableProperty]
@@ -29,6 +33,9 @@ public partial class DeveloperTeamInfoModel : ViewModelBase
 
     [ObservableProperty]
     private string _name;
+
+    [ObservableProperty]
+    private Uri? icon;
 
     [RelayCommand]
     public void Back()
@@ -47,7 +54,7 @@ public partial class DeveloperTeamInfoModel : ViewModelBase
         CreateNameDialogModel? model = control.DataContext as CreateNameDialogModel;
         try
         {
-            await services.Rest.EditTeamAsync(Id, new CreateTeamRequest
+            await services.Rest.EditTeamAsync(Id, new EditTeamRequest
             {
                 Name = model.Name
             });
@@ -67,5 +74,43 @@ public partial class DeveloperTeamInfoModel : ViewModelBase
         }
         catch { }
 
+    }
+
+    [RelayCommand]
+    public async Task UploadIcon()
+    {
+        var files = await services.FilePicker();
+        if (!files.Any())
+            return;
+
+        try
+        {
+            RestTeam? getTeam = null;
+            using (Stream stream = await files.First().OpenReadAsync())
+            {
+                getTeam = await services.Rest.EditTeamAsync(Id, new EditTeamRequest
+                {
+                    Icon = Utils.GetImageBase64(stream)
+                });
+            }
+            Icon = new Uri(getTeam.GetIconUrl());
+            team?.IconId = getTeam.IconId;
+        }
+        catch { }
+    }
+
+    [RelayCommand]
+    public async Task ClearIcon()
+    {
+        try
+        {
+            await services.Rest.EditTeamAsync(Id, new EditTeamRequest
+            {
+                Icon = ""
+            });
+            Icon = null;
+            team?.IconId = null;
+        }
+        catch { }
     }
 }

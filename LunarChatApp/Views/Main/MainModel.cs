@@ -23,9 +23,11 @@ public partial class MainModel : ViewModelBase
 {
     private bool _disposed;
     public ServiceManager services;
+    public TestState state { get; set; }
     public MainModel(ServiceManager sv)
     {
         services = sv;
+        state = sv.State;
         _toastManager = sv.ToastManager;
         services.PageManager.OnSwitchPage += SwitchPage;
         services.Client.OnRelationAdd += RelationAdd;
@@ -45,20 +47,23 @@ public partial class MainModel : ViewModelBase
 
     private async Task MessageRecieve(RestChannel channel, RestMessage message)
     {
-        if (channel.Type != ChannelType.Direct || message.Author.Id == services.Client.CurrentId || channel.Id == services.Socket.State.CurrentChannel?.Id)
+        if (channel.Type != ChannelType.Direct || message.Author.Id == services.Client.CurrentId || channel.Id == services.State.CurrentChannel?.Id)
             return;
 
         if (message.Source == LunarChatSharp.Core.Messages.MessageSourceType.System)
             return;
 
-        services.ToastManager.CreateToast(message.Author.DisplayName ?? message.Author.Username)
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            services.ToastManager.CreateToast(message.Author.DisplayName ?? message.Author.Username)
                  .WithContent(message.Content)
                  .WithAction("View", () =>
                  {
-                     services.State.Socket.CurrentChannel = channel;
-                     services.Client.OnSelectChannel?.Invoke(services.State.Socket.CurrentChannel);
+                     services.State.CurrentChannel = channel;
+                     services.Client.OnSelectChannel?.Invoke(services.State.CurrentChannel);
                  })
                  .Show();
+        });
     }
 
     private async Task RelationAdd(RestRelation relation)
@@ -68,20 +73,28 @@ public partial class MainModel : ViewModelBase
             if (relation.RequestBy == services.Client.CurrentId)
                 return;
 
-            services.ToastManager.CreateToast("Friend Request")
-               .WithContent($"{relation.DisplayName ?? relation.Username} would like to add you.")
-               .WithAction("View", () => { services.State.TriggerPageSelect(new FriendsList() { DataContext = new FriendsListModel(services) }); })
-               .Show();
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                services.ToastManager.CreateToast("Friend Request")
+                               .WithContent($"{relation.DisplayName ?? relation.Username} would like to add you.")
+                               .WithAction("View", () => { services.State.TriggerPageSelect(new FriendsList() { DataContext = new FriendsListModel(services) }); })
+                               .Show();
+            });
+
         }
         else if (relation.Type == UserRelationType.Friend)
         {
             if (relation.RequestBy != services.Client.CurrentId)
                 return;
 
-            services.ToastManager.CreateToast("Friend Added")
-                 .WithContent($"{relation.DisplayName ?? relation.Username} accepted your request.")
-                 .WithAction("View", () => { services.State.TriggerPageSelect(new FriendsList() { DataContext = new FriendsListModel(services) }); })
-                 .Show();
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                services.ToastManager.CreateToast("Friend Added")
+                                 .WithContent($"{relation.DisplayName ?? relation.Username} accepted your request.")
+                                 .WithAction("View", () => { services.State.TriggerPageSelect(new FriendsList() { DataContext = new FriendsListModel(services) }); })
+                                 .Show();
+            });
+
         }
     }
 

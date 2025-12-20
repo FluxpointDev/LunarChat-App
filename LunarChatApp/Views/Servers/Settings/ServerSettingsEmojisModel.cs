@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using LunarChatApp.Services;
 using LunarChatApp.Views.Dialogs;
+using LunarChatApp.Views.Dialogs.Servers;
 using LunarChatSharp;
 using LunarChatSharp.Core.Servers;
 using LunarChatSharp.Rest.Messages;
@@ -14,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
@@ -32,16 +34,16 @@ public partial class ServerSettingsEmojisModel : ViewModelBase
         services.Client.OnEmojiCreate += EmojiCreated;
         services.Client.OnEmojiUpdate += EmojiUpdated;
         services.Client.OnEmojiDelete += EmojiDeleted;
-        services.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
-        _canCreate = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.CreateExpressions);
-        bool CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageExpressions);
+        services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+        _canCreate = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.CreateExpressions);
+        bool CanManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.ManageExpressions);
         _searchTimer = new Timer(500); // 500ms debounce
         _searchTimer.Elapsed += SearchTimerElapsed;
         _searchTimer.AutoReset = false;
 
         PropertyChanged += OnPropertyChanged;
 
-        _originalItems = services.State.Socket.CurrentServer.Emojis.Values.Select(x => new EmojiListItem(services)
+        _originalItems = services.State.CurrentServer.Emojis.Values.Select(x => new EmojiListItem(services)
         {
             Id = x.Id,
             Name = x.Name,
@@ -53,12 +55,12 @@ public partial class ServerSettingsEmojisModel : ViewModelBase
         Items = new ObservableCollection<EmojiListItem>(_originalItems);
     }
 
-    private async Task PermissionUpdate()
+    private async Task PermissionUpdate(RestServer server)
     {
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            CanCreate = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.CreateExpressions);
-            bool CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageExpressions);
+            CanCreate = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.CreateExpressions);
+            bool CanManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.ManageExpressions);
             foreach (var i in _originalItems)
             {
                 i.CanManage = i.Creator == services.Client.CurrentId || CanManage;
@@ -102,13 +104,14 @@ public partial class ServerSettingsEmojisModel : ViewModelBase
 
     private async Task EmojiCreated(RestServer server, RestEmoji emoji)
     {
-        bool CanManage = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ServerPermission.ManageExpressions);
+        bool CanManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.ManageExpressions);
         EmojiListItem item = new EmojiListItem(services)
         {
             Id = emoji.Id,
             Creator = emoji.CreatedBy,
             Name = emoji.Name,
-            CanManage = emoji.CreatedBy == services.Client.CurrentId || CanManage
+            CanManage = emoji.CreatedBy == services.Client.CurrentId || CanManage,
+            Icon = new Uri(emoji.GetIconUrl())
         };
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
@@ -116,29 +119,34 @@ public partial class ServerSettingsEmojisModel : ViewModelBase
             item.PropertyChanged += OnItemsChanged;
             UpdateList();
         });
-
     }
 
     [RelayCommand]
     public void CreateEmote()
     {
-        services.Dialogs.Create(new CreateNameDialog(), new CreateNameDialogModel
+        services.Dialogs.Create(new CreateEmojiDialog(), new CreateEmojiDialogModel(services)
         {
         }, "Create Emoji").WithSubmit(SubmitEmoji).Open();
     }
 
     public async Task SubmitEmoji(UserControl control)
     {
-        CreateNameDialogModel? model = control.DataContext as CreateNameDialogModel;
-        if (model.Name == null)
-            model.Name = "";
+        CreateEmojiDialogModel? model = control.DataContext as CreateEmojiDialogModel;
+        if (model == null || string.IsNullOrEmpty(model.Name) || model.Icon == null)
+            return;
 
         try
         {
-            await services.Rest.CreateEmojiAsync(services.State.Socket.CurrentServer?.Server.Id, new CreateEmojiRequest
+            using (var str = new MemoryStream())
             {
-                Name = model.Name
-            });
+                model.Icon.Save(str);
+                str.Position = 0;
+                await services.Rest.CreateEmojiAsync(services.State.CurrentServer?.Server.Id, new CreateEmojiRequest
+                {
+                    Name = model.Name,
+                    Icon = Utils.GetImageBase64(str)
+                });
+            }
         }
         catch { }
     }
@@ -261,6 +269,9 @@ public partial class EmojiListItem(ServiceManager services) : ObservableObject
     [ObservableProperty]
     private string _name;
 
+    [ObservableProperty]
+    private Uri icon;
+
     public string Id;
 
     [ObservableProperty]
@@ -283,7 +294,7 @@ public partial class EmojiListItem(ServiceManager services) : ObservableObject
 
         try
         {
-            await services.Rest.EditEmojiAsync(services.State.Socket.CurrentServer?.Server.Id, Id, new EditEmojiRequest
+            await services.Rest.EditEmojiAsync(services.State.CurrentServer?.Server.Id, Id, new EditEmojiRequest
             {
                 Name = model.Name
             });
@@ -302,7 +313,7 @@ public partial class EmojiListItem(ServiceManager services) : ObservableObject
     {
         try
         {
-            await services.Rest.DeleteEmojiAsync(services.State.Socket.CurrentServer?.Server.Id, Id);
+            await services.Rest.DeleteEmojiAsync(services.State.CurrentServer?.Server.Id, Id);
         }
         catch { }
     }

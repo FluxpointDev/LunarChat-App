@@ -48,7 +48,7 @@ public partial class SettingsDebugModel : ViewModelBase
 
         using (var stream = System.IO.File.OpenRead(Path))
         {
-            await services.Rest.SendMesssageAsync(services.Socket.State.CurrentChannel?.Id, new CreateMessageRequest
+            await services.Rest.SendMesssageAsync(services.State.CurrentChannel?.Id, new CreateMessageRequest
             {
                 Attachments = new CreateAttachmentRequest[]
                 {

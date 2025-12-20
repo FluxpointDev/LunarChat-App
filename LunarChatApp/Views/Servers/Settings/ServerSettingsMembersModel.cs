@@ -34,7 +34,7 @@ public partial class ServerSettingsMembersModel : ViewModelBase
         _searchTimer.AutoReset = false;
         services.Client.OnMemberJoin += MemberJoin;
         services.Client.OnMemberLeft += MemberLeft;
-        services.Socket.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+        services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
         PropertyChanged += OnPropertyChanged;
 
         foreach (var i in _originalItems) i.PropertyChanged += OnItemsChanged;
@@ -42,7 +42,7 @@ public partial class ServerSettingsMembersModel : ViewModelBase
 
         _ = Task.Run(async () =>
         {
-            var Members = await services.Rest.GetMembersAsync(services.Socket.State.CurrentServer.Server.Id);
+            var Members = await services.Rest.GetMembersAsync(services.State.CurrentServer.Server.Id);
             if (Members == null)
                 return;
 
@@ -57,13 +57,13 @@ public partial class ServerSettingsMembersModel : ViewModelBase
         });
     }
 
-    private async Task PermissionUpdate()
+    private async Task PermissionUpdate(RestServer server)
     {
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             foreach (var i in _originalItems)
             {
-                i.Update(services.State.Socket.CurrentServer.Member);
+                i.Update(services.State.CurrentServer.Member);
             }
         });
 
@@ -71,7 +71,7 @@ public partial class ServerSettingsMembersModel : ViewModelBase
 
     private async Task MemberLeft(RestServer server, RestMember member)
     {
-        if (services.State.Socket.CurrentServer?.Server?.Id != server.Id)
+        if (services.State.CurrentServer?.Server?.Id != server.Id)
             return;
 
         var item = _originalItems.FirstOrDefault(x => x.id == member.Id);
@@ -88,7 +88,7 @@ public partial class ServerSettingsMembersModel : ViewModelBase
 
     private async Task MemberJoin(RestServer server, RestMember member)
     {
-        if (services.State.Socket.CurrentServer?.Server?.Id != server.Id)
+        if (services.State.CurrentServer?.Server?.Id != server.Id)
             return;
 
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
@@ -213,12 +213,12 @@ public partial class MemberListItem : ObservableObject
         JoinedAt = member.JoinedAt.Value.ToLocalTime().ToString("d MMMM yyyy");
 
         bool CanManage = false;
-        CanTransferOwner = !member.User.IsBot && services.Socket.State.CurrentServer.Server.OwnerId == services.Client.CurrentId && id != services.Socket.State.CurrentServer.Server.OwnerId;
-        if (member.User.Id != services.State.Socket.CurrentServer.Server.OwnerId)
+        CanTransferOwner = !member.User.IsBot && services.State.CurrentServer.Server.OwnerId == services.Client.CurrentId && id != services.State.CurrentServer.Server.OwnerId;
+        if (member.User.Id != services.State.CurrentServer.Server.OwnerId)
         {
-            CanBanMember = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.BanMembers);
-            CanKickUser = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.KickMembers);
-            CanTimeoutUser = services.State.Socket.CurrentServer.HasPermission(services.State.Socket.CurrentServer.Member, ModPermission.TimeoutMembers);
+            CanBanMember = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.BanMembers);
+            CanKickUser = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.KickMembers);
+            CanTimeoutUser = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.TimeoutMembers);
         }
         if (services.Client.CurrentId == member.User.Id)
         {
@@ -337,7 +337,7 @@ public partial class MemberListItem : ObservableObject
         CreateBanRequest req = model.CreateRequest();
         try
         {
-            await services.Rest.BanMemberAsync(services.Socket.State.CurrentServer.Server.Id, id, req);
+            await services.Rest.BanMemberAsync(services.State.CurrentServer.Server.Id, id, req);
             services.ToastManager.CreateToast("Member Banned").DismissOnClick().WithDelay(3).Show();
         }
         catch { }
@@ -348,7 +348,7 @@ public partial class MemberListItem : ObservableObject
     {
         try
         {
-            await services.Rest.EditServerAsync(services.Socket.State.CurrentServer.Server.Id, new EditServerRequest
+            await services.Rest.EditServerAsync(services.State.CurrentServer.Server.Id, new EditServerRequest
             {
                 OwnerId = id
             });
@@ -370,7 +370,7 @@ public partial class MemberListItem : ObservableObject
 
         try
         {
-            await services.Rest.KickMemberAsync(services.Socket.State.CurrentServer.Server.Id, id, new LunarChatSharp.Rest.ReasonRequest
+            await services.Rest.KickMemberAsync(services.State.CurrentServer.Server.Id, id, new LunarChatSharp.Rest.ReasonRequest
             {
                 Reason = model.Reason
             });
@@ -386,7 +386,7 @@ public partial class MemberListItem : ObservableObject
         {
             if (timeoutItemText.StartsWith("Remove"))
             {
-                await services.Rest.TimeoutMemberAsync(services.Socket.State.CurrentServer.Server.Id, id, null, null);
+                await services.Rest.TimeoutMemberAsync(services.State.CurrentServer.Server.Id, id, null, null);
                 services.ToastManager.CreateToast("Timeout Removed").DismissOnClick().WithDelay(3).Show();
             }
             else
@@ -405,7 +405,7 @@ public partial class MemberListItem : ObservableObject
             return;
         try
         {
-            await services.Rest.TimeoutMemberAsync(services.Socket.State.CurrentServer.Server.Id, id, model.GetTimeout(), model.Reason);
+            await services.Rest.TimeoutMemberAsync(services.State.CurrentServer.Server.Id, id, model.GetTimeout(), model.Reason);
             services.ToastManager.CreateToast("Member Timed-out").DismissOnClick().WithDelay(3).Show();
         }
         catch { }

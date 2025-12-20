@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
@@ -16,7 +17,10 @@ using LunarChatSharp.Websocket.Events.Servers;
 using Material.Icons;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.ViewModels;
@@ -46,7 +50,7 @@ public partial class ServersModel : ViewModelBase
         services.Client.OnPresenceUpdate += PresenceUpdate;
         services.Client.OnAccountUpdate += AccountUpdate;
         services.Client.OnServerUpdate += ServerUpdate;
-        if (state.Socket.CurrentServer == null)
+        if (state.CurrentServer == null)
         {
             _selectedPage = new HomeView() { DataContext = new HomeModel(services) };
             //_selectedHeader = new HomeHeader() { DataContext = new HomeHeaderModel() };
@@ -54,9 +58,9 @@ public partial class ServersModel : ViewModelBase
         }
         else
         {
-            _selectedHeader = new ServerHeaderView() { DataContext = new ServerHeaderModel(services, state.Socket.CurrentServer.Server) };
+            _selectedHeader = new ServerHeaderView() { DataContext = new ServerHeaderModel(services, state.CurrentServer.Server) };
             _selectedSidebar = new ChannelsListView() { DataContext = new ChannelListModel(services, state) };
-            if (state.Socket.CurrentChannel != null)
+            if (state.CurrentChannel != null)
                 _selectedPage = new ChannelView() { DataContext = new ChannelViewModel(state, services) };
         }
 
@@ -103,26 +107,36 @@ public partial class ServersModel : ViewModelBase
 
     private async Task ServerUpdate(RestServer server, ServerUpdateEvent ev)
     {
-        if (string.IsNullOrEmpty(ev.Changed.Name))
-            return;
-
-        var item = ServersList.FirstOrDefault(x => (x.DataContext as ServerIconModel)?.Id == ev.ServerId);
-        if (item != null)
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            ServerIconModel? model = item.DataContext as ServerIconModel;
-            if (model == null)
-                return;
-
-            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            var item = ServersList.FirstOrDefault(x => (x.DataContext as ServerIconModel)?.Id == ev.ServerId);
+            if (item != null)
             {
-                if (server.Name != null)
+                ServerIconModel? model = item.DataContext as ServerIconModel;
+                if (model == null)
+                    return;
+
+
+                if (ev.Changed.Name != null)
                 {
-                    model.Name = server.Name;
+                    model.Name = ev.Changed.Name;
                     model.Fallback = server.GetFallback();
                 }
-            });
 
-        }
+                if (ev.Changed.Icon != null)
+                {
+                    if (ev.Changed.Icon == "")
+                    {
+                        model.Fallback = server.GetFallback();
+                        model.Icon = null;
+                    }
+                    else
+                    {
+                        model.Icon = new Uri(ev.Changed.GetIconUrl());
+                    }
+                }
+            }
+        });
     }
 
     private async Task AccountUpdate(AccountUpdateEvent ev)
@@ -141,7 +155,43 @@ public partial class ServersModel : ViewModelBase
             if (string.IsNullOrEmpty(state.CurrentDisplayName))
                 state.CurrentDisplayName = state.Username;
         });
+        if (ev.Changed.Avatar != null)
+        {
+            if (!string.IsNullOrEmpty(ev.Changed.Avatar))
+            {
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        var bytes = await new HttpClient().GetByteArrayAsync(ev.Changed.GetAvatarUrl());
+                        Bitmap? bitmap = null;
+                        using (MemoryStream str = new MemoryStream(bytes))
+                        {
+                            bitmap = new Bitmap(str);
+                        }
 
+                        if (bitmap == null)
+                            return;
+
+                        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+                        {
+                            services.State.Avatar = bitmap;
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex);
+                    }
+                });
+            }
+            else
+            {
+                Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+                {
+                    state.Avatar = null;
+                });
+            }
+        }
     }
 
     private async Task PresenceUpdate(RestUserPresence presence)
@@ -153,13 +203,17 @@ public partial class ServersModel : ViewModelBase
     {
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            ServersList.Remove(ServersList.FirstOrDefault(x => (x.DataContext as ServerIconModel).Id == server.Id));
-            if (server.Id == state.Socket.CurrentServer?.Server.Id)
+            var item = ServersList.FirstOrDefault(x => (x.DataContext as ServerIconModel).Id == server.Id);
+            if (item == null)
+                return;
+
+            ServersList.Remove(item);
+            if (server.Id == state.CurrentServer?.Server.Id)
             {
                 SelectedHeader = null;
                 SelectedSidebar = null;
                 SelectedPage = null;
-                state.Socket.CurrentServer = null;
+                state.CurrentServer = null;
             }
         });
 
@@ -167,12 +221,12 @@ public partial class ServersModel : ViewModelBase
 
     private async Task State_OnAddServer(RestServer server)
     {
-        var serverItem = ServersList.FirstOrDefault(x => (x.DataContext as ServerIconModel)!.Id == server.Id);
-        if (serverItem != null)
-            return;
-
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
+            var serverItem = ServersList.FirstOrDefault(x => (x.DataContext as ServerIconModel)!.Id == server.Id);
+            if (serverItem != null)
+                return;
+
             ServersList.Add(new ServerIcon()
             {
                 DataContext = new ServerIconModel(services, server)
@@ -199,7 +253,7 @@ public partial class ServersModel : ViewModelBase
             IsExpanded = true;
         if (server == null)
         {
-            state.Socket.CurrentServer = null;
+            state.CurrentServer = null;
             SelectedHeader = null;
             SelectedSidebar = null;
             SelectedPage = null;
@@ -237,7 +291,7 @@ public partial class ServersModel : ViewModelBase
         //SelectedHeader = new HomeHeader() { DataContext = new HomeHeaderModel() };
         SelectedSidebar = new DMsListView { DataContext = new DMsListModel(services) };
         SelectedPage = new HomeView() { DataContext = new HomeModel(services) };
-        state.Socket.CurrentServer = null;
+        state.CurrentServer = null;
     }
 
     [RelayCommand]

@@ -7,6 +7,7 @@ using LunarChatApp.Views;
 using LunarChatApp.Views.Channels.Settings;
 using LunarChatApp.Views.Servers.Settings;
 using LunarChatSharp.Rest.Channels;
+using LunarChatSharp.Rest.Servers;
 using LunarChatSharp.Rest.Webhooks;
 using System.Threading.Tasks;
 
@@ -33,20 +34,18 @@ public partial class ChannelSettingsModel : ViewModelBase
         {
             channelType = "Server Channel";
             isServerChannel = true;
-            if (sv.State.Socket.CurrentServer != null)
-            {
-                sv.State.Socket.CurrentServer.OnChannelUpdate += UpdateChannel;
-                sv.State.Socket.CurrentServer.OnPermissionUpdate += PermissionUpdate;
-            }
+            sv.Client.OnChannelUpdate += UpdateChannel;
+            if (sv.State.CurrentServer != null)
+                sv.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
         }
 
         if (SelectedPage == null)
             SelectedPage = new ChannelSettingsOverview { DataContext = new ChannelSettingsOverviewModel(services, chan) };
     }
 
-    private async Task PermissionUpdate()
+    private async Task PermissionUpdate(RestServer server)
     {
-        bool HasManage = services.Socket.State.CurrentServer.CanManageChannel(services.Socket.State.CurrentServer.Member);
+        bool HasManage = services.State.CurrentServer.CanManageChannel(services.State.CurrentServer.Member);
         if (HasManage)
             return;
 
@@ -58,6 +57,9 @@ public partial class ChannelSettingsModel : ViewModelBase
 
     private async Task UpdateChannel(RestChannel channel, UpdateChannelRequest request)
     {
+        if (state.CurrentChannel?.Id != channel.Id)
+            return;
+
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             ChannelName = channel.Name;

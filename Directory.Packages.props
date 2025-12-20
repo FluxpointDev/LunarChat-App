@@ -3,7 +3,7 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <!-- Switch to 655 for browser and 677 everything else -->
-    <AvaVersion>12.0.999-cibuild0060677-alpha</AvaVersion>
+    <AvaVersion>12.0.999-cibuild0060655-alpha</AvaVersion>
   </PropertyGroup>
   <ItemGroup>
     <!-- Avalonia packages -->

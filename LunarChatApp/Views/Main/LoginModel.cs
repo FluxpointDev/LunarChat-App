@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Avalonia.Media.Imaging;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatApp.Validators;
@@ -9,6 +10,9 @@ using LunarChatSharp.Rest.Users;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
+using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.ViewModels;
@@ -30,6 +34,17 @@ public partial class LoginModel(ServiceManager services, MainModel main) : ViewM
 
     [ObservableProperty]
     private string? _username = ServiceManager.IsDev ? "builderb" : null;
+
+    [ObservableProperty]
+    private int selectedAvatarType;
+
+    [ObservableProperty]
+    private string[] _items =
+    [
+        "Male",
+        "Female"
+    ];
+
 
     [Required(ErrorMessage = "Email is required")]
     [EmailValidation]
@@ -72,11 +87,10 @@ public partial class LoginModel(ServiceManager services, MainModel main) : ViewM
 
         try
         {
-
-
             RestUser Json = await services.Rest.CreateDemoAccount(new CreateDemoAccountRequest
             {
                 Username = CleanUsername,
+                AvatarType = SelectedAvatarType
             });
 
             await services.Client.LoginAsync(Json.Id);
@@ -86,6 +100,34 @@ public partial class LoginModel(ServiceManager services, MainModel main) : ViewM
             services.State.DisplayName = Json.DisplayName;
             services.State.AboutMe = Json.AboutMe;
             services.State.Username = Json.Username;
+
+            if (!string.IsNullOrEmpty(Json.AvatarId))
+            {
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        var bytes = await new HttpClient().GetByteArrayAsync(Json.GetAvatarUrl());
+                        Bitmap? bitmap = null;
+                        using (MemoryStream str = new MemoryStream(bytes))
+                        {
+                            bitmap = new Bitmap(str);
+                        }
+
+                        if (bitmap == null)
+                            return;
+
+                        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+                        {
+                            services.State.Avatar = bitmap;
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex);
+                    }
+                });
+            }
             services.State.CachedServersPage = new ServersPage
             {
                 DataContext = new ServersModel(services, main)
