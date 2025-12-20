@@ -32,8 +32,6 @@ public static class TrayMenu
         var items = trayIcon.Menu.Items.OfType<NativeMenuItem>().ToList();
         var openMenu = items.First(x =>
             x.Header != null && x.Header.Contains("Open", StringComparison.CurrentCultureIgnoreCase));
-        //var aboutMenu = items.First(x =>
-        //    x.Header != null && x.Header.Contains("About", StringComparison.CurrentCultureIgnoreCase));
         var exitMenu = items.First(x =>
             x.Header != null && x.Header.Contains("Quit", StringComparison.CurrentCultureIgnoreCase));
 
@@ -47,18 +45,6 @@ public static class TrayMenu
 
             window.Activate();
         };
-
-        //aboutMenu.Click += (_, _) =>
-        //{
-        //    if (window.WindowState == WindowState.Minimized)
-        //    {
-        //        window.RestoreWindowState();
-        //        window.Show();
-        //    }
-
-        //    window.Activate();
-        //    viewModel.ShowAboutCommand.Execute(null);
-        //};
 
         exitMenu.Click += (_, _) =>
         {

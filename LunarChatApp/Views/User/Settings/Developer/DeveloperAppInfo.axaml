@@ -5,6 +5,7 @@
 			 xmlns:developer="using:LunarChatApp.Views.User.Settings.Developer"
 			 xmlns:materialIcons="using:Material.Icons.Avalonia"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:shadui="using:ShadUI"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="LunarChatApp.DeveloperAppInfo"
 			 x:DataType="developer:DeveloperAppInfoModel">
@@ -22,51 +23,101 @@
 				<SelectableTextBlock Margin="4,0,0,0" Classes="Lead" FontSize="16" Text="{Binding Id}"></SelectableTextBlock>
 			</StackPanel>
 
-			<StackPanel>
-				<Label Classes="Small">Type</Label>
-				<SelectableTextBlock Margin="4,0,0,0" Classes="Lead" FontSize="16" Text="{Binding Type}"></SelectableTextBlock>
-			</StackPanel>
+			<TabControl>
+				<TabControl.Items>
+					<TabItem Header="Info">
+						<StackPanel Spacing="10">
+							<StackPanel>
+								<Label Classes="Small">Type</Label>
+								<SelectableTextBlock Margin="4,0,0,0" Classes="Lead" FontSize="16" Text="{Binding Type}"></SelectableTextBlock>
+							</StackPanel>
 
-			<StackPanel>
-				<Label Classes="Small">Description</Label>
-				<SelectableTextBlock Margin="4,0,0,0" Classes="Lead" FontSize="16" Text="{Binding Description}"></SelectableTextBlock>
-			</StackPanel>
+							<StackPanel>
+								<Label Classes="Small">Description</Label>
+								<SelectableTextBlock Margin="4,0,0,0" Classes="Lead" FontSize="16" Text="{Binding Description}"></SelectableTextBlock>
+							</StackPanel>
 
-			<StackPanel>
-				<Label Classes="Small">Website</Label>
-				<SelectableTextBlock Margin="4,0,0,0" Classes="Lead" FontSize="16" Text="{Binding Website}"></SelectableTextBlock>
-			</StackPanel>
+							<StackPanel>
+								<Label Classes="Small">Website</Label>
+								<SelectableTextBlock Margin="4,0,0,0" Classes="Lead" FontSize="16" Text="{Binding Website}"></SelectableTextBlock>
+							</StackPanel>
 
-			<StackPanel>
-				<Label Classes="Small">Terms of Service</Label>
-				<SelectableTextBlock Margin="4,0,0,0" Classes="Lead" FontSize="16" Text="{Binding Terms}"></SelectableTextBlock>
-			</StackPanel>
+							<StackPanel>
+								<Label Classes="Small">Terms of Service</Label>
+								<SelectableTextBlock Margin="4,0,0,0" Classes="Lead" FontSize="16" Text="{Binding Terms}"></SelectableTextBlock>
+							</StackPanel>
 
-			<StackPanel>
-				<Label Classes="Small">Privacy Policy</Label>
-				<SelectableTextBlock Margin="4,0,0,0" Classes="Lead" FontSize="16" Text="{Binding Privacy}"></SelectableTextBlock>
-			</StackPanel>
+							<StackPanel>
+								<Label Classes="Small">Privacy Policy</Label>
+								<SelectableTextBlock Margin="4,0,0,0" Classes="Lead" FontSize="16" Text="{Binding Privacy}"></SelectableTextBlock>
+							</StackPanel>
 
-			<StackPanel Spacing="10" HorizontalAlignment="Left">
-				<Label Classes="Small">Icon</Label>
-				<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True" Width="90" Height="90"
-						BorderBrush="{DynamicResource BorderColor}" BorderThickness="2">
-					<Grid>
-						<controls:AsyncImage CornerRadius="90" Source="{Binding Icon}" IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"></controls:AsyncImage>
-						<Button Opacity="0.6" Command="{Binding UploadIconCommand}" CornerRadius="90" />
-						<materialIcons:MaterialIcon VerticalAlignment="Center" HorizontalAlignment="Center" Kind="Plus" Width="14" Height="14" IsHitTestVisible="False" Foreground="{DynamicResource PrimaryColor}" IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNull}}" />
-					</Grid>
-				</Border>
+							<StackPanel Spacing="10" HorizontalAlignment="Left">
+								<Label Classes="Small">Icon</Label>
+								<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True" Width="90" Height="90"
+										BorderBrush="{DynamicResource BorderColor}" BorderThickness="2">
+									<Grid>
+										<controls:AsyncImage CornerRadius="90" Source="{Binding Icon}" IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"></controls:AsyncImage>
+										<Button Opacity="0.6" Command="{Binding UploadIconCommand}" CornerRadius="90" />
+										<materialIcons:MaterialIcon VerticalAlignment="Center" HorizontalAlignment="Center" Kind="Plus" Width="14" Height="14" IsHitTestVisible="False" Foreground="{DynamicResource PrimaryColor}" IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNull}}" />
+									</Grid>
+								</Border>
 
-				<StackPanel
-				HorizontalAlignment="Left"
-				Orientation="Horizontal"
-				Spacing="8">
-					<Button Command="{Binding ClearIconCommand}"
-							Classes="Primary"
-							Content="Clear" />
-				</StackPanel>
-			</StackPanel>
+								<StackPanel
+								HorizontalAlignment="Left"
+								Orientation="Horizontal"
+								Spacing="8">
+									<Button Command="{Binding ClearIconCommand}"
+											Classes="Primary"
+											Content="Clear" />
+								</StackPanel>
+							</StackPanel>
+						</StackPanel>
+					</TabItem>
+					<TabItem Header="Data Access">
+						<StackPanel Spacing="10">
+							<shadui:Card Margin="4" HasShadow="True" HorizontalAlignment="Stretch" BorderBrush="{DynamicResource InfoColor60}" Background="{DynamicResource InfoColor10}">
+								<TextBlock FontSize="16" Text="Let users know what data your app needs to function!" />
+							</shadui:Card>
+
+							<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding MessageContentEnabled}">
+								<ToggleSwitch.OffContent>
+									<Label Classes="Small" VerticalAlignment="Center">Message Content</Label>
+								</ToggleSwitch.OffContent>
+								<ToggleSwitch.OnContent>
+									<Label Classes="Small" VerticalAlignment="Center">Message Content</Label>
+								</ToggleSwitch.OnContent>
+							</ToggleSwitch>
+							<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Access message text, attachments and embeds."></SelectableTextBlock>
+
+							<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding ServerMembersEnabled}">
+								<ToggleSwitch.OffContent>
+									<Label Classes="Small" VerticalAlignment="Center">Server Members</Label>
+								</ToggleSwitch.OffContent>
+								<ToggleSwitch.OnContent>
+									<Label Classes="Small" VerticalAlignment="Center">Server Members</Label>
+								</ToggleSwitch.OnContent>
+							</ToggleSwitch>
+							<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Access server member information and roles."></SelectableTextBlock>
+
+							<ToggleSwitch Margin="12,0,10,0" IsChecked="{Binding PresenceEnabled}">
+								<ToggleSwitch.OffContent>
+									<Label Classes="Small" VerticalAlignment="Center">User Presence</Label>
+								</ToggleSwitch.OffContent>
+								<ToggleSwitch.OnContent>
+									<Label Classes="Small" VerticalAlignment="Center">User Presence</Label>
+								</ToggleSwitch.OnContent>
+							</ToggleSwitch>
+							<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Access user status and online state."></SelectableTextBlock>
+
+						</StackPanel>
+					</TabItem>
+					<TabItem Header="Permissions">
+					</TabItem>
+				</TabControl.Items>
+			</TabControl>
+
+
 		</StackPanel>
 	</StackPanel>
 </UserControl>

@@ -15,7 +15,7 @@ public partial class TestState : ObservableObject
 {
     public string? CleanUsername(string username)
     {
-        char[] characters = username.ToLower().Where(x =>
+        char[] characters = username.ToLower().Where(static x =>
         {
             if (x == '_' || x == '.' || char.IsLetterOrDigit(x))
                 return true;

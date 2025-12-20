@@ -57,6 +57,15 @@ public partial class DeveloperAppInfoModel : ViewModelBase
     [ObservableProperty]
     private Uri? icon;
 
+    [ObservableProperty]
+    private bool messageContentEnabled;
+
+    [ObservableProperty]
+    private bool serverMembersEnabled;
+
+    [ObservableProperty]
+    private bool presenceEnabled;
+
     [RelayCommand]
     public void Back()
     {
