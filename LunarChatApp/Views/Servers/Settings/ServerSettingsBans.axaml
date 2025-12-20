@@ -37,15 +37,6 @@
                 ItemsSource="{Binding Items}"
                 SelectionMode="Single">
                 <DataGrid.Columns>
-                    <!--<DataGridCheckBoxColumn Binding="{Binding IsSelected}" CanUserSort="False">
-                        <DataGridCheckBoxColumn.Header>
-                            <CheckBox
-                                x:Name="SelectToggler"
-                                Command="{Binding ToggleSelectionCommand}"
-                                CommandParameter="{Binding #SelectToggler.IsChecked}"
-                                IsChecked="{Binding SelectAll}" />
-                        </DataGridCheckBoxColumn.Header>
-                    </DataGridCheckBoxColumn>-->
                     <DataGridTextColumn
                         Binding="{Binding TargetName}"
                         CanUserSort="False"

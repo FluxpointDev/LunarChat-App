@@ -6,8 +6,6 @@
              x:Class="LunarChatApp.App"
              xmlns:themes="clr-namespace:ShadUI;assembly=ShadUI"
              RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
-
 
      <TrayIcon.Icons>
         <TrayIcons>

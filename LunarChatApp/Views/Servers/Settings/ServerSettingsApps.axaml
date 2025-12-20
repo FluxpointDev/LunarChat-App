@@ -28,9 +28,6 @@
                             Opacity="0.75" />
                     </TextBox.InnerRightContent>
                 </TextBox>
-                <!--<Button Grid.Column="1" Command="{Binding CreateEmoteCommand}"
-		Classes="Primary"
-		Content="Create" />-->
             </Grid>
             <DataGrid
                 x:Name="DataGrid"
@@ -40,15 +37,6 @@
                 ItemsSource="{Binding Items}"
                 SelectionMode="Single">
                 <DataGrid.Columns>
-                    <!--<DataGridCheckBoxColumn Binding="{Binding IsSelected}" CanUserSort="False">
-                        <DataGridCheckBoxColumn.Header>
-                            <CheckBox
-                                x:Name="SelectToggler"
-                                Command="{Binding ToggleSelectionCommand}"
-                                CommandParameter="{Binding #SelectToggler.IsChecked}"
-                                IsChecked="{Binding SelectAll}" />
-                        </DataGridCheckBoxColumn.Header>
-                    </DataGridCheckBoxColumn>-->
                     <DataGridTextColumn
                         Binding="{Binding Name}"
                         CanUserSort="False"
@@ -58,9 +46,6 @@
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
-									<!--<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding OpenRoleCommand}">
-										<materialIcons:MaterialIcon Kind="Pencil" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
-									</Button>-->
 									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding CopyIdCommand}">
 										<materialIcons:MaterialIcon Kind="Identifier" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 									</Button>
