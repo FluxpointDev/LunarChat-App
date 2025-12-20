@@ -6,7 +6,6 @@ using LunarChatApp.ViewModels.Main;
 using LunarChatApp.Views;
 using LunarChatApp.Views.Main;
 using LunarChatSharp.Rest.Channels;
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,7 +35,7 @@ public partial class DMsListModel : ViewModelBase
     {
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            var item = CrockeryList.FirstOrDefault(x => (x.DataContext as DMListItemModel).id == channel.Id);
+            var item = CrockeryList.FirstOrDefault(x => (x.DataContext as DMListItemModel)?.id == channel.Id);
             if (item == null)
                 return;
 
@@ -48,25 +47,15 @@ public partial class DMsListModel : ViewModelBase
     {
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            var item = CrockeryList.FirstOrDefault(x => (x.DataContext as DMListItemModel).id == channel.Id);
+            var item = CrockeryList.FirstOrDefault(x => (x.DataContext as DMListItemModel)?.id == channel.Id);
             if (item == null)
                 return;
 
             var model = item.DataContext as DMListItemModel;
+            if (model == null)
+                return;
 
-            if (request.Name != null)
-                model.Name = request.Name;
-
-            if (request.Icon != null)
-            {
-                if (!string.IsNullOrEmpty(request.Icon))
-                    model.Avatar = new Uri(channel.GroupSettings.GetIconUrl());
-                else
-                {
-                    model.Fallback = channel.GetFallback();
-                    model.Avatar = null;
-                }
-            }
+            model.Update(request);
         });
 
     }

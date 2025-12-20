@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using Avalonia.Data.Converters;
 
 // ReSharper disable once CheckNamespace

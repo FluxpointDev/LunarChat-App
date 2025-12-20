@@ -7,17 +7,12 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
-using System.Text;
-using Avalonia.Controls;
 using Avalonia.Controls.Utils;
-using Avalonia.Data;
 using Avalonia.Data.Converters;
-using Avalonia.Utilities;
 
 namespace Avalonia.Collections
 {

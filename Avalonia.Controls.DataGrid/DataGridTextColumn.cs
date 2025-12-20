@@ -10,8 +10,6 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using System;
 using System.ComponentModel;
-using Avalonia.Layout;
-using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Controls.Documents;
 using Avalonia.Styling;
 

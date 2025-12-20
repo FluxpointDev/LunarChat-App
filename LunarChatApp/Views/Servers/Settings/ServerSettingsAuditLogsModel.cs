@@ -141,30 +141,23 @@ public partial class AuditListItem : ObservableObject
 {
     public AuditListItem(RestAuditLog audit)
     {
-        try
+        actionUser = audit.UserName;
+        targetName = audit.TargetName;
+        date = audit.ActionAt.Value.ToLocalTime().ToString("hh:mm tt");
+        switch (audit.ActionType)
         {
-            actionUser = audit.UserName;
-            targetName = audit.TargetName;
-            date = audit.ActionAt.Value.ToLocalTime().ToString("hh:mm tt");
-            switch (audit.ActionType)
-            {
-                case ActionType.ServerUpdate:
-                    text = "Updated Server";
-                    icon = MaterialIconKind.HomeEdit;
-                    break;
-            }
-            changes = new ObservableCollection<AuditLogChangeItemModel>();
-            foreach (var i in audit.Changes)
-            {
-                changes.Add(new AuditLogChangeItemModel
-                {
-                    Text = $"Changed name from {i.OldValue} to {i.NewValue}"
-                });
-            }
+            case ActionType.ServerUpdate:
+                text = "Updated Server";
+                icon = MaterialIconKind.HomeEdit;
+                break;
         }
-        catch (Exception ex)
+        changes = new ObservableCollection<AuditLogChangeItemModel>();
+        foreach (var i in audit.Changes)
         {
-            Debug.WriteLine(ex);
+            changes.Add(new AuditLogChangeItemModel
+            {
+                Text = $"Changed name from {i.OldValue} to {i.NewValue}"
+            });
         }
     }
 

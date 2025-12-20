@@ -5,7 +5,6 @@
 
 using Avalonia.Input;
 using Avalonia.VisualTree;
-using Avalonia.Controls;
 
 namespace Avalonia.Controls.Utils
 {

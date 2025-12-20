@@ -5,7 +5,6 @@
 
 #nullable disable
 
-using Avalonia.Controls.Utils;
 using Avalonia.Data;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Utilities;

@@ -1,5 +1,4 @@
-﻿using System;
-using Avalonia.Rendering.Composition;
+﻿using Avalonia.Rendering.Composition;
 
 // ReSharper disable once CheckNamespace
 namespace ShadUI;

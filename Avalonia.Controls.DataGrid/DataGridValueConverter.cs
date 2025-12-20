@@ -5,11 +5,8 @@
 
 using Avalonia.Controls.Utils;
 using Avalonia.Data.Converters;
-using Avalonia.Utilities;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 
 namespace Avalonia.Controls
 {

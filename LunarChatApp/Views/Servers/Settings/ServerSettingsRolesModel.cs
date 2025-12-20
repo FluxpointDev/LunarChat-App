@@ -41,15 +41,7 @@ public partial class ServerSettingsRolesModel : ViewModelBase
         _searchTimer.Elapsed += SearchTimerElapsed;
         _searchTimer.AutoReset = false;
 
-        _originalItems = services.State.CurrentServer.Roles.Values.OrderByDescending(x => x.Position).Select(x => new RoleListItem(services, openInfo)
-        {
-            Color = x.Color ?? "#99AAB5",
-            Name = x.Name,
-            Id = x.Id,
-            Position = x.Position,
-            Icon = string.IsNullOrEmpty(x.IconId) ? null : new Uri(x.GetIconUrl()),
-            CanManage = _canManage
-        }).ToList();
+        _originalItems = services.State.CurrentServer.Roles.Values.OrderByDescending(x => x.Position).Select(x => new RoleListItem(services, x, _canManage, openInfo)).ToList();
 
         PropertyChanged += OnPropertyChanged;
 
@@ -112,15 +104,7 @@ public partial class ServerSettingsRolesModel : ViewModelBase
 
     private async Task RoleCreated(RestServer server, RestRole role)
     {
-        RoleListItem item = new RoleListItem(services, openInfo)
-        {
-            Color = role.Color ?? "#99AAB5",
-            Id = role.Id,
-            Name = role.Name,
-            Position = role.Position,
-            Icon = string.IsNullOrEmpty(role.IconId) ? null : new Uri(role.GetIconUrl()),
-            CanManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.ManageRoles)
-        };
+        RoleListItem item = new RoleListItem(services, role, services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.ManageRoles), openInfo);
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             _originalItems.Add(item);
@@ -275,7 +259,7 @@ public partial class ServerSettingsRolesModel : ViewModelBase
     [ObservableProperty]
     private ObservableCollection<RoleListItem> _items;
 }
-public partial class RoleListItem(ServiceManager services, Action<RestRole> openInfo) : ObservableObject
+public partial class RoleListItem : ObservableObject
 {
     [ObservableProperty]
     private bool _isSelected;
@@ -296,6 +280,20 @@ public partial class RoleListItem(ServiceManager services, Action<RestRole> open
 
     [ObservableProperty]
     private bool _canManage;
+    private ServiceManager services;
+    private Action<RestRole> openInfo;
+
+    public RoleListItem(ServiceManager sv, RestRole role, bool canManage, Action<RestRole> openInfo)
+    {
+        services = sv;
+        this.openInfo = openInfo;
+        _color = role.Color ?? "#99AAB5";
+        _name = role.Name;
+        _id = role.Id;
+        Position = role.Position;
+        Icon = string.IsNullOrEmpty(role.IconId) ? null : new Uri(role.GetIconUrl());
+        _canManage = canManage;
+    }
 
     [RelayCommand]
     public void OpenRole()

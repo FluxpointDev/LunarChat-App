@@ -1,5 +1,4 @@
-﻿using System;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Data.Converters;
 
 // ReSharper disable once CheckNamespace

@@ -96,7 +96,6 @@ public partial class ChannelSettingsGroupUsersModel : ViewModelBase
         {
             CanManage = services.Client.CurrentId == services.State.CurrentChannel?.GroupSettings?.OwnerId;
 
-
             foreach (var i in _originalItems)
             {
                 i.Update(i.user);

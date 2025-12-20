@@ -7,7 +7,6 @@
 
 using Avalonia.Collections;
 using Avalonia.Controls.Utils;
-using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Utilities;
 using System;
@@ -17,7 +16,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using Avalonia.Data;
-using Avalonia.Styling;
 
 namespace Avalonia.Controls
 {

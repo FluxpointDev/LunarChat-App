@@ -4,7 +4,6 @@
 // All other rights reserved.
 
 using Avalonia.Input;
-using Avalonia.Input.Platform;
 
 namespace Avalonia.Controls.Utils
 {

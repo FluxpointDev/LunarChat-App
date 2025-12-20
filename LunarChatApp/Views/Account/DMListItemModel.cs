@@ -40,6 +40,23 @@ public partial class DMListItemModel : ViewModelBase
         }
     }
 
+    public void Update(UpdateChannelRequest request)
+    {
+        if (request.Name != null)
+            Name = request.Name;
+
+        if (request.Icon != null)
+        {
+            if (!string.IsNullOrEmpty(request.Icon))
+                Avatar = new Uri(channel.GroupSettings.GetIconUrl());
+            else
+            {
+                Fallback = channel.GetFallback();
+                Avatar = null;
+            }
+        }
+    }
+
     [ObservableProperty]
     private string? _name;
 

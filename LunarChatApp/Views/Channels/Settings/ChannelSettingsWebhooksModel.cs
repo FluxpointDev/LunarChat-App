@@ -74,15 +74,7 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
 
             Dispatcher.UIThread.Post(() =>
             {
-                _originalItems = webhooks.Select(x => new WebhookListItem(services, openInfo)
-                {
-                    Name = x.Name,
-                    Id = x.Id,
-                    CanManage = _canManage,
-                    channelId = x.ChannelId,
-                    token = x.Token,
-                    Avatar = string.IsNullOrEmpty(x.AvatarId) ? null : new Uri(x.GetAvatarUrl())
-                }).ToList();
+                _originalItems = webhooks.Select(x => new WebhookListItem(services, x, _canManage, openInfo)).ToList();
 
                 Items = new ObservableCollection<WebhookListItem>(_originalItems);
             });
@@ -161,15 +153,7 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
         if (services.State.CurrentChannel?.Id != server.Id)
             return;
 
-        WebhookListItem item = new WebhookListItem(services, openInfo)
-        {
-            Id = webhook.Id,
-            Name = webhook.Name,
-            channelId = webhook.ChannelId,
-            CanManage = CanManage,
-            token = webhook.Token,
-            Avatar = string.IsNullOrEmpty(webhook.AvatarId) ? null : new Uri(webhook.GetAvatarUrl())
-        };
+        WebhookListItem item = new WebhookListItem(services, webhook, CanManage, openInfo);
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             _originalItems.Add(item);
@@ -306,8 +290,21 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
     private ObservableCollection<WebhookListItem> _items;
 }
 
-public partial class WebhookListItem(ServiceManager services, Action<RestWebhook> openInfo) : ObservableObject
+public partial class WebhookListItem : ObservableObject
 {
+    private ServiceManager services;
+
+    public WebhookListItem(ServiceManager sv, RestWebhook webhook, bool canManage, Action<RestWebhook> openInfo)
+    {
+        services = sv;
+        _name = webhook.Name;
+        _id = webhook.Id;
+        _canManage = canManage;
+        channelId = webhook.ChannelId;
+        token = webhook.Token;
+        Avatar = string.IsNullOrEmpty(webhook.AvatarId) ? null : new Uri(webhook.GetAvatarUrl());
+    }
+
     [ObservableProperty]
     private bool _isSelected;
 

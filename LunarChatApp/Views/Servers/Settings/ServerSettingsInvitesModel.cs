@@ -49,16 +49,7 @@ public partial class ServerSettingsInvitesModel : ViewModelBase
 
             Dispatcher.UIThread.Post(() =>
             {
-                _originalItems.AddRange(Invites.Select(x => new InviteListItem
-                {
-                    services = services,
-                    Code = x.Code,
-                    Inviter = x.Inviter.GetCurrentNameDiscrim(),
-                    Uses = x.MaxUses != 0 ? $"{x.Uses}/{x.MaxUses}" : x.Uses.ToString(),
-                    Expires = x.ExpiresAt.HasValue ? x.ExpiresAt.Value.ToLocalTime().ToString("dd/MM/yyyy (hh:mm tt)") : null,
-                    channelId = x.ChannelId,
-                    Channel = services.Socket.State.Channels.TryGetValue(x.ChannelId, out var channel) ? "#" + channel.Name : "#invalid-channel"
-                }));
+                _originalItems.AddRange(Invites.Select(x => new InviteListItem(services, x)));
                 Items = new ObservableCollection<InviteListItem>(_originalItems);
                 Loaded = true;
             });
@@ -92,16 +83,7 @@ public partial class ServerSettingsInvitesModel : ViewModelBase
 
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            _originalItems.Add(new InviteListItem
-            {
-                services = services,
-                Inviter = invite.Inviter.GetCurrentNameDiscrim(),
-                Code = invite.Code,
-                Expires = invite.ExpiresAt.HasValue ? invite.ExpiresAt.Value.ToLocalTime().ToString("dd/MM/yyyy (hh:mm tt)") : null,
-                Uses = invite.MaxUses != 0 ? $"{invite.Uses}/{invite.MaxUses}" : invite.Uses.ToString(),
-                channelId = invite.ChannelId,
-                Channel = services.Socket.State.Channels.TryGetValue(invite.ChannelId, out var channel) ? "#" + channel.Name : "#invalid-channel"
-            });
+            _originalItems.Add(new InviteListItem(services, invite));
             Items = new ObservableCollection<InviteListItem>(_originalItems);
         });
 
@@ -246,6 +228,17 @@ public partial class InviteListItem : ObservableObject
 {
     public ServiceManager services;
 
+    public InviteListItem(ServiceManager sv, RestInvite invite)
+    {
+        services = sv;
+        _code = invite.Code;
+        _inviter = invite.Inviter.GetCurrentNameDiscrim();
+        uses = invite.MaxUses != 0 ? $"{invite.Uses}/{invite.MaxUses}" : invite.Uses.ToString();
+        expires = invite.ExpiresAt.HasValue ? invite.ExpiresAt.Value.ToLocalTime().ToString("dd/MM/yyyy (hh:mm tt)") : null;
+        channelId = invite.ChannelId;
+        Channel = services.Socket.State.Channels.TryGetValue(invite.ChannelId, out var channel) ? "#" + channel.Name : "#invalid-channel";
+    }
+
     [ObservableProperty]
     private bool _isSelected;
 
@@ -265,6 +258,8 @@ public partial class InviteListItem : ObservableObject
 
     [ObservableProperty]
     private string expires;
+
+
 
     [RelayCommand]
     public void CopyInvite()

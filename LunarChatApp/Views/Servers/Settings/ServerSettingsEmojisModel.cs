@@ -43,13 +43,7 @@ public partial class ServerSettingsEmojisModel : ViewModelBase
 
         PropertyChanged += OnPropertyChanged;
 
-        _originalItems = services.State.CurrentServer.Emojis.Values.Select(x => new EmojiListItem(services)
-        {
-            Id = x.Id,
-            Name = x.Name,
-            Creator = x.CreatedBy,
-            CanManage = x.CreatedBy == services.Client.CurrentId || CanManage
-        }).ToList();
+        _originalItems = services.State.CurrentServer.Emojis.Values.Select(x => new EmojiListItem(services, x, CanManage)).ToList();
 
         foreach (var i in _originalItems) i.PropertyChanged += OnItemsChanged;
         Items = new ObservableCollection<EmojiListItem>(_originalItems);
@@ -74,7 +68,7 @@ public partial class ServerSettingsEmojisModel : ViewModelBase
 
     private async Task EmojiDeleted(RestServer server, RestEmoji emoji)
     {
-        EmojiListItem? item = _originalItems.FirstOrDefault(x => x.Id == emoji.Id);
+        EmojiListItem? item = _originalItems.FirstOrDefault(x => x.id == emoji.Id);
         if (item == null)
             return;
 
@@ -89,7 +83,7 @@ public partial class ServerSettingsEmojisModel : ViewModelBase
 
     private async Task EmojiUpdated(RestServer server, RestEmoji emoji, EmojiUpdateEvent ev)
     {
-        EmojiListItem? item = _originalItems.FirstOrDefault(x => x.Id == emoji.Id);
+        EmojiListItem? item = _originalItems.FirstOrDefault(x => x.id == emoji.Id);
         if (item == null)
             return;
 
@@ -105,14 +99,7 @@ public partial class ServerSettingsEmojisModel : ViewModelBase
     private async Task EmojiCreated(RestServer server, RestEmoji emoji)
     {
         bool CanManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.ManageExpressions);
-        EmojiListItem item = new EmojiListItem(services)
-        {
-            Id = emoji.Id,
-            Creator = emoji.CreatedBy,
-            Name = emoji.Name,
-            CanManage = emoji.CreatedBy == services.Client.CurrentId || CanManage,
-            Icon = new Uri(emoji.GetIconUrl())
-        };
+        EmojiListItem item = new EmojiListItem(services, emoji, CanManage);
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             _originalItems.Add(item);
@@ -261,8 +248,20 @@ public partial class ServerSettingsEmojisModel : ViewModelBase
     private ObservableCollection<EmojiListItem> _items;
 
 }
-public partial class EmojiListItem(ServiceManager services) : ObservableObject
+public partial class EmojiListItem : ObservableObject
 {
+    private readonly ServiceManager services;
+    public EmojiListItem(ServiceManager sv, RestEmoji emoji, bool canManage)
+    {
+        services = sv;
+        id = emoji.Id;
+        _creator = emoji.CreatedBy;
+        _name = emoji.Name;
+        _canManage = emoji.CreatedBy == services.Client.CurrentId || canManage;
+        if (!string.IsNullOrEmpty(emoji.IconId))
+            Icon = new Uri(emoji.GetIconUrl());
+    }
+
     [ObservableProperty]
     private bool _isSelected;
 
@@ -272,7 +271,7 @@ public partial class EmojiListItem(ServiceManager services) : ObservableObject
     [ObservableProperty]
     private Uri icon;
 
-    public string Id;
+    public string id;
 
     [ObservableProperty]
     private string _creator;
@@ -294,7 +293,7 @@ public partial class EmojiListItem(ServiceManager services) : ObservableObject
 
         try
         {
-            await services.Rest.EditEmojiAsync(services.State.CurrentServer?.Server.Id, Id, new EditEmojiRequest
+            await services.Rest.EditEmojiAsync(services.State.CurrentServer?.Server.Id, id, new EditEmojiRequest
             {
                 Name = model.Name
             });
@@ -305,7 +304,7 @@ public partial class EmojiListItem(ServiceManager services) : ObservableObject
     [RelayCommand]
     public void CopyId()
     {
-        services.CopyText(Id);
+        services.CopyText(id);
     }
 
     [RelayCommand]
@@ -313,7 +312,7 @@ public partial class EmojiListItem(ServiceManager services) : ObservableObject
     {
         try
         {
-            await services.Rest.DeleteEmojiAsync(services.State.CurrentServer?.Server.Id, Id);
+            await services.Rest.DeleteEmojiAsync(services.State.CurrentServer?.Server.Id, id);
         }
         catch { }
     }

@@ -7,7 +7,6 @@
 
 using Avalonia.Controls.Utils;
 using Avalonia.Interactivity;
-using Avalonia.Utilities;
 
 namespace Avalonia.Controls
 {

@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using Avalonia.Controls;
 
 // ReSharper disable once CheckNamespace

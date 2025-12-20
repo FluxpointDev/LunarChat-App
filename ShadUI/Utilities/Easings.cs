@@ -1,5 +1,4 @@
-﻿using System;
-using Avalonia.Animation.Easings;
+﻿using Avalonia.Animation.Easings;
 
 // ReSharper disable once CheckNamespace
 namespace ShadUI;

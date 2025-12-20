@@ -3,10 +3,6 @@
 // Please see http://go.microsoft.com/fwlink/?LinkID=131993 for details.
 // All other rights reserved.
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Avalonia.Controls.Primitives
 {
     /// <summary>
