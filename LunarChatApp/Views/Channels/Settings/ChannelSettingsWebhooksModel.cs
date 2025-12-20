@@ -26,11 +26,11 @@ namespace LunarChatApp.Views.Channels.Settings;
 
 public partial class ChannelSettingsWebhooksModel : ViewModelBase
 {
-    private ServiceManager services;
+    private readonly ServiceManager services;
     private List<WebhookListItem> _originalItems = new List<WebhookListItem>();
     private readonly Timer? _searchTimer;
-    private Action openWebhook;
-    private Action<RestWebhook> openInfo;
+    private readonly Action openWebhook;
+    private readonly Action<RestWebhook> openInfo;
 
     public ChannelSettingsWebhooksModel(ServiceManager sv, Action openWebhook, Action<RestWebhook> openInfo)
     {
@@ -38,7 +38,7 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
         this.openWebhook = openWebhook;
         this.openInfo = openInfo;
 
-        if (services.State.CurrentChannel.Type == ChannelType.Group)
+        if (services.State.CurrentChannel?.Type == ChannelType.Group)
         {
             _canManage = services.Client.CurrentId == services.State.CurrentChannel.GroupSettings?.OwnerId;
 
@@ -68,7 +68,10 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
 
         _ = Task.Run(async () =>
         {
-            var webhooks = await services.Rest.GetWebhooksAsync(services.State.CurrentChannel?.Id);
+            if (services.State.CurrentChannel == null)
+                return;
+
+            var webhooks = await services.Rest.GetWebhooksAsync(services.State.CurrentChannel.Id);
             if (webhooks == null)
                 return;
 
@@ -93,7 +96,7 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
     public async Task SubmitWebhook(UserControl control)
     {
         CreateWebhookDialogModel? model = control.DataContext as CreateWebhookDialogModel;
-        if (model == null || string.IsNullOrEmpty(model.Name) || model.Icon == null)
+        if (model == null || services.State.CurrentChannel == null || string.IsNullOrEmpty(model.Name) || model.Icon == null)
             return;
 
         try
@@ -102,7 +105,7 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
             {
                 model.Icon.Save(str);
                 str.Position = 0;
-                await services.Rest.CreateWebhookAsync(services.State.CurrentChannel?.Id, new CreateWebhookRequest
+                await services.Rest.CreateWebhookAsync(services.State.CurrentChannel.Id, new CreateWebhookRequest
                 {
                     Name = model.Name,
                     Icon = Utils.GetImageBase64(str)
@@ -142,7 +145,9 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
 
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            item.Name = ev.Name;
+            if (ev.Name != null)
+                item.Name = ev.Name;
+
             UpdateList();
         });
 
@@ -165,6 +170,10 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
 
     private async Task PermissionUpdate(RestServer server)
     {
+        if (services.State.CurrentServer == null)
+            return;
+
+
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             CanManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ChannelPermission.ManageWebhooks);
@@ -292,7 +301,7 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
 
 public partial class WebhookListItem : ObservableObject
 {
-    private ServiceManager services;
+    private readonly ServiceManager services;
 
     public WebhookListItem(ServiceManager sv, RestWebhook webhook, bool canManage, Action<RestWebhook> openInfo)
     {
@@ -302,7 +311,7 @@ public partial class WebhookListItem : ObservableObject
         _canManage = canManage;
         channelId = webhook.ChannelId;
         token = webhook.Token;
-        Avatar = string.IsNullOrEmpty(webhook.AvatarId) ? null : new Uri(webhook.GetAvatarUrl());
+        Avatar = string.IsNullOrEmpty(webhook.AvatarId) ? null : new Uri(webhook.GetAvatarUrl()!);
     }
 
     [ObservableProperty]
@@ -342,12 +351,16 @@ public partial class WebhookListItem : ObservableObject
     public async Task SubmitWebhook(UserControl control)
     {
         CreateNameDialogModel? model = control.DataContext as CreateNameDialogModel;
-        if (model.Name == null)
-            model.Name = "";
+        if (model == null || string.IsNullOrEmpty(model.Name))
+            return;
+
+        if (services.State.CurrentChannel == null)
+            return;
+
 
         try
         {
-            await services.Rest.EditWebhookAsync(services.State.CurrentChannel?.Id, Id, new EditWebhookRequest
+            await services.Rest.EditWebhookAsync(services.State.CurrentChannel.Id, Id, new EditWebhookRequest
             {
                 Name = model.Name ?? "",
             });
@@ -371,9 +384,12 @@ public partial class WebhookListItem : ObservableObject
     [RelayCommand]
     public async Task DeleteWebhook()
     {
+        if (services.State.CurrentChannel == null)
+            return;
+
         try
         {
-            await services.Rest.DeleteWebhookAsync(services.State.CurrentChannel?.Id, Id);
+            await services.Rest.DeleteWebhookAsync(services.State.CurrentChannel.Id, Id);
         }
         catch { }
     }

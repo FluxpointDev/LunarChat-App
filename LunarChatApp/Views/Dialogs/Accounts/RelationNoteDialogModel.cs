@@ -8,5 +8,5 @@ public partial class RelationNoteDialogModel : ViewModelBase
     private string _username;
 
     [ObservableProperty]
-    private string _note;
+    private string? _note;
 }

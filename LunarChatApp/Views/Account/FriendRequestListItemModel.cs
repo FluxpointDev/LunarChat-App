@@ -12,13 +12,11 @@ namespace LunarChatApp.Views.Account;
 
 public partial class FriendRequestListItemModel : ViewModelBase
 {
-    private ServiceManager services;
-    private RestRelation user;
+    private readonly ServiceManager services;
 
     public FriendRequestListItemModel(ServiceManager sv, RestRelation u)
     {
         services = sv;
-        user = u;
         id = u.UserId;
         CanAccept = u.RequestBy != sv.Client.CurrentId;
         Username = u.Username;
@@ -71,7 +69,10 @@ public partial class FriendRequestListItemModel : ViewModelBase
     {
         try
         {
-            RelationNoteDialogModel model = control.DataContext as RelationNoteDialogModel;
+            RelationNoteDialogModel? model = control.DataContext as RelationNoteDialogModel;
+            if (model == null)
+                return;
+
             await services.Rest.UpdateNoteAsync(id, model.Note);
         }
         catch { }

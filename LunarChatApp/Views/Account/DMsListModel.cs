@@ -14,7 +14,7 @@ namespace LunarChatApp.ViewModels.User;
 
 public partial class DMsListModel : ViewModelBase
 {
-    private ServiceManager services;
+    private readonly ServiceManager services;
 
     public DMsListModel(ServiceManager sv)
     {

@@ -18,7 +18,7 @@ namespace LunarChatApp.Views.User.Settings.Developer;
 
 public partial class DeveloperListModel : ViewModelBase
 {
-    private ServiceManager services;
+    private readonly ServiceManager services;
     public DeveloperListModel(ServiceManager sv, RestTeam? team, System.Action back, Func<DevItemModel, Task> ac)
     {
         services = sv;
@@ -41,13 +41,13 @@ public partial class DeveloperListModel : ViewModelBase
             {
                 Dispatcher.UIThread.Post(() =>
                 {
-                    if (dev.Teams.Any())
+                    if (dev.Teams.Length != 0)
                     {
                         Items.AddRange(dev.Teams.Select(x => new TeamListItem { Id = x.Id, Name = x.Name }));
                         TeamsList.AddRange(dev.Teams.Select(x => new DevItem { DataContext = new DevItemModel(services, x, ac) }));
                     }
 
-                    if (dev.Apps.Any())
+                    if (dev.Apps.Length != 0)
                         AppsList.AddRange(dev.Apps.Select(x => new DevItem { DataContext = new DevItemModel(services, x, ac) }));
                     Loaded = true;
                 });
@@ -97,6 +97,9 @@ public partial class DeveloperListModel : ViewModelBase
     public async Task SubmitApp(UserControl control)
     {
         CreateNameDialogModel? model = control.DataContext as CreateNameDialogModel;
+        if (model == null)
+            return;
+
         try
         {
             RestApp app = await services.Rest.CreateAppAsync(new CreateAppRequest
@@ -112,6 +115,9 @@ public partial class DeveloperListModel : ViewModelBase
     public async Task SubmitTeam(UserControl control)
     {
         CreateNameDialogModel? model = control.DataContext as CreateNameDialogModel;
+        if (model == null)
+            return;
+
         try
         {
             RestTeam team = await services.Rest.CreateTeamAsync(new CreateTeamRequest

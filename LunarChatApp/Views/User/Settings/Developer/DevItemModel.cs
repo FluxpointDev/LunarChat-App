@@ -17,7 +17,7 @@ public partial class DevItemModel : ViewModelBase
         Name = team.Name;
         Fallback = GetFallback(team.Name);
         if (!string.IsNullOrEmpty(team.IconId))
-            Icon = new Uri(team.GetIconUrl());
+            Icon = new Uri(team.GetIconUrl()!);
 
         action = ac;
     }
@@ -29,14 +29,14 @@ public partial class DevItemModel : ViewModelBase
         Name = app.Name;
         Fallback = GetFallback(app.Name);
         if (!string.IsNullOrEmpty(app.AvatarId))
-            Icon = new Uri(app.GetAvatarUrl());
+            Icon = new Uri(app.GetAvatarUrl()!);
 
         action = ac;
     }
 
     private string GetFallback(string name)
     {
-        string FallbackName = null;
+        string? FallbackName = null;
         foreach (var i in name.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
         {
             FallbackName += i.ToUpper()[0];
@@ -44,10 +44,10 @@ public partial class DevItemModel : ViewModelBase
         return FallbackName!;
     }
 
-    private ServiceManager services;
+    private readonly ServiceManager services;
     public string Id;
     public bool IsTeam;
-    private Func<DevItemModel, Task> action;
+    private readonly Func<DevItemModel, Task> action;
 
     [ObservableProperty]
     private string _name;

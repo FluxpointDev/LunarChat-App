@@ -23,25 +23,31 @@ public partial class ServerSettingsAuditLogsModel : ViewModelBase
     private readonly List<AuditListItem> _originalItems = new List<AuditListItem>();
 
     private readonly Timer? _searchTimer;
-    private ServiceManager services;
+    private readonly ServiceManager services;
 
     public ServerSettingsAuditLogsModel(ServiceManager sv)
     {
         services = sv;
-        _canManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.ManageRoles);
 
-        services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+
+        if (services.State.CurrentServer != null)
+        {
+            _canManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.ViewAuditLogs);
+            services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+        }
+
         _searchTimer = new Timer(500); // 500ms debounce
         _searchTimer.Elapsed += SearchTimerElapsed;
         _searchTimer.AutoReset = false;
-
-        _canManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.ViewAuditLogs);
-
         PropertyChanged += OnPropertyChanged;
 
         Items = new ObservableCollection<AuditListItem>(_originalItems);
         _ = Task.Run(async () =>
         {
+            if (services.State.CurrentServer == null)
+                return;
+
+
             try
             {
                 var AuditLogs = await services.Rest.GetAuditLogsAsync(services.State.CurrentServer.Server.Id);
@@ -64,6 +70,9 @@ public partial class ServerSettingsAuditLogsModel : ViewModelBase
 
     private async Task PermissionUpdate(RestServer server)
     {
+        if (services.State.CurrentServer == null)
+            return;
+
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             CanManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.ViewAuditLogs);
@@ -143,7 +152,7 @@ public partial class AuditListItem : ObservableObject
     {
         actionUser = audit.UserName;
         targetName = audit.TargetName;
-        date = audit.ActionAt.Value.ToLocalTime().ToString("hh:mm tt");
+        date = audit.ActionAt.ToLocalTime().ToString("hh:mm tt");
         switch (audit.ActionType)
         {
             case ActionType.ServerUpdate:

@@ -9,7 +9,7 @@ namespace LunarChatApp.Views.User.Settings;
 
 public partial class SettingsDeveloperModel : ViewModelBase
 {
-    private ServiceManager services;
+    private readonly ServiceManager services;
     public SettingsDeveloperModel(ServiceManager sv)
     {
         services = sv;

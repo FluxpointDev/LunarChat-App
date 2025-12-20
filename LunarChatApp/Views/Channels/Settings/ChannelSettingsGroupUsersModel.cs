@@ -23,7 +23,7 @@ public partial class ChannelSettingsGroupUsersModel : ViewModelBase
     private readonly List<GroupUserListItem> _originalItems = new List<GroupUserListItem>();
 
     private readonly Timer? _searchTimer;
-    private ServiceManager services;
+    private readonly ServiceManager services;
 
     public ChannelSettingsGroupUsersModel(ServiceManager sv)
     {
@@ -203,11 +203,15 @@ public partial class ChannelSettingsGroupUsersModel : ViewModelBase
     {
         try
         {
-            AddFriendDialogModel? data = control.DataContext as AddFriendDialogModel;
-            var friend = services.State.Socket.Relations.Values.FirstOrDefault(x => x.UserId == data.Username || x.Username == data.Username);
+            AddFriendDialogModel? model = control.DataContext as AddFriendDialogModel;
+            if (model == null)
+                return;
+
+
+            var friend = services.State.Socket.Relations.Values.FirstOrDefault(x => x.UserId == model.Username || x.Username == model.Username);
             await services.Rest.PutAsync($"/groups/{services.State.CurrentChannel?.Id}/users", new GroupAddUserRequest
             {
-                UserId = friend.UserId
+                UserId = friend?.UserId
             });
         }
         catch { }
@@ -274,6 +278,10 @@ public partial class GroupUserListItem : ObservableObject
         if (isBot)
             return;
 
+        if (services.State.CurrentChannel == null)
+            return;
+
+
         try
         {
             await services.Rest.UpdateChannelAsync(services.State.CurrentChannel.Id, new UpdateChannelRequest
@@ -287,6 +295,10 @@ public partial class GroupUserListItem : ObservableObject
     [RelayCommand]
     public async Task RemoveUser()
     {
+        if (services.State.CurrentChannel == null)
+            return;
+
+
         try
         {
             if (isBot)

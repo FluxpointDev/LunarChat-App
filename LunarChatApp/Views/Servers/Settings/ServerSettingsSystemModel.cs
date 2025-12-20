@@ -18,25 +18,34 @@ public partial class ServerSettingsSystemModel : ViewModelBase
     public ServerSettingsSystemModel(ServiceManager sv)
     {
         services = sv;
-        canManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ChannelPermission.ManageChannel);
-        services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
-        Items = new ObservableCollection<ChannelListItem>
+
+        if (services.State.CurrentServer != null)
         {
-            new ChannelListItem
+            canManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ChannelPermission.ManageChannel);
+            services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+
+            Items = new ObservableCollection<ChannelListItem>
             {
-                id = ""
-            }
-        };
-        Items.AddRange(services.State.CurrentServer.Channels.Values.Select(x => new ChannelListItem
-        {
-            id = x.Id,
-            Name = x.Name
-        }));
+                new ChannelListItem
+                {
+                    id = ""
+                }
+            };
+            Items.AddRange(services.State.CurrentServer.Channels.Values.Select(x => new ChannelListItem
+            {
+                id = x.Id,
+                Name = x.Name
+            }));
+        }
+
         UpdateSystemMessages();
     }
 
     private async Task PermissionUpdate(RestServer server)
     {
+        if (services.State.CurrentServer == null)
+            return;
+
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             CanManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ChannelPermission.ManageChannel);

@@ -59,6 +59,9 @@ public partial class ServerSettingsMembersModel : ViewModelBase
 
     private async Task PermissionUpdate(RestServer server)
     {
+        if (services.State.CurrentServer == null)
+            return;
+
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             foreach (var i in _originalItems)
@@ -197,7 +200,7 @@ public partial class ServerSettingsMembersModel : ViewModelBase
 }
 public partial class MemberListItem : ObservableObject
 {
-    private ServiceManager services;
+    private readonly ServiceManager services;
 
     public MemberListItem(ServiceManager sv, RestMember member)
     {
@@ -208,9 +211,13 @@ public partial class MemberListItem : ObservableObject
 
     public void Update(RestMember member)
     {
+        if (services.State.CurrentServer == null)
+            return;
+
+
         Name = member.GetCurrentNameDiscrim();
         CreatedAt = member.User.CreatedAt.ToLocalTime().ToString("d MMMM yyyy");
-        JoinedAt = member.JoinedAt.Value.ToLocalTime().ToString("d MMMM yyyy");
+        JoinedAt = member.JoinedAt.ToLocalTime().ToString("d MMMM yyyy");
 
         bool CanManage = false;
         CanTransferOwner = !member.User.IsBot && services.State.CurrentServer.Server.OwnerId == services.Client.CurrentId && id != services.State.CurrentServer.Server.OwnerId;
@@ -226,12 +233,12 @@ public partial class MemberListItem : ObservableObject
             CanKickUser = false;
             CanTimeoutUser = false;
         }
-        BanItemText = $"Ban {_name}";
-        KickItemText = $"Kick {_name}";
+        BanItemText = $"Ban {Name}";
+        KickItemText = $"Kick {Name}";
         if (member.Timeout.HasValue)
-            TimeoutItemText = $"Remove Timeout {_name}";
+            TimeoutItemText = $"Remove Timeout {Name}";
         else
-            TimeoutItemText = $"Timeout {_name}";
+            TimeoutItemText = $"Timeout {Name}";
 
         RestRole? CurrentRole = null;
         int RolesCount = 0;
@@ -332,7 +339,7 @@ public partial class MemberListItem : ObservableObject
     public async Task SubmitBan(UserControl control)
     {
         BanMemberDialogModel? model = control.DataContext as BanMemberDialogModel;
-        if (model == null)
+        if (model == null || services.State.CurrentServer == null)
             return;
         CreateBanRequest req = model.CreateRequest();
         try
@@ -346,6 +353,9 @@ public partial class MemberListItem : ObservableObject
     [RelayCommand]
     public async Task TransferOwnership()
     {
+        if (services.State.CurrentServer == null)
+            return;
+
         try
         {
             await services.Rest.EditServerAsync(services.State.CurrentServer.Server.Id, new EditServerRequest
@@ -365,7 +375,7 @@ public partial class MemberListItem : ObservableObject
     public async Task SubmitKick(UserControl control)
     {
         KickMemberDialogModel? model = control.DataContext as KickMemberDialogModel;
-        if (model == null)
+        if (model == null || services.State.CurrentServer == null)
             return;
 
         try
@@ -382,9 +392,12 @@ public partial class MemberListItem : ObservableObject
     [RelayCommand]
     public async Task TimeoutUser()
     {
+        if (services.State.CurrentServer == null)
+            return;
+
         try
         {
-            if (timeoutItemText.StartsWith("Remove"))
+            if (TimeoutItemText.StartsWith("Remove"))
             {
                 await services.Rest.TimeoutMemberAsync(services.State.CurrentServer.Server.Id, id, null, null);
                 services.ToastManager.CreateToast("Timeout Removed").DismissOnClick().WithDelay(3).Show();
@@ -401,8 +414,9 @@ public partial class MemberListItem : ObservableObject
     public async Task SubmitTimeout(UserControl control)
     {
         TimeoutMemberDialogModel? model = control.DataContext as TimeoutMemberDialogModel;
-        if (model == null)
+        if (model == null || services.State.CurrentServer == null)
             return;
+
         try
         {
             await services.Rest.TimeoutMemberAsync(services.State.CurrentServer.Server.Id, id, model.GetTimeout(), model.Reason);

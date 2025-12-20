@@ -27,16 +27,21 @@ public partial class ServerSettingsEmojisModel : ViewModelBase
     private readonly List<EmojiListItem> _originalItems = new List<EmojiListItem>();
 
     private readonly Timer? _searchTimer;
-    private ServiceManager services;
+    private readonly ServiceManager services;
     public ServerSettingsEmojisModel(ServiceManager sv)
     {
         services = sv;
         services.Client.OnEmojiCreate += EmojiCreated;
         services.Client.OnEmojiUpdate += EmojiUpdated;
         services.Client.OnEmojiDelete += EmojiDeleted;
-        services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
-        _canCreate = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.CreateExpressions);
-        bool CanManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.ManageExpressions);
+        bool CanManage = false;
+        if (services.State.CurrentServer != null)
+        {
+            services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+            _canCreate = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.CreateExpressions);
+            CanManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.ManageExpressions);
+        }
+
         _searchTimer = new Timer(500); // 500ms debounce
         _searchTimer.Elapsed += SearchTimerElapsed;
         _searchTimer.AutoReset = false;
@@ -51,6 +56,9 @@ public partial class ServerSettingsEmojisModel : ViewModelBase
 
     private async Task PermissionUpdate(RestServer server)
     {
+        if (services.State.CurrentServer == null)
+            return;
+
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             CanCreate = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.CreateExpressions);
@@ -98,6 +106,9 @@ public partial class ServerSettingsEmojisModel : ViewModelBase
 
     private async Task EmojiCreated(RestServer server, RestEmoji emoji)
     {
+        if (services.State.CurrentServer == null)
+            return;
+
         bool CanManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.ManageExpressions);
         EmojiListItem item = new EmojiListItem(services, emoji, CanManage);
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
@@ -119,7 +130,7 @@ public partial class ServerSettingsEmojisModel : ViewModelBase
     public async Task SubmitEmoji(UserControl control)
     {
         CreateEmojiDialogModel? model = control.DataContext as CreateEmojiDialogModel;
-        if (model == null || string.IsNullOrEmpty(model.Name) || model.Icon == null)
+        if (model == null || services.State.CurrentServer == null || string.IsNullOrEmpty(model.Name) || model.Icon == null)
             return;
 
         try
@@ -128,7 +139,7 @@ public partial class ServerSettingsEmojisModel : ViewModelBase
             {
                 model.Icon.Save(str);
                 str.Position = 0;
-                await services.Rest.CreateEmojiAsync(services.State.CurrentServer?.Server.Id, new CreateEmojiRequest
+                await services.Rest.CreateEmojiAsync(services.State.CurrentServer.Server.Id, new CreateEmojiRequest
                 {
                     Name = model.Name,
                     Icon = Utils.GetImageBase64(str)
@@ -258,8 +269,7 @@ public partial class EmojiListItem : ObservableObject
         _creator = emoji.CreatedBy;
         _name = emoji.Name;
         _canManage = emoji.CreatedBy == services.Client.CurrentId || canManage;
-        if (!string.IsNullOrEmpty(emoji.IconId))
-            Icon = new Uri(emoji.GetIconUrl());
+        Icon = new Uri(emoji.GetIconUrl()!);
     }
 
     [ObservableProperty]
@@ -290,10 +300,16 @@ public partial class EmojiListItem : ObservableObject
     public async Task SubmitEmoji(UserControl control)
     {
         CreateNameDialogModel? model = control.DataContext as CreateNameDialogModel;
+        if (model == null)
+            return;
+
+        if (services.State.CurrentServer == null)
+            return;
+
 
         try
         {
-            await services.Rest.EditEmojiAsync(services.State.CurrentServer?.Server.Id, id, new EditEmojiRequest
+            await services.Rest.EditEmojiAsync(services.State.CurrentServer.Server.Id, id, new EditEmojiRequest
             {
                 Name = model.Name
             });
@@ -310,9 +326,12 @@ public partial class EmojiListItem : ObservableObject
     [RelayCommand]
     public async Task DeleteEmoji()
     {
+        if (services.State.CurrentServer == null)
+            return;
+
         try
         {
-            await services.Rest.DeleteEmojiAsync(services.State.CurrentServer?.Server.Id, id);
+            await services.Rest.DeleteEmojiAsync(services.State.CurrentServer.Server.Id, id);
         }
         catch { }
     }

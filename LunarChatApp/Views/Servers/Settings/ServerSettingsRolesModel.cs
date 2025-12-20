@@ -24,19 +24,24 @@ public partial class ServerSettingsRolesModel : ViewModelBase
     private readonly List<RoleListItem> _originalItems = new List<RoleListItem>();
 
     private readonly Timer? _searchTimer;
-    private ServiceManager services;
-    private Action openRoles;
-    private Action<RestRole> openInfo;
+    private readonly ServiceManager services;
+    private readonly Action openRoles;
+    private readonly Action<RestRole> openInfo;
     public ServerSettingsRolesModel(ServiceManager sv, Action openRole, Action<RestRole> openInfo)
     {
         services = sv;
         this.openRoles = openRole;
         this.openInfo = openInfo;
-        _canManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.ManageRoles);
+        if (services.State.CurrentServer != null)
+        {
+            _canManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.ManageRoles);
+            services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+        }
+
         services.Client.OnRoleCreate += RoleCreated;
         services.Client.OnRoleUpdate += RoleUpdated;
         services.Client.OnRoleDelete += RoleDeleted;
-        services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+
         _searchTimer = new Timer(500); // 500ms debounce
         _searchTimer.Elapsed += SearchTimerElapsed;
         _searchTimer.AutoReset = false;
@@ -52,6 +57,9 @@ public partial class ServerSettingsRolesModel : ViewModelBase
 
     private async Task PermissionUpdate(RestServer server)
     {
+        if (services.State.CurrentServer == null)
+            return;
+
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             CanManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.ManageRoles);
@@ -96,7 +104,7 @@ public partial class ServerSettingsRolesModel : ViewModelBase
                 item.Color = ev.Color ?? "#99AAB5";
 
             if (ev.Icon != null)
-                item.Icon = string.IsNullOrEmpty(ev.Icon) ? null : new Uri(ev.GetIconUrl());
+                item.Icon = string.IsNullOrEmpty(ev.Icon) ? null : new Uri(ev.GetIconUrl()!);
             UpdateList();
         });
 
@@ -104,6 +112,9 @@ public partial class ServerSettingsRolesModel : ViewModelBase
 
     private async Task RoleCreated(RestServer server, RestRole role)
     {
+        if (services.State.CurrentServer == null)
+            return;
+
         RoleListItem item = new RoleListItem(services, role, services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.ManageRoles), openInfo);
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
@@ -142,12 +153,15 @@ public partial class ServerSettingsRolesModel : ViewModelBase
     public async Task SubmitRole(UserControl control)
     {
         CreateNameDialogModel? model = control.DataContext as CreateNameDialogModel;
+        if (model == null || services.State.CurrentServer == null)
+            return;
+
         if (model.Name == null)
             model.Name = "";
 
         try
         {
-            await services.Rest.CreateRoleAsync(services.State.CurrentServer?.Server.Id, new CreateRoleRequest
+            await services.Rest.CreateRoleAsync(services.State.CurrentServer.Server.Id, new CreateRoleRequest
             {
                 Name = model.Name
             });
@@ -241,6 +255,10 @@ public partial class ServerSettingsRolesModel : ViewModelBase
     [RelayCommand]
     public void DefaultMembersRole()
     {
+        if (services.State.CurrentServer == null)
+            return;
+
+
         openInfo.Invoke(new RestRole
         {
             Id = "0",
@@ -280,8 +298,9 @@ public partial class RoleListItem : ObservableObject
 
     [ObservableProperty]
     private bool _canManage;
-    private ServiceManager services;
-    private Action<RestRole> openInfo;
+
+    private readonly ServiceManager services;
+    private readonly Action<RestRole> openInfo;
 
     public RoleListItem(ServiceManager sv, RestRole role, bool canManage, Action<RestRole> openInfo)
     {
@@ -291,7 +310,7 @@ public partial class RoleListItem : ObservableObject
         _name = role.Name;
         _id = role.Id;
         Position = role.Position;
-        Icon = string.IsNullOrEmpty(role.IconId) ? null : new Uri(role.GetIconUrl());
+        Icon = string.IsNullOrEmpty(role.IconId) ? null : new Uri(role.GetIconUrl()!);
         _canManage = canManage;
     }
 
@@ -311,9 +330,12 @@ public partial class RoleListItem : ObservableObject
     [RelayCommand]
     public async Task DeleteRole()
     {
+        if (services.State.CurrentServer == null)
+            return;
+
         try
         {
-            await services.Rest.DeleteRoleAsync(services.State.CurrentServer?.Server.Id, Id);
+            await services.Rest.DeleteRoleAsync(services.State.CurrentServer.Server.Id, Id);
         }
         catch { }
     }

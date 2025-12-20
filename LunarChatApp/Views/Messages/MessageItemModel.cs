@@ -30,7 +30,7 @@ public partial class MessageItemModel : ViewModelBase
             _isBot = message.Author.IsBot;
             CanDelete = sv.Client.CurrentId == authorId;
             if (!string.IsNullOrEmpty(message.Author.AvatarId))
-                Avatar = new Uri(message.Author.GetAvatarUrl());
+                Avatar = new Uri(message.Author.GetAvatarUrl()!);
             else
                 fallback = message.Author.GetFallback();
         }
@@ -49,16 +49,16 @@ public partial class MessageItemModel : ViewModelBase
         Time = message.CreatedAt.ToLocalTime().ToString("hh:mm tt");
         if (message.UpdatedAt.HasValue)
             editedTime = message.UpdatedAt.Value.ToLocalTime().ToString("hh:mm tt");
-        if (message.Embeds != null && message.Embeds.Any())
+        if (message.Embeds != null && message.Embeds.Length != 0)
             embedsList = new ObservableCollection<EmbedItem>(message.Embeds.Select(x => new EmbedItem { DataContext = new EmbedItemModel(services, x) }));
-        if (message.Attachments != null && message.Attachments.Any())
+        if (message.Attachments != null && message.Attachments.Length != 0)
             imagesList = new ObservableCollection<ImageItem>(message.Attachments.Select(x => new ImageItem
             {
                 DataContext = new ImageItemModel(services, x)
             }));
     }
 
-    private ServiceManager services;
+    private readonly ServiceManager services;
     public readonly string messageId;
     public readonly string authorId;
 
@@ -107,6 +107,8 @@ public partial class MessageItemModel : ViewModelBase
     [RelayCommand]
     public void LinkClicked(InlineHyperlinkClickedEventArgs args)
     {
+        if (args.HRef == null)
+            return;
         services.OpenLink(args.HRef);
     }
 
@@ -135,7 +137,9 @@ public partial class MessageItemModel : ViewModelBase
 
     public void Update(MessageUpdateEvent ev, EditMessageRequest message)
     {
-        EditedTime = ev.UpdatedAt.Value.ToLocalTime().ToString("hh:mm tt");
+        if (ev.UpdatedAt.HasValue)
+            EditedTime = ev.UpdatedAt.Value.ToLocalTime().ToString("hh:mm tt");
+
         if (message.Content != null)
         {
             var markdownBuilder = new ObservableStringBuilder();
@@ -145,7 +149,7 @@ public partial class MessageItemModel : ViewModelBase
 
         if (message.Embeds != null)
         {
-            if (message.Embeds != null && message.Embeds.Any())
+            if (message.Embeds != null && message.Embeds.Length != 0)
                 EmbedsList = new ObservableCollection<EmbedItem>(message.Embeds.Select(x => new EmbedItem { DataContext = new EmbedItemModel(services, x) }));
             else
                 EmbedsList = null;

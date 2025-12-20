@@ -6,7 +6,6 @@ using LunarChatApp.Views;
 using LunarChatApp.Views.Dialogs;
 using LunarChatSharp;
 using LunarChatSharp.Rest.Users;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,13 +13,11 @@ namespace LunarChatApp.Components;
 
 public partial class BlockListItemModel : ViewModelBase
 {
-    private ServiceManager services;
-    private RestRelation user;
+    private readonly ServiceManager services;
 
     public BlockListItemModel(ServiceManager sv, RestRelation u)
     {
         services = sv;
-        user = u;
         id = u.UserId;
         Username = u.Username;
         DisplayName = u.DisplayName ?? u.Username;
@@ -35,11 +32,11 @@ public partial class BlockListItemModel : ViewModelBase
     [ObservableProperty]
     private string? _displayName;
 
-    [ObservableProperty]
-    private Uri? avatar;
+    //[ObservableProperty]
+    //private Uri? avatar;
 
-    [ObservableProperty]
-    private string fallback;
+    //[ObservableProperty]
+    //private string fallback;
 
     [RelayCommand]
     public async Task RemoveBlock()
@@ -65,7 +62,10 @@ public partial class BlockListItemModel : ViewModelBase
     {
         try
         {
-            RelationNoteDialogModel model = control.DataContext as RelationNoteDialogModel;
+            RelationNoteDialogModel? model = control.DataContext as RelationNoteDialogModel;
+            if (model == null)
+                return;
+
             await services.Rest.UpdateNoteAsync(id, model.Note);
         }
         catch { }

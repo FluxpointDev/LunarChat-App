@@ -51,7 +51,7 @@ public sealed class PageManager(ServiceProvider serviceProvider)
 
         if (services.State.CurrentServer != null)
         {
-            if (channel == null && services.State.CurrentServer.Channels.Any())
+            if (channel == null && !services.State.CurrentServer.Channels.IsEmpty)
                 channel = services.State.CurrentServer.Channels.FirstOrDefault().Value;
 
             if (channel != null && services.State.CurrentChannel?.Id != channel.Id)

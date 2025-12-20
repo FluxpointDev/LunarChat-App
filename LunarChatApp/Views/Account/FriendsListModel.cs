@@ -17,7 +17,7 @@ namespace LunarChatApp.ViewModels.Main;
 
 public partial class FriendsListModel : ViewModelBase
 {
-    private ServiceManager services;
+    private readonly ServiceManager services;
     public FriendsListModel(ServiceManager sv)
     {
         services = sv;
@@ -104,8 +104,12 @@ public partial class FriendsListModel : ViewModelBase
     {
         try
         {
-            AddFriendDialogModel? data = control.DataContext as AddFriendDialogModel;
-            await services.Rest.AddFriendAsync(data.Username);
+            AddFriendDialogModel? model = control.DataContext as AddFriendDialogModel;
+            if (model == null)
+                return;
+
+
+            await services.Rest.AddFriendAsync(model.Username!);
         }
         catch { }
     }
@@ -120,8 +124,12 @@ public partial class FriendsListModel : ViewModelBase
     {
         try
         {
-            AddFriendDialogModel? data = control.DataContext as AddFriendDialogModel;
-            await services.Rest.AddIgnoreAsync(data.Username);
+            AddFriendDialogModel? model = control.DataContext as AddFriendDialogModel;
+            if (model == null)
+                return;
+
+
+            await services.Rest.AddIgnoreAsync(model.Username!);
         }
         catch { }
     }
@@ -136,8 +144,11 @@ public partial class FriendsListModel : ViewModelBase
     {
         try
         {
-            AddFriendDialogModel? data = control.DataContext as AddFriendDialogModel;
-            await services.Rest.AddBlockAsync(data.Username);
+            AddFriendDialogModel? model = control.DataContext as AddFriendDialogModel;
+            if (model == null)
+                return;
+
+            await services.Rest.AddBlockAsync(model.Username!);
         }
         catch { }
 

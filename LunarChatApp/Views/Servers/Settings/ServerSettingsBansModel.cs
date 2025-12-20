@@ -55,6 +55,9 @@ public partial class ServerSettingsBansModel : ViewModelBase
 
     private async Task PermissionUpdate(RestServer server)
     {
+        if (services.State.CurrentServer == null)
+            return;
+
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             CanBan = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.BanMembers);
@@ -208,17 +211,23 @@ public partial class BanListItem : ObservableObject
     private string _bannedAt;
 
     [ObservableProperty]
-    private string reason;
+    private string? reason;
 
-    private ServiceManager services;
+    private readonly ServiceManager services;
 
     public BanListItem(ServiceManager sv, RestBan x)
     {
         services = sv;
-        id = x.TargetUser.Id;
+        if (x.TargetUser != null)
+        {
+            id = x.TargetUser.Id;
+            _targetName = x.TargetUser.GetCurrentNameDiscrim();
+        }
+
+        if (x.ActionUser != null)
+            _actionName = x.ActionUser.GetCurrentNameDiscrim();
+
         _bannedAt = x.BannedAt.ToLocalTime().ToString("d MMMM yyyy");
-        _targetName = x.TargetUser.GetCurrentNameDiscrim();
-        _actionName = x.ActionUser.GetCurrentNameDiscrim();
         reason = x.Reason;
     }
 
@@ -231,6 +240,9 @@ public partial class BanListItem : ObservableObject
     [RelayCommand]
     public async Task UnbanUser()
     {
+        if (services.State.CurrentServer == null)
+            return;
+
         try
         {
             await services.Rest.UnbanMemberAsync(services.State.CurrentServer.Server.Id, id);
