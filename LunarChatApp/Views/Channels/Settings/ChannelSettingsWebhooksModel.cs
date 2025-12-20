@@ -62,8 +62,6 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
 
         PropertyChanged += OnPropertyChanged;
 
-        foreach (var i in _originalItems)
-            i.PropertyChanged += OnItemsChanged;
         Items = new ObservableCollection<WebhookListItem>();
 
         _ = Task.Run(async () =>
@@ -127,7 +125,6 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
 
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            item.PropertyChanged -= OnItemsChanged;
             _originalItems.Remove(item);
             UpdateList();
         });
@@ -162,7 +159,6 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             _originalItems.Add(item);
-            item.PropertyChanged += OnItemsChanged;
             UpdateList();
         });
 
@@ -202,7 +198,6 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
 
             Items.AddRange(filteredItems);
         }
-        UpdateTotal();
     }
 
     private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -221,7 +216,6 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
                 IsSearching = false;
                 Items.Clear();
                 Items.AddRange(_originalItems);
-                UpdateTotal();
             }
         }
     }
@@ -239,61 +233,15 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
 
             IsSearching = false;
             _searchTimer?.Stop();
-            UpdateTotal();
         });
     }
 
-    private void OnItemsChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        var selectedAll = Items.All(item => item.IsSelected);
-        var notSelectedCount = Items.Count(item => !item.IsSelected);
-
-        if (selectedAll)
-        {
-            SelectAll = true;
-        }
-        else if (notSelectedCount == Items.Count)
-        {
-            SelectAll = false;
-        }
-        else
-        {
-            SelectAll = null;
-        }
-
-        UpdateTotal();
-    }
-
-    private void UpdateTotal()
-    {
-        TotalCount = Items.Count;
-        SelectedCount = Items.Count(item => item.IsSelected);
-    }
 
     [ObservableProperty]
     private string _searchString = string.Empty;
 
     [ObservableProperty]
     private bool _isSearching;
-
-    [ObservableProperty]
-    private bool? _selectAll = false;
-
-    [RelayCommand]
-    private void ToggleSelection(bool? selectAll)
-    {
-        foreach (var item in Items)
-        {
-            item.IsSelected = selectAll ?? false;
-        }
-    }
-
-
-    [ObservableProperty]
-    private int _selectedCount;
-
-    [ObservableProperty]
-    private int _totalCount;
 
     [ObservableProperty]
     private ObservableCollection<WebhookListItem> _items;

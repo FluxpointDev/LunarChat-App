@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
@@ -38,7 +39,6 @@ public partial class ChannelSettingsGroupUsersModel : ViewModelBase
         services.Client.OnGroupAddUser += AddUser;
         services.Client.OnGroupRemoveUser += RemoveUser;
         canManage = services.Client.CurrentId == services.State.CurrentChannel?.GroupSettings?.OwnerId;
-        foreach (var i in _originalItems) i.PropertyChanged += OnItemsChanged;
         Items = new ObservableCollection<GroupUserListItem>(_originalItems);
 
         _ = Task.Run(async () =>
@@ -112,6 +112,8 @@ public partial class ChannelSettingsGroupUsersModel : ViewModelBase
 
     private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
+        Debug.WriteLine("Changed: " + e.PropertyName);
+
         if (e.PropertyName == nameof(SearchString))
         {
             if (SearchString.Length > 0)
@@ -126,7 +128,6 @@ public partial class ChannelSettingsGroupUsersModel : ViewModelBase
                 IsSearching = false;
                 Items.Clear();
                 Items.AddRange(_originalItems);
-                UpdateTotal();
             }
         }
     }
@@ -144,45 +145,16 @@ public partial class ChannelSettingsGroupUsersModel : ViewModelBase
 
             IsSearching = false;
             _searchTimer?.Stop();
-            UpdateTotal();
         });
     }
 
-    private void OnItemsChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        var selectedAll = Items.All(item => item.IsSelected);
-        var notSelectedCount = Items.Count(item => !item.IsSelected);
 
-        if (selectedAll)
-        {
-            SelectAll = true;
-        }
-        else if (notSelectedCount == Items.Count)
-        {
-            SelectAll = false;
-        }
-        else
-        {
-            SelectAll = null;
-        }
-
-        UpdateTotal();
-    }
-
-    private void UpdateTotal()
-    {
-        TotalCount = Items.Count;
-        SelectedCount = Items.Count(item => item.IsSelected);
-    }
 
     [ObservableProperty]
     private string _searchString = string.Empty;
 
     [ObservableProperty]
     private bool _isSearching;
-
-    [ObservableProperty]
-    private bool? _selectAll = false;
 
     [RelayCommand]
     private void ToggleSelection(bool? selectAll)
@@ -216,12 +188,6 @@ public partial class ChannelSettingsGroupUsersModel : ViewModelBase
         }
         catch { }
     }
-
-    [ObservableProperty]
-    private int _selectedCount;
-
-    [ObservableProperty]
-    private int _totalCount;
 
     [ObservableProperty]
     private ObservableCollection<GroupUserListItem> _items;

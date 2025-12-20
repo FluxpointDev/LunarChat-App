@@ -50,8 +50,6 @@ public partial class ServerSettingsRolesModel : ViewModelBase
 
         PropertyChanged += OnPropertyChanged;
 
-        foreach (var i in _originalItems)
-            i.PropertyChanged += OnItemsChanged;
         Items = new ObservableCollection<RoleListItem>(_originalItems);
     }
 
@@ -82,7 +80,6 @@ public partial class ServerSettingsRolesModel : ViewModelBase
 
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            item.PropertyChanged -= OnItemsChanged;
             _originalItems.Remove(item);
             UpdateList();
         });
@@ -119,7 +116,6 @@ public partial class ServerSettingsRolesModel : ViewModelBase
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             _originalItems.Add(item);
-            item.PropertyChanged += OnItemsChanged;
             UpdateList();
         });
 
@@ -139,7 +135,6 @@ public partial class ServerSettingsRolesModel : ViewModelBase
 
             Items.AddRange(filteredItems);
         }
-        UpdateTotal();
     }
 
     [RelayCommand]
@@ -185,7 +180,6 @@ public partial class ServerSettingsRolesModel : ViewModelBase
                 IsSearching = false;
                 Items.Clear();
                 Items.AddRange(_originalItems);
-                UpdateTotal();
             }
         }
     }
@@ -203,35 +197,7 @@ public partial class ServerSettingsRolesModel : ViewModelBase
 
             IsSearching = false;
             _searchTimer?.Stop();
-            UpdateTotal();
         });
-    }
-
-    private void OnItemsChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        var selectedAll = Items.All(item => item.IsSelected);
-        var notSelectedCount = Items.Count(item => !item.IsSelected);
-
-        if (selectedAll)
-        {
-            SelectAll = true;
-        }
-        else if (notSelectedCount == Items.Count)
-        {
-            SelectAll = false;
-        }
-        else
-        {
-            SelectAll = null;
-        }
-
-        UpdateTotal();
-    }
-
-    private void UpdateTotal()
-    {
-        TotalCount = Items.Count;
-        SelectedCount = Items.Count(item => item.IsSelected);
     }
 
     [ObservableProperty]
@@ -239,18 +205,6 @@ public partial class ServerSettingsRolesModel : ViewModelBase
 
     [ObservableProperty]
     private bool _isSearching;
-
-    [ObservableProperty]
-    private bool? _selectAll = false;
-
-    [RelayCommand]
-    private void ToggleSelection(bool? selectAll)
-    {
-        foreach (var item in Items)
-        {
-            item.IsSelected = selectAll ?? false;
-        }
-    }
 
     [RelayCommand]
     public void DefaultMembersRole()
@@ -267,12 +221,6 @@ public partial class ServerSettingsRolesModel : ViewModelBase
             Permissions = services.State.CurrentServer.Server.DefaultPermissions
         });
     }
-
-    [ObservableProperty]
-    private int _selectedCount;
-
-    [ObservableProperty]
-    private int _totalCount;
 
     [ObservableProperty]
     private ObservableCollection<RoleListItem> _items;

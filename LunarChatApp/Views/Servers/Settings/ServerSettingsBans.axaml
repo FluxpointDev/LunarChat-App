@@ -82,20 +82,5 @@
 					</DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <Grid ColumnDefinitions="* Auto">
-                <TextBlock VerticalAlignment="Center" Classes="Small Muted">
-                    <Run Text="{Binding SelectedCount}" />
-                    <Run Text="of" />
-                    <Run Text="{Binding TotalCount}" />
-                    <Run Text="row(s) selected." />
-                </TextBlock>
-                <StackPanel
-                    Grid.Column="1"
-                    Orientation="Horizontal"
-                    Spacing="8">
-                    <Button Classes="Outline" IsEnabled="False">Previous</Button>
-                    <Button Classes="Outline" IsEnabled="False">Next</Button>
-                </StackPanel>
-            </Grid>
         </StackPanel>
 </UserControl>
