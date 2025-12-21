@@ -6,10 +6,12 @@ using LunarChatApp.ViewModels.Dialogs;
 using LunarChatApp.Views;
 using LunarChatApp.Views.Dialogs;
 using LunarChatSharp;
+using LunarChatSharp.Core.Channels;
 using LunarChatSharp.Core.Servers;
 using LunarChatSharp.Rest.Channels;
 using LunarChatSharp.Rest.Servers;
 using LunarChatSharp.Websocket.Events.Servers;
+using System;
 using System.Threading.Tasks;
 
 namespace LunarChatApp.ViewModels.Servers;
@@ -17,14 +19,16 @@ namespace LunarChatApp.ViewModels.Servers;
 public partial class ServerHeaderModel : ViewModelBase
 {
     private ServiceManager services;
-    public ServerHeaderModel(ServiceManager sv, RestServer s)
+    public ServerHeaderModel(ServiceManager sv, RestServer server)
     {
         services = sv;
-        Name = s.Name;
-        isOwner = sv.Client.CurrentId == s.OwnerId;
+        Name = server.Name;
+        isOwner = sv.Client.CurrentId == server.OwnerId;
         UpdatePermissions();
         services.Client.OnServerUpdate += ServerUpdate;
         services.State.CurrentServer.OnPermissionUpdate += Update;
+        if (!string.IsNullOrEmpty(server.BannerId))
+            Banner = new Uri(server.GetBannerUrl()!);
     }
 
     private async Task ServerUpdate(RestServer server, ServerUpdateEvent ev)
@@ -54,6 +58,9 @@ public partial class ServerHeaderModel : ViewModelBase
 
     public void UpdatePermissions()
     {
+        if (services.State.CurrentServer == null)
+            return;
+
         CanManageChannels = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ChannelPermission.ManageChannel);
         CanChangeNickname = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.ChangeNickname) || services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.ManageNicknames);
         CanViewSettings = services.State.CurrentServer.CanManageServer(services.State.CurrentServer.Member);
@@ -71,6 +78,9 @@ public partial class ServerHeaderModel : ViewModelBase
     [ObservableProperty]
     private bool canChangeNickname;
 
+    [ObservableProperty]
+    private Uri? banner;
+
     [RelayCommand]
     public async Task CreateChannel()
     {
@@ -79,15 +89,33 @@ public partial class ServerHeaderModel : ViewModelBase
 
     public async Task SubmitChannel(UserControl control)
     {
+        if (services.State.CurrentServer == null)
+            return;
+
+        CreateChannelDialogModel? model = control.DataContext as CreateChannelDialogModel;
+        if (model == null)
+            return;
+
+        ChannelType RealType = ChannelType.Text;
+
+        switch (model.Type)
+        {
+            case ChannelType.Direct:
+                RealType = ChannelType.Category;
+                break;
+            default:
+                RealType = model.Type;
+                break;
+        }
+
         try
         {
-            CreateChannelDialogModel model = (CreateChannelDialogModel)control.DataContext!;
             await services.Rest.CreateChannelAsync(new CreateChannelRequest
             {
                 Name = model.Name,
                 Topic = model.Topic,
                 ServerId = services.State.CurrentServer.Server.Id,
-                Type = model.Type,
+                Type = RealType,
             });
         }
         catch { }

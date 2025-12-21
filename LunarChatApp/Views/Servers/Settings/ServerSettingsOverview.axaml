@@ -32,8 +32,8 @@
 					Content="Delete Server" />
 		</StackPanel>
 		<StackPanel Spacing="10" HorizontalAlignment="Left">
-			<Label Classes="Small">Server Icon</Label>
-			<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True" Width="90" Height="90"
+			<Label Classes="Small">Icon</Label>
+			<Border HorizontalAlignment="Left" CornerRadius="90" ClipToBounds="True" Width="90" Height="90"
 					BorderBrush="{DynamicResource BorderColor}" BorderThickness="2">
 				<Grid>
 					<controls:AsyncImage CornerRadius="90" Source="{Binding ServerIcon}" IsVisible="{Binding ServerIcon, Converter={x:Static ObjectConverters.IsNotNull}}"></controls:AsyncImage>
@@ -49,6 +49,27 @@
 				<Button Command="{Binding ClearIconCommand}" IsEnabled="{Binding CanManage}"
 						Classes="Primary"
 						Content="Clear" />
+			</StackPanel>
+
+			<StackPanel Spacing="10" HorizontalAlignment="Left">
+				<Label Classes="Small">Banner</Label>
+				<Border VerticalAlignment="Top" CornerRadius="8" ClipToBounds="True" Width="200" Height="90"
+						BorderBrush="{DynamicResource BorderColor}" BorderThickness="2">
+					<Grid>
+						<controls:AsyncImage CornerRadius="8" Source="{Binding ServerIcon}" IsVisible="{Binding Banner, Converter={x:Static ObjectConverters.IsNotNull}}"></controls:AsyncImage>
+						<Button Opacity="0.6" Command="{Binding UploadBannerCommand}" IsEnabled="{Binding CanManage}" CornerRadius="8" />
+						<materialIcons:MaterialIcon VerticalAlignment="Center" HorizontalAlignment="Center" Kind="Plus" Width="14" Height="14" IsHitTestVisible="False" Foreground="{DynamicResource PrimaryColor}" IsVisible="{Binding Banner, Converter={x:Static ObjectConverters.IsNull}}" />
+					</Grid>
+				</Border>
+
+				<StackPanel
+				HorizontalAlignment="Left"
+				Orientation="Horizontal"
+				Spacing="8">
+					<Button Command="{Binding ClearBannerCommand}" IsEnabled="{Binding CanManage}"
+							Classes="Primary"
+							Content="Clear" />
+				</StackPanel>
 			</StackPanel>
 		</StackPanel>
 	</StackPanel>

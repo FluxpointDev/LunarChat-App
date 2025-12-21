@@ -54,17 +54,18 @@
                     BorderThickness="{TemplateBinding BorderThickness}"
                     CornerRadius="{TemplateBinding CornerRadius}"
                     Name="Border">
-                    <Grid IsSharedSizeScope="True" RowDefinitions="Auto * Auto">
+                    <Grid Grid.IsSharedSizeScope="True" RowDefinitions="Auto * Auto">
                         <ContentPresenter
                             Content="{TemplateBinding Header}"
+                            IsVisible="{TemplateBinding Header, Converter={x:Static ObjectConverters.IsNotNull}}"
                             Grid.Row="0"
                             Margin="{TemplateBinding Padding,
                                                      Converter={x:Static shadui:ThicknessConverters.NoBottom}}" />
-                        <ScrollViewer
+                        <ScrollViewer VerticalScrollBarVisibility="Disabled"
                             Classes.Stack="{TemplateBinding Expanded,
                                                             Converter={x:Static BoolConverters.Not}}"
                             Grid.Row="1"
-                            Margin="0,8"
+                            Margin="0,0"
                             Padding="{TemplateBinding Padding,
                                                       Converter={x:Static shadui:ThicknessConverters.LeftRight}}">
                             <ScrollViewer.Transitions>
@@ -76,6 +77,7 @@
                         </ScrollViewer>
                         <ContentPresenter
                             Content="{TemplateBinding Footer}"
+                             IsVisible="{TemplateBinding Footer, Converter={x:Static ObjectConverters.IsNotNull}}"
                             Grid.Row="2"
                             Margin="{TemplateBinding Padding,
                                                      Converter={x:Static shadui:ThicknessConverters.NoTop}}" />

@@ -66,9 +66,18 @@ public partial class ServerSettingsModel : ViewModelBase
             if (ev.Changed.Name != null)
                 ServerName = ev.Changed.Name;
 
-            if (ev.Changed.Icon != null && SelectedPage is ServerSettingsOverview page)
-                (page.DataContext as ServerSettingsOverviewModel).ServerIcon = string.IsNullOrEmpty(ev.Changed.Icon) ? null : new System.Uri(ev.Changed.GetIconUrl());
+            if (SelectedPage is ServerSettingsOverview page)
+            {
+                ServerSettingsOverviewModel? model = page.DataContext as ServerSettingsOverviewModel;
+                if (model == null)
+                    return;
 
+                if (ev.Changed.Icon != null)
+                    model.ServerIcon = string.IsNullOrEmpty(ev.Changed.Icon) ? null : new System.Uri(ev.Changed.GetIconUrl()!);
+
+                if (ev.Changed.Banner != null)
+                    model.Banner = string.IsNullOrEmpty(ev.Changed.Banner) ? null : new System.Uri(ev.Changed.GetBannerUrl()!);
+            }
         });
 
     }

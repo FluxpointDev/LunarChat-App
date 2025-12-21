@@ -10,7 +10,7 @@
 			 mc:Ignorable="d" d:DesignWidth="48" d:DesignHeight="48"
 			 x:Class="LunarChatApp.ServerIcon"
 			 x:DataType="viewmodels:ServerIconModel">
-	<Button IsEnabled="true" Command="{Binding SelectedServerCommand}" Margin="2" Padding="4">
+	<Button  Command="{Binding SelectedServerCommand}" Margin="2" Padding="4">
 		<StackPanel>
 			<Border IsVisible="{Binding !IsFeature}" CornerRadius="12" ClipToBounds="True" ToolTip.Tip="{Binding Name}" ToolTip.Placement="Right">
 				<StackPanel>

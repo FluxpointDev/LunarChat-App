@@ -59,7 +59,7 @@ public partial class ServersModel : ViewModelBase
         else
         {
             _selectedHeader = new ServerHeaderView() { DataContext = new ServerHeaderModel(services, state.CurrentServer.Server) };
-            _selectedSidebar = new ChannelsListView() { DataContext = new ChannelListModel(services, state) };
+            _selectedSidebar = new ChannelsList() { DataContext = new ChannelsListModel(services, state) };
             if (state.CurrentChannel != null)
                 _selectedPage = new ChannelView() { DataContext = new ChannelViewModel(state, services) };
         }
@@ -261,7 +261,7 @@ public partial class ServersModel : ViewModelBase
         else
         {
             SelectedHeader = new ServerHeaderView() { DataContext = new ServerHeaderModel(services, server) };
-            SelectedSidebar = new ChannelsListView() { DataContext = new ChannelListModel(services, state) };
+            SelectedSidebar = new ChannelsList() { DataContext = new ChannelsListModel(services, state) };
             SelectedPage = null;
         }
     }

@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace LunarChatApp;
 
-public partial class ChannelsListView : UserControl
+public partial class ChannelsList : UserControl
 {
-    public ChannelsListView()
+    public ChannelsList()
     {
         InitializeComponent();
     }

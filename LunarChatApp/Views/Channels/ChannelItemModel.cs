@@ -51,6 +51,9 @@ public partial class ChannelItemModel : ViewModelBase
     [ObservableProperty]
     private MaterialIconKind icon;
 
+    [ObservableProperty]
+    public bool toggled = true;
+
     [RelayCommand]
     public void SelectChannel()
     {

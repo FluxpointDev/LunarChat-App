@@ -3,7 +3,7 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:local="using:LunarChatApp"
-             xmlns:materialIcons="using:Material.Icons.Avalonia"
+			 xmlns:materialIcons="using:Material.Icons.Avalonia"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:md="using:LiveMarkdown.Avalonia"
 			 xmlns:shadui="using:ShadUI"
@@ -16,96 +16,95 @@
 		BorderBrush="{DynamicResource BorderColor30}"
 		BorderThickness="0,0,1,0"
 		Expanded="{Binding IsExpanded}"
-		Grid.Column="0"
-		MinWidth="{OnPlatform Default=60, Android=0, iOS=0}"
+		MinWidth="{OnPlatform Default=54, Android=0, iOS=0}"
 		Padding="4"
 		Width="240">
-			<shadui:Sidebar.Header>
-				<StackPanel Orientation="Horizontal">
-					<Button Margin="2" Padding="8" Command="{Binding OpenHomeCommand}">
-						<materialIcons:MaterialIcon Kind="House" Width="28" Height="28" Foreground="{DynamicResource PrimaryColor}" />
-					</Button>
-					<ContentControl Content="{Binding SelectedHeader}"></ContentControl>
-				</StackPanel>
-			</shadui:Sidebar.Header>
-
-			<Grid>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="*" />
-					<RowDefinition Height="Auto" />
-				</Grid.RowDefinitions>
-				<Grid>
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="auto" />
-						<ColumnDefinition />
-					</Grid.ColumnDefinitions>
-					<StackPanel HorizontalAlignment="Left">
-						<ItemsRepeater MinWidth="40" ItemsSource="{Binding ServersList}">
-						</ItemsRepeater>
-						<local:ServerIcon DataContext="{Binding DiscoveryModel}" IsVisible="{OnPlatform Default=true, Android=false, iOS=false}"></local:ServerIcon>
-						<local:ServerIcon DataContext="{Binding AddServerModel}"></local:ServerIcon>
-					</StackPanel>
-					<ContentControl IsVisible="{Binding IsExpanded}" Grid.Column="1" Content="{Binding SelectedSidebar}"></ContentControl>
+			<Grid RowDefinitions="*, 52" Margin="0,0,0,6">
+				<Grid ColumnDefinitions="52, *">
+					<Grid RowDefinitions="43, 8, *">
+						<Button Command="{Binding OpenHomeCommand}" Height="40" Width="40">
+							<materialIcons:MaterialIcon Kind="House" Width="28" Height="28" Foreground="{DynamicResource PrimaryColor}" />
+						</Button>
+						<Border Width="30" Margin="0,4,0,0" Grid.Row="1" BorderBrush="{DynamicResource BorderColor60}" BorderThickness="0,1,0,0"></Border>
+						<ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Hidden" IsScrollChainingEnabled="true">
+							<StackPanel>
+								<ItemsRepeater ItemsSource="{Binding ServersList}">
+								</ItemsRepeater>
+								<local:ServerIcon DataContext="{Binding DiscoveryModel}" IsVisible="{OnPlatform Default=true, Android=false, iOS=false}"></local:ServerIcon>
+								<local:ServerIcon DataContext="{Binding AddServerModel}"></local:ServerIcon>
+							</StackPanel>
+						</ScrollViewer>
+					</Grid>
+					<Border Grid.Column="1" BorderThickness="1,0,0,0" BorderBrush="{DynamicResource BorderColor30}">
+						<Grid RowDefinitions="auto, *">
+							<ContentControl Content="{Binding SelectedHeader}"></ContentControl>
+							<ScrollViewer Grid.Row="1">
+								<ContentControl IsVisible="{Binding IsExpanded}" Grid.Column="1" Content="{Binding SelectedSidebar}"></ContentControl>
+							</ScrollViewer>
+						</Grid>
+					</Border>
 				</Grid>
-				<Grid Grid.Row="1" IsVisible="{OnPlatform Default=true, Android=false, iOS=false}">
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="*" />
-						<ColumnDefinition Width="50" />
-					</Grid.ColumnDefinitions>
-					<Menu Classes="Single">
-						<MenuItem
-						Classes="NoPressedAnimation"
-						CornerRadius="{DynamicResource LgCornerRadius}"
-						HorizontalAlignment="Stretch"
-						Padding="8,0"
-						Cursor="Hand"
-						shadui:MenuItemAssist.PopupHorizontalOffset="4"
-						shadui:MenuItemAssist.PopupPlacement="TopEdgeAlignedLeft"
-						shadui:MenuItemAssist.PopupVerticalOffset="0">
-							<MenuItem.Header>
-								<Button HorizontalAlignment="Left" Padding="4" IsHitTestVisible="False">
-									<StackPanel Orientation="Horizontal" Spacing="6">
-										<Grid>
-											<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
-												<Image Source="{Binding state.Avatar}" Width="40" Height="40"></Image>
-											</Border>
-											<Border Width="16" Height="16" VerticalAlignment="Bottom" HorizontalAlignment="Right" CornerRadius="90" ClipToBounds="True" Background="{DynamicResource PrimaryForegroundColor}">
-												<materialIcons:MaterialIcon Margin="0,0,0.5,0.5" ClipToBounds="True" Padding="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Kind="{Binding StatusIcon}" Width="14" Height="14" Foreground="{Binding StatusColor}" />
-											</Border>
-										</Grid>
-										<StackPanel>
-											<TextBlock Text="{Binding state.CurrentDisplayName}"></TextBlock>
-											<TextBlock Classes="Muted" Text="{Binding state.Username}"></TextBlock>
+				<Border Grid.Row="1" Margin="2,0,10,0" Background="{DynamicResource BorderColor}" IsVisible="{OnPlatform Default=true, Android=false, iOS=false}"
+					CornerRadius="8" Padding="4">
+					<Grid ColumnSpacing="2">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*" />
+							<ColumnDefinition Width="auto" />
+						</Grid.ColumnDefinitions>
+						<Menu Classes="Single">
+							<MenuItem
+							Classes="NoPressedAnimation"
+							CornerRadius="{DynamicResource LgCornerRadius}"
+							HorizontalAlignment="Stretch"
+							Cursor="Hand"
+							shadui:MenuItemAssist.PopupHorizontalOffset="4"
+							shadui:MenuItemAssist.PopupPlacement="TopEdgeAlignedLeft"
+							shadui:MenuItemAssist.PopupVerticalOffset="-4">
+								<MenuItem.Header>
+									<Button HorizontalAlignment="Left" Padding="1" IsHitTestVisible="False">
+										<StackPanel Orientation="Horizontal" Spacing="6">
+											<Grid>
+												<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True">
+													<Image Source="{Binding state.Avatar}" Width="34" Height="34"></Image>
+												</Border>
+												<Border Width="16" Height="16" VerticalAlignment="Bottom" HorizontalAlignment="Right" CornerRadius="90" ClipToBounds="True" Background="{DynamicResource PrimaryForegroundColor}">
+													<materialIcons:MaterialIcon Margin="0,0,0.5,0.5" ClipToBounds="True" Padding="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Kind="{Binding StatusIcon}" Width="14" Height="14" Foreground="{Binding StatusColor}" />
+												</Border>
+											</Grid>
+											<StackPanel>
+												<TextBlock Text="{Binding state.CurrentDisplayName}"></TextBlock>
+												<TextBlock Classes="Muted" Text="{Binding state.Username}"></TextBlock>
+											</StackPanel>
 										</StackPanel>
-									</StackPanel>
-								</Button>
-							</MenuItem.Header>
-							<MenuItem Width="160" Header="Status" Command="{Binding OpenStatusDialogCommand}">
-								<MenuItem.Icon>
-									<materialIcons:MaterialIcon Kind="Tag" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
-								</MenuItem.Icon>
+									</Button>
+								</MenuItem.Header>
+								<MenuItem Width="150" Header="Status" Command="{Binding OpenStatusDialogCommand}">
+									<MenuItem.Icon>
+										<materialIcons:MaterialIcon Kind="Tag" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Width="150" Header="Copy User ID" Command="{Binding CopyUserID}">
+									<MenuItem.Icon>
+										<materialIcons:MaterialIcon Kind="ContentCopy" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Width="150" Header="Logout" Command="{Binding LogoutCommand}">
+									<MenuItem.Icon>
+										<materialIcons:MaterialIcon Kind="Logout" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Width="150" Header="Quit" Command="{Binding QuitCommand}" IsVisible="{OnPlatform Default='True', Browser='False'}">
+									<MenuItem.Icon>
+										<materialIcons:MaterialIcon Kind="Close" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
+									</MenuItem.Icon>
+								</MenuItem>
 							</MenuItem>
-							<MenuItem Width="160" Header="Copy User ID" Command="{Binding CopyUserID}">
-								<MenuItem.Icon>
-									<materialIcons:MaterialIcon Kind="ContentCopy" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
-								</MenuItem.Icon>
-							</MenuItem>
-							<MenuItem Width="160" Header="Logout" Command="{Binding LogoutCommand}">
-								<MenuItem.Icon>
-									<materialIcons:MaterialIcon Kind="Logout" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
-								</MenuItem.Icon>
-							</MenuItem>
-							<MenuItem Width="160" Header="Quit" Command="{Binding QuitCommand}" IsVisible="{OnPlatform Default='True', Browser='False'}">
-								<MenuItem.Icon>
-									<materialIcons:MaterialIcon Kind="Close" Width="12" Height="12" Foreground="{DynamicResource PrimaryColor}" />
-								</MenuItem.Icon>
-							</MenuItem>
-						</MenuItem>
-					</Menu>
-					<Button Grid.Column="1" Command="{Binding OpenSettingsCommand}">
-						<materialIcons:MaterialIcon Kind="Settings" Width="22" Height="22" Foreground="{DynamicResource PrimaryColor}" />
-					</Button>
-				</Grid>
+						</Menu>
+						<Button Grid.Column="1" Command="{Binding OpenSettingsCommand}" Width="46">
+							<materialIcons:MaterialIcon Kind="Settings" Width="22" Height="22" Foreground="{DynamicResource PrimaryColor}" />
+						</Button>
+					</Grid>
+				</Border>
 			</Grid>
 		</shadui:Sidebar>
 		<Grid.GestureRecognizers>

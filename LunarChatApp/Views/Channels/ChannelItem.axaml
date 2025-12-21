@@ -9,7 +9,7 @@
 			 mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="100"
 			 x:Class="LunarChatApp.ChannelItem"
 			 x:DataType="servers:ChannelItemModel">
-	<shadui:SidebarItem Command="{Binding SelectChannelCommand}">
+	<shadui:SidebarItem Command="{Binding SelectChannelCommand}" Padding="8" IsVisible="{Binding Toggled}">
 		<shadui:SidebarItem.Content>
 			<Grid Grid.ColumnDefinitions="*, auto">
 				<TextBlock Text="{Binding Name}"></TextBlock>

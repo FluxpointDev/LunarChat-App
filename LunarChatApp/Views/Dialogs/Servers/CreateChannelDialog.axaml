@@ -29,6 +29,7 @@
 		<ComboBox Width="225" shadui:ControlAssist.Label="Type" SelectedIndex="{Binding Type}">
 			<ComboBoxItem>Text</ComboBoxItem>
 			<ComboBoxItem>Voice</ComboBoxItem>
+			<ComboBoxItem>Category</ComboBoxItem>
 		</ComboBox>
 	</StackPanel>
 </UserControl>

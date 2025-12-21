@@ -22,7 +22,10 @@ public partial class ServerSettingsOverviewModel : ViewModelBase
         services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
         canManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.ManageServer);
         if (!string.IsNullOrEmpty(services.State.CurrentServer.Server.IconId))
-            ServerIcon = new Uri(services.State.CurrentServer.Server.GetIconUrl());
+            ServerIcon = new Uri(services.State.CurrentServer.Server.GetIconUrl()!);
+
+        if (!string.IsNullOrEmpty(services.State.CurrentServer.Server.BannerId))
+            Banner = new Uri(services.State.CurrentServer.Server.GetBannerUrl()!);
     }
 
     private async Task PermissionUpdate(RestServer server)
@@ -38,7 +41,10 @@ public partial class ServerSettingsOverviewModel : ViewModelBase
     private string? _serverNameEdit;
 
     [ObservableProperty]
-    private Uri serverIcon;
+    private Uri? serverIcon;
+
+    [ObservableProperty]
+    private Uri? banner;
 
     [RelayCommand]
     public async Task UploadIcon()
@@ -67,6 +73,38 @@ public partial class ServerSettingsOverviewModel : ViewModelBase
             await services.Rest.EditServerAsync(services.State.CurrentServer?.Server?.Id, new EditServerRequest
             {
                 Icon = ""
+            });
+        }
+        catch { }
+    }
+
+    [RelayCommand]
+    public async Task UploadBanner()
+    {
+        var files = await services.FilePicker();
+        if (!files.Any())
+            return;
+
+        _ = Task.Run(async () =>
+        {
+            using (Stream stream = await files.First().OpenReadAsync())
+            {
+                await services.Rest.EditServerAsync(services.State.CurrentServer?.Server?.Id, new EditServerRequest
+                {
+                    Banner = Utils.GetImageBase64(stream)
+                });
+            }
+        });
+    }
+
+    [RelayCommand]
+    public async Task ClearBanner()
+    {
+        try
+        {
+            await services.Rest.EditServerAsync(services.State.CurrentServer?.Server?.Id, new EditServerRequest
+            {
+                Banner = ""
             });
         }
         catch { }
