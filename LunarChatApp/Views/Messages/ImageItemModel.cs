@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
+using LunarChatApp.ViewModels;
+using LunarChatApp.Views.Dialogs;
 using LunarChatSharp.Rest.Messages;
 using System;
 
@@ -23,6 +25,15 @@ public partial class ImageItemModel : ViewModelBase
     [RelayCommand]
     public void OpenImage()
     {
+        MainView? view = null;
+        if (services.MainControl is MainWindow window)
+            view = window.Content as MainView;
+        else
+            view = services.MainControl as MainView;
 
+        if (view == null)
+            return;
+
+        (view.DataContext as MainModel)!.CurrentImage = new ImagePopup() { DataContext = new ImagePopupModel(services, Source) };
     }
 }

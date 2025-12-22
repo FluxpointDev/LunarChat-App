@@ -19,8 +19,9 @@
 	<Grid Grid.RowDefinitions="*, auto">
 		<ContentControl Name="MainContent" Content="{Binding SelectedPage}" />
 		<ContentControl Name="DialogContent" Content="{Binding CurrentDialog}" />
+		<ContentControl Content="{Binding CurrentImage}" />
 		<toasts:ToastHost Manager="{Binding ToastManager}" />
-		<UniformGrid IsVisible="{Binding NavBarVisible}" Grid.Row="1" Columns="4" ColumnSpacing="2" Background="{DynamicResource PrimaryColor10}">
+		<UniformGrid x:Name="MobileNavBar" IsVisible="{Binding NavBarVisible}" Grid.Row="1" Columns="4" ColumnSpacing="2" Background="{DynamicResource PrimaryColor10}">
 			<Button Padding="0,8,0,8" Command="{Binding OpenServersCommand}">
 				<StackPanel Spacing="2">
 					<materialIcons:MaterialIcon Kind="House" Width="20" Height="20" Foreground="{DynamicResource PrimaryColor}" />

@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:controls="using:Avalonia.Labs.Controls"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:dialogs="using:LunarChatApp.Views.Dialogs"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.ImagePopup"
+			 x:DataType="dialogs:ImagePopupModel">
+	<Panel Background="#66000000" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" PointerPressed="Panel_PointerPressed">
+		<Grid RowDefinitions="100, *, 100">
+			<Panel>
+				<StackPanel Margin="20" Spacing="10" HorizontalAlignment="Right" Orientation="Horizontal">
+					<!--<Button Classes="Secondary" VerticalAlignment="Center" Command="{Binding SaveCommand}">Save</Button>-->
+					<Button Classes="Secondary" VerticalAlignment="Center" Command="{Binding OpenLinkCommand}">Open</Button>
+					<Button Classes="Secondary" VerticalAlignment="Center" Command="{Binding CloseCommand}">Close</Button>
+				</StackPanel>
+			</Panel>
+			<Grid Grid.Row="1" ColumnDefinitions="1*, 6*, 1*">
+				<Panel Grid.Column="0" />
+				<Border Grid.Column="1">
+					<controls:AsyncImage Source="{Binding Source}" Stretch="Uniform"></controls:AsyncImage>
+				</Border>
+				<Panel Grid.Column="2" />
+			</Grid>
+			<Panel Grid.Row="2">
+				
+			</Panel>
+		</Grid>
+	</Panel>
+</UserControl>

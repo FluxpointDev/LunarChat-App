@@ -105,6 +105,9 @@ public partial class MainModel : ViewModelBase
     private PopupMask _currentDialog;
 
     [ObservableProperty]
+    private object? _currentImage;
+
+    [ObservableProperty]
     private string _currentRoute = "login";
 
     [ObservableProperty]
