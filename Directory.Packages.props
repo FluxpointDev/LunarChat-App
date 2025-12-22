@@ -2,8 +2,8 @@
   <!-- https://learn.microsoft.com/en-us/nuget/consume-packages/central-package-management -->
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    <!-- Switch to 655 for browser and 677 everything else -->
-    <AvaVersion>12.0.999-cibuild0060655-alpha</AvaVersion>
+    <!-- Switch to cibuild0060677 for browser and cibuild0061023 everything else -->
+    <AvaVersion>12.0.999-cibuild0061023-alpha</AvaVersion>
   </PropertyGroup>
   <ItemGroup>
     <!-- Avalonia packages -->

@@ -63,10 +63,10 @@
 						</ItemsRepeater.Layout>
 					</ItemsRepeater>
 				</StackPanel>
-				<StackPanel>
+				<StackPanel MaxWidth="600" HorizontalAlignment="Left">
 					<ItemsRepeater ItemsSource="{Binding ImagesList}">
 						<ItemsRepeater.Layout>
-							<UniformGridLayout MinItemHeight="200" />
+							<UniformGridLayout MinItemHeight="150" MinColumnSpacing="4" MinRowSpacing="4" />
 						</ItemsRepeater.Layout>
 					</ItemsRepeater>
 				</StackPanel>

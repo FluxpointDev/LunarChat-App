@@ -7,5 +7,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="LunarChatApp.ImageItem"
              x:DataType="messages:ImageItemModel">
-    <controls:AsyncImage MaxWidth="400" MaxHeight="250" Stretch="Fill" Source="{Binding Source}"></controls:AsyncImage>
+    <Button Command="{Binding OpenImageCommand}" CornerRadius="2">
+		<controls:AsyncImage MaxWidth="290" MaxHeight="150" Stretch="Fill" Source="{Binding Source}"></controls:AsyncImage>
+    </Button>
 </UserControl>

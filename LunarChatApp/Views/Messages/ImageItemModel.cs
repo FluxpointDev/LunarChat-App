@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
 using LunarChatSharp.Rest.Messages;
 using System;
@@ -17,5 +18,11 @@ public partial class ImageItemModel : ViewModelBase
         services = sv;
         Source = new Uri(ServiceManager.IsDev ? $"https://localhost:7216/attachments/{attachment.Id}/{attachment.FileName}" :
             $"https://lunar.fluxpoint.dev/api/attachments/{attachment.Id}/{attachment.FileName}");
+    }
+
+    [RelayCommand]
+    public void OpenImage()
+    {
+
     }
 }

@@ -74,7 +74,7 @@
 							</StackPanel>
 						</StackPanel>
 					</TabItem>
-					<TabItem Header="Data Access">
+					<!--<TabItem Header="Data Access">
 						<StackPanel Spacing="10">
 							<shadui:Card Margin="4" HasShadow="True" HorizontalAlignment="Stretch" BorderBrush="{DynamicResource InfoColor60}" Background="{DynamicResource InfoColor10}">
 								<TextBlock FontSize="16" Text="Let users know what data your app needs to function!" />
@@ -111,8 +111,9 @@
 							<SelectableTextBlock Margin="8,-4,0,10" Classes="Muted" FontSize="14" Text="Access user status and online state."></SelectableTextBlock>
 
 						</StackPanel>
-					</TabItem>
+					</TabItem>-->
 					<TabItem Header="Permissions">
+
 					</TabItem>
 				</TabControl.Items>
 			</TabControl>

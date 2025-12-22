@@ -120,7 +120,7 @@
 							<ColumnDefinition Width="auto" />
 						</Grid.ColumnDefinitions>
 						<Button Command="{Binding PasteImageCommand}" IsVisible="False" HotKey="Ctrl+v" />
-						<Menu Classes="Single">
+						<Menu Classes="Single" VerticalAlignment="Center">
 							<MenuItem
 							Classes="NoPressedAnimation"
 							CornerRadius="{DynamicResource LgCornerRadius}"
