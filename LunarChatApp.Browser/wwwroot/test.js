@@ -14,5 +14,4 @@ export function playSound(name) {
     var audio = new Audio('media/' + name + '.mp3');
     window.currentSound = audio;
     audio.play();
-
 }

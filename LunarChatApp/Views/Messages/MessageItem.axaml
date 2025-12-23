@@ -1,6 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
 			 xmlns:components="using:LunarChatApp.Components"
-             xmlns:controls="using:Avalonia.Labs.Controls"
+			 xmlns:controls="using:Avalonia.Labs.Controls"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:local="using:LunarChatApp"
@@ -53,7 +53,7 @@
 					</Border>
 					<SelectableTextBlock Margin="4,0,0,0" Classes="Muted" FontSize="13" VerticalAlignment="Center" Text="{Binding Time}"></SelectableTextBlock>
 					<SelectableTextBlock Classes="Muted" VerticalAlignment="Center" Text="(edited)" IsVisible="{Binding EditedTime, Converter={x:Static ObjectConverters.IsNotNull}}"
-						  ToolTip.Placement="Top" ToolTip.Tip="{Binding EditedTime}" ToolTip.VerticalOffset="-4"></SelectableTextBlock>
+										 ToolTip.Placement="Top" ToolTip.Tip="{Binding EditedTime}" ToolTip.VerticalOffset="-4"></SelectableTextBlock>
 				</StackPanel>
 				<md:MarkdownRenderer Name="MarkdownView" MarkdownBuilder="{Binding Message}" InlineHyperlinkCommand="{Binding LinkClicked}" />
 				<StackPanel>
@@ -67,6 +67,14 @@
 					<ItemsRepeater ItemsSource="{Binding ImagesList}">
 						<ItemsRepeater.Layout>
 							<UniformGridLayout MinItemHeight="150" MinColumnSpacing="4" MinRowSpacing="4" />
+						</ItemsRepeater.Layout>
+					</ItemsRepeater>
+				</StackPanel>
+				<StackPanel MaxWidth="600" HorizontalAlignment="Left">
+					<ItemsRepeater ItemsSource="{Binding ReactionList}">
+						
+						<ItemsRepeater.Layout>
+							<WrapLayout VerticalSpacing="6" HorizontalSpacing="6" />
 						</ItemsRepeater.Layout>
 					</ItemsRepeater>
 				</StackPanel>

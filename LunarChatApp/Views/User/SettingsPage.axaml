@@ -71,7 +71,7 @@
 					</shadui:SidebarItem.Icon>
 				</shadui:SidebarItem>
 				<shadui:SidebarItemLabel AsSeparator="True" Text="App" />
-				<shadui:SidebarItem Content="Notifications" Command="{Binding OpenNotificationsCommand}">
+				<shadui:SidebarItem Content="Notifications" Command="{Binding OpenNotificationsCommand}" IsEnabled="False">
 					<shadui:SidebarItem.Icon>
 						<Viewbox>
 							<materialIcons:MaterialIcon Kind="Notifications" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />

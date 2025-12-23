@@ -120,7 +120,7 @@ public partial class SettingsModel : ViewModelBase
         if (SelectedPage != null && SelectedPage is IDisposable disposablePrevious)
             disposablePrevious.Dispose();
 
-        services.MediaService.StopSound();
+        //services.MediaService.StopSound();
 
         SelectedTitle = pageType.ToString();
 

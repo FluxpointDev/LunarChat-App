@@ -56,6 +56,16 @@ public partial class MessageItemModel : ViewModelBase
             {
                 DataContext = new ImageItemModel(services, x)
             }));
+
+        if (message.Reactions != null && message.Reactions.Any())
+        {
+            reactionList = new ObservableCollection<ReactionItem>(message.Reactions.Values.Select(x => new ReactionItem()
+            {
+                DataContext = new ReactionItemModel(services, message, x.Emoji) { SelfReaction = x.hasReacted }
+            }));
+            if (reactionList.Count != 10)
+                reactionList.Add(new ReactionItem() { DataContext = new ReactionItemModel(services, message, null) { IsAdd = true } });
+        }
     }
 
     private readonly ServiceManager services;
@@ -103,6 +113,9 @@ public partial class MessageItemModel : ViewModelBase
 
     [ObservableProperty]
     private ObservableCollection<ImageItem>? imagesList;
+
+    [ObservableProperty]
+    private ObservableCollection<ReactionItem>? reactionList;
 
     [RelayCommand]
     public void LinkClicked(InlineHyperlinkClickedEventArgs args)

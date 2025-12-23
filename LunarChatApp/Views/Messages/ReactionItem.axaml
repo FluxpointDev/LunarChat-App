@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:controls="using:Avalonia.Labs.Controls"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:materialIcons="using:Material.Icons.Avalonia"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:messages="using:LunarChatApp.Views.Messages"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.ReactionItem"
+			 x:DataType="messages:ReactionItemModel">
+	<StackPanel>
+		<StackPanel.Styles>
+			<Style Selector="Button.notSelected">
+				<Setter Property="Background" Value="{DynamicResource BorderColor60}" />
+			</Style>
+			<Style Selector="Button.selected">
+				<Setter Property="Background" Value="{DynamicResource InfoColor20}" />
+				<Setter Property="BorderBrush" Value="{DynamicResource InfoColor60}"></Setter>
+			</Style>
+		</StackPanel.Styles>
+		<Button IsVisible="{Binding !IsAdd}" Padding="12, 6" BorderThickness="1"
+				ToolTip.Placement="Top" ToolTip.Tip="{Binding Name}" ToolTip.VerticalOffset="-5"
+				Classes.selected="{Binding SelfReaction}" Classes.notSelected="{Binding !SelfReaction}">
+			<StackPanel Orientation="Horizontal" Spacing="6">
+				<controls:AsyncImage Stretch="UniformToFill" Width="20" Height="20" Source="{Binding Source}"></controls:AsyncImage>
+				<TextBlock Text="{Binding Count}"></TextBlock>
+			</StackPanel>
+		</Button>
+		<Button IsVisible="{Binding IsAdd}" HorizontalAlignment="Left" Background="{DynamicResource BorderColor60}" Padding="6" BorderBrush="{DynamicResource BorderColor60}" BorderThickness="1"
+				ToolTip.Placement="Top" ToolTip.Tip="Add Reaction" ToolTip.VerticalOffset="-5">
+			<StackPanel Orientation="Horizontal" Spacing="6">
+				<materialIcons:MaterialIcon Kind="EmoticonHappy" Width="20" Height="20" Padding="2" Foreground="{DynamicResource PrimaryColor}" />
+			</StackPanel>
+		</Button>
+	</StackPanel>
+
+</UserControl>
