@@ -10,7 +10,6 @@
     <StackPanel Spacing="20" HorizontalAlignment="Left">
 		<StackPanel HorizontalAlignment="Left" Spacing="10">
             <Button Classes="Primary" Content="Play Sound" Command="{Binding PlaySoundCommand}"></Button>
-            <Button Classes="Primary" Content="Upload Test" Command="{Binding UploadCommand}"></Button>
             <Grid RowDefinitions="Auto, *, Auto">
 		<vlc:VideoView Grid.Row="1" MediaPlayer="{Binding player}" Height="200" Width="300"
                        HorizontalAlignment="Stretch"

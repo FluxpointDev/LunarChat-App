@@ -2,8 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using LibVLCSharp.Shared;
 using LunarChatApp.Services;
-using LunarChatSharp;
-using LunarChatSharp.Rest.Messages;
 using System;
 using System.Threading.Tasks;
 
@@ -41,23 +39,6 @@ public partial class SettingsDebugModel : ViewModelBase
         });
     }
 
-    [RelayCommand]
-    public async Task Upload()
-    {
-        string Path = "C:\\Users\\Brandan\\Downloads\\galaxy.png";
-
-        using (var stream = System.IO.File.OpenRead(Path))
-        {
-            await services.Rest.SendMesssageAsync(services.State.CurrentChannel?.Id, new CreateMessageRequest
-            {
-                Attachments = new CreateAttachmentRequest[]
-                {
-                    new CreateAttachmentRequest(stream, "galaxy.png")
-                }
-            });
-        }
-    }
-
 
     [RelayCommand]
     public void Play()
@@ -69,7 +50,7 @@ public partial class SettingsDebugModel : ViewModelBase
 
         try
         {
-            using var media = new Media(vlc, new Uri(System.AppDomain.CurrentDomain.BaseDirectory + "Assets\\Sounds\\test.mp4"));
+            using var media = new Media(vlc, new Uri(System.AppDomain.CurrentDomain.BaseDirectory + "Assets\\Sounds\\test_video.mp4"));
             player.Play(media);
         }
         catch { }

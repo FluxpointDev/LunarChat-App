@@ -103,9 +103,9 @@
 		<Grid Grid.Row="1" Grid.ColumnDefinitions="*, auto">
 			<Grid Grid.RowDefinitions="*, auto">
 				<ScrollViewer Margin="10,10,10,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
-					<Interaction.Behaviors>
+					<!--<Interaction.Behaviors>
 						<components:ScrollToEndBehavior />
-					</Interaction.Behaviors>
+					</Interaction.Behaviors>-->
 					<ItemsRepeater ItemsSource="{Binding CrockeryList}">
 						<ItemsRepeater.Layout>
 							<StackLayout Spacing="12" />

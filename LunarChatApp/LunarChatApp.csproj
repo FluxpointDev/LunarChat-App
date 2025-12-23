@@ -6,6 +6,7 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
 	<PublishAot>false</PublishAot>
 	<NuGetAuditMode>direct</NuGetAuditMode>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	<JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
   </PropertyGroup>
  
@@ -13,28 +14,13 @@
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
- 
-  
-  <ItemGroup>
-    <AvaloniaResource Remove="Assets\Sounds\notification.mp3" />
-    <AvaloniaResource Remove="Assets\Sounds\test.mp4" />
-  </ItemGroup>
- 
   
   <ItemGroup>
     <AvaloniaXaml Remove="Assets\Styles\OverrideResource.axaml" />
+	  <Content Include="wwwroot\**">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
   </ItemGroup>
- 
-  
-  <ItemGroup>
-    <Content Include="Assets\Sounds\notification.mp3">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Sounds\test.mp4">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  
 
   <ItemGroup>
     <PackageReference Include="Avalonia" />

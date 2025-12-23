@@ -24,4 +24,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\media\**">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

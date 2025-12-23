@@ -120,6 +120,8 @@ public partial class SettingsModel : ViewModelBase
         if (SelectedPage != null && SelectedPage is IDisposable disposablePrevious)
             disposablePrevious.Dispose();
 
+        services.MediaService.StopSound();
+
         SelectedTitle = pageType.ToString();
 
         switch (pageType)
@@ -152,7 +154,7 @@ public partial class SettingsModel : ViewModelBase
                 SelectedPage = new SettingsChat();
                 break;
             case SettingsPageType.Notifications:
-                SelectedPage = new SettingsNotifications();
+                SelectedPage = new SettingsNotifications() { DataContext = new SettingsNotificationsModel(services) };
                 break;
             case SettingsPageType.Developer:
                 SelectedPage = new SettingsDeveloper() { DataContext = new SettingsDeveloperModel(services) };

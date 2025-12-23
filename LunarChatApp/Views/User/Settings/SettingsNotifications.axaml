@@ -1,8 +1,25 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialIcons="using:Material.Icons.Avalonia"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:settings="using:LunarChatApp.Views.User.Settings"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="LunarChatApp.SettingsNotifications">
-  
+             x:Class="LunarChatApp.SettingsNotifications"
+             x:DataType="settings:SettingsNotificationsModel">
+  <StackPanel Spacing="10">
+	  <StackPanel Spacing="10" Orientation="Horizontal">
+		  <Button Command="{Binding PlayMessageSound}">
+			  <materialIcons:MaterialIcon Kind="VolumeMedium" Width="22" Height="22" Foreground="{DynamicResource PrimaryColor}" />
+          </Button>
+          <Label Classes="Small">Message Sound</Label>
+      </StackPanel>
+
+      <StackPanel Spacing="10" Orientation="Horizontal">
+		  <Button Command="{Binding PlayCallSoundCommand}">
+			  <materialIcons:MaterialIcon Kind="VolumeMedium" Width="22" Height="22" Foreground="{DynamicResource PrimaryColor}" />
+          </Button>
+          <Label Classes="Small">Call Sound</Label>
+      </StackPanel>
+  </StackPanel>
 </UserControl>
