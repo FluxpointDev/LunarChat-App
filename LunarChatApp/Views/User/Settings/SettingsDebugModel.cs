@@ -27,7 +27,7 @@ public partial class SettingsDebugModel : ViewModelBase
         {
             try
             {
-                string Path = System.AppDomain.CurrentDomain.BaseDirectory + "Assets\\Sounds\\notification.mp3";
+                string Path = System.AppDomain.CurrentDomain.BaseDirectory + "wwwroot\\media\\notification.mp3";
                 var media = new Media(vlc, new Uri(Path));
                 var mediaplayer = new MediaPlayer(vlc);
                 mediaplayer.Play(media);
@@ -50,7 +50,7 @@ public partial class SettingsDebugModel : ViewModelBase
 
         try
         {
-            using var media = new Media(vlc, new Uri(System.AppDomain.CurrentDomain.BaseDirectory + "Assets\\Sounds\\test_video.mp4"));
+            using var media = new Media(vlc, new Uri(System.AppDomain.CurrentDomain.BaseDirectory + "wwwroot\\media\\test_video.mp4"));
             player.Play(media);
         }
         catch { }

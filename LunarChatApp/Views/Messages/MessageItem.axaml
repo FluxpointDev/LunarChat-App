@@ -70,14 +70,13 @@
 						</ItemsRepeater.Layout>
 					</ItemsRepeater>
 				</StackPanel>
-				<StackPanel MaxWidth="600" HorizontalAlignment="Left">
+				<!--<StackPanel MaxWidth="600" HorizontalAlignment="Left">
 					<ItemsRepeater ItemsSource="{Binding ReactionList}">
-						
 						<ItemsRepeater.Layout>
 							<WrapLayout VerticalSpacing="6" HorizontalSpacing="6" />
 						</ItemsRepeater.Layout>
 					</ItemsRepeater>
-				</StackPanel>
+				</StackPanel>-->
 			</StackPanel>
 		</Grid>
 	</Border>

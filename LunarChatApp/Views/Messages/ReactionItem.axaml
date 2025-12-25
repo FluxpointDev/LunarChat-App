@@ -27,7 +27,7 @@
 			</StackPanel>
 		</Button>
 		<Button IsVisible="{Binding IsAdd}" HorizontalAlignment="Left" Background="{DynamicResource BorderColor60}" Padding="6" BorderBrush="{DynamicResource BorderColor60}" BorderThickness="1"
-				ToolTip.Placement="Top" ToolTip.Tip="Add Reaction" ToolTip.VerticalOffset="-5">
+				ToolTip.Placement="Top" ToolTip.Tip="Add Reaction" ToolTip.VerticalOffset="-5" Command="{Binding OpenEmojiMenu}">
 			<StackPanel Orientation="Horizontal" Spacing="6">
 				<materialIcons:MaterialIcon Kind="EmoticonHappy" Width="20" Height="20" Padding="2" Foreground="{DynamicResource PrimaryColor}" />
 			</StackPanel>

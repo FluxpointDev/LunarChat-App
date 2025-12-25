@@ -5,8 +5,6 @@ using Avalonia.Android;
 using static Android.Content.Intent;
 
 // leanback and touchscreen are required for the Android TV.
-[assembly: UsesFeature("android.software.leanback", Required = false)]
-[assembly: UsesFeature("android.hardware.touchscreen", Required = false)]
 namespace LunarChatApp.Android;
 
 [Activity(

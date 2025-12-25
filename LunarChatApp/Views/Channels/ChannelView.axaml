@@ -28,13 +28,13 @@
 				</Button>
 				<Menu Classes="Single" Grid.Column="1">
 					<MenuItem Height="38"
-					Classes="NoPressedAnimation"
-					CornerRadius="{DynamicResource LgCornerRadius}"
-					Padding="14,2,14,0"
-					Cursor="Hand" VerticalAlignment="Top"
-					shadui:MenuItemAssist.PopupHorizontalOffset="4"
-					shadui:MenuItemAssist.PopupPlacement="BottomEdgeAlignedLeft"
-					shadui:MenuItemAssist.PopupVerticalOffset="4">
+							  Classes="NoPressedAnimation"
+							  CornerRadius="{DynamicResource LgCornerRadius}"
+							  Padding="14,2,14,0"
+							  Cursor="Hand" VerticalAlignment="Top"
+							  shadui:MenuItemAssist.PopupHorizontalOffset="4"
+							  shadui:MenuItemAssist.PopupPlacement="BottomEdgeAlignedLeft"
+							  shadui:MenuItemAssist.PopupVerticalOffset="4">
 						<MenuItem.Header>
 							<Button IsHitTestVisible="False">
 								<TextBlock Classes="Large" Text="{Binding Name}"></TextBlock>
@@ -104,7 +104,7 @@
 			<Grid Grid.RowDefinitions="*, auto">
 				<ScrollViewer Margin="10,10,10,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
 					<!--<Interaction.Behaviors>
-						<components:ScrollToEndBehavior />
+					<components:ScrollToEndBehavior />
 					</Interaction.Behaviors>-->
 					<ItemsRepeater ItemsSource="{Binding CrockeryList}">
 						<ItemsRepeater.Layout>
@@ -154,10 +154,11 @@
 								 Text="You have been timed out">
 						</TextBox>
 						<!--<avrichtextbox:RichTextBox Grid.Column="1" x:Name="RichBox" Background="#393A41" BorderBrush="Transparent"></avrichtextbox:RichTextBox>-->
-						<Button Grid.Column="2" Margin="0, 0, 4, 0" VerticalAlignment="Center" Padding="4">
+						<Button Name="EmojiMenuButton" Grid.Column="2" Margin="0, 0, 4, 0" VerticalAlignment="Center" Padding="4">
 							<!--<Button.Flyout>
-							<Flyout Placement="TopEdgeAlignedRight" VerticalOffset="-16"
-							><local:EmojisMenu></local:EmojisMenu></Flyout>
+								<Flyout Placement="TopEdgeAlignedRight" VerticalOffset="-16">
+									<ContentControl Content="{Binding state.EmojisMenu}" IsVisible="{Binding state.EmojisMenu, Converter={x:Static ObjectConverters.IsNotNull}}"></ContentControl>
+								</Flyout>
 							</Button.Flyout>-->
 							<materialIcons:MaterialIcon Kind="Smiley" Width="22" Height="22" Foreground="{DynamicResource PrimaryColor}" />
 						</Button>

@@ -5,13 +5,20 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="LunarChatApp.EmojisMenu"
-			 x:DataType="components:EmojisMenuModel"
-			 Padding="10">
-	<WrapPanel ItemSpacing="6">
+			 x:DataType="components:EmojisMenuModel" Padding="20">
+	<ScrollViewer Height="200" Width="300">
+		<ItemsRepeater ItemsSource="{Binding ServersList}">
+			<ItemsRepeater.Layout>
+				<StackLayout Spacing="10" />
+			</ItemsRepeater.Layout>
+		</ItemsRepeater>
+	</ScrollViewer>
+		
+	<!--<WrapPanel ItemSpacing="6">
 		<Button Content="😀" FontSize="24" Width="36" Height="36" Click="Button_Click" />
 		<Button Content="🔥" FontSize="24" Width="36" Height="36" Click="Button_Click" />
 		<Button Content="🐦" FontSize="24" Width="36" Height="36" Click="Button_Click" />
 		<Button Content="💥" FontSize="24" Width="36" Height="36" Click="Button_Click" />
 		<Button Content="😺" FontSize="24" Width="36" Height="36" Click="Button_Click" />
-	</WrapPanel>
+	</WrapPanel>-->
 </UserControl>

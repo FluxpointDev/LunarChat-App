@@ -61,10 +61,17 @@ public partial class MessageItemModel : ViewModelBase
         {
             reactionList = new ObservableCollection<ReactionItem>(message.Reactions.Values.Select(x => new ReactionItem()
             {
-                DataContext = new ReactionItemModel(services, message, x.Emoji) { SelfReaction = x.hasReacted }
+                DataContext = new ReactionItemModel(services, message, x) { }
             }));
             if (reactionList.Count != 10)
                 reactionList.Add(new ReactionItem() { DataContext = new ReactionItemModel(services, message, null) { IsAdd = true } });
+        }
+        else
+        {
+            reactionList = new ObservableCollection<ReactionItem>
+            {
+                new ReactionItem() { DataContext = new ReactionItemModel(services, message, null) { IsAdd = true } }
+            };
         }
     }
 

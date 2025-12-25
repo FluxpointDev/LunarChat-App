@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
+using LunarChatApp.Components;
 using LunarChatSharp.Core.Users;
 using LunarChatSharp.Rest.Channels;
 using LunarChatSharp.Websocket;
@@ -45,6 +46,9 @@ public partial class TestState : ObservableObject
     private string _currentDisplayName;
 
     [ObservableProperty]
+    private EmojisMenu emojisMenu;
+
+    [ObservableProperty]
     private string? _displayName;
     public string? AboutMe { get; set; }
 
@@ -54,6 +58,8 @@ public partial class TestState : ObservableObject
     public delegate void PageEventHandler(UserControl control);
     public event PageEventHandler? OnPageSelect;
     public Func<bool?, Task>? OnExpandChannels;
+    public Func<Task>? OpenEmojiMenu;
+    public Func<EmojiListItemModel, Task>? UseEmoji;
 
     public void TriggerPageSelect(UserControl control)
     {

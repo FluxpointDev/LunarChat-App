@@ -1,5 +1,6 @@
 ﻿using LibVLCSharp.Shared;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -9,11 +10,13 @@ public partial class MediaService
 {
     public LibVLC VLC;
     private MediaPlayer currentPlayer;
+    public Dictionary<string, Media> Sounds;
     public MediaService()
     {
         if (!OperatingSystem.IsBrowser())
         {
-            Core.Initialize();
+            //Core.Initialize();
+            Sounds = new Dictionary<string, Media>();
             VLC = new LibVLC(enableDebugLogs: ServiceManager.IsDev);
             if (ServiceManager.IsDev)
             {
@@ -35,14 +38,25 @@ public partial class MediaService
 
     internal async Task PlaySoundAsync(string name)
     {
+        string Url = $"https://lunar.fluxpoint.dev/demo/{name}.mp3";
         if (OperatingSystem.IsBrowser())
-            JSRuntime.PlaySound(name);
-        else
         {
             try
             {
-                string Path = AppDomain.CurrentDomain.BaseDirectory + $"wwwroot\\media\\{name}.mp3";
-                var currentSound = new Media(VLC, new Uri(Path));
+                JSRuntime.PlaySound(name);
+            }
+            catch { }
+        }
+        else
+        {
+            if (!Sounds.TryGetValue(name, out Media? media))
+            {
+                media = new Media(VLC, Url);
+                Sounds.Add(name, media);
+            }
+            try
+            {
+                var currentSound = new Media(VLC, new Uri(Url));
                 if (currentPlayer != null)
                 {
                     currentPlayer.Stop();

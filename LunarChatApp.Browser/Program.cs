@@ -9,7 +9,7 @@ internal sealed partial class Program
 {
     private static Task Main(string[] args)
     {
-        JSHost.ImportAsync("JSRuntime", "/test.js");
+        JSHost.ImportAsync("JSRuntime", "/media.js");
         return BuildAvaloniaApp()
                 .WithInterFont()
                 .With(new FontManagerOptions

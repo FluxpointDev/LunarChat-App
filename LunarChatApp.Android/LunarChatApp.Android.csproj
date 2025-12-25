@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<TargetFramework>net10.0-android36.0</TargetFramework>
@@ -13,7 +13,9 @@
 		<AndroidEnableMultiDex>True</AndroidEnableMultiDex>
 		<!--<HotAvaloniaRemote>true</HotAvaloniaRemote>-->
 	</PropertyGroup>
-
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<AndroidResource Include="Icon.png">

@@ -1,27 +1,36 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:settings="using:LunarChatApp.Views.User.Settings"
-             xmlns:vlc="using:LibVLCSharp.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="LunarChatApp.SettingsDebug"
-             x:DataType="settings:SettingsDebugModel">
-    <StackPanel Spacing="20" HorizontalAlignment="Left">
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:settings="using:LunarChatApp.Views.User.Settings"
+			 xmlns:vlc="using:LibVLCSharp.Avalonia"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.SettingsDebug"
+			 x:DataType="settings:SettingsDebugModel">
+	<!--<StackPanel Spacing="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+		<vlc:VideoView Grid.Row="1" MediaPlayer="{Binding player}"
+							   HorizontalAlignment="Stretch"
+							   VerticalAlignment="Stretch" Height="200" />
+		<Panel Name="ControlsPanel" Height="200">
+						<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Background="#900000FF" Spacing="20">
+							<Button Command="{Binding Play}" Margin="20">Play</Button>
+							<Button Command="{Binding Stop}" Margin="20">Stop</Button>
+						</StackPanel>
+					</Panel>
 		<StackPanel HorizontalAlignment="Left" Spacing="10">
-            <Button Classes="Primary" Content="Play Sound" Command="{Binding PlaySoundCommand}"></Button>
-            <Grid RowDefinitions="Auto, *, Auto">
-		<vlc:VideoView Grid.Row="1" MediaPlayer="{Binding player}" Height="200" Width="300"
-                       HorizontalAlignment="Stretch"
-                       VerticalAlignment="Stretch">
-			<Panel Name="ControlsPanel" Height="200">
-				<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Background="#900000FF" Spacing="20">
-					<Button Command="{Binding Play}" Margin="20">Play</Button>
-					<Button Command="{Binding Stop}" Margin="20">Stop</Button>
-				</StackPanel>
-			</Panel>
-		</vlc:VideoView>
-	</Grid>
-        </StackPanel>
-    </StackPanel>
+			<Button Classes="Primary" Content="Play Sound" Command="{Binding PlaySoundCommand}"></Button>
+			<Grid RowDefinitions="*" HorizontalAlignment="Stretch">
+				--><!--<vlc:VideoView Grid.Row="1" MediaPlayer="{Binding player}" Height="200"
+							   HorizontalAlignment="Stretch"
+							   VerticalAlignment="Stretch">
+					<Panel Name="ControlsPanel" Height="200">
+						<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Background="#900000FF" Spacing="20">
+							<Button Command="{Binding Play}" Margin="20">Play</Button>
+							<Button Command="{Binding Stop}" Margin="20">Stop</Button>
+						</StackPanel>
+					</Panel>
+				</vlc:VideoView>--><!--
+			</Grid>
+		</StackPanel>
+	</StackPanel>-->
 </UserControl>

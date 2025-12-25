@@ -61,7 +61,7 @@ public partial class ServersModel : ViewModelBase
             _selectedHeader = new ServerHeaderView() { DataContext = new ServerHeaderModel(services, state.CurrentServer.Server) };
             _selectedSidebar = new ChannelsList() { DataContext = new ChannelsListModel(services, state) };
             if (state.CurrentChannel != null)
-                _selectedPage = new ChannelView() { DataContext = new ChannelViewModel(state, services) };
+                _selectedPage = new ChannelView(services) { DataContext = new ChannelViewModel(state, services) };
         }
 
         if (ServersList == null)
@@ -244,7 +244,7 @@ public partial class ServersModel : ViewModelBase
         if (channel == null)
             SelectedPage = null;
         else
-            SelectedPage = new ChannelView() { DataContext = new ChannelViewModel(state, services) };
+            SelectedPage = new ChannelView(services) { DataContext = new ChannelViewModel(state, services) };
     }
 
     private async Task OnSelectServer(RestServer? server)

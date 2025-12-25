@@ -17,9 +17,6 @@
   
   <ItemGroup>
     <AvaloniaXaml Remove="Assets\Styles\OverrideResource.axaml" />
-	  <Content Include="wwwroot\**">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +31,7 @@
     <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="DynamicData" />
     <PackageReference Include="Jab" />
+    <PackageReference Include="LibVLCSharp" />
     <PackageReference Include="LibVLCSharp.Avalonia" />
     <PackageReference Include="Material.Icons.Avalonia" />
     <PackageReference Include="WebView.Avalonia" />

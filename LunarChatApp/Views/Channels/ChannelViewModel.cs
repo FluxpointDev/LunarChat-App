@@ -13,6 +13,7 @@ using LunarChatApp.Views.Main;
 using LunarChatSharp;
 using LunarChatSharp.Core.Servers;
 using LunarChatSharp.Rest.Channels;
+using LunarChatSharp.Rest.Helpers;
 using LunarChatSharp.Rest.Messages;
 using LunarChatSharp.Rest.Servers;
 using LunarChatSharp.Websocket.Events.Messages;
@@ -27,7 +28,7 @@ namespace LunarChatApp.ViewModels;
 
 public partial class ChannelViewModel : ViewModelBase
 {
-    private TestState state;
+    public TestState state { get; set; }
     public ServiceManager services;
     public ChannelViewModel(TestState st, ServiceManager sv)
     {
@@ -41,6 +42,7 @@ public partial class ChannelViewModel : ViewModelBase
         if (state.CurrentServer != null)
             services.Client.OnChannelUpdate += ChannelUpdate;
 
+        services.State.UseEmoji += UseEmoji;
         services.State.OnExpandChannels += ExpandChannels;
         services.Client.OnMessageRecieved += State_OnMessageRecieved;
         services.Client.OnMessageEdit += MessageEdit;
@@ -95,6 +97,11 @@ public partial class ChannelViewModel : ViewModelBase
 
             }
         });
+    }
+
+    private async Task UseEmoji(EmojiListItemModel model)
+    {
+        await services.Rest.AddReactionAsync(services.State.CurrentChannel?.Id, services.State.EmojisMenu.ReactionMessage, model.emojiId);
     }
 
     [RelayCommand]

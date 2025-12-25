@@ -1,0 +1,13 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:components="using:LunarChatApp.Components"
+             xmlns:controls="using:Avalonia.Labs.Controls"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="LunarChatApp.EmojiListItem"
+             x:DataType="components:EmojiListItemModel">
+  <Button Command="{Binding UseEmojiCommand}">
+	  <controls:AsyncImage Width="36" Height="36" Source="{Binding Source}"></controls:AsyncImage>
+  </Button>
+</UserControl>

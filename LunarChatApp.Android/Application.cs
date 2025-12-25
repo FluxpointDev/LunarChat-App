@@ -16,6 +16,7 @@ public class Application : AvaloniaAndroidApplication<App>
     protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
     {
         return base.CustomizeAppBuilder(builder)
+            .With(new SkiaOptions { MaxGpuResourceSizeBytes = 8096000 })
             .WithInterFont();
     }
 }

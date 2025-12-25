@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using LunarChatApp.Components;
 using LunarChatApp.Services;
 using LunarChatApp.Utility;
 using LunarChatApp.ViewModels.Dialogs;
@@ -14,6 +15,7 @@ using LunarChatSharp.Rest.Messages;
 using LunarChatSharp.Rest.Users;
 using ShadUI;
 using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -32,6 +34,7 @@ public partial class MainModel : ViewModelBase
         services.PageManager.OnSwitchPage += SwitchPage;
         services.Client.OnRelationAdd += RelationAdd;
         services.Client.OnMessageRecieved += MessageRecieve;
+        services.Client.OnReady += Ready;
         if (SelectedPage == null)
         {
             SelectedPage = new LoginPage
@@ -43,6 +46,25 @@ public partial class MainModel : ViewModelBase
             services.Dialogs.OnDialogClose += CloseDialog;
         }
 
+    }
+
+    private async Task Ready()
+    {
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            try
+            {
+                var menu = new EmojisMenu()
+                {
+                    DataContext = new EmojisMenuModel(services)
+                };
+                state.EmojisMenu = menu;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+            }
+        });
     }
 
     private async Task MessageRecieve(RestChannel channel, RestMessage message)

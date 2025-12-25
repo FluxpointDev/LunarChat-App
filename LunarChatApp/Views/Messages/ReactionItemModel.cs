@@ -14,15 +14,21 @@ public partial class ReactionItemModel : ViewModelBase
     private string channelId;
     private string messageId;
     private string? emojiId;
-    public ReactionItemModel(ServiceManager sv, RestMessage message, RestEmoji? emoji)
+    public ReactionItemModel(ServiceManager sv, RestMessage message, RestReaction? reaction)
     {
         services = sv;
         channelId = message.ChannelId;
         messageId = message.Id;
-        emojiId = emoji?.Id;
-        name = emoji?.Name;
-        if (!string.IsNullOrEmpty(emoji?.IconId))
-            Source = new Uri(emoji.GetIconUrl()!);
+
+        if (reaction != null)
+        {
+            emojiId = reaction.Emoji?.Id;
+            name = reaction.Emoji?.Name;
+            count = reaction.Count;
+            selfReaction = reaction.hasReacted;
+            if (!string.IsNullOrEmpty(reaction.Emoji?.IconId))
+                Source = new Uri(reaction.Emoji.GetIconUrl()!);
+        }
     }
 
     [ObservableProperty]
@@ -47,5 +53,12 @@ public partial class ReactionItemModel : ViewModelBase
             await services.Rest.RemoveReactionAsync(channelId, messageId, emojiId);
         else
             await services.Rest.AddReactionAsync(channelId, messageId, emojiId);
+    }
+
+    [RelayCommand]
+    public void OpenEmojiMenu()
+    {
+        services.State.EmojisMenu.ReactionMessage = messageId;
+        services.State.OpenEmojiMenu?.Invoke();
     }
 }

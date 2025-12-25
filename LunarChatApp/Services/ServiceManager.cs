@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using LunarChatApp.ViewModels.Dialogs;
+using LunarChatApp.Views;
 using LunarChatSharp;
 using LunarChatSharp.Rest;
 using LunarChatSharp.Websocket;
@@ -15,7 +16,7 @@ namespace LunarChatApp.Services;
 public sealed class ServiceManager
 {
     public static bool IsDev = true;
-    public static bool UseDevAPI = true;
+    public static bool UseDevAPI = false;
     public static bool UseProxy = false;
     public readonly PageManager PageManager;
     public readonly TestState State;
@@ -27,6 +28,13 @@ public sealed class ServiceManager
     public readonly ToastManager ToastManager;
     public readonly MediaService MediaService;
     public Visual MainControl;
+    public MainView? GetMainView()
+    {
+        if (MainControl is MainWindow window)
+            return window.Content as MainView;
+
+        return MainControl as MainView;
+    }
     public ServiceManager(PageManager page, TestState st, LunarClient client, ThemeWatcher theme, DialogService diag, ToastManager toast)
     {
         PageManager = page;

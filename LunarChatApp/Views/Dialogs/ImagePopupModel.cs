@@ -35,11 +35,7 @@ public partial class ImagePopupModel : ViewModelBase
     [RelayCommand]
     public void Close()
     {
-        MainView? view = null;
-        if (services.MainControl is MainWindow window)
-            view = window.Content as MainView;
-        else
-            view = services.MainControl as MainView;
+        MainView? view = services.GetMainView();
 
         if (view == null)
             return;

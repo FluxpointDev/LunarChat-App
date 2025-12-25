@@ -25,11 +25,7 @@ public partial class ImageItemModel : ViewModelBase
     [RelayCommand]
     public void OpenImage()
     {
-        MainView? view = null;
-        if (services.MainControl is MainWindow window)
-            view = window.Content as MainView;
-        else
-            view = services.MainControl as MainView;
+        MainView? view = services.GetMainView();
 
         if (view == null)
             return;
