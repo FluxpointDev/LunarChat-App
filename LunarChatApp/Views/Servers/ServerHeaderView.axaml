@@ -13,17 +13,25 @@
 		<Grid>
 			<controls:AsyncImage Height="120" Stretch="Fill" Source="{Binding Banner}" IsVisible="{Binding Banner, Converter={x:Static ObjectConverters.IsNotNull}}"></controls:AsyncImage>
 			<Menu Classes="Single" HorizontalAlignment="Stretch">
-				<MenuItem
+				<MenuItem Background="{Binding BannerColor}"
 				Classes="NoPressedAnimation" CornerRadius="0"
 				Cursor="Hand"
 				shadui:MenuItemAssist.PopupHorizontalOffset="4"
 				shadui:MenuItemAssist.PopupPlacement="BottomEdgeAlignedLeft"
 				shadui:MenuItemAssist.PopupVerticalOffset="4">
 					<MenuItem.Header>
-						<Button VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Width="164" Height="39" IsHitTestVisible="False">
+						<Button VerticalAlignment="Center" HorizontalContentAlignment="Left" Width="164" MinHeight="39" IsHitTestVisible="False">
 							<Grid ColumnSpacing="12" ColumnDefinitions="*, auto">
-								<TextBlock Classes="h6" Text="{Binding Name}" TextWrapping="WrapWithOverflow" MaxLines="2" Width="120"></TextBlock>
-								<materialIcons:MaterialIcon Grid.Column="1" HorizontalAlignment="Right" Kind="KeyboardArrowDown" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
+								<TextBlock Classes="h6" Text="{Binding Name}" Foreground="{Binding BannerText}" Width="120">
+									<TextBlock.Effect>
+										<DropShadowDirectionEffect BlurRadius="2" Color="{DynamicResource BackgroundColor}" />
+									</TextBlock.Effect>
+								</TextBlock>
+								<materialIcons:MaterialIcon Grid.Column="1" HorizontalAlignment="Right" Kind="KeyboardArrowDown" Width="16" Height="16" Foreground="{Binding BannerText}">
+									<materialIcons:MaterialIcon.Effect>
+										<DropShadowDirectionEffect BlurRadius="2" Color="{DynamicResource BackgroundColor}" />
+									</materialIcons:MaterialIcon.Effect>
+									</materialIcons:MaterialIcon>
 							</Grid>
 						</Button>
 					</MenuItem.Header>

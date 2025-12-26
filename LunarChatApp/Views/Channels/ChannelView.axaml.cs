@@ -13,7 +13,7 @@ public partial class ChannelView : UserControl
         services = sv;
         InitializeComponent();
         services.State.OpenEmojiMenu += OpenEmojiMenu;
-        EmojiMenuButton.Flyout.Closed += EmojiMenuClosed;
+        //EmojiMenuButton.Flyout.Closed += EmojiMenuClosed;
     }
 
     private void EmojiMenuClosed(object? sender, EventArgs e)

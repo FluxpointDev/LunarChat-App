@@ -11,6 +11,7 @@ using LunarChatSharp.Core.Servers;
 using LunarChatSharp.Rest.Channels;
 using LunarChatSharp.Rest.Servers;
 using LunarChatSharp.Websocket.Events.Servers;
+using ShadUI;
 using System;
 using System.Threading.Tasks;
 
@@ -25,10 +26,27 @@ public partial class ServerHeaderModel : ViewModelBase
         Name = server.Name;
         isOwner = sv.Client.CurrentId == server.OwnerId;
         UpdatePermissions();
+        services.ThemeWatcher.ThemeChanged += ThemeChanged;
         services.Client.OnServerUpdate += ServerUpdate;
         services.State.CurrentServer.OnPermissionUpdate += Update;
         if (!string.IsNullOrEmpty(server.BannerId))
+        {
+            bannerColor = "#66000000";
+            bannerText = "#FFE5E5E5";
             Banner = new Uri(server.GetBannerUrl()!);
+        }
+        else
+        {
+            bannerText = services.ThemeWatcher.ThemeColors.PrimaryColor.ToString();
+        }
+    }
+
+    private void ThemeChanged(object? sender, ThemeColors e)
+    {
+        if (Banner == null)
+        {
+            BannerText = e.PrimaryColor.ToString();
+        }
     }
 
     private async Task ServerUpdate(RestServer server, ServerUpdateEvent ev)
@@ -40,6 +58,23 @@ public partial class ServerHeaderModel : ViewModelBase
         {
             if (!string.IsNullOrEmpty(ev.Changed.Name))
                 Name = ev.Changed.Name;
+
+            if (ev.Changed.Banner != null)
+            {
+                if (ev.Changed.Banner == "")
+                {
+                    BannerColor = null;
+                    BannerText = services.ThemeWatcher.ThemeColors.PrimaryColor.ToString();
+                    Banner = null;
+                }
+                else
+                {
+                    BannerColor = "#66000000";
+                    BannerText = "#FFE5E5E5";
+                    Banner = new Uri(ev.Changed.GetBannerUrl()!);
+                }
+
+            }
         });
 
     }
@@ -80,6 +115,12 @@ public partial class ServerHeaderModel : ViewModelBase
 
     [ObservableProperty]
     private Uri? banner;
+
+    [ObservableProperty]
+    private string? bannerColor;
+
+    [ObservableProperty]
+    private string? bannerText;
 
     [RelayCommand]
     public async Task CreateChannel()

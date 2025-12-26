@@ -56,7 +56,7 @@
 				<Border VerticalAlignment="Top" CornerRadius="8" ClipToBounds="True" Width="200" Height="90"
 						BorderBrush="{DynamicResource BorderColor}" BorderThickness="2">
 					<Grid>
-						<controls:AsyncImage CornerRadius="8" Source="{Binding ServerIcon}" IsVisible="{Binding Banner, Converter={x:Static ObjectConverters.IsNotNull}}"></controls:AsyncImage>
+						<controls:AsyncImage CornerRadius="8" Stretch="Fill" Source="{Binding Banner}" IsVisible="{Binding Banner, Converter={x:Static ObjectConverters.IsNotNull}}"></controls:AsyncImage>
 						<Button Opacity="0.6" Command="{Binding UploadBannerCommand}" IsEnabled="{Binding CanManage}" CornerRadius="8" />
 						<materialIcons:MaterialIcon VerticalAlignment="Center" HorizontalAlignment="Center" Kind="Plus" Width="14" Height="14" IsHitTestVisible="False" Foreground="{DynamicResource PrimaryColor}" IsVisible="{Binding Banner, Converter={x:Static ObjectConverters.IsNull}}" />
 					</Grid>
