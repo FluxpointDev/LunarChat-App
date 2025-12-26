@@ -1,44 +1,19 @@
 ﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
-using LibVLCSharp.Shared;
 using LunarChatApp.Services;
-using System;
-using System.Threading.Tasks;
 
 namespace LunarChatApp.Views.User.Settings;
 
 public partial class SettingsDebugModel : ViewModelBase
 {
     private ServiceManager services;
-    private readonly LibVLC vlc;
-    public MediaPlayer player { get; set; }
+    public Control player { get; set; }
 
     public SettingsDebugModel(ServiceManager sv)
     {
         services = sv;
-        vlc = sv.MediaService.VLC;
-        player = new MediaPlayer(vlc);
+        player = MediaService.VideoPlayer.CreateControl();
     }
-
-    [RelayCommand]
-    public void PlaySound()
-    {
-        _ = Task.Run(() =>
-        {
-            try
-            {
-                string Path = System.AppDomain.CurrentDomain.BaseDirectory + "wwwroot\\media\\notification.mp3";
-                var media = new Media(vlc, new Uri(Path));
-                var mediaplayer = new MediaPlayer(vlc);
-                mediaplayer.Play(media);
-            }
-            catch (Exception ex)
-            {
-
-            }
-        });
-    }
-
 
     [RelayCommand]
     public void Play()
@@ -50,8 +25,7 @@ public partial class SettingsDebugModel : ViewModelBase
 
         try
         {
-            using var media = new Media(vlc, new Uri(System.AppDomain.CurrentDomain.BaseDirectory + "wwwroot\\media\\test_video.mp4"));
-            player.Play(media);
+            MediaService.VideoPlayer.Play("https://lunar.fluxpoint.dev/demo/media/test_video.mp4");
         }
         catch { }
     }
@@ -61,7 +35,7 @@ public partial class SettingsDebugModel : ViewModelBase
     {
         try
         {
-            player.Stop();
+            MediaService.VideoPlayer.Stop();
         }
         catch { }
     }

@@ -2,6 +2,7 @@
 using Android.Runtime;
 using Avalonia;
 using Avalonia.Android;
+using LunarChatApp.Services;
 
 namespace LunarChatApp.Android;
 
@@ -15,6 +16,7 @@ public class Application : AvaloniaAndroidApplication<App>
 
     protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
     {
+        MediaService.VideoPlayer = new ExoPlayer();
         return base.CustomizeAppBuilder(builder)
             .With(new SkiaOptions { MaxGpuResourceSizeBytes = 8096000 })
             .WithInterFont();

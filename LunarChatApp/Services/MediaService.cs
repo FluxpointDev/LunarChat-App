@@ -8,7 +8,8 @@ namespace LunarChatApp.Services;
 
 public partial class MediaService
 {
-    public LibVLC VLC;
+    public static IMediaPlayer VideoPlayer { get; set; }
+    public static LibVLC VLC;
     private MediaPlayer currentPlayer;
     public Dictionary<string, Media> Sounds;
     public MediaService()
@@ -38,7 +39,7 @@ public partial class MediaService
 
     internal async Task PlaySoundAsync(string name)
     {
-        string Url = $"https://lunar.fluxpoint.dev/demo/{name}.mp3";
+        string Url = $"https://lunar.fluxpoint.dev/demo/media/{name}.mp3";
         if (OperatingSystem.IsBrowser())
         {
             try

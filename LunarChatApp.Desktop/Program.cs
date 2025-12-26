@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using LunarChatApp.Services;
 using System;
 
 namespace LunarChatApp.Desktop;
@@ -11,6 +12,7 @@ sealed class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        MediaService.VideoPlayer = new VLCPlayer();
         BuildAvaloniaApp()
        .StartWithClassicDesktopLifetime(args);
     }

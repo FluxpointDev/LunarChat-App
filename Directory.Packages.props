@@ -3,7 +3,7 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <!-- Switch to cibuild0060655 for browser and cibuild0061023 everything else -->
-    <AvaVersion>12.0.999-cibuild0061023-alpha</AvaVersion>
+    <AvaVersion>12.0.999-cibuild0060655-alpha</AvaVersion>
   </PropertyGroup>
   <ItemGroup>
     <!-- Avalonia packages -->
@@ -33,7 +33,6 @@
     <PackageVersion Include="Material.Icons.Avalonia" Version="3.0.0-preview3.1" />
     <PackageVersion Include="ShadUI" Version="0.1.5" />
     <PackageVersion Include="Svg.Controls.Avalonia" Version="11.3.6.2" />
-    <PackageVersion Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
     <PackageVersion Include="TextMateSharp.Grammars" Version="1.0.70" />
     <PackageVersion Include="VideoLAN.LibVLC.Android" Version="3.7.0-beta" />
     <PackageVersion Include="VideoLAN.LibVLC.Mac" Version="3.1.3.1" />
@@ -41,6 +40,8 @@
     <PackageVersion Include="WebView.Avalonia" Version="11.0.0.1" />
     <PackageVersion Include="WebView.Avalonia.Desktop" Version="11.0.0.1" />
     <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.17" />
+    <PackageVersion Include="Xamarin.AndroidX.Media3.ExoPlayer" Version="1.8.0" />
+    <PackageVersion Include="Xamarin.AndroidX.Media3.Ui" Version="1.8.0" />
     <PackageVersion Include="Xaml.Behaviors.Avalonia" Version="11.3.9" />
     <PackageVersion Include="Avalonia.Controls.DataGrid" Version="11.3.999-cibuild0055466-alpha" />
   </ItemGroup>

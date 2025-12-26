@@ -27,6 +27,8 @@
 		<PackageReference Include="Avalonia.Android" />
 		<PackageReference Include="VideoLAN.LibVLC.Android" />
 		<PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" />
+		<PackageReference Include="Xamarin.AndroidX.Media3.ExoPlayer" />
+		<PackageReference Include="Xamarin.AndroidX.Media3.Ui" />
 		<!--<PackageReference Include="HotAvalonia">
 			<IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
 			<PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>

@@ -62,7 +62,7 @@ public partial class HomeModel(ServiceManager services) : ViewModelBase
     [RelayCommand]
     public void OpenAPIDocs()
     {
-        services.OpenLink(new System.Uri("https://docs.fluxpoint.dev/lunar-api"));
+        services.OpenLink(new System.Uri("https://docs.fluxpoint.dev/lunar/api"));
     }
 
     public async Task SubmitServer(UserControl control)

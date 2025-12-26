@@ -16,10 +16,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <AvaloniaXaml Remove="Assets\Styles\OverrideResource.axaml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Avalonia" />
     <PackageReference Include="Avalonia.Controls.ItemsRepeater" />
     <PackageReference Include="Avalonia.Fonts.Inter" />
@@ -44,27 +40,6 @@
     <ProjectReference Include="..\ext\LunarChatSharp\LunarChatSharp\LunarChatSharp.csproj" />
     <ProjectReference Include="..\LiveMarkdown.Avalonia\LiveMarkdown.Avalonia.csproj" />
     <ProjectReference Include="..\ShadUI\ShadUI.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Views\Account\FriendRequestIListtem.axaml.cs">
-      <DependentUpon>FriendRequestIListtem.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Channels\ChannelItem.axaml.cs">
-      <DependentUpon>ChannelItem.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Channels\ChannelsList.axaml.cs">
-      <DependentUpon>ChannelsList.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Dialogs\Servers\ReportServerDialog.axaml.cs">
-      <DependentUpon>ReportServerDialog.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Servers\Settings\AuditLogChangeItem.axaml.cs">
-      <DependentUpon>AuditLogChangeItem.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\User\Settings\Developer\DeveloperList.axaml.cs">
-      <DependentUpon>DeveloperList.axaml</DependentUpon>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>

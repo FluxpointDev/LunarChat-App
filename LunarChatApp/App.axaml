@@ -31,6 +31,6 @@
         <themes:ShadTheme />
         <labs:ControlThemes />
         <materialIcons:MaterialIconStyles />
-        <StyleInclude Source="/Assets/Styles/Markdown.axaml"/>
+        <!--<StyleInclude Source="/Assets/Styles/Markdown.axaml"/>-->
     </Application.Styles>
 </Application>
