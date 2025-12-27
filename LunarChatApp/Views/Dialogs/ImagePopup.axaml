@@ -17,14 +17,14 @@
 				</StackPanel>
 			</Panel>
 			<Grid Grid.Row="1" ColumnDefinitions="1*, 6*, 1*">
-				<Panel Grid.Column="0" />
+				<Panel Grid.Column="0" IsVisible="{OnPlatform Default=true, Android=false, iOS=false}" />
 				<Border Grid.Column="1">
 					<controls:AsyncImage Source="{Binding Source}" Stretch="Uniform"></controls:AsyncImage>
 				</Border>
-				<Panel Grid.Column="2" />
+				<Panel Grid.Column="2" IsVisible="{OnPlatform Default=true, Android=false, iOS=false}" />
 			</Grid>
 			<Panel Grid.Row="2">
-				
+
 			</Panel>
 		</Grid>
 	</Panel>

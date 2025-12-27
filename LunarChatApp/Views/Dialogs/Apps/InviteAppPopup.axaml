@@ -1,0 +1,121 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:apps="using:LunarChatApp.Views.Dialogs.Apps"
+			 xmlns:controls="using:Avalonia.Labs.Controls"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:materialIcons="using:Material.Icons.Avalonia"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:shadui="using:ShadUI"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="LunarChatApp.InviteAppPopup"
+			 x:DataType="apps:InviteAppPopupModel">
+	<Panel Background="#66000000" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" PointerPressed="Panel_PointerPressed">
+		<Grid RowDefinitions="1*, 12*, 1*">
+			<Panel IsVisible="{OnPlatform Default=true, Android=false, iOS=false}">
+			</Panel>
+			<Grid Grid.Row="1" ColumnDefinitions="*, auto, *">
+				<Panel Grid.Column="0" IsVisible="{OnPlatform Default=true, Android=false, iOS=false}" />
+				<Border IsHitTestVisible="True" Grid.Column="1" Width="500" Background="{DynamicResource BorderColor}" CornerRadius="8" Padding="20">
+					<Grid RowDefinitions="auto, *, auto" RowSpacing="20">
+						<StackPanel Spacing="12" Orientation="Horizontal" HorizontalAlignment="Center">
+							<Border VerticalAlignment="Top" CornerRadius="90" ClipToBounds="True" Width="50" Height="50">
+								<controls:AsyncImage Source="https://cdn.discordapp.com/avatars/434556304661544960/98bdd36f05fb452adeb6a37c1b5f0546.webp?size=320"></controls:AsyncImage>
+							</Border>
+							<SelectableTextBlock VerticalAlignment="Center" Classes="Large">Waifu</SelectableTextBlock>
+							<Border VerticalAlignment="Center" CornerRadius="8" ClipToBounds="True">
+								<SelectableTextBlock Padding="10,2,10,2" Background="{DynamicResource InfoColor60}" FontWeight="Bold" Text="APP"></SelectableTextBlock>
+							</Border>
+						</StackPanel>
+						<ScrollViewer Grid.Row="1">
+							<StackPanel Spacing="10">
+								<SelectableTextBlock HorizontalAlignment="Center" Classes="Muted" FontSize="15">Invite Waifu to your Server or Group!</SelectableTextBlock>
+								<shadui:Card Padding="20" HasShadow="True" HorizontalAlignment="Stretch" BorderBrush="{DynamicResource InfoColor60}" Background="{DynamicResource InfoColor10}">
+									<WrapPanel Orientation="Horizontal" LineSpacing="-4" ItemSpacing="2">
+										<TextBlock FontSize="15" VerticalAlignment="Center">This app has a</TextBlock>
+										<HyperlinkButton FontSize="15" Content="Privacy Policy" FontWeight="Bold">
+											<HyperlinkButton.Styles>
+												<Style Selector="HyperlinkButton">
+													<Setter Property="TextBlock.TextDecorations" Value="{x:Null}" />
+												</Style>
+											</HyperlinkButton.Styles>
+										</HyperlinkButton>
+										<TextBlock FontSize="15" VerticalAlignment="Center">and</TextBlock>
+										<HyperlinkButton FontSize="15" Content="Terms of Service" FontWeight="Bold">
+											<HyperlinkButton.Styles>
+												<Style Selector="HyperlinkButton">
+													<Setter Property="TextBlock.TextDecorations" Value="{x:Null}" />
+												</Style>
+											</HyperlinkButton.Styles>
+										</HyperlinkButton>
+									</WrapPanel>
+								</shadui:Card>
+								<StackPanel Spacing="10" Margin="20,0,20,0">
+									<SelectableTextBlock Classes="Large" FontSize="15">Data Access</SelectableTextBlock>
+									<StackPanel Orientation="Horizontal" Spacing="10">
+										<materialIcons:MaterialIcon Kind="Check" Width="16" Height="16" Foreground="{DynamicResource MutedColor}" />
+										<SelectableTextBlock Classes="Muted" FontSize="15">Message Content</SelectableTextBlock>
+									</StackPanel>
+									<StackPanel Orientation="Horizontal" Spacing="10">
+										<materialIcons:MaterialIcon Kind="Check" Width="16" Height="16" Foreground="{DynamicResource MutedColor}" />
+										<SelectableTextBlock Classes="Muted" FontSize="15">Server Members</SelectableTextBlock>
+									</StackPanel>
+
+									<SelectableTextBlock Classes="Large" FontSize="15">Info</SelectableTextBlock>
+									<StackPanel Orientation="Horizontal" Spacing="10">
+										<materialIcons:MaterialIcon Kind="Clock" Width="16" Height="16" Foreground="{DynamicResource MutedColor}" />
+										<SelectableTextBlock Classes="Muted" FontSize="15">Created since 25 December 2025</SelectableTextBlock>
+									</StackPanel>
+									<StackPanel Orientation="Horizontal" Spacing="10">
+										<materialIcons:MaterialIcon Kind="Robot" Width="16" Height="16" Foreground="{DynamicResource MutedColor}" />
+										<SelectableTextBlock Classes="Muted" FontSize="15">Used in 1 server</SelectableTextBlock>
+									</StackPanel>
+									<StackPanel Orientation="Horizontal" Spacing="10">
+										<materialIcons:MaterialIcon Kind="Code" Width="16" Height="16" Foreground="{DynamicResource MutedColor}" />
+										<SelectableTextBlock Classes="Muted" FontSize="15">Owned by Fluxpoint Development</SelectableTextBlock>
+									</StackPanel>
+								</StackPanel>
+							</StackPanel>
+
+						</ScrollViewer>
+						<StackPanel Spacing="20" Grid.Row="2">
+							<Border CornerRadius="12" Background="{DynamicResource OutlineColor}" Padding="10">
+								<StackPanel Spacing="10">
+									<ComboBox MaxWidth="255" SelectedIndex="0" ItemsSource="{Binding ServerItems}"
+											  SelectedItem="{Binding SelectedServer}"
+											  shadui:ControlAssist.Label="Server">
+										<ComboBox.ItemTemplate>
+											<DataTemplate>
+												<TextBlock Text="{Binding Name}" />
+											</DataTemplate>
+										</ComboBox.ItemTemplate>
+									</ComboBox>
+
+									<ComboBox MaxWidth="255" SelectedIndex="0" ItemsSource="{Binding GroupItems}"
+											  SelectedItem="{Binding SelectedGroup}"
+											  shadui:ControlAssist.Label="Group">
+										<ComboBox.ItemTemplate>
+											<DataTemplate>
+												<TextBlock Text="{Binding Name}" />
+											</DataTemplate>
+										</ComboBox.ItemTemplate>
+									</ComboBox>
+									<TextBlock HorizontalAlignment="Center" Classes="Muted" FontSize="15">You need Manage Apps permission</TextBlock>
+								</StackPanel>
+							</Border>
+
+							<Grid ColumnDefinitions="*, *" ColumnSpacing="20" VerticalAlignment="Bottom">
+								<Button Classes="Secondary" Content="Cancel" Command="{Binding CloseCommand}"></Button>
+								<Button Grid.Column="1" Classes="Primary" Content="Continue"></Button>
+							</Grid>
+						</StackPanel>
+					</Grid>
+
+				</Border>
+				<Panel Grid.Column="2" IsVisible="{OnPlatform Default=true, Android=false, iOS=false}" />
+			</Grid>
+			<Panel Grid.Row="2" IsVisible="{OnPlatform Default=true, Android=false, iOS=false}">
+
+			</Panel>
+		</Grid>
+	</Panel>
+</UserControl>

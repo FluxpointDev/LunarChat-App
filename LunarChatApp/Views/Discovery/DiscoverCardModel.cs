@@ -2,7 +2,9 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LunarChatApp.Services;
+using LunarChatApp.ViewModels;
 using LunarChatApp.Views.Dialogs;
+using LunarChatApp.Views.Dialogs.Apps;
 using LunarChatSharp;
 using LunarChatSharp.Rest.Dev;
 using LunarChatSharp.Rest.Servers;
@@ -52,7 +54,11 @@ public partial class DiscoverCardModel : ViewModelBase
 
         if (isApp)
         {
-            services.Dialogs.Create(new InviteAppDialog(), new InviteAppDialogModel(services, id), "Invite " + name).WithSubmit(InviteApp).Open();
+            var view = services.GetMainView();
+            if (view == null)
+                return;
+            (view.DataContext as MainModel)!.CurrentImage = new InviteAppPopup { DataContext = new InviteAppPopupModel(services, id) };
+            //services.Dialogs.Create(new InviteAppDialog(), new InviteAppDialogModel(services, id), "Invite " + name).WithSubmit(InviteApp).Open();
         }
         else
         {

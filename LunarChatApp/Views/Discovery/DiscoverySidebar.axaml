@@ -22,7 +22,7 @@
 
 		<shadui:SidebarItem Command="{Binding ShowAppsCommand}">
 			<shadui:SidebarItem.Content>
-				<TextBlock Text="Bots"></TextBlock>
+				<TextBlock Text="Apps"></TextBlock>
 			</shadui:SidebarItem.Content>
 			<shadui:SidebarItem.Icon>
 				<Viewbox>
