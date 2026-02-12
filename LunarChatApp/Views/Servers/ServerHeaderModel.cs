@@ -29,7 +29,7 @@ public partial class ServerHeaderModel : ViewModelBase
         services.ThemeWatcher.ThemeChanged += ThemeChanged;
         services.Client.OnServerUpdate += ServerUpdate;
         services.State.CurrentServer.OnPermissionUpdate += Update;
-        if (!string.IsNullOrEmpty(server.BannerId))
+        if (server.BannerId.HasValue)
         {
             bannerColor = "#66000000";
             bannerText = "#FFE5E5E5";
@@ -166,7 +166,7 @@ public partial class ServerHeaderModel : ViewModelBase
     [RelayCommand]
     public void CopyServerID()
     {
-        services.CopyText(services.State.CurrentServer?.Server.Id);
+        services.CopyText(services.State.CurrentServer?.Server.Id.ToString());
     }
 
     [RelayCommand]
@@ -210,9 +210,11 @@ public partial class ServerHeaderModel : ViewModelBase
     [RelayCommand]
     public async Task LeaveServer()
     {
+        if (services.State.CurrentServer == null)
+            return;
         try
         {
-            await services.Rest.LeaveServerAsync(services.State.CurrentServer?.Server.Id);
+            await services.Rest.LeaveServerAsync(services.State.CurrentServer.Server.Id);
             services.Client.OnSelectServer?.Invoke(null);
         }
         catch { }

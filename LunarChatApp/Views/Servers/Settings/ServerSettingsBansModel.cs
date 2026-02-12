@@ -151,7 +151,7 @@ public partial class BanListItem : ObservableObject
     [ObservableProperty]
     private bool _isSelected;
 
-    public string id;
+    public ulong id;
 
     [ObservableProperty]
     private string _targetName;
@@ -186,7 +186,7 @@ public partial class BanListItem : ObservableObject
     [RelayCommand]
     public void CopyUserID()
     {
-        services.CopyText(id);
+        services.CopyText(id.ToString());
     }
 
     [RelayCommand]

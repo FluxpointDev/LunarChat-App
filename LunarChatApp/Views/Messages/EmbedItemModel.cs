@@ -34,9 +34,11 @@ public partial class EmbedItemModel : ViewModelBase
             AuthorName = null;
             AuthorIcon = null;
         }
+        if (!string.IsNullOrEmpty(embed.ImageUrl))
+            Image = new Uri(embed.ImageUrl);
 
-        Image = new Uri(embed.Image);
-        Thumbnail = new Uri(embed.Thumbnail);
+        if (!string.IsNullOrEmpty(embed.ThumbnailUrl))
+            Thumbnail = new Uri(embed.ThumbnailUrl);
 
         if (embed.Footer != null && !string.IsNullOrEmpty(embed.Footer.Text))
         {

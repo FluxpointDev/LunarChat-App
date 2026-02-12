@@ -29,7 +29,7 @@ public partial class MessageItemModel : ViewModelBase
             Username = message.Author.GetCurrentName();
             _isBot = message.Author.IsBot;
             CanDelete = sv.Client.CurrentId == authorId;
-            if (!string.IsNullOrEmpty(message.Author.AvatarId))
+            if (message.Author.AvatarId.HasValue)
                 Avatar = new Uri(message.Author.GetAvatarUrl()!);
             else
                 fallback = message.Author.GetFallback();
@@ -76,8 +76,8 @@ public partial class MessageItemModel : ViewModelBase
     }
 
     private readonly ServiceManager services;
-    public readonly string messageId;
-    public readonly string authorId;
+    public readonly ulong messageId;
+    public readonly ulong authorId;
 
     [ObservableProperty]
     private bool _isAuthor;
@@ -152,7 +152,7 @@ public partial class MessageItemModel : ViewModelBase
     [RelayCommand]
     public void CopyId()
     {
-        services.CopyText(messageId);
+        services.CopyText(messageId.ToString());
     }
 
     public void Update(MessageUpdateEvent ev, EditMessageRequest message)

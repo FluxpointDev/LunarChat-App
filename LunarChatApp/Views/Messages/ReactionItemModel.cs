@@ -11,9 +11,9 @@ namespace LunarChatApp.Views.Messages;
 public partial class ReactionItemModel : ViewModelBase
 {
     private ServiceManager services;
-    private string channelId;
-    private string messageId;
-    private string? emojiId;
+    private ulong channelId;
+    private ulong messageId;
+    private ulong emojiId;
     public ReactionItemModel(ServiceManager sv, RestMessage message, RestReaction? reaction)
     {
         services = sv;
@@ -22,12 +22,11 @@ public partial class ReactionItemModel : ViewModelBase
 
         if (reaction != null)
         {
-            emojiId = reaction.Emoji?.Id;
+            emojiId = reaction.Emoji.Id;
             name = reaction.Emoji?.Name;
             count = reaction.Count;
             selfReaction = reaction.hasReacted;
-            if (!string.IsNullOrEmpty(reaction.Emoji?.IconId))
-                Source = new Uri(reaction.Emoji.GetIconUrl()!);
+            Source = new Uri(reaction.Emoji!.GetIconUrl()!);
         }
     }
 

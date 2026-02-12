@@ -28,8 +28,9 @@ public partial class ChannelsListModel : ViewModelBase
             {
                 new CategoryItem() { DataContext = new CategoryItemModel(services, new RestChannel
                 {
-                    Id = null!,
-                    Name = null!
+                    Id = 0,
+                    Name = null!,
+                    CreatedAt = System.DateTime.UtcNow
                 }, CanManage) }
             };
             _channelsList.AddRange(services.State.CurrentServer.Channels.Values.Where(x => x.Type == ChannelType.Category).OrderBy(x => x.Position).Select(x => new CategoryItem

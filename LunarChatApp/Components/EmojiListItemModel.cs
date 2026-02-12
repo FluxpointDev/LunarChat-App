@@ -15,8 +15,7 @@ public partial class EmojiListItemModel : ViewModelBase
     {
         services = sv;
         emojiId = emoji.Id;
-        if (!string.IsNullOrEmpty(emoji.IconId))
-            Source = new Uri(emoji.GetIconUrl()!);
+        Source = new Uri(emoji.GetIconUrl()!);
 
 
         Debug.WriteLine("Render: " + emoji.Name);
@@ -25,7 +24,7 @@ public partial class EmojiListItemModel : ViewModelBase
     [ObservableProperty]
     private Uri source;
 
-    public string emojiId;
+    public ulong emojiId;
 
     [RelayCommand]
     public void UseEmoji()

@@ -16,7 +16,7 @@ public partial class UserPopupModel : ViewModelBase
 {
     private ServiceManager services;
 
-    public UserPopupModel(ServiceManager sv, string userId)
+    public UserPopupModel(ServiceManager sv, ulong userId)
     {
         services = sv;
 
@@ -40,8 +40,9 @@ public partial class UserPopupModel : ViewModelBase
         Name = user.DisplayName ?? user.Username;
         Username = user.Username;
         AboutMe = new ObservableStringBuilder();
-        AboutMe.Append(user.AboutMe);
-        if (!string.IsNullOrEmpty(user.AvatarId))
+        if (user.Profile != null)
+            AboutMe.Append(user.Profile.AboutMe);
+        if (user.AvatarId.HasValue)
             Avatar = new Uri(user.GetAvatarUrl());
         else
             fallback = user.GetFallback();
@@ -88,6 +89,6 @@ public partial class UserPopupModel : ViewModelBase
     [RelayCommand]
     public void CopyId()
     {
-        services.CopyText(user.Id);
+        services.CopyText(user.Id.ToString());
     }
 }

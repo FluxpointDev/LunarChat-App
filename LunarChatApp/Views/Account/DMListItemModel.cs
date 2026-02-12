@@ -12,7 +12,7 @@ public partial class DMListItemModel : ViewModelBase
 {
     private readonly ServiceManager services;
     private readonly RestChannel channel;
-    public string id;
+    public ulong id;
     public DMListItemModel(ServiceManager sv, RestChannel chan)
     {
         services = sv;
@@ -26,7 +26,7 @@ public partial class DMListItemModel : ViewModelBase
 
             _name = OtherUser.GetCurrentNameDiscrim();
 
-            if (!string.IsNullOrEmpty(OtherUser.AvatarId))
+            if (OtherUser.AvatarId.HasValue)
                 Avatar = new Uri(OtherUser.GetAvatarUrl()!);
             else
                 fallback = OtherUser.GetFallback();
@@ -36,7 +36,7 @@ public partial class DMListItemModel : ViewModelBase
             _name = chan.Name;
 
 
-            if (!string.IsNullOrEmpty(chan.GroupSettings?.IconId))
+            if (chan.GroupSettings != null && chan.GroupSettings.IconId.HasValue)
                 Avatar = new Uri(chan.GroupSettings.GetIconUrl()!);
             else
                 fallback = chan.GetFallback();

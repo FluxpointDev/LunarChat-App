@@ -31,16 +31,19 @@ public partial class SettingsProfileModel : ViewModelBase
 
     public async Task AccountUpdate(AccountUpdateEvent ev)
     {
+        if (ev.Changed == null)
+            return;
+
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            if (ev.Username != null)
-                Username = ev.Username;
+            if (ev.Changed.Username != null)
+                Username = ev.Changed.Username;
 
-            if (ev.DisplayName != null)
-                DisplayName = ev.DisplayName;
+            if (ev.Changed.DisplayName != null)
+                DisplayName = ev.Changed.DisplayName;
 
-            if (ev.Email != null)
-                Email = ev.Email;
+            if (ev.Changed.Email != null)
+                Email = ev.Changed.Email;
         });
 
     }

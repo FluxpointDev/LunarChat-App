@@ -30,7 +30,7 @@ public partial class EmojisServerListModel : ViewModelBase
     [ObservableProperty]
     public string name;
 
-    public string serverId;
+    public ulong serverId;
 
     [ObservableProperty]
     private ObservableCollection<EmojiListItem> emojisList;

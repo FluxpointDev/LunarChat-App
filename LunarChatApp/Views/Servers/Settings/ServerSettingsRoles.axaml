@@ -40,7 +40,7 @@
 				</StackPanel>
 			</shadui:Card>
 			</Button>
-			<DataGrid
+			<DataGrid IsEnabled="{Binding $parent[settings:ServerSettingsRolesModel].IsMoving}"
 			x:Name="DataGrid"
 			CanUserReorderColumns="False"
 			CanUserSortColumns="False"
@@ -61,6 +61,11 @@
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
 					<DataGridTextColumn
+					Binding="{Binding Position}"
+					CanUserSort="False"
+					Header="Position"
+					IsReadOnly="True" />
+					<DataGridTextColumn
 					Binding="{Binding Name}"
 					CanUserSort="False"
 					Header="Name"
@@ -77,6 +82,21 @@
 									</Button>
 									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding DeleteRoleCommand}" IsEnabled="{Binding CanManage}">
 										<materialIcons:MaterialIcon Kind="TrashCan" Width="16" Height="16" Foreground="{DynamicResource ErrorColor}" />
+									</Button>
+								</StackPanel>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+
+					<DataGridTemplateColumn Header="">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
+									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding MoveRoleUpCommand}" IsEnabled="{Binding CanMoveUp}">
+										<materialIcons:MaterialIcon Kind="ChevronUp" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
+									</Button>
+									<Button Padding="10,6,10,6" Background="{DynamicResource BorderColor}" Command="{Binding MoveRoleDownCommand}" IsEnabled="{Binding CanMoveDown}">
+										<materialIcons:MaterialIcon Kind="ChevronDown" Width="16" Height="16" Foreground="{DynamicResource PrimaryColor}" />
 									</Button>
 								</StackPanel>
 							</DataTemplate>

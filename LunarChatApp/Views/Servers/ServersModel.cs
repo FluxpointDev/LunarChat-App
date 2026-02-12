@@ -69,19 +69,19 @@ public partial class ServersModel : ViewModelBase
             ServersList = new ObservableCollection<ServerIcon>(state.Socket.Servers.Values.Select(x => new ServerIcon() { DataContext = new ServerIconModel(services, x.Server) }));
             addServerModel = new ServerIconModel(services, new RestServer
             {
-                Id = "0",
+                Id = 0,
                 Name = "+",
                 CreatedAt = DateTime.UtcNow,
-                OwnerId = null!,
+                OwnerId = 0,
                 SystemMessages = null!,
                 DefaultPermissions = null!,
             });
             discoveryModel = new ServerIconModel(services, new RestServer
             {
-                Id = "1",
+                Id = 1,
                 Name = "o",
                 CreatedAt = DateTime.UtcNow,
-                OwnerId = null!,
+                OwnerId = 0,
                 SystemMessages = null!,
                 DefaultPermissions = null!,
             });
@@ -141,19 +141,23 @@ public partial class ServersModel : ViewModelBase
 
     private async Task AccountUpdate(AccountUpdateEvent ev)
     {
+        if (ev.Changed == null)
+            return;
+
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            if (ev.DisplayName != null)
+            if (ev.Changed.DisplayName != null)
             {
-                state.DisplayName = ev.DisplayName;
-                state.CurrentDisplayName = ev.DisplayName;
+                state.DisplayName = ev.Changed.DisplayName;
+                state.CurrentDisplayName = ev.Changed.DisplayName;
             }
 
-            if (ev.Username != null)
-                state.Username = ev.Username;
+            if (ev.Changed.Username != null)
+                state.Username = ev.Changed.Username;
 
             if (string.IsNullOrEmpty(state.CurrentDisplayName))
                 state.CurrentDisplayName = state.Username;
+
         });
         if (ev.Changed.Avatar != null)
         {
@@ -297,7 +301,7 @@ public partial class ServersModel : ViewModelBase
     [RelayCommand]
     public void CopyUserID()
     {
-        services.CopyText(services.Client.CurrentId);
+        services.CopyText(services.Client.CurrentId.GetValueOrDefault().ToString());
     }
 
     [RelayCommand]

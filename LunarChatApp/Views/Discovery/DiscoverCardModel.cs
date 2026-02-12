@@ -36,7 +36,7 @@ public partial class DiscoverCardModel : ViewModelBase
         joinText = "Add App";
     }
 
-    private string id;
+    private ulong id;
     private bool isApp;
 
     [ObservableProperty]
@@ -77,7 +77,7 @@ public partial class DiscoverCardModel : ViewModelBase
             {
                 try
                 {
-                    await services.Rest.AddMemberAsync(id, services.Client.CurrentId);
+                    await services.Rest.AddMemberAsync(id, services.Client.CurrentId.GetValueOrDefault());
                     await Task.Delay(new TimeSpan(0, 0, 1));
                     if (services.State.Socket.Servers.TryGetValue(id, out var getServer))
                         services.PageManager.SwitchServer(services, getServer.Server);

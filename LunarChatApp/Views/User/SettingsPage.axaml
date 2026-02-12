@@ -101,7 +101,7 @@
 				</shadui:SidebarItem>
 			</StackPanel>
 		</shadui:Sidebar>
-		<StackPanel Grid.Column="1" Margin="6" MaxWidth="800">
+		<Grid Grid.Column="1" Margin="6" MaxWidth="800" RowDefinitions="auto, *">
 			<Grid Grid.ColumnDefinitions="*, auto">
 				<TextBlock Classes="Large" Text="{Binding SelectedTitle}"></TextBlock>
 				<Button Command="{Binding CloseSettingsCommand}" HorizontalAlignment="Right">
@@ -110,6 +110,6 @@
 			</Grid>
 			<ScrollViewer Grid.Row="1" Content="{Binding SelectedPage}" Margin="0,20,0,0" Padding="6,0,20,0">
 			</ScrollViewer>
-		</StackPanel>
+		</Grid>
 	</Grid>
 </UserControl>

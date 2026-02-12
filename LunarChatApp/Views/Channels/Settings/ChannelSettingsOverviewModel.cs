@@ -28,8 +28,8 @@ public partial class ChannelSettingsOverviewModel : ViewModelBase
         {
             isGroup = true;
             CanManage = services.Client.CurrentId == chan.GroupSettings?.OwnerId;
-            if (!string.IsNullOrEmpty(chan.GroupSettings.IconId))
-                GroupIcon = new Uri(chan.GroupSettings.GetIconUrl());
+            if (chan.GroupSettings != null && chan.GroupSettings.IconId.HasValue)
+                GroupIcon = new Uri(chan.GroupSettings.GetIconUrl()!);
         }
         else
         {

@@ -27,13 +27,13 @@ public partial class HomeModel(ServiceManager services) : ViewModelBase
     {
         try
         {
-            if (!services.State.Socket.Servers.ContainsKey(services.State.Socket.LunarCommunityId))
-                await services.Rest.AddMemberAsync(services.State.Socket.LunarCommunityId, services.Client.CurrentId);
+            if (!services.State.Socket.Servers.ContainsKey(services.State.Socket.LunarCommunityId.GetValueOrDefault()))
+                await services.Rest.AddMemberAsync(services.State.Socket.LunarCommunityId!.Value, services.Client.CurrentId ?? 0);
 
         }
         catch { }
 
-        if (services.State.Socket.Servers.TryGetValue(services.State.Socket.LunarCommunityId, out var server))
+        if (services.State.Socket.Servers.TryGetValue(services.State.Socket.LunarCommunityId.GetValueOrDefault(), out var server))
             services.PageManager.SwitchServer(services, server.Server);
     }
 
@@ -43,13 +43,13 @@ public partial class HomeModel(ServiceManager services) : ViewModelBase
     {
         try
         {
-            if (!services.State.Socket.Servers.ContainsKey(services.State.Socket.LunarDevId))
-                await services.Rest.AddMemberAsync(services.State.Socket.LunarDevId, services.Client.CurrentId);
+            if (!services.State.Socket.Servers.ContainsKey(services.State.Socket.LunarDevId.GetValueOrDefault()))
+                await services.Rest.AddMemberAsync(services.State.Socket.LunarDevId!.Value, services.Client.CurrentId ?? 0);
 
         }
         catch { }
 
-        if (services.State.Socket.Servers.TryGetValue(services.State.Socket.LunarDevId, out var server))
+        if (services.State.Socket.Servers.TryGetValue(services.State.Socket.LunarDevId.GetValueOrDefault(), out var server))
             services.PageManager.SwitchServer(services, server.Server);
     }
 

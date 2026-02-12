@@ -34,17 +34,17 @@ public partial class ServerIconModel : ViewModelBase
                 Icon = new Uri("avares://LunarChatApp/Assets/lunar-dev-icon.png");
                 break;
             default:
-                if (!string.IsNullOrEmpty(server.IconId))
+                if (server.IconId.HasValue)
                     Icon = new Uri(server.GetIconUrl());
                 break;
         }
 
-        if (Id == "0")
+        if (Id == 0)
         {
             isFeature = true;
             _showPlus = true;
         }
-        else if (Id == "1")
+        else if (Id == 1)
         {
             isFeature = true;
             showDiscovery = true;
@@ -70,16 +70,16 @@ public partial class ServerIconModel : ViewModelBase
     [ObservableProperty]
     private Uri? _icon;
 
-    public string Id;
+    public ulong Id;
 
     [RelayCommand]
     public void SelectedServer()
     {
-        if (Id == "0")
+        if (Id == 0)
         {
             services.Dialogs.Create(new JoinServerDialog(), new JoinServerDialogModel(services), "Server").WithSubmit(SubmitServer).Open();
         }
-        else if (Id == "1")
+        else if (Id == 1)
         {
             services.State.OnExpandChannels?.Invoke(true);
             var model = (services.State.CachedServersPage.DataContext as ServersModel);
@@ -109,7 +109,7 @@ public partial class ServerIconModel : ViewModelBase
             {
                 var invite = await services.Rest.UseInviteAsync(model.Textbox);
                 await Task.Delay(new TimeSpan(0, 0, 1));
-                if (services.State.Socket.Servers.TryGetValue(invite.ServerId, out var getServer))
+                if (services.State.Socket.Servers.TryGetValue(invite.ServerId.GetValueOrDefault(), out var getServer))
                 {
                     services.PageManager.SwitchServer(services, getServer.Server);
                 }

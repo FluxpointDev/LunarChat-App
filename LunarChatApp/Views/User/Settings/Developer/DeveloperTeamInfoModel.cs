@@ -24,12 +24,12 @@ public partial class DeveloperTeamInfoModel : ViewModelBase
         backAction = back;
         _id = team.Id;
         Name = team.Name;
-        if (!string.IsNullOrEmpty(team.IconId))
+        if (team.IconId.HasValue)
             Icon = new Uri(team.GetIconUrl());
     }
 
     [ObservableProperty]
-    private string _id;
+    private ulong _id;
 
     [ObservableProperty]
     private string _name;

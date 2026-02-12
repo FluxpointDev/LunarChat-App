@@ -24,17 +24,17 @@ public partial class DeveloperAppInfoModel : ViewModelBase
         this.app = app;
         _id = app.Id;
         _name = app.Name;
-        _type = app.IsPublic.GetValueOrDefault() ? "Public App" : "Private App";
+        _type = app.IsPublic ? "Public App" : "Private App";
         _description = app.Description;
-        _website = app.Website;
-        _terms = app.Terms;
-        _privacy = app.Privacy;
-        if (!string.IsNullOrEmpty(app.AvatarId))
+        _website = app.WebsiteUrl;
+        _terms = app.TermsUrl;
+        _privacy = app.PrivacyUrl;
+        if (app.AvatarId.HasValue)
             Icon = new Uri(app.GetAvatarUrl());
     }
 
     [ObservableProperty]
-    private string _id;
+    private ulong _id;
 
     [ObservableProperty]
     private string _name;
@@ -170,17 +170,17 @@ public partial class DeveloperAppInfoModel : ViewModelBase
             Description = getApp.Description;
             app.Description = getApp.Description;
 
-            Type = getApp.IsPublic.GetValueOrDefault() ? "Public App" : "Private App";
+            Type = getApp.IsPublic ? "Public App" : "Private App";
             app.IsPublic = getApp.IsPublic;
 
-            Privacy = getApp.Privacy;
-            app.Privacy = getApp.Privacy;
+            Privacy = getApp.PrivacyUrl;
+            app.PrivacyUrl = getApp.PrivacyUrl;
 
-            Terms = getApp.Terms;
-            app.Terms = getApp.Terms;
+            Terms = getApp.TermsUrl;
+            app.TermsUrl = getApp.TermsUrl;
 
-            Website = getApp.Website;
-            app.Website = getApp.Website;
+            Website = getApp.WebsiteUrl;
+            app.WebsiteUrl = getApp.WebsiteUrl;
         }
         catch { }
     }

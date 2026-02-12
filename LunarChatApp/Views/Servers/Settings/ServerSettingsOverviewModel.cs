@@ -21,10 +21,10 @@ public partial class ServerSettingsOverviewModel : ViewModelBase
         ServerNameEdit = services.State.CurrentServer.Server.Name;
         services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
         canManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.ManageServer);
-        if (!string.IsNullOrEmpty(services.State.CurrentServer.Server.IconId))
+        if (services.State.CurrentServer.Server.IconId.HasValue)
             ServerIcon = new Uri(services.State.CurrentServer.Server.GetIconUrl()!);
 
-        if (!string.IsNullOrEmpty(services.State.CurrentServer.Server.BannerId))
+        if (services.State.CurrentServer.Server.BannerId.HasValue)
             Banner = new Uri(services.State.CurrentServer.Server.GetBannerUrl()!);
     }
 
@@ -49,6 +49,9 @@ public partial class ServerSettingsOverviewModel : ViewModelBase
     [RelayCommand]
     public async Task UploadIcon()
     {
+        if (services.State.CurrentServer == null)
+            return;
+
         var files = await services.FilePicker();
         if (!files.Any())
             return;
@@ -57,7 +60,7 @@ public partial class ServerSettingsOverviewModel : ViewModelBase
         {
             using (Stream stream = await files.First().OpenReadAsync())
             {
-                await services.Rest.EditServerAsync(services.State.CurrentServer?.Server?.Id, new EditServerRequest
+                await services.Rest.EditServerAsync(services.State.CurrentServer.Server.Id, new EditServerRequest
                 {
                     Icon = Utils.GetImageBase64(stream)
                 });
@@ -68,9 +71,11 @@ public partial class ServerSettingsOverviewModel : ViewModelBase
     [RelayCommand]
     public async Task ClearIcon()
     {
+        if (services.State.CurrentServer == null)
+            return;
         try
         {
-            await services.Rest.EditServerAsync(services.State.CurrentServer?.Server?.Id, new EditServerRequest
+            await services.Rest.EditServerAsync(services.State.CurrentServer.Server.Id, new EditServerRequest
             {
                 Icon = ""
             });
@@ -81,6 +86,9 @@ public partial class ServerSettingsOverviewModel : ViewModelBase
     [RelayCommand]
     public async Task UploadBanner()
     {
+        if (services.State.CurrentServer == null)
+            return;
+
         var files = await services.FilePicker();
         if (!files.Any())
             return;
@@ -89,7 +97,7 @@ public partial class ServerSettingsOverviewModel : ViewModelBase
         {
             using (Stream stream = await files.First().OpenReadAsync())
             {
-                await services.Rest.EditServerAsync(services.State.CurrentServer?.Server?.Id, new EditServerRequest
+                await services.Rest.EditServerAsync(services.State.CurrentServer.Server.Id, new EditServerRequest
                 {
                     Banner = Utils.GetImageBase64(stream)
                 });
@@ -100,9 +108,12 @@ public partial class ServerSettingsOverviewModel : ViewModelBase
     [RelayCommand]
     public async Task ClearBanner()
     {
+        if (services.State.CurrentServer == null)
+            return;
+
         try
         {
-            await services.Rest.EditServerAsync(services.State.CurrentServer?.Server?.Id, new EditServerRequest
+            await services.Rest.EditServerAsync(services.State.CurrentServer.Server.Id, new EditServerRequest
             {
                 Banner = ""
             });

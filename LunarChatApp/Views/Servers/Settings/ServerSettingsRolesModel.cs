@@ -21,7 +21,7 @@ namespace LunarChatApp.Views.Servers.Settings;
 
 public partial class ServerSettingsRolesModel : ViewModelBase
 {
-    private readonly List<RoleListItem> _originalItems = new List<RoleListItem>();
+    private List<RoleListItem> _originalItems = new List<RoleListItem>();
 
     private readonly Timer? _searchTimer;
     private readonly ServiceManager services;
@@ -35,23 +35,45 @@ public partial class ServerSettingsRolesModel : ViewModelBase
         if (services.State.CurrentServer != null)
         {
             _canManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.ManageRoles);
+            //int currentRank = services.State.CurrentServer.Member.GetRank(services.State.CurrentServer);
+            int currentRank = 0;
             services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+            _originalItems = services.State.CurrentServer.Roles.Values.OrderByDescending(x => x.Position).Select(x => new RoleListItem(services, this, x, _canManage, openInfo, currentRank)).ToList();
         }
 
         services.Client.OnRoleCreate += RoleCreated;
         services.Client.OnRoleUpdate += RoleUpdated;
         services.Client.OnRoleDelete += RoleDeleted;
+        //services.Client.OnRolePositions += RolePositions;
 
         _searchTimer = new Timer(500); // 500ms debounce
         _searchTimer.Elapsed += SearchTimerElapsed;
         _searchTimer.AutoReset = false;
 
-        _originalItems = services.State.CurrentServer.Roles.Values.OrderByDescending(x => x.Position).Select(x => new RoleListItem(services, x, _canManage, openInfo)).ToList();
 
         PropertyChanged += OnPropertyChanged;
 
         Items = new ObservableCollection<RoleListItem>(_originalItems);
     }
+
+    private async Task RolePositions(RestServer server, Dictionary<ulong, int> dictionary)
+    {
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            foreach (var i in _originalItems)
+            {
+                if (dictionary.TryGetValue(i.Id, out int pos))
+                    i.Position = pos;
+            }
+
+            _originalItems = _originalItems.OrderByDescending(x => x.Position).ToList();
+
+            Items = new ObservableCollection<RoleListItem>(_originalItems);
+        });
+    }
+
+    [ObservableProperty]
+    private bool isMoving;
 
     private async Task PermissionUpdate(RestServer server)
     {
@@ -112,7 +134,7 @@ public partial class ServerSettingsRolesModel : ViewModelBase
         if (services.State.CurrentServer == null)
             return;
 
-        RoleListItem item = new RoleListItem(services, role, services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.ManageRoles), openInfo);
+        RoleListItem item = new RoleListItem(services, this, role, services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ModPermission.ManageRoles), openInfo, 0);
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             _originalItems.Add(item);
@@ -130,7 +152,7 @@ public partial class ServerSettingsRolesModel : ViewModelBase
         else
         {
             var filteredItems = _originalItems
-                .Where(item => item.Name.Contains(SearchString, StringComparison.OrdinalIgnoreCase)).OrderByDescending(x => x.Position)
+                .Where(item => item.Name.Contains(SearchString, StringComparison.OrdinalIgnoreCase)).OrderByDescending(x => x.position)
                 .ToList();
 
             Items.AddRange(filteredItems);
@@ -215,10 +237,11 @@ public partial class ServerSettingsRolesModel : ViewModelBase
 
         openInfo.Invoke(new RestRole
         {
-            Id = "0",
+            Id = 0,
             CreatedAt = DateTime.Now,
             Name = "Default Members Role",
-            Permissions = services.State.CurrentServer.Server.DefaultPermissions
+            Permissions = services.State.CurrentServer.Server.DefaultPermissions,
+            ServerId = services.State.CurrentServer.Server.Id
         });
     }
 
@@ -233,13 +256,14 @@ public partial class RoleListItem : ObservableObject
     [ObservableProperty]
     private string _name;
 
-    public int Position;
+    [ObservableProperty]
+    public int position;
 
     [ObservableProperty]
     private string _color;
 
     [ObservableProperty]
-    private string _id;
+    private ulong _id;
 
     [ObservableProperty]
     private Uri? icon;
@@ -247,19 +271,47 @@ public partial class RoleListItem : ObservableObject
     [ObservableProperty]
     private bool _canManage;
 
+    [ObservableProperty]
+    private bool canMoveUp;
+
+    [ObservableProperty]
+    private bool canMoveDown;
+
     private readonly ServiceManager services;
     private readonly Action<RestRole> openInfo;
+    private readonly ServerSettingsRolesModel model;
 
-    public RoleListItem(ServiceManager sv, RestRole role, bool canManage, Action<RestRole> openInfo)
+    public RoleListItem(ServiceManager sv, ServerSettingsRolesModel md, RestRole role, bool canManage, Action<RestRole> openInfo, int currentRank)
     {
         services = sv;
+        model = md;
         this.openInfo = openInfo;
         _color = role.Color ?? "#99AAB5";
         _name = role.Name;
         _id = role.Id;
-        Position = role.Position;
-        Icon = string.IsNullOrEmpty(role.IconId) ? null : new Uri(role.GetIconUrl()!);
-        _canManage = canManage;
+        position = role.Position;
+        Icon = role.IconId.HasValue ? new Uri(role.GetIconUrl()!) : null;
+        Update(currentRank, canManage);
+    }
+
+    public void Update(int currentRank, bool canManage)
+    {
+        if (Position != 0)
+            CanMoveDown = true;
+
+        if (services.State.CurrentServer != null && currentRank > Position)
+        {
+            CanManage = canManage;
+            if ((Position + 1) < services.State.CurrentServer.Roles.Count)
+                CanMoveUp = true;
+            else
+                CanMoveUp = false;
+        }
+        else
+        {
+            CanManage = canManage;
+            CanMoveUp = false;
+        }
     }
 
     [RelayCommand]
@@ -272,7 +324,7 @@ public partial class RoleListItem : ObservableObject
     [RelayCommand]
     public void CopyId()
     {
-        services.CopyText(Id);
+        services.CopyText(Id.ToString());
     }
 
     [RelayCommand]
@@ -286,5 +338,44 @@ public partial class RoleListItem : ObservableObject
             await services.Rest.DeleteRoleAsync(services.State.CurrentServer.Server.Id, Id);
         }
         catch { }
+    }
+
+    [RelayCommand]
+    public async Task MoveRoleUp()
+    {
+        if (services.State.CurrentServer == null)
+            return;
+
+        try
+        {
+            model.IsMoving = true;
+            await services.Rest.EditRoleAsync(services.State.CurrentServer.Server.Id, Id, new EditRoleRequest
+            {
+                Position = position + 1
+            });
+        }
+        catch { }
+        model.IsMoving = false;
+    }
+
+    [RelayCommand]
+    public async Task MoveRoleDown()
+    {
+        if (services.State.CurrentServer == null)
+            return;
+
+        if (position == 0)
+            return;
+
+        try
+        {
+            model.IsMoving = true;
+            await services.Rest.EditRoleAsync(services.State.CurrentServer.Server.Id, Id, new EditRoleRequest
+            {
+                Position = position - 1
+            });
+        }
+        catch { }
+        model.IsMoving = false;
     }
 }

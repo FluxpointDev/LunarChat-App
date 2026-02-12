@@ -15,19 +15,21 @@ namespace LunarChatApp.Views.Servers.Settings;
 public partial class ServerSettingsRoleInfoModel : ViewModelBase
 {
     private ServiceManager services;
+    public readonly ulong roleId;
     private RestRole role;
     private Action backAction;
     public ServerSettingsRoleInfoModel(ServiceManager sv, RestRole r, Action back)
     {
         services = sv;
+        roleId = r.Id;
         backAction = back;
         role = r;
         _roleName = role.Name;
         _color = role.Color;
-        _allowEdit = role.Id != "0";
+        _allowEdit = role.Id != 0;
         services.Client.OnRoleUpdate += RoleUpdate;
         Permissions = new RolePermissionsModel(role);
-        if (!string.IsNullOrEmpty(role.IconId))
+        if (role.IconId.HasValue)
             Icon = new Uri(role.GetIconUrl());
     }
 
@@ -69,6 +71,9 @@ public partial class ServerSettingsRoleInfoModel : ViewModelBase
     [RelayCommand]
     public async Task Save()
     {
+        if (services.State.CurrentServer == null)
+            return;
+
         EditRoleRequest req = new EditRoleRequest();
         if (RoleName != role.Name)
             req.Name = RoleName;
@@ -80,14 +85,14 @@ public partial class ServerSettingsRoleInfoModel : ViewModelBase
 
         try
         {
-            if (role.Id == "0")
-                await services.Rest.EditServerAsync(services.State.CurrentServer?.Server.Id, new LunarChatSharp.Rest.Servers.EditServerRequest
+            if (role.Id == 0)
+                await services.Rest.EditServerAsync(services.State.CurrentServer.Server.Id, new LunarChatSharp.Rest.Servers.EditServerRequest
                 {
                     DefaultPermissions = req.Permissions,
                 });
             else
             {
-                RestRole getRole = await services.Rest.EditRoleAsync(services.State.CurrentServer?.Server.Id, role.Id, req);
+                RestRole getRole = await services.Rest.EditRoleAsync(services.State.CurrentServer.Server.Id, role.Id, req);
                 RoleName = getRole.Name;
                 role.Name = getRole.Name;
             }
@@ -99,6 +104,9 @@ public partial class ServerSettingsRoleInfoModel : ViewModelBase
     [RelayCommand]
     public async Task UploadIcon()
     {
+        if (services.State.CurrentServer == null)
+            return;
+
         var files = await services.FilePicker();
         if (!files.Any())
             return;
@@ -107,7 +115,7 @@ public partial class ServerSettingsRoleInfoModel : ViewModelBase
         {
             using (Stream stream = await files.First().OpenReadAsync())
             {
-                await services.Rest.EditRoleAsync(services.State.CurrentServer?.Server?.Id, role.Id, new EditRoleRequest
+                await services.Rest.EditRoleAsync(services.State.CurrentServer.Server.Id, role.Id, new EditRoleRequest
                 {
                     Icon = Utils.GetImageBase64(stream)
                 });
@@ -118,9 +126,12 @@ public partial class ServerSettingsRoleInfoModel : ViewModelBase
     [RelayCommand]
     public async Task ClearIcon()
     {
+        if (services.State.CurrentServer == null)
+            return;
+
         try
         {
-            await services.Rest.EditRoleAsync(services.State.CurrentServer?.Server?.Id, role.Id, new EditRoleRequest
+            await services.Rest.EditRoleAsync(services.State.CurrentServer.Server.Id, role.Id, new EditRoleRequest
             {
                 Icon = ""
             });

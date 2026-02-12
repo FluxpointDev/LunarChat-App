@@ -203,8 +203,12 @@ public partial class InviteListItem : ObservableObject
         uses = invite.MaxUses != 0 ? $"{invite.Uses}/{invite.MaxUses}" : invite.Uses.ToString();
 
         expires = invite.ExpiresAt.HasValue ? invite.ExpiresAt.Value.ToLocalTime().ToString("dd/MM/yyyy (hh:mm tt)") : null;
-        channelId = invite.ChannelId;
-        Channel = services.Socket.State.Channels.TryGetValue(invite.ChannelId, out var channel) ? "#" + channel.Name : "#invalid-channel";
+        if (invite.ChannelId.HasValue)
+        {
+            channelId = invite.ChannelId.Value;
+            Channel = services.Socket.State.Channels.TryGetValue(invite.ChannelId.Value, out var channel) ? "#" + channel.Name : "#invalid-channel";
+        }
+
     }
 
     [ObservableProperty]
@@ -219,13 +223,13 @@ public partial class InviteListItem : ObservableObject
     [ObservableProperty]
     private string channel;
 
-    public string channelId;
+    public ulong channelId;
 
     [ObservableProperty]
     private string uses;
 
     [ObservableProperty]
-    private string expires;
+    private string? expires;
 
 
 

@@ -15,7 +15,7 @@ public partial class ServerSettingsDiscoveryModel : ViewModelBase
         services = sv;
         ServerDescriptionEdit = services.State.CurrentServer.Server.Description;
         vanityInvite = services.State.CurrentServer.Server.VanityInvite;
-        isPublic = services.State.CurrentServer.Server.Features.HasFlag(ServerFeature.Discoverable);
+        isPublic = services.State.CurrentServer.Server.Features.GetValueOrDefault().HasFlag(ServerFeature.Discoverable);
         services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
         canManage = services.State.CurrentServer.HasPermission(services.State.CurrentServer.Member, ServerPermission.ManageServer);
     }
@@ -55,7 +55,7 @@ public partial class ServerSettingsDiscoveryModel : ViewModelBase
         if (server.VanityInvite != VanityInvite)
             data.VanityInvite = VanityInvite;
 
-        if (server.Features.HasFlag(ServerFeature.Discoverable) != IsPublic)
+        if (server.Features.GetValueOrDefault().HasFlag(ServerFeature.Discoverable) != IsPublic)
             data.IsDiscoverable = IsPublic;
         try
         {

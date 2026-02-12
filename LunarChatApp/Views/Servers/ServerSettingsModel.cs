@@ -26,12 +26,27 @@ public partial class ServerSettingsModel : ViewModelBase
         ServerName = st.CurrentServer.Server.Name;
         services.Client.OnServerUpdate += ServerUpdate;
         services.Client.OnRemoveServer += RemoveServer;
-        services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+        services.Client.OnRoleUpdate += RoleUpdate;
+        if (services.State.CurrentServer != null)
+            services.State.CurrentServer.OnPermissionUpdate += PermissionUpdate;
+
         if (SelectedPage == null)
             SelectedPage = new ServerSettingsOverview() { DataContext = new ServerSettingsOverviewModel(services) };
     }
 
-    private string id;
+    private async Task RoleUpdate(RestServer server, RestRole role, EditRoleRequest req)
+    {
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            if (SelectedPage is ServerSettingsRoleInfo roleInfo && roleInfo.DataContext is ServerSettingsRoleInfoModel model)
+            {
+                if (model.roleId == role.Id)
+                    SelectedTitle = "Edit Role - " + req?.Name ?? role.Name;
+            }
+        });
+    }
+
+    private ulong id;
 
     private async Task RemoveServer(RestServer server)
     {

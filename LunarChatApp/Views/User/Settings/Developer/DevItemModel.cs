@@ -16,7 +16,7 @@ public partial class DevItemModel : ViewModelBase
         Id = team.Id;
         Name = team.Name;
         Fallback = GetFallback(team.Name);
-        if (!string.IsNullOrEmpty(team.IconId))
+        if (team.IconId.HasValue)
             Icon = new Uri(team.GetIconUrl()!);
 
         action = ac;
@@ -28,7 +28,7 @@ public partial class DevItemModel : ViewModelBase
         Id = app.Id;
         Name = app.Name;
         Fallback = GetFallback(app.Name);
-        if (!string.IsNullOrEmpty(app.AvatarId))
+        if (app.AvatarId.HasValue)
             Icon = new Uri(app.GetAvatarUrl()!);
 
         action = ac;
@@ -45,7 +45,7 @@ public partial class DevItemModel : ViewModelBase
     }
 
     private readonly ServiceManager services;
-    public string Id;
+    public ulong Id;
     public bool IsTeam;
     private readonly Func<DevItemModel, Task> action;
 

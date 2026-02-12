@@ -114,7 +114,7 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
     }
 
 
-    private async Task WebhookDelete(RestChannel server, string webhookId)
+    private async Task WebhookDelete(RestChannel server, ulong webhookId)
     {
         if (services.State.CurrentChannel?.Id != server.Id)
             return;
@@ -131,7 +131,7 @@ public partial class ChannelSettingsWebhooksModel : ViewModelBase
 
     }
 
-    private async Task WebhookUpdate(RestChannel server, string webhookId, EditWebhookRequest ev)
+    private async Task WebhookUpdate(RestChannel server, ulong webhookId, EditWebhookRequest ev)
     {
         if (services.State.CurrentChannel?.Id != server.Id)
             return;
@@ -259,7 +259,7 @@ public partial class WebhookListItem : ObservableObject
         _canManage = canManage;
         channelId = webhook.ChannelId;
         token = webhook.Token;
-        Avatar = string.IsNullOrEmpty(webhook.AvatarId) ? null : new Uri(webhook.GetAvatarUrl()!);
+        Avatar = webhook.AvatarId.HasValue ? new Uri(webhook.GetAvatarUrl()!) : null;
     }
 
     [ObservableProperty]
@@ -269,11 +269,11 @@ public partial class WebhookListItem : ObservableObject
     private string _name;
 
     [ObservableProperty]
-    private string _id;
+    private ulong _id;
 
     public string token;
 
-    public string channelId;
+    public ulong channelId;
 
     [ObservableProperty]
     private bool _canManage;
@@ -319,7 +319,7 @@ public partial class WebhookListItem : ObservableObject
     [RelayCommand]
     public void CopyId()
     {
-        services.CopyText(Id);
+        services.CopyText(Id.ToString());
     }
 
     [RelayCommand]

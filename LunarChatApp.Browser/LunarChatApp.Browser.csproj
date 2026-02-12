@@ -18,16 +18,4 @@
     <ProjectReference Include="..\LunarChatApp\LunarChatApp.csproj" />
 	<TrimmerRootAssembly Include="LunarChatSharp" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Program.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="wwwroot\media\**">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
 </Project>

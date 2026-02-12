@@ -27,7 +27,7 @@ public partial class DeveloperListModel : ViewModelBase
         {
             new TeamListItem
             {
-                Id = "0",
+                Id = 0,
                 Name = "All Apps"
             }
         };
@@ -135,7 +135,7 @@ public partial class DeveloperListModel : ViewModelBase
 
 public partial class TeamListItem : ObservableObject
 {
-    public string Id { get; set; }
+    public ulong Id { get; set; }
 
     [ObservableProperty]
     private string _name;

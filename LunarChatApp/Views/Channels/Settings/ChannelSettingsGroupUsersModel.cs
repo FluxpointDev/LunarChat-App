@@ -57,7 +57,7 @@ public partial class ChannelSettingsGroupUsersModel : ViewModelBase
     }
 
 
-    private async Task RemoveUser(RestChannel channel, string arg2)
+    private async Task RemoveUser(RestChannel channel, ulong arg2)
     {
         if (channel.Id != services.State.CurrentChannel?.Id)
             return;
@@ -180,10 +180,13 @@ public partial class ChannelSettingsGroupUsersModel : ViewModelBase
                 return;
 
 
-            var friend = services.State.Socket.Relations.Values.FirstOrDefault(x => x.UserId == model.Username || x.Username == model.Username);
+            var friend = services.State.Socket.Relations.Values.FirstOrDefault(x => x.Username == model.Username);
+            if (friend == null)
+                return;
+
             await services.Rest.PutAsync($"/groups/{services.State.CurrentChannel?.Id}/users", new GroupAddUserRequest
             {
-                UserId = friend?.UserId
+                UserId = friend.UserId
             });
         }
         catch { }
@@ -216,7 +219,7 @@ public partial class GroupUserListItem : ObservableObject
     [ObservableProperty]
     private bool _isSelected;
 
-    public string id;
+    public ulong id;
 
     [ObservableProperty]
     private string _name;
@@ -235,7 +238,7 @@ public partial class GroupUserListItem : ObservableObject
     [RelayCommand]
     public void CopyUserID()
     {
-        services.CopyText(id);
+        services.CopyText(id.ToString());
     }
 
     [RelayCommand]

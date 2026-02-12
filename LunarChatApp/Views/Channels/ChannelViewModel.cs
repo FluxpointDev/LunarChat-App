@@ -101,12 +101,17 @@ public partial class ChannelViewModel : ViewModelBase
 
     private async Task UseEmoji(EmojiListItemModel model)
     {
-        await services.Rest.AddReactionAsync(services.State.CurrentChannel?.Id, services.State.EmojisMenu.ReactionMessage, model.emojiId);
+        if (services.State.CurrentChannel == null || services.State.EmojisMenu.ReactionMessage == null)
+            return;
+        await services.Rest.AddReactionAsync(services.State.CurrentChannel.Id, services.State.EmojisMenu.ReactionMessage.Value, model.emojiId);
     }
 
     [RelayCommand]
     public async Task PasteImage()
     {
+        if (services.State.CurrentChannel == null)
+            return;
+
         var topLevel = TopLevel.GetTopLevel(services.MainControl)!;
 
         var data = await topLevel?.Clipboard?.TryGetDataAsync();
@@ -128,7 +133,7 @@ public partial class ChannelViewModel : ViewModelBase
                 file.Save(stream);
 
                 CreateAttachmentRequest attach = await CreateAttachmentRequest.CreateFromStream(stream, "image.png");
-                await services.Rest.SendMesssageAsync(services.State.CurrentChannel?.Id, new CreateMessageRequest
+                await services.Rest.SendMesssageAsync(services.State.CurrentChannel.Id, new CreateMessageRequest
                 {
                     Attachments = new CreateAttachmentRequest[]
                     {
@@ -179,7 +184,7 @@ public partial class ChannelViewModel : ViewModelBase
 
     }
 
-    private async Task MemberUpdate(RestServer server, string arg2, EditMemberRequest request)
+    private async Task MemberUpdate(RestServer server, ulong arg2, EditMemberRequest request)
     {
         if (services.State.CurrentServer.Server.Id != server.Id)
             return;
@@ -343,7 +348,7 @@ public partial class ChannelViewModel : ViewModelBase
     [RelayCommand]
     public void CopyChannelID()
     {
-        services.CopyText(services.State.CurrentChannel?.Id);
+        services.CopyText(services.State.CurrentChannel?.Id.ToString());
     }
 
     [RelayCommand]
@@ -354,6 +359,9 @@ public partial class ChannelViewModel : ViewModelBase
 
     public async Task SubmitInvite(UserControl control)
     {
+        if (services.State.CurrentChannel == null)
+            return;
+
         CreateInviteDialogModel? model = control.DataContext as CreateInviteDialogModel;
         if (model == null)
             return;
@@ -361,7 +369,7 @@ public partial class ChannelViewModel : ViewModelBase
         CreateInviteRequest req = model.CreateRequest();
         try
         {
-            RestInvite invite = await services.Rest.CreateInviteAsync(services.State.CurrentChannel?.Id, req);
+            RestInvite invite = await services.Rest.CreateInviteAsync(services.State.CurrentChannel.Id, req);
             services.CopyText(invite.Code);
         }
         catch { }
@@ -375,13 +383,16 @@ public partial class ChannelViewModel : ViewModelBase
 
     public async Task SubmitGroupName(UserControl control)
     {
+        if (services.State.CurrentChannel == null)
+            return;
+
         CreateNameDialogModel? model = control.DataContext as CreateNameDialogModel;
         if (model == null || string.IsNullOrEmpty(model.Name))
             return;
 
         try
         {
-            await services.Rest.UpdateChannelAsync(services.State.CurrentChannel?.Id, new UpdateChannelRequest
+            await services.Rest.UpdateChannelAsync(services.State.CurrentChannel.Id, new UpdateChannelRequest
             {
                 Name = model.Name
             });
@@ -400,7 +411,7 @@ public partial class ChannelViewModel : ViewModelBase
         try
         {
             AddFriendDialogModel? data = control.DataContext as AddFriendDialogModel;
-            var friend = state.Socket.Relations.Values.FirstOrDefault(x => x.UserId == data.Username || x.Username == data.Username);
+            var friend = state.Socket.Relations.Values.FirstOrDefault(x => x.Username == data.Username);
             await services.Rest.PutAsync($"/groups/{services.State.CurrentChannel?.Id}/users", new GroupAddUserRequest
             {
                 UserId = friend.UserId
@@ -412,6 +423,9 @@ public partial class ChannelViewModel : ViewModelBase
     [RelayCommand]
     public void ChannelSettings()
     {
+        if (state.CurrentChannel == null)
+            return;
+
         services.PageManager.OnSwitchPage(new ChannelSettings
         {
             DataContext = new ChannelSettingsModel(services, state.CurrentChannel)
@@ -421,6 +435,9 @@ public partial class ChannelViewModel : ViewModelBase
     [RelayCommand]
     public void GroupSettings()
     {
+        if (state.CurrentChannel == null)
+            return;
+
         services.PageManager.OnSwitchPage(new ChannelSettings
         {
             DataContext = new ChannelSettingsModel(services, state.CurrentChannel)
@@ -430,9 +447,12 @@ public partial class ChannelViewModel : ViewModelBase
     [RelayCommand]
     public async Task LeaveGroup()
     {
+        if (state.CurrentChannel == null)
+            return;
+
         try
         {
-            await services.Rest.DeleteChannelAsync(state.CurrentChannel?.Id, new DeleteChannelRequest
+            await services.Rest.DeleteChannelAsync(state.CurrentChannel.Id, new DeleteChannelRequest
             {
 
             });
@@ -443,9 +463,12 @@ public partial class ChannelViewModel : ViewModelBase
     [RelayCommand]
     public async Task DeleteChannel()
     {
+        if (state.CurrentChannel == null)
+            return;
+
         try
         {
-            await services.Rest.DeleteChannelAsync(state.CurrentChannel?.Id, new DeleteChannelRequest
+            await services.Rest.DeleteChannelAsync(state.CurrentChannel.Id, new DeleteChannelRequest
             {
                 ServerId = state.CurrentServer?.Server.Id
             });
@@ -456,6 +479,8 @@ public partial class ChannelViewModel : ViewModelBase
     [RelayCommand]
     public async Task OpenFilePicker()
     {
+        if (state.CurrentChannel == null)
+            return;
         Console.WriteLine("Picked file");
         try
         {
@@ -475,7 +500,7 @@ public partial class ChannelViewModel : ViewModelBase
                     {
                         CreateAttachmentRequest attach = await CreateAttachmentRequest.CreateFromStream(stream, files.First().Name);
 
-                        await services.Rest.SendMesssageAsync(services.State.CurrentChannel?.Id, new CreateMessageRequest
+                        await services.Rest.SendMesssageAsync(services.State.CurrentChannel.Id, new CreateMessageRequest
                         {
                             Attachments = new CreateAttachmentRequest[]
                             {

@@ -17,10 +17,10 @@ public partial class CategoryItemModel : ViewModelBase
     public CategoryItemModel(ServiceManager sv, RestChannel channel, bool canManage)
     {
         services = sv;
-        isRootCategory = string.IsNullOrEmpty(channel.Id);
+        isRootCategory = channel.Id == 0;
         id = channel.Id;
         name = channel.Name;
-        _channelsList = new ObservableCollection<ChannelItem>(services.State.CurrentServer.Channels.Values.Where(x => x.Type != ChannelType.Category && (isRootCategory ? string.IsNullOrEmpty(x.ParentId) : x.ParentId == channel.Id)).OrderBy(x => x.Position).Select(x => new ChannelItem() { DataContext = new ChannelItemModel(services, services.State, x, canManage) }));
+        _channelsList = new ObservableCollection<ChannelItem>(services.State.CurrentServer.Channels.Values.Where(x => x.Type != ChannelType.Category && (isRootCategory ? !x.ParentId.HasValue : x.ParentId == channel.Id)).OrderBy(x => x.Position).Select(x => new ChannelItem() { DataContext = new ChannelItemModel(services, services.State, x, canManage) }));
     }
 
     [ObservableProperty]
@@ -29,7 +29,7 @@ public partial class CategoryItemModel : ViewModelBase
     [ObservableProperty]
     private bool isRootCategory;
 
-    public string id;
+    public ulong id;
 
     [RelayCommand]
     public void ToggleCategory()

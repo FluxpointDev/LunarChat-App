@@ -93,15 +93,15 @@ public partial class LoginModel(ServiceManager services, MainModel main) : ViewM
                 AvatarType = SelectedAvatarType
             });
 
-            await services.Client.LoginAsync(Json.Id);
+            await services.Client.LoginAsync(Json.Id.ToString());
 
             services.State.Socket = services.Socket.State;
             services.State.CurrentDisplayName = Json.DisplayName ?? Json.Username;
             services.State.DisplayName = Json.DisplayName;
-            services.State.AboutMe = Json.AboutMe;
+            services.State.AboutMe = Json.Profile?.AboutMe;
             services.State.Username = Json.Username;
 
-            if (!string.IsNullOrEmpty(Json.AvatarId))
+            if (Json.AvatarId.HasValue)
             {
                 _ = Task.Run(async () =>
                 {

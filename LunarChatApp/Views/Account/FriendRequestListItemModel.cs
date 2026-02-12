@@ -23,7 +23,7 @@ public partial class FriendRequestListItemModel : ViewModelBase
         DisplayName = u.DisplayName ?? u.Username;
     }
 
-    public string id;
+    public ulong id;
 
     [ObservableProperty]
     private string? _username;
@@ -60,7 +60,7 @@ public partial class FriendRequestListItemModel : ViewModelBase
     {
         services.Dialogs.Create(new RelationNoteDialog(), new RelationNoteDialogModel
         {
-            Username = id,
+            Username = id.ToString(),
             Note = services.State.Socket.Relations.GetValueOrDefault(id)?.Note
         }, "Note").WithSubmit(SubmitNote).Open();
     }

@@ -26,7 +26,7 @@ public partial class FriendListItemModel : ViewModelBase
         DisplayName = u.DisplayName ?? u.Username;
     }
 
-    public string id;
+    public ulong id;
 
     [ObservableProperty]
     private string? _username;
@@ -52,7 +52,7 @@ public partial class FriendListItemModel : ViewModelBase
             {
                 Name = model.Name,
                 Type = LunarChatSharp.Core.Channels.ChannelType.Group,
-                Users = new string[]
+                Users = new ulong[]
                 {
                     id
                 }
@@ -78,7 +78,7 @@ public partial class FriendListItemModel : ViewModelBase
                 {
                     Name = "",
                     Type = LunarChatSharp.Core.Channels.ChannelType.Direct,
-                    Users = new string[]
+                    Users = new ulong[]
                     {
                         id
                     }
@@ -108,7 +108,7 @@ public partial class FriendListItemModel : ViewModelBase
     {
         services.Dialogs.Create(new RelationNoteDialog(), new RelationNoteDialogModel
         {
-            Username = id,
+            Username = Username ?? id.ToString(),
             Note = services.State.Socket.Relations.GetValueOrDefault(id)?.Note
         }, "Note").WithSubmit(SubmitNote).Open();
     }

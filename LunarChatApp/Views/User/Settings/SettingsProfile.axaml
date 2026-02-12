@@ -1,9 +1,9 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:controls="using:Avalonia.Labs.Controls"
+			 xmlns:controls="using:Avalonia.Labs.Controls"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:lunarchatsharp="using:LunarChatSharp"
-             xmlns:materialIcons="using:Material.Icons.Avalonia"
+			 xmlns:lunarchatsharp="using:LunarChatSharp"
+			 xmlns:materialIcons="using:Material.Icons.Avalonia"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:settings="using:LunarChatApp.Views.User.Settings"
 			 xmlns:shadui="using:ShadUI"
@@ -55,8 +55,7 @@
 		<StackPanel Spacing="10">
 			<Label Classes="Small">About Me</Label>
 			<TextBox AcceptsReturn="True" MaxLength="{Binding Source={x:Static lunarchatsharp:Static.MaxDescriptionLength}}" MaxLines="5" Text="{Binding AboutMe}"></TextBox>
-			<Button
-			Classes="Primary" Content="Update" Command="{Binding UpdateAboutMeCommand}" />
+			<Button Classes="Primary" Content="Update" Command="{Binding UpdateAboutMeCommand}" />
 		</StackPanel>
 
 		<StackPanel Spacing="10" HorizontalAlignment="Left">

@@ -9,10 +9,10 @@ public partial class UpdateAppDialogModel : ViewModelBase
     {
         _name = app.Name;
         _description = app.Description;
-        _isPublic = app.IsPublic.GetValueOrDefault();
-        _website = app.Website;
-        _terms = app.Terms;
-        _privacy = app.Privacy;
+        _isPublic = app.IsPublic;
+        _website = app.WebsiteUrl;
+        _terms = app.TermsUrl;
+        _privacy = app.PrivacyUrl;
     }
 
     [ObservableProperty]

@@ -231,10 +231,10 @@ public partial class EmojiListItem : ObservableObject
     [ObservableProperty]
     private Uri icon;
 
-    public string id;
+    public ulong id;
 
     [ObservableProperty]
-    private string _creator;
+    private ulong _creator;
 
     [ObservableProperty]
     private bool _canManage;
@@ -270,7 +270,7 @@ public partial class EmojiListItem : ObservableObject
     [RelayCommand]
     public void CopyId()
     {
-        services.CopyText(id);
+        services.CopyText(id.ToString());
     }
 
     [RelayCommand]

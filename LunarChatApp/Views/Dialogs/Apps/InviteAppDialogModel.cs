@@ -9,7 +9,7 @@ namespace LunarChatApp.Views.Dialogs;
 
 public partial class InviteAppDialogModel : ViewModelBase
 {
-    public InviteAppDialogModel(ServiceManager services, string appId)
+    public InviteAppDialogModel(ServiceManager services, ulong appId)
     {
         _serverItems = new ObservableCollection<AppListItem>(services.State.Socket.Servers.Values.Where(x => !x.Apps.ContainsKey(appId) && x.HasPermission(x.Member, ServerPermission.ManageApps)).Select(x => new AppListItem
         {
@@ -41,5 +41,5 @@ public partial class AppListItem : ObservableObject
     [ObservableProperty]
     private string _name;
 
-    public string id;
+    public ulong id;
 }

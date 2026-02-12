@@ -9,5 +9,5 @@ public partial class EmojisMenu : UserControl
         InitializeComponent();
     }
 
-    public string? ReactionMessage;
+    public ulong? ReactionMessage;
 }

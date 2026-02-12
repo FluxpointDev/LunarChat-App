@@ -48,10 +48,11 @@ public partial class ServerSettingsAppsModel : ViewModelBase
         sv.Client.OnAppRemove += AppRemove;
         PropertyChanged += OnPropertyChanged;
 
+
         _ = Task.Run(async () =>
         {
-            var apps = IsGroup ? await sv.Rest.GetGroupAppsAsync(sv.State.CurrentChannel?.Id!) :
-            await sv.Rest.GetServerAppsAsync(sv.State.CurrentServer?.Server.Id!);
+            var apps = IsGroup ? await sv.Rest.GetGroupAppsAsync(sv.State.CurrentChannel.Id!) :
+            await sv.Rest.GetServerAppsAsync(sv.State.CurrentServer.Server.Id!);
             if (apps != null)
             {
                 foreach (var i in apps)
@@ -233,12 +234,12 @@ public partial class AppListItem(ServiceManager services, ServerSettingsAppsMode
     [ObservableProperty]
     private string _name;
 
-    public string Id;
+    public ulong Id;
 
     [RelayCommand]
     public void CopyId()
     {
-        services.CopyText(Id);
+        services.CopyText(Id.ToString());
     }
 
     [RelayCommand]

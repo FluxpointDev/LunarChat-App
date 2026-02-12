@@ -14,7 +14,7 @@ public partial class ChannelItemModel : ViewModelBase
     private TestState state;
     private RestChannel channel;
     private ServiceManager services;
-    public string id;
+    public ulong id;
     public ChannelItemModel(ServiceManager sv, TestState st, RestChannel chan, bool manage)
     {
         id = chan.Id;

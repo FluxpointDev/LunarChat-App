@@ -28,7 +28,7 @@ public partial class ServerSettingsSystemModel : ViewModelBase
             {
                 new ChannelListItem
                 {
-                    id = ""
+                    id = null
                 }
             };
             Items.AddRange(services.State.CurrentServer.Channels.Values.Select(x => new ChannelListItem
@@ -62,7 +62,7 @@ public partial class ServerSettingsSystemModel : ViewModelBase
         if (server == null)
             return;
 
-        if (!string.IsNullOrEmpty(server.Server.SystemMessages.MemberJoined))
+        if (server.Server.SystemMessages.MemberJoined.HasValue)
         {
             SelectedJoinMessage = Items.FirstOrDefault(x => x.id == server.Server.SystemMessages.MemberJoined);
             if (SelectedJoinMessage == null)
@@ -71,7 +71,7 @@ public partial class ServerSettingsSystemModel : ViewModelBase
         if (SelectedJoinMessage == null)
             SelectedJoinMessage = Items.First();
 
-        if (!string.IsNullOrEmpty(server.Server.SystemMessages.MemberLeft))
+        if (server.Server.SystemMessages.MemberLeft.HasValue)
         {
             SelectedLeftMessage = Items.FirstOrDefault(x => x.id == server.Server.SystemMessages.MemberLeft);
             if (SelectedLeftMessage == null)
@@ -80,7 +80,7 @@ public partial class ServerSettingsSystemModel : ViewModelBase
         if (SelectedLeftMessage == null)
             SelectedLeftMessage = Items.First();
 
-        if (!string.IsNullOrEmpty(server.Server.SystemMessages.MemberBanned))
+        if (server.Server.SystemMessages.MemberBanned.HasValue)
         {
             SelectedBanMessage = Items.FirstOrDefault(x => x.id == server.Server.SystemMessages.MemberBanned);
             if (SelectedBanMessage == null)
@@ -89,7 +89,7 @@ public partial class ServerSettingsSystemModel : ViewModelBase
         if (SelectedBanMessage == null)
             SelectedBanMessage = Items.First();
 
-        if (!string.IsNullOrEmpty(server.Server.SystemMessages.MemberUnbanned))
+        if (server.Server.SystemMessages.MemberUnbanned.HasValue)
         {
             SelectedUnbanMessage = Items.FirstOrDefault(x => x.id == server.Server.SystemMessages.MemberUnbanned);
             if (SelectedUnbanMessage == null)
@@ -98,7 +98,7 @@ public partial class ServerSettingsSystemModel : ViewModelBase
         if (SelectedUnbanMessage == null)
             SelectedUnbanMessage = Items.First();
 
-        if (!string.IsNullOrEmpty(server.Server.SystemMessages.MemberKicked))
+        if (server.Server.SystemMessages.MemberKicked.HasValue)
         {
             SelectedKickMessage = Items.FirstOrDefault(x => x.id == server.Server.SystemMessages.MemberKicked);
             if (SelectedKickMessage == null)
@@ -107,7 +107,7 @@ public partial class ServerSettingsSystemModel : ViewModelBase
         if (SelectedKickMessage == null)
             SelectedKickMessage = Items.First();
 
-        if (!string.IsNullOrEmpty(server.Server.SystemMessages.MemberTimedout))
+        if (server.Server.SystemMessages.MemberTimedout.HasValue)
         {
             SelectedTimeoutMessage = Items.FirstOrDefault(x => x.id == server.Server.SystemMessages.MemberTimedout);
             if (SelectedTimeoutMessage == null)
@@ -116,7 +116,7 @@ public partial class ServerSettingsSystemModel : ViewModelBase
         if (SelectedTimeoutMessage == null)
             SelectedTimeoutMessage = Items.First();
 
-        if (!string.IsNullOrEmpty(server.Server.SystemMessages.AppAdded))
+        if (server.Server.SystemMessages.AppAdded.HasValue)
         {
             SelectedAppAdded = Items.FirstOrDefault(x => x.id == server.Server.SystemMessages.AppAdded);
             if (SelectedAppAdded == null)
@@ -125,7 +125,7 @@ public partial class ServerSettingsSystemModel : ViewModelBase
         if (SelectedAppAdded == null)
             SelectedAppAdded = Items.First();
 
-        if (!string.IsNullOrEmpty(server.Server.SystemMessages.AppRemoved))
+        if (server.Server.SystemMessages.AppRemoved.HasValue)
         {
             SelectedAppRemoved = Items.FirstOrDefault(x => x.id == server.Server.SystemMessages.AppRemoved);
             if (SelectedAppRemoved == null)
@@ -169,20 +169,23 @@ public partial class ServerSettingsSystemModel : ViewModelBase
     [RelayCommand]
     public async Task UpdateSystem()
     {
+        if (services.State.CurrentServer == null)
+            return;
+
         try
         {
-            await services.Rest.EditServerAsync(services.State.CurrentServer?.Server.Id!, new LunarChatSharp.Rest.Servers.EditServerRequest
+            await services.Rest.EditServerAsync(services.State.CurrentServer.Server.Id, new LunarChatSharp.Rest.Servers.EditServerRequest
             {
                 SystemMessages = new RestServerSystemMessages
                 {
-                    MemberJoined = SelectedJoinMessage != null ? SelectedJoinMessage.id : "",
-                    MemberLeft = SelectedLeftMessage != null ? SelectedLeftMessage.id : "",
-                    MemberBanned = SelectedBanMessage != null ? SelectedBanMessage.id : "",
-                    MemberUnbanned = SelectedUnbanMessage != null ? SelectedUnbanMessage.id : "",
-                    MemberKicked = SelectedKickMessage != null ? SelectedKickMessage.id : "",
-                    MemberTimedout = SelectedTimeoutMessage != null ? SelectedTimeoutMessage.id : "",
-                    AppAdded = SelectedAppAdded != null ? SelectedAppAdded.id : "",
-                    AppRemoved = SelectedAppRemoved != null ? SelectedAppRemoved.id : "",
+                    MemberJoined = SelectedJoinMessage != null ? SelectedJoinMessage.id : 0,
+                    MemberLeft = SelectedLeftMessage != null ? SelectedLeftMessage.id : 0,
+                    MemberBanned = SelectedBanMessage != null ? SelectedBanMessage.id : 0,
+                    MemberUnbanned = SelectedUnbanMessage != null ? SelectedUnbanMessage.id : 0,
+                    MemberKicked = SelectedKickMessage != null ? SelectedKickMessage.id : 0,
+                    MemberTimedout = SelectedTimeoutMessage != null ? SelectedTimeoutMessage.id : 0,
+                    AppAdded = SelectedAppAdded != null ? SelectedAppAdded.id : 0,
+                    AppRemoved = SelectedAppRemoved != null ? SelectedAppRemoved.id : 0,
                 }
             });
         }
@@ -194,5 +197,5 @@ public partial class ChannelListItem : ObservableObject
     [ObservableProperty]
     private string _name;
 
-    public string id;
+    public ulong? id;
 }
